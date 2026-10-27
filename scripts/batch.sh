@@ -55,14 +55,15 @@ case $cmd in
     [[ -n $(contract_base) ]] || { print -u2 "run: commit the contract tests first"; exit 1; }
     [[ -z $(build_changes) ]] || { print -u2 "run: working tree not clean"; exit 1; }
     mkdir -p "$ev" evidence/raw
-    raw="evidence/raw/batch-$n-muse.log"   # git-ignored: the full transcript can echo local files
+    raw="evidence/raw/batch-$n-muse.log"   # git-ignored: Muse's final report, with absolute local paths
     print "muse $model, batch $n, started $(now)" > "$raw"
     # Headless runs can't answer approval prompts; --disable-approval keeps the OS sandbox on (docs/muse/muse-code.md).
-    muse exec --model "$model" --no-foreign-personal-context --disable-approval \
+    muse exec --model "$model" --contributor-mode off --no-foreign-personal-context --disable-approval \
       "$(cat briefs/_worker_preamble.md briefs/$n.md)" </dev/null >> "$raw" 2>&1 || print "muse exited non-zero" >> "$raw"
+    # The full transcript (every tool call and file read) stays in the git-ignored export.
     muse export --last --redacted --out "evidence/raw/batch-$n-muse_session.json" </dev/null 2>/dev/null || true
-    grep -c -E "contributor" "evidence/raw/batch-$n-muse_session.json" 2>/dev/null && print -u2 "WARNING: contributor model in session" || true
-    cp "$raw" "$ev/builder.md"
+    uv run python scripts/muse_usage.py "$n" "evidence/raw/batch-$n-muse_session.json" || print -u2 "usage: no export to price"
+    sed "s#$PWD/##g" "$raw" > "$ev/builder.md"   # the committed report keeps repo-relative paths only
     gate
     ;;
   gate)
@@ -75,7 +76,7 @@ case $cmd in
     title=$(head -1 "briefs/$n.md" | sed 's/^# *//')
     # Stage only build paths, so files another tool drops in the repo never ride along.
     git add anamnesis tests "$ev" "briefs/$n.md" SPEC.md pyproject.toml uv.lock
-    git commit -q -m "feat: batch $n - $title" -m "Built by the batch builder (see Built-by in the review), gated (ruff + pytest + contract lock), reviewed by Antigravity. Evidence: $ev/"
+    git commit -q -m "feat: batch $n - $title" -m "Built by the batch builder (see Built-by in the review), gated (ruff + pytest + contract lock), reviewed by Claude Code (CEO). Evidence: $ev/"
     git switch -q main
     git merge -q --no-ff "$branch" -m "merge: $branch"
     sha=$(git rev-parse --short HEAD)
