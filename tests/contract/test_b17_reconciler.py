@@ -64,6 +64,19 @@ def test_units_per_intake_count_when_the_claim_states_the_tablet_strength(units,
     assert reconcile_pair(said, the_pack, CAT).type is expected
 
 
+@pytest.mark.parametrize("said,the_pack,expected", [
+    # supervisor 17 #1: the model copied the tablet strength into intake_amount
+    (claim("Lipitor", intake=mg("atorvastatin", 20), units=0.5), LIPITOR_20, D.STRENGTH_MISMATCH),  # was: match
+    (claim("Concor", intake=mg("bisoprolol", 5), units=2), CONCOR_5, D.INTAKE_DIFFERS_FROM_UNIT_STRENGTH),  # was: match
+    (claim("Concor", strength=st(mg("bisoprolol", 5)), intake=mg("bisoprolol", 5), units=2), CONCOR_5,
+     D.INTAKE_DIFFERS_FROM_UNIT_STRENGTH),  # was: match
+    # a consistent intake and units already flag at the intake step: unchanged
+    (claim("Concor", intake=mg("bisoprolol", 10), units=2), CONCOR_5, D.INTAKE_DIFFERS_FROM_UNIT_STRENGTH),
+])
+def test_units_still_count_when_the_intake_came_out_even(said, the_pack, expected):
+    assert reconcile_pair(said, the_pack, CAT).type is expected
+
+
 def test_units_alone_flag_a_multiple_but_never_make_a_match():
     assert reconcile_pair(claim("Concor", units=2), CONCOR_5, CAT).type is D.INTAKE_DIFFERS_FROM_UNIT_STRENGTH
     assert reconcile_pair(claim("Concor", units=1), CONCOR_5, CAT).type is D.INSUFFICIENT_INFORMATION
@@ -114,6 +127,7 @@ def test_one_product_named_by_brand_and_ingredient_is_not_a_conflict():
     ("metoprolol retard", D.MATCH),  # a release word
     ("Beloc-Zok", D.MATCH),  # a brand
     ("ميتوبرولول ممتد", D.MATCH),  # an Arabic release word
+    ("ميتوبرولول الممتد", D.MATCH),  # the same with the article attached (supervisor 17 #2)
 ])
 def test_a_claim_side_release_is_trusted_only_when_the_claim_says_so(name, expected):
     said = claim(name, strength=st(mg("metoprolol", 100), release="modified"))
