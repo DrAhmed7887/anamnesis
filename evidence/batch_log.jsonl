@@ -5,3 +5,4 @@
 {"batch":5,"branch":"batch/5-live-meta","model":"gpt-6-sol","tests_passed":195,"verdict":"pass","merge_commit":"0c8f231","at":"2026-10-27T10:18:03Z"}
 {"batch":6,"branch":"batch/6-live-format","model":"manual","tests_passed":196,"verdict":"pass","merge_commit":"052d7ee","at":"2026-10-27T10:20:32Z"}
 {"batch":7,"branch":"batch/7-salts","model":"gpt-6-sol","tests_passed":222,"verdict":"pass","merge_commit":"64c1a06","at":"2026-10-27T10:26:29Z"}
+{"batch":8,"branch":"batch/8-claims","model":"gpt-6-luna","tests_passed":242,"verdict":"pass","merge_commit":"7260bf4","at":"2026-10-27T10:33:06Z"}
