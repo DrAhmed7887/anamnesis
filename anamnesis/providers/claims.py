@@ -8,7 +8,7 @@ from pydantic import ValidationError
 from anamnesis.core.catalogue import normalise
 from anamnesis.core.guardrails import AdviceLeak, assert_no_advice, assert_no_advice_in_ingredients
 from anamnesis.providers.base import ProviderError, ProviderTrace, cost_usd, with_one_retry
-from anamnesis.providers.meta import SPARK_CALL_ESTIMATE_USD, MetaClient
+from anamnesis.providers.meta import MetaClient, spark_call_estimate
 from anamnesis.providers.numbers import coerce_strength, parse_amount_text
 from anamnesis.providers.spend import SpendGuard
 from anamnesis.schema import (
@@ -248,7 +248,7 @@ class MetaClaimExtractor:
         body = {
             "model": self.model,
             "reasoning_effort": "low",
-            "max_tokens": 4000,
+            "max_tokens": 16000,
             "messages": [
                 {"role": "system", "content": _SYSTEM_PROMPT},
                 {"role": "user", "content": transcript},
@@ -258,8 +258,10 @@ class MetaClaimExtractor:
             }},
         }
 
+        estimate = spark_call_estimate(body)
+
         def attempt() -> tuple[list[PatientClaim], ProviderTrace]:
-            self.guard.check(SPARK_CALL_ESTIMATE_USD)
+            self.guard.check(estimate)
             payload, latency_ms = self.client.post("/chat/completions", json=body)
             try:
                 usage = payload["usage"]
@@ -284,6 +286,11 @@ class MetaClaimExtractor:
                 cost_usd=cost,
             )
             self.guard.charge_prechecked(trace)
+            if payload["choices"][0].get("finish_reason") == "length":
+                raise ProviderError(
+                    "spark", "Spark reply stopped at the length limit", retryable=False,
+                    attempt_trace=trace,
+                )
             try:
                 claims = parse_claims_json(content, turns)
             except ProviderError as exc:
@@ -293,6 +300,4 @@ class MetaClaimExtractor:
                 ) from None
             return claims, trace
 
-        return with_one_retry(
-            attempt, guard=self.guard, model_id=self.model, estimate=SPARK_CALL_ESTIMATE_USD,
-        )
+        return with_one_retry(attempt, guard=self.guard, model_id=self.model, estimate=estimate)

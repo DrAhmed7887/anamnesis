@@ -92,14 +92,18 @@ class Segmenter:
 
 
 class Reader:
-    """Scripted label reader: readings[(region_id, cropped)] -> LabelReading."""
+    """Scripted label reader: readings[(region_id, is_zoom)] -> LabelReading.
+
+    Since batch 18 every read is a crop, so a region's second read is its zoom (SPEC §4 steps 4-5).
+    """
 
     def __init__(self, readings):
         self.readings, self.calls = readings, []
 
     def read(self, image, region, *, mime, cropped=False):
+        is_zoom = any(call[0] == region.region_id for call in self.calls)
         self.calls.append((region.region_id, cropped, Image.open(io.BytesIO(image)).size))
-        return self.readings[(region.region_id, cropped)], trace(f"read-{len(self.calls)}", "0.002")
+        return self.readings[(region.region_id, is_zoom)], trace(f"read-{len(self.calls)}", "0.002")
 
 
 R0, R1 = region(0, 110, 10, 189, 89), region(1, 10, 10, 89, 89)
@@ -123,8 +127,9 @@ def test_concept_fallback_then_crop_zoom_recovers_an_unreadable_label():
     report = run(seg, reader)
     assert [c for _, c in seg.calls] == ["medicine box", "label"]
     assert all(sha == SHA for sha, _ in seg.calls)            # SAM only ever sees the source photo (F-06)
-    zooms = [c for c in reader.calls if c[1]]
-    assert zooms == [(R1.region_id, True, (88, 88))]           # 80x80 box + 10% margin, from the source pixels
+    assert all(cropped for _, cropped, _ in reader.calls)      # batch 18: every read is a crop
+    assert [c for c in reader.calls if c[0] == R1.region_id] == [  # the crop (80x80 + 10% margin), then its 2x zoom
+        (R1.region_id, True, (88, 88)), (R1.region_id, True, (176, 176))]
     obs = {o.visual_evidence[0]: o for o in report.observations}
     assert obs[R1.region_id].label_text == "Concor 5 mg"     # the zoomed reading keeps the source region id
     assert {(f.claim_id, f.type) for f in report.findings} == {("c1", D.MATCH), (None, D.MISSING_MODALITY)}

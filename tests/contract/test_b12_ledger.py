@@ -16,11 +16,11 @@ import pytest
 from anamnesis.providers import ProviderError, SpendCapExceeded, SpendGuard
 from anamnesis.providers.claims import MetaClaimExtractor
 from anamnesis.providers.meta import (
-    SPARK_CALL_ESTIMATE_USD,
     MetaClient,
     MetaLabelReader,
     MetaSegmenter,
     MetaTranscriber,
+    spark_call_estimate,
 )
 from anamnesis.schema import AudioTurn, ImageRegion
 
@@ -148,8 +148,9 @@ def test_claim_extractor_charges_a_timeout_then_succeeds(guard):
     s = Script(httpx.ReadTimeout("slow"), (200, chat(body)))
     claims, trace = MetaClaimExtractor(client(s), guard).extract(turns)
     first, second = lines(guard)
-    assert first["estimated"] is True and Decimal(first["cost_usd"]) == SPARK_CALL_ESTIMATE_USD
-    assert trace.prior_cost_usd == SPARK_CALL_ESTIMATE_USD
+    bound = spark_call_estimate(json.loads(s.requests[0].content))  # batch 18: the request's upper bound
+    assert first["estimated"] is True and Decimal(first["cost_usd"]) == bound
+    assert trace.prior_cost_usd == bound
 
 
 # --- the cap counts estimated charges ---------------------------------------------------------------------
