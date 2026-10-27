@@ -67,6 +67,10 @@ case $cmd in
     # The full transcript (every tool call and file read) stays in the git-ignored export.
     muse export --last --redacted --out "evidence/raw/batch-$n-muse_session.json" </dev/null 2>/dev/null || true
     uv run python scripts/muse_usage.py "$n" "evidence/raw/batch-$n-muse_session.json" || print -u2 "usage: no export to price"
+    # Did Muse pin its goal, close it, and work under it? Printed now and kept with the batch evidence.
+    print "goal check, batch $n:"
+    { uv run python scripts/goal_check.py "evidence/raw/batch-$n-muse_session.json" || true; } \
+      | sed "s#$PWD/##g" | tee "$ev/goal.md"
     sed "s#$PWD/##g" "$raw" > "$ev/builder.md"   # the committed report keeps repo-relative paths only
     gate
     ;;

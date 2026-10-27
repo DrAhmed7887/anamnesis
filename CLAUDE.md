@@ -11,7 +11,7 @@ Claude Code is the **CEO** (orchestrator and reviewer) in this repo, and **Muse 
 - Commands:
   ```bash
   scripts/batch.sh start <n> <slug>   # branch batch/<n>-<slug>; then commit "test(contract): batch <n>" + briefs/<n>.md
-  scripts/batch.sh run <n>            # Muse Code builder (muse-spark-1.3) + gate (ruff, pytest, contract lock) → evidence/batches/<n>/
+  scripts/batch.sh run <n>            # Muse Code builder (muse-spark-1.3) + goal check (goal.md) + gate (ruff, pytest, contract lock) → evidence/batches/<n>/
   scripts/batch.sh gate <n>           # rerun the gate after a fix
   scripts/batch.sh merge <n>          # needs "Verdict: PASS" in evidence/batches/<n>/review.md
   scripts/grill.sh <milestone>        # Muse Code on evidence/grills/<milestone>/brief.md → effect.md triage
