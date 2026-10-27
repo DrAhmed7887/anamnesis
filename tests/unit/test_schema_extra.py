@@ -5,7 +5,14 @@ from decimal import Decimal
 import pytest
 from pydantic import ValidationError
 
-from anamnesis.schema import AudioTurn, DoseRegimen, Finding, ImageRegion, IngredientAmount
+from anamnesis.schema import (
+    AudioTurn,
+    DoseRegimen,
+    Finding,
+    ImageRegion,
+    IngredientAmount,
+    Strength,
+)
 
 
 def test_ids_must_be_non_empty():
@@ -51,3 +58,14 @@ def test_non_match_finding_requires_review_even_with_both_sides():
 def test_amount_is_kept_as_decimal():
     amount = IngredientAmount(inn="amoxicillin", amount=Decimal("875"), unit="mg")
     assert isinstance(amount.amount, Decimal)
+
+
+def test_duplicate_ingredient_alias_is_rejected():
+    with pytest.raises(ValidationError, match="duplicate canonical INNs"):
+        Strength(
+            ingredients=[
+                IngredientAmount(inn="Acetaminophen", amount=Decimal(500), unit="mg"),
+                IngredientAmount(inn="paracetamol", amount=Decimal(500), unit="mg"),
+            ],
+            per="tablet",
+        )

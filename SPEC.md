@@ -67,7 +67,7 @@ The first rule that applies wins.
 ### Pairing (`reconcile_all`)
 - Only readable packs can pair. Candidate pairs have overlapping identity sets.
 - Score each candidate: 3 = same identity and equal strength, 2 = same identity, 1 = overlap.
-- Take candidates greedily by score, then claim index, then pack index. The **set** of findings must not depend on the order of claims or packs.
+- Take candidates greedily by score, then `claim_id`, then `observation_id`. Ties are broken by **ID**, not by list position, so the set of findings doesn't depend on the order of claims or packs. Findings come back sorted by `finding_id`.
 - Leftovers:
   - an unreadable pack → `unreadable_source`
   - an unresolvable name → `unresolved_name`

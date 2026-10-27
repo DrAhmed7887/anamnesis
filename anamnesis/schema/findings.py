@@ -14,6 +14,8 @@ class DiscrepancyType(StrEnum):
     INTAKE_DIFFERS_FROM_UNIT_STRENGTH = "intake_differs_from_unit_strength"
     INGREDIENT_MISMATCH = "ingredient_mismatch"
     RATIO_MISMATCH = "ratio_mismatch"
+    FORMULATION_MISMATCH = "formulation_mismatch"
+    INSUFFICIENT_INFORMATION = "insufficient_information"
     DISCONTINUED_BUT_PRESENT = "discontinued_but_present"
     UNREADABLE_SOURCE = "unreadable_source"
     UNRESOLVED_NAME = "unresolved_name"
@@ -37,6 +39,8 @@ class Finding(BaseModel):
 
     @model_validator(mode="after")
     def validate_evidence_sides(self) -> "Finding":
+        from anamnesis.schema.templates import QUESTION_FOR, TEMPLATES
+
         has_audio = bool(self.audio_evidence)
         has_visual = bool(self.visual_evidence)
         two_sided = {
@@ -45,6 +49,8 @@ class Finding(BaseModel):
             DiscrepancyType.INTAKE_DIFFERS_FROM_UNIT_STRENGTH,
             DiscrepancyType.INGREDIENT_MISMATCH,
             DiscrepancyType.RATIO_MISMATCH,
+            DiscrepancyType.FORMULATION_MISMATCH,
+            DiscrepancyType.INSUFFICIENT_INFORMATION,
             DiscrepancyType.DISCONTINUED_BUT_PRESENT,
         }
 
@@ -58,4 +64,12 @@ class Finding(BaseModel):
             raise ValueError("missing_modality requires exactly one evidence side")
         if self.type is not DiscrepancyType.MATCH and not self.needs_clinician_review:
             raise ValueError(f"{self.type.value} requires clinician review")
+        if (self.claim_id is not None) != has_audio:
+            raise ValueError("claim_id must correspond to audio evidence")
+        if (self.observation_id is not None) != has_visual:
+            raise ValueError("observation_id must correspond to visual evidence")
+        if self.clinician_note != TEMPLATES[self.type]:
+            raise ValueError("clinician_note must use the canonical template")
+        if self.patient_question_id != QUESTION_FOR[self.type]:
+            raise ValueError("patient_question_id must use the canonical question")
         return self

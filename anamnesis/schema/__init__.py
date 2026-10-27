@@ -9,9 +9,11 @@ from anamnesis.schema.medication import (
     PackObservation,
     PatientClaim,
     Readability,
+    Release,
     Strength,
     StrengthPer,
     Unit,
+    canonical_inn,
 )
 
 __all__ = [
@@ -25,7 +27,9 @@ __all__ = [
     "PackObservation",
     "PatientClaim",
     "Readability",
+    "Release",
     "Strength",
     "StrengthPer",
     "Unit",
+    "canonical_inn",
 ]

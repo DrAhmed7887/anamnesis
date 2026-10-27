@@ -6,10 +6,12 @@ from pathlib import Path
 
 import yaml
 
+from anamnesis.schema.medication import Release, canonical_inn
+
 
 def _normalise(text: str) -> str:
     text = text.casefold().replace("®", "").replace("™", "")
-    text = re.sub(r"(?<!\w)[/-]|[/-](?!\w)|[^\w\s/-]", " ", text)
+    text = re.sub(r"[^\w\s]", " ", text)
     return " ".join(text.split())
 
 
@@ -19,6 +21,8 @@ class CatalogueEntry:
     inns: frozenset[str]
     countries: tuple[str, ...]
     synthetic: bool
+    release: Release
+    splittable: bool | None
 
 
 @dataclass(frozen=True)
@@ -26,28 +30,51 @@ class Catalogue:
     entries: tuple[CatalogueEntry, ...]
 
     def resolve(self, text: str, country: str | None = None) -> CatalogueEntry | None:
-        """Best match for the text; the country is a preference, never a filter."""
-        if country is not None:
-            local = self._best(text, country.upper())
-            if local is not None:
-                return local
-        return self._best(text, None)
+        """Resolve one product name, preferring country only among equivalent names."""
+        matches = self._matches(text)
+        if not matches:
+            return None
+        maximal = [
+            (name, entry, brand)
+            for name, entry, brand in matches
+            if not any(name != other and name in other for other, _, _ in matches)
+        ]
+        products = {entry.brand for _, entry, _ in maximal}
+        if len(products) != 1:
+            return None
+        entries = [entry for _, entry, _ in maximal]
+        if country:
+            entries.sort(key=lambda entry: country.upper() not in entry.countries)
+        return entries[0]
 
-    def _best(self, text: str, country: str | None) -> CatalogueEntry | None:
+    def _matches(self, text: str) -> list[tuple[str, CatalogueEntry, bool]]:
         normalised = _normalise(text)
-        best: tuple[int, CatalogueEntry] | None = None
+        matches = []
         for entry in self.entries:
-            if country is not None and country not in entry.countries:
-                continue
-            names = [entry.brand]
+            names = [(entry.brand, True)]
             if len(entry.inns) == 1:
-                names.extend(entry.inns)
-            for name in names:
-                candidate = _normalise(name)
-                if re.search(rf"(?<!\w){re.escape(candidate)}(?!\w)", normalised):
-                    if best is None or len(candidate) > best[0]:
-                        best = (len(candidate), entry)
-        return best[1] if best else None
+                names.extend((inn, False) for inn in entry.inns)
+                if "paracetamol" in entry.inns:
+                    names.append(("acetaminophen", False))
+            for raw, brand in names:
+                name = _normalise(raw)
+                if re.search(rf"(?<!\w){re.escape(name)}(?!\w)", normalised):
+                    matches.append((name, entry, brand))
+        return matches
+
+    def _brand_entry(self, text: str) -> CatalogueEntry | None:
+        entry = self.resolve(text)
+        if entry is None:
+            return None
+        return entry if any(e is entry and brand for _, e, brand in self._matches(text)) else None
+
+    def implied_release(self, text: str) -> Release:
+        entry = self._brand_entry(text)
+        return entry.release if entry else Release.UNKNOWN
+
+    def splittable(self, text: str) -> bool | None:
+        entry = self._brand_entry(text)
+        return entry.splittable if entry else None
 
 
 def load_catalogue(path: str | Path | None = None) -> Catalogue:
@@ -59,9 +86,11 @@ def load_catalogue(path: str | Path | None = None) -> Catalogue:
         tuple(
             CatalogueEntry(
                 brand=record["brand"],
-                inns=frozenset(record["inns"]),
+                inns=frozenset(canonical_inn(inn) for inn in record["inns"]),
                 countries=tuple(record["countries"]),
                 synthetic=record["synthetic"],
+                release=Release(record["release"]),
+                splittable=record["splittable"],
             )
             for record in records
         )

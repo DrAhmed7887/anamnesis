@@ -36,6 +36,18 @@ class Readability(StrEnum):
     UNREADABLE = "unreadable"
 
 
+class Release(StrEnum):
+    IMMEDIATE = "immediate"
+    MODIFIED = "modified"
+    UNKNOWN = "unknown"
+
+
+def canonical_inn(name: str) -> str:
+    """Normalise an ingredient name for identity comparisons."""
+    normalised = name.strip().casefold()
+    return {"acetaminophen": "paracetamol"}.get(normalised, normalised)
+
+
 class IngredientAmount(BaseModel):
     """Amount of one active ingredient."""
 
@@ -53,11 +65,15 @@ class Strength(BaseModel):
 
     ingredients: list[IngredientAmount]
     per: StrengthPer
+    release: Release = Release.UNKNOWN
 
     @model_validator(mode="after")
     def require_ingredient(self) -> "Strength":
         if not self.ingredients:
             raise ValueError("strength must contain at least one ingredient")
+        inns = [canonical_inn(part.inn) for part in self.ingredients]
+        if len(inns) != len(set(inns)):
+            raise ValueError("strength contains duplicate canonical INNs")
         return self
 
 
@@ -68,7 +84,7 @@ class DoseRegimen(BaseModel):
 
     units_per_intake: Decimal | None = None
     intakes_per_day: Decimal | None = None
-    as_needed: bool = False
+    as_needed: bool | None = None
 
     @model_validator(mode="after")
     def require_positive_values(self) -> "DoseRegimen":
