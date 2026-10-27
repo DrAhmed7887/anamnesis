@@ -7,3 +7,4 @@
 {"batch":7,"branch":"batch/7-salts","model":"gpt-6-sol","tests_passed":222,"verdict":"pass","merge_commit":"64c1a06","at":"2026-10-27T10:26:29Z"}
 {"batch":8,"branch":"batch/8-claims","model":"gpt-6-luna","tests_passed":242,"verdict":"pass","merge_commit":"7260bf4","at":"2026-10-27T10:33:06Z"}
 {"batch":9,"branch":"batch/9-live-claims","model":"gpt-6-luna","tests_passed":264,"verdict":"pass","merge_commit":"67fc2cf","at":"2026-10-27T10:36:30Z"}
+{"batch":10,"branch":"batch/10-identity","model":"gpt-6-luna","tests_passed":284,"verdict":"pass","merge_commit":"d7cbbae","at":"2026-10-27T10:57:17Z"}
