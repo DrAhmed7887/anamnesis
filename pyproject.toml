@@ -24,3 +24,6 @@ target-version = "py312"
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
 per-file-ignores = { "tests/contract/*" = ["E501"] }
+
+[tool.ruff.lint.isort]
+known-first-party = ["anamnesis"]

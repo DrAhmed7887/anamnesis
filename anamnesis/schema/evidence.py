@@ -15,8 +15,8 @@ class AudioTurn(BaseModel):
     turn_id: NonEmptyStr
     start_ms: int = Field(ge=0)
     end_ms: int
-    transcript: str
-    speaker: str | None = None
+    transcript: NonEmptyStr
+    speaker: NonEmptyStr | None = None
     lang_hint: str | None = None
 
     @model_validator(mode="after")

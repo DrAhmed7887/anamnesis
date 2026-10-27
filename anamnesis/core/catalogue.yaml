@@ -1,32 +1,48 @@
 - brand: Concor
+  release: immediate
+  splittable: true
   inns: [bisoprolol]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Beloc-Zok
+  release: modified
+  splittable: true
   inns: [metoprolol]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Norvasc
+  release: immediate
+  splittable: null
   inns: [amlodipine]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Glucophage
+  release: immediate
+  splittable: null
   inns: [metformin]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Panadol
+  release: immediate
+  splittable: null
   inns: [paracetamol]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Panadol Extra
+  release: immediate
+  splittable: null
   inns: [paracetamol, caffeine]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Augmentin
+  release: immediate
+  splittable: false
   inns: [amoxicillin, clavulanic acid]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Lipitor
+  release: immediate
+  splittable: false
   inns: [atorvastatin]
   countries: [DE, ES, GB]
   synthetic: true

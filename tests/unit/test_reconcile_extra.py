@@ -63,3 +63,26 @@ def test_country_outside_catalogue_still_resolves() -> None:
     # Reviewer fix: an Egyptian pack must not become unresolved just because EG isn't listed.
     entry = load_catalogue().resolve("Concor 5 mg", country="EG")
     assert entry is not None and entry.inns == frozenset({"bisoprolol"})
+
+
+def test_no_comparable_amount_does_not_produce_match() -> None:
+    result = reconcile_pair(claim("Concor"), pack("Concor 5 mg", amount("bisoprolol", "5")), load_catalogue())
+    assert result.type is D.INSUFFICIENT_INFORMATION
+
+
+def test_multiple_brand_names_cannot_silently_resolve() -> None:
+    catalogue = load_catalogue()
+    assert catalogue.resolve("Concor and Lipitor") is None
+    assert catalogue.resolve("Panadol Extra") is not None
+
+
+def test_readable_pack_wins_over_unreadable_pack_with_same_inn() -> None:
+    catalogue = load_catalogue()
+    blurry = pack(None, amount("bisoprolol", "5"), readability="unreadable")
+    clear = pack("Concor 5 mg", amount("bisoprolol", "5"))
+    blurry = blurry.model_copy(update={"observation_id": "blurry"})
+    clear = clear.model_copy(update={"observation_id": "clear"})
+    found = {(f.claim_id, f.observation_id): f.type for f in reconcile_all(
+        [claim("Concor", amount("bisoprolol", "5"))], [blurry, clear], catalogue
+    )}
+    assert found == {("c", "clear"): D.MATCH, (None, "blurry"): D.UNREADABLE_SOURCE}
