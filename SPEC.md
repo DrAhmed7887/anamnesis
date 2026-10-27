@@ -86,6 +86,10 @@ The first rule that applies wins.
 - Full JSON is collected, then validated with Pydantic. Voice, SAM, and Spark calls retry once on retryable errors and use a 30 s timeout.
 
 ## 5. Every model call logs
+- **Ledger** (`evidence/spend/ledger.jsonl`): `call_id`, `model_id`, `cost_usd`, `time_utc`, `estimated` (+ `reason`). Lines from before batch 12 have no `estimated` field; all of them are real charges.
+- **Trace** (saved with each live result in `evidence/live/<date>/*.json`): latency and tokens as listed below.
+- Muse Code grill runs (the `muse` CLI) are billed by Meta **outside** our adapters, so they are not on the ledger (see `evidence/decisions.md`).
+
 `model_id`, `latency_ms`, `input_tokens`, `output_tokens`, `cost_usd` → `evidence/`. Hosted Meta models are the default. Open weights (Glimmer on Modal, Spark Open on Baseten) are for comparison only.
 Billing-uncertain failures are recorded at the pre-call estimate. Rejected 4xx and
 429 requests are not charged.

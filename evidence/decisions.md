@@ -35,3 +35,9 @@ Muse (M1 #3) said ER tablets can't be split. That is too broad: some scored ER t
 - English chain unchanged and correct after the identity rewrite (no regression).
 - The Arabic note was transcribed with **all three brands in Arabic script** this time (كونكور, بلوك زوك, البنادول, the last with an attached article). All are `unresolved_name`. That makes 3 runs and 3 different spellings of the same audio. Batch 11 (Arabic-script aliases + Arabic letter normalisation + optional ال/وال/بال) is the planned fix.
 - Ledger total: $0.167 of the $5 cap.
+
+## 2026-10-27: Meta spend outside the ledger (QM M2 round 2, #6)
+The ledger only covers calls made through our adapters. Muse Code (`muse` CLI) grill runs are billed by Meta directly:
+- **M0 plan grill** (run by Antigravity, 27 Oct morning): probably `muse-spark-1.3-contributor`. Cost not measured.
+- **M1 core grill:** `muse-spark-1.3-contributor`, about 2.67M input / 84k output tokens ≈ **$0.20** at contributor rates. Synthetic code only.
+- From M2 on, `scripts/grill.sh` pins Standard mode. Those runs will be billed at standard rates, still outside the ledger, and noted here.

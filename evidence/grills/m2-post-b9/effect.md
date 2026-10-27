@@ -36,3 +36,18 @@ Reviewer verdicts by Claude Code. The HOLD stands until the blocker (#8) is fixe
 | 10 | "Any of 25 languages" overstates what was tested | **Accepted:** SPEC now says English and Egyptian Arabic were tested live | now |
 
 Tooling note: `--mode plan` has no effect together with `--disable-slash-commands` (agy warning). The review still ran sandboxed with no tools, and no file appeared in the Drive Sessions inbox.
+
+## Quality manager, round 2 (after B12a): VERDICT HOLD
+The round-1 **blocker #8 (ledger) is cleared**: it isn't in round 2. The new blockers are two round-1 findings already accepted for B12b, now escalated. **No live runs until B12b lands.**
+
+| QM2 # | Finding | Verdict | Where |
+|---|---|---|---|
+| 1 | Blocker: combination-pack intake check is skipped, so it reports `match` (= QM1 #3b) | **Accepted**, escalated | B12b |
+| 2 | Blocker: salts only in `name_text`/`label_text`; salt conflicts within one side (= QM1 #2) | **Accepted**, escalated | B12b |
+| 3 | `strength` vs scalar `inn` contradiction on one side (= QM1 #3a) | Accepted | B12b |
+| 4 | M2 can't close while F-06, F-07 caps, F-09 and M1 #10 are unbuilt | Accepted: M2 stays open | B12, B13 |
+| 5 | Country preference is still dead code (= QM1 #6) | Accepted | B12b |
+| 6 | SPEC §5 vs ledger fields; Muse grill spend missing from the ledger | **Fixed now:** SPEC §5 states what the ledger and the traces hold; `decisions.md` records the spend outside the ledger (M1 ≈ $0.20 contributor) | done |
+| 7 | B9 review overstated "both live transcripts reconcile" | **Fixed now:** the review is corrected (offline fixtures only; no live Arabic run since B11) | done |
+| 8 | More Arabic contract pins (`وبيلوكزوك`, ة/ى/أ on both sides) | Accepted | B12b |
+| 9 | B4 `built_by`; earlier test-count split | **Fixed now:** log corrections appended (append-only) | done |
