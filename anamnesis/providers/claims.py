@@ -198,15 +198,23 @@ def parse_claims_json(text: str, turns: list[AudioTurn]) -> list[PatientClaim]:
                 coerce_strength(raw["strength"]) if raw["strength"] is not None else None
             )
             intake_amount = _coerce_intake(raw["intake_amount"])
+            regimen = _coerce_regimen(raw["regimen"])
+            units_sent = (
+                isinstance(raw.get("regimen"), dict)
+                and raw["regimen"].get("units_per_intake") is not None
+            )
+            units_dropped = units_sent and (
+                not isinstance(regimen, dict) or regimen.get("units_per_intake") is None
+            )
             if (raw["strength"] is not None and strength is None) or (
                 raw["intake_amount"] is not None and intake_amount is None
-            ):
+            ) or units_dropped:
                 # A dropped claim amount takes the other one with it (SPEC §2).
                 strength = None
                 intake_amount = None
             values = {
                 **{key: value for key, value in raw.items() if key != "turn_ids"},
-                "regimen": _coerce_regimen(raw["regimen"]),
+                "regimen": regimen,
                 "intake_amount": intake_amount,
                 "strength": strength,
                 "claim_id": f"c{index}",

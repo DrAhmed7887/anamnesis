@@ -3,7 +3,7 @@
 from anamnesis.schema.findings import DiscrepancyType as D
 
 TEMPLATES: dict[D, str] = {
-    D.MATCH: "The reported medication details agree with the pack label.",
+    D.MATCH: "The compared identity and strength details agree.",
     D.STRENGTH_MISMATCH: "Patient-reported strength differs from the pack label.",
     D.INTAKE_DIFFERS_FROM_UNIT_STRENGTH: "Reported intake differs from the strength of one pack unit.",
     D.INGREDIENT_MISMATCH: "Reported and pack ingredients differ.",
