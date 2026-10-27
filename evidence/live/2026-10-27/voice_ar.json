@@ -1,8 +1,8 @@
 {
   "trace": {
-    "call_id": "e9674d17-429f-4c0c-8654-5971b022becf",
+    "call_id": "c647b4a3-b05b-4652-a947-27633d7b6f89",
     "model_id": "muse-voice-transcribe-1.0",
-    "latency_ms": 2901,
+    "latency_ms": 3022,
     "input_tokens": 0,
     "output_tokens": 0,
     "cost_usd": "0.00070"
@@ -10,9 +10,9 @@
   "turns": [
     {
       "turn_id": "turn-0",
-      "start_ms": 60,
+      "start_ms": 0,
       "end_ms": 12620,
-      "transcript": "أنا باخد كوناكور خمسة ميلي جرام مرة في اليوم وباخدد BelocZok خمسين ملي جرام مرتين في اليوم وقفت البنادول من شهر",
+      "transcript": "انا باخد كونكور خمسة ملي جرام مرة في اليوم وباخد وباخد BelocZok خمسين ملي جرام مرتين في اليوم وقفت البنادول من شهر",
       "speaker": null,
       "lang_hint": "ar"
     }

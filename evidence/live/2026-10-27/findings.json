@@ -1,0 +1,35 @@
+{
+  "claims_source": "hand-written from voice_en transcript",
+  "findings": [
+    {
+      "finding_id": "c1:o1",
+      "type": "match",
+      "claim_id": "c1",
+      "observation_id": "o1",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "15595e0869ee-1"
+      ],
+      "needs_clinician_review": false,
+      "clinician_note": "The reported medication details agree with the pack label.",
+      "patient_question_id": null
+    },
+    {
+      "finding_id": "c2:o0",
+      "type": "intake_differs_from_unit_strength",
+      "claim_id": "c2",
+      "observation_id": "o0",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "15595e0869ee-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "Reported intake differs from the strength of one pack unit.",
+      "patient_question_id": "intake"
+    }
+  ]
+}

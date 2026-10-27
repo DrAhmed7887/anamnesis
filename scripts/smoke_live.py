@@ -16,8 +16,10 @@ from decimal import Decimal
 from pathlib import Path
 
 from anamnesis.core.catalogue import load_catalogue
+from anamnesis.core.reconcile import reconcile_all
 from anamnesis.providers import ProviderError, SpendCapExceeded, SpendGuard, top_regions
 from anamnesis.providers.meta import MetaClient, MetaLabelReader, MetaSegmenter, MetaTranscriber
+from anamnesis.schema import IngredientAmount, PackObservation, PatientClaim, Strength
 
 ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "evidence/raw/media"
@@ -93,11 +95,35 @@ def main() -> None:
                    lambda r=region: MetaLabelReader(client, guard).read(image, r, mime="image/png"))
         if res:
             reading, trace = res
-            readings.append({"trace": trace.model_dump(), "reading": reading.model_dump()})
+            readings.append({"trace": trace.model_dump(), "reading": reading})
             print(f"      {reading.readability.value}: {reading.label_text!r} inn={reading.inn} "
                   f"strength={reading.strength.model_dump() if reading.strength else None}")
-    save(out, "labels", readings)
+    save(out, "labels", [{"trace": r["trace"], "reading": r["reading"].model_dump()} for r in readings])
+    reconcile(out, readings)
     finish(guard, start)
+
+
+def reconcile(out: Path, readings: list[dict]) -> None:
+    """Offline step: live pack readings against the English voice note's claims.
+
+    The claims are HAND-WRITTEN from the voice_en transcript until claim extraction exists (next batch).
+    """
+    mg = lambda inn, a: IngredientAmount(inn=inn, amount=Decimal(a), unit="mg")  # noqa: E731
+    claims = [
+        PatientClaim(claim_id="c1", name_text="Concor", status="active", audio_evidence=["turn-0"],
+                     strength=Strength(ingredients=[mg("bisoprolol", "5")], per="tablet")),
+        PatientClaim(claim_id="c2", name_text="metoprolol", status="active", audio_evidence=["turn-0"],
+                     intake_amount=mg("metoprolol", "50")),
+    ]
+    packs = [PackObservation(observation_id=f"o{i}", label_text=r["reading"].label_text, inn=r["reading"].inn,
+                             strength=r["reading"].strength, readability=r["reading"].readability,
+                             country=r["reading"].country, visual_evidence=[r["reading"].region_id])
+             for i, r in enumerate(readings)]
+    findings = reconcile_all(claims, packs, load_catalogue())
+    save(out, "findings", {"claims_source": "hand-written from voice_en transcript",
+                           "findings": [f.model_dump() for f in findings]})
+    for f in findings:
+        print(f"      {f.finding_id:7} {f.type.value:34} {f.clinician_note}")
 
 
 def finish(guard: SpendGuard, start: Decimal) -> None:

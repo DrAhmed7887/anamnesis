@@ -1,21 +1,22 @@
 [
   {
     "trace": {
-      "call_id": "chatcmpl-01a17ce0-897b-73b6-bfcd-79a094ca93b4",
+      "call_id": "chatcmpl-01a17ce6-1c66-7296-a063-b8bc2272e2aa",
       "model_id": "muse-spark-1.3",
-      "latency_ms": 3326,
+      "latency_ms": 2596,
       "input_tokens": 1475,
-      "output_tokens": 703,
-      "cost_usd": "0.00483150"
+      "output_tokens": 759,
+      "cost_usd": "0.00506950"
     },
     "reading": {
       "region_id": "15595e0869ee-0",
-      "label_text": "Beloc-Zok 100 mg Metoprolol succinate Prolonged-release tablets",
-      "inn": "Metoprolol succinate",
+      "label_text": "Beloc-Zok 100 mg\nMetoprolol succinate\nProlonged-release tablets",
+      "inn": "metoprolol succinate",
       "strength": {
         "ingredients": [
           {
-            "inn": "Metoprolol succinate",
+            "inn": "metoprolol",
+            "salt": "succinate",
             "amount": "100",
             "unit": "mg"
           }
@@ -29,21 +30,22 @@
   },
   {
     "trace": {
-      "call_id": "chatcmpl-01a17ce0-97c9-718e-b744-f1f204db701c",
+      "call_id": "chatcmpl-01a17ce6-2a1d-733f-b081-34d14c94424f",
       "model_id": "muse-spark-1.3",
-      "latency_ms": 3666,
+      "latency_ms": 3471,
       "input_tokens": 1474,
-      "output_tokens": 803,
-      "cost_usd": "0.00525525"
+      "output_tokens": 644,
+      "cost_usd": "0.00457950"
     },
     "reading": {
       "region_id": "15595e0869ee-1",
-      "label_text": "Concor 5 mg\nBisoprolol fumarate\n30 film-coated tablets",
+      "label_text": "Concor 5 mg Bisoprolol fumarate 30 film-coated tablets",
       "inn": "Bisoprolol fumarate",
       "strength": {
         "ingredients": [
           {
-            "inn": "Bisoprolol fumarate",
+            "inn": "bisoprolol",
+            "salt": "fumarate",
             "amount": "5",
             "unit": "mg"
           }

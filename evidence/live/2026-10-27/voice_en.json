@@ -1,8 +1,8 @@
 {
   "trace": {
-    "call_id": "ceb2ad0b-da9e-45ac-b3dc-7e4616f3dde8",
+    "call_id": "3d0241fd-f19a-4eba-802b-8bfb1f903aad",
     "model_id": "muse-voice-transcribe-1.0",
-    "latency_ms": 3248,
+    "latency_ms": 3710,
     "input_tokens": 0,
     "output_tokens": 0,
     "cost_usd": "0.00050"
@@ -12,7 +12,7 @@
       "turn_id": "turn-0",
       "start_ms": 0,
       "end_ms": 8700,
-      "transcript": "I take Concor five milligrams once a day. I also take Metoprolol fifty milligrams twice a day. I stopped taking Panadol last month.",
+      "transcript": "I take Concor five milligrams once a day. I also take Metoprolol 50 milligrams twice a day. I stopped taking Panadol last month",
       "speaker": null,
       "lang_hint": "en"
     }
