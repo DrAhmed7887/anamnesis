@@ -1,6 +1,6 @@
 """Live smoke test: one real call per Meta model, on synthetic media, behind the SpendGuard cap.
 
-    uv run python scripts/smoke_live.py [--cap 5.00]
+    PYTHONPATH=. uv run python scripts/smoke_live.py [--cap 5.00]
 
 The key is read from the macOS Keychain (service META_API_KEY) and never printed or saved.
 Outputs: evidence/live/<date>/*.json (provider results only) and the ledger evidence/spend/ledger.jsonl.
@@ -74,8 +74,13 @@ def main() -> None:
 
     image = (MEDIA / "packs.png").read_bytes()
     segmenter = MetaSegmenter(client, guard)
-    res = step("sam medicine box", lambda: segmenter.segment(image, "medicine box", mime="image/png"))
-    if not res:
+    res = None
+    # "label" found the packs when "medicine box" found none (27 Oct)
+    for concept in ("medicine box", "label"):
+        res = step(f"sam {concept!r}", lambda c=concept: segmenter.segment(image, c, mime="image/png"))
+        if res and res[0]:
+            break
+    if not res or not res[0]:
         return finish(guard, start)
     regions, trace = res
     save(out, "sam", {"trace": trace.model_dump(), "regions": [r.model_dump() for r in regions]})
