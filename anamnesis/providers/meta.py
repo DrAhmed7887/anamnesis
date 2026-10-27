@@ -100,9 +100,15 @@ class MetaClient:
             response = self._http.post(path.lstrip("/"), **kwargs)
         except httpx.TimeoutException as exc:
             message = self._safe(f"Meta request timed out: {exc}")
-            raise ProviderError("meta", message, retryable=True) from None
+            raise ProviderError(
+                "meta", message, retryable=True, billable_uncertain=True,
+                estimated_reason="timeout",
+            ) from None
         except httpx.RequestError as exc:
-            raise ProviderError("meta", self._safe(f"Meta request failed: {exc}"), retryable=True) from None
+            raise ProviderError(
+                "meta", self._safe(f"Meta request failed: {exc}"), retryable=True,
+                billable_uncertain=True, estimated_reason="transport error",
+            ) from None
         latency_ms = max(0, int((time.monotonic() - start) * 1000))
         if response.is_error:
             try:
@@ -113,13 +119,21 @@ class MetaClient:
             raise ProviderError(
                 "meta", self._safe(f"Meta HTTP {response.status_code}: {message}"),
                 retryable=response.status_code == 429 or response.status_code >= 500,
+                billable_uncertain=response.status_code >= 500,
+                estimated_reason=f"http {response.status_code}",
             )
         try:
             payload = response.json()
         except ValueError as exc:
-            raise ProviderError("meta", "malformed Meta response JSON", retryable=True) from exc
+            raise ProviderError(
+                "meta", "malformed Meta response JSON", retryable=True,
+                billable_uncertain=True, estimated_reason="malformed response JSON",
+            ) from exc
         if not isinstance(payload, dict):
-            raise ProviderError("meta", "malformed Meta response object", retryable=True)
+            raise ProviderError(
+                "meta", "malformed Meta response object", retryable=True,
+                billable_uncertain=True, estimated_reason="malformed response object",
+            )
         return payload, latency_ms
 
 
@@ -155,7 +169,7 @@ class MetaTranscriber:
         except (EOFError, ValueError, wave.Error, ZeroDivisionError) as exc:
             raise ProviderError("voice", f"unsupported WAV audio: {exc}") from exc
 
-        self.guard.check(cost_usd(_VOICE_MODEL, audio_ms=duration))
+        estimate = cost_usd(_VOICE_MODEL, audio_ms=duration)
         request: dict[str, Any] = {
             "model": _VOICE_MODEL, "audioEncoding": "WAV", "mode": "ENDPOINTING",
         }
@@ -163,22 +177,28 @@ class MetaTranscriber:
             request["languageBias"] = language_bias
         if keywords is not None:
             request["keywords"] = keywords
-        payload, latency_ms = self.client.post("/asr/transcribe", files={
-            "request": (None, json.dumps(request), "application/json"),
-            "audio": ("recording.wav", wav, "audio/wav"),
-        })
-        try:
-            turns = parse_transcribe_response(payload, lang_hint)
-        except ProviderError as exc:
-            raise ProviderError(exc.provider, self.client._safe(str(exc)), exc.retryable) from None
-        try:
-            billed_ms = int(payload["audioDurationMs"])
-            cost = cost_usd(_VOICE_MODEL, audio_ms=billed_ms)
-        except (KeyError, TypeError, ValueError) as exc:
-            raise ProviderError("voice", "invalid audioDurationMs") from exc
-        trace = _trace(str(payload.get("id") or uuid.uuid4()), _VOICE_MODEL, latency_ms, cost=cost)
-        self.guard.charge(trace)
-        return turns, trace
+        def attempt() -> tuple[list[AudioTurn], ProviderTrace]:
+            self.guard.check(estimate)
+            payload, latency_ms = self.client.post("/asr/transcribe", files={
+                "request": (None, json.dumps(request), "application/json"),
+                "audio": ("recording.wav", wav, "audio/wav"),
+            })
+            try:
+                turns = parse_transcribe_response(payload, lang_hint)
+                call_id = str(payload.get("id") or uuid.uuid4())
+                cost = cost_usd(_VOICE_MODEL, audio_ms=int(payload["audioDurationMs"]))
+            except (ProviderError, KeyError, TypeError, ValueError) as exc:
+                raise ProviderError(
+                    "voice", "malformed transcription response", retryable=True,
+                    billable_uncertain=True, estimated_reason="malformed Voice response",
+                ) from exc
+            trace = _trace(call_id, _VOICE_MODEL, latency_ms, cost=cost)
+            self.guard.charge_prechecked(trace)
+            return turns, trace
+
+        return with_one_retry(
+            attempt, guard=self.guard, model_id=_VOICE_MODEL, estimate=estimate,
+        )
 
 
 class MetaSegmenter:
@@ -191,31 +211,45 @@ class MetaSegmenter:
         if (not 1 <= len(words) <= 4 or "," in concept
                 or re.search(r"\b(?:and|or)\b", concept, re.IGNORECASE)):
             raise ProviderError("sam", "concept must be one short noun phrase")
-        self.guard.check(cost_usd(_SAM_MODEL, images=1))
-        payload, latency_ms = self.client.post("/responses", json={
+        estimate = cost_usd(_SAM_MODEL, images=1)
+        body = {
             "model": _SAM_MODEL,
             "input": [{"type": "message", "role": "user", "content": [
                 {"type": "input_text", "text": concept},
                 {"type": "input_image", "image_url": _data_url(image, mime)},
             ]}],
             "metadata": {"include_confidence": "true"},
-        })
-        try:
-            output = payload["output"]
-            text = "".join(
-                part["text"] for item in output for part in item.get("content", [])
-                if part.get("type") == "output_text"
-            )
-            call_id = str(payload["id"])
-        except (KeyError, TypeError, AttributeError) as exc:
-            raise ProviderError("sam", "malformed SAM response") from exc
-        try:
-            regions = parse_sam_output(text, hashlib.sha256(image).hexdigest())
-        except ProviderError as exc:
-            raise ProviderError(exc.provider, self.client._safe(str(exc)), exc.retryable) from None
-        trace = _trace(call_id, _SAM_MODEL, latency_ms, cost=cost_usd(_SAM_MODEL, images=1))
-        self.guard.charge(trace)
-        return regions, trace
+        }
+
+        def attempt() -> tuple[list[ImageRegion], ProviderTrace]:
+            self.guard.check(estimate)
+            payload, latency_ms = self.client.post("/responses", json=body)
+            try:
+                output = payload["output"]
+                text = "".join(
+                    part["text"] for item in output for part in item.get("content", [])
+                    if part.get("type") == "output_text"
+                )
+                call_id = payload["id"]
+                if not isinstance(call_id, str) or not call_id:
+                    raise ValueError("missing id")
+            except (KeyError, TypeError, AttributeError, ValueError) as exc:
+                raise ProviderError(
+                    "sam", "malformed SAM response", retryable=True,
+                    billable_uncertain=True, estimated_reason="malformed SAM response",
+                ) from exc
+            try:
+                regions = parse_sam_output(text, hashlib.sha256(image).hexdigest())
+            except ProviderError as exc:
+                raise ProviderError(
+                    exc.provider, self.client._safe(str(exc)), retryable=True,
+                    billable_uncertain=True, estimated_reason="malformed SAM output",
+                ) from None
+            trace = _trace(call_id, _SAM_MODEL, latency_ms, cost=estimate)
+            self.guard.charge_prechecked(trace)
+            return regions, trace
+
+        return with_one_retry(attempt, guard=self.guard, model_id=_SAM_MODEL, estimate=estimate)
 
 
 class MetaLabelReader:
@@ -256,17 +290,25 @@ class MetaLabelReader:
                 call_id = str(payload["id"])
                 cost = cost_usd(self.model, input_tokens=input_tokens, output_tokens=output_tokens)
             except (KeyError, IndexError, TypeError, ValueError) as exc:
-                raise ProviderError("spark", "malformed Spark response", retryable=True) from exc
+                raise ProviderError(
+                    "spark", "malformed Spark response", retryable=True,
+                    billable_uncertain=True, estimated_reason="malformed Spark response",
+                ) from exc
             trace = _trace(call_id, self.model, latency_ms, cost=cost,
                            input_tokens=input_tokens, output_tokens=output_tokens)
-            self.guard.charge(trace)
+            self.guard.charge_prechecked(trace)
             try:
                 reading = parse_label_json(content, region.region_id)
             except ProviderError as exc:
-                raise ProviderError(exc.provider, self.client._safe(str(exc)), exc.retryable) from None
+                raise ProviderError(
+                    exc.provider, self.client._safe(str(exc)), retryable=True,
+                    attempt_trace=trace,
+                ) from None
             return reading, trace
 
-        return with_one_retry(attempt)
+        return with_one_retry(
+            attempt, guard=self.guard, model_id=self.model, estimate=SPARK_CALL_ESTIMATE_USD,
+        )
 
 
 __all__ = [

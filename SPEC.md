@@ -83,10 +83,12 @@ The first rule that applies wins.
 - One tool: `submit_reconciliation`. `tool_choice="auto"`.
 - `max_grounding_iters = 2`, then abstain.
 - Top-3 SAM regions per photo.
-- Full JSON is collected, then validated with Pydantic. Spark calls get 1 retry and a 30 s timeout today; Voice and SAM retries land in batch 12a (QM M2 #4).
+- Full JSON is collected, then validated with Pydantic. Voice, SAM, and Spark calls retry once on retryable errors and use a 30 s timeout.
 
 ## 5. Every model call logs
 `model_id`, `latency_ms`, `input_tokens`, `output_tokens`, `cost_usd` → `evidence/`. Hosted Meta models are the default. Open weights (Glimmer on Modal, Spark Open on Baseten) are for comparison only.
+Billing-uncertain failures are recorded at the pre-call estimate. Rejected 4xx and
+429 requests are not charged.
 
 ## 6. Build rules
 - All models use `extra="forbid"`. No recursive JSON schemas.

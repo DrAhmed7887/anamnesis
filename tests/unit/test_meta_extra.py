@@ -37,7 +37,7 @@ def test_http_error_redacts_key_and_keeps_provider_message(tmp_path):
     assert key not in str(raised.value)
 
 
-def test_timeout_is_retryable(tmp_path):
+def test_timeout_is_retried_and_recorded_as_estimated(tmp_path):
     def timeout(request):
         raise httpx.ReadTimeout("slow", request=request)
 
@@ -46,7 +46,9 @@ def test_timeout_is_retryable(tmp_path):
     with pytest.raises(ProviderError) as raised:
         MetaTranscriber(client, guard).transcribe(_wav())
     assert raised.value.retryable is True
-    assert not guard.ledger_path.exists()
+    lines = [json.loads(line) for line in guard.ledger_path.read_text(encoding="utf-8").splitlines()]
+    assert len(lines) == 2
+    assert all(line["estimated"] and line["reason"] == "timeout" for line in lines)
 
 
 def test_wav_duration_and_invalid_header():
