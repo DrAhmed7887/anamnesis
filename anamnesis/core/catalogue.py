@@ -9,7 +9,8 @@ import yaml
 from anamnesis.schema.medication import INN_ALIASES, Release, canonical_inn
 
 
-def _normalise(text: str) -> str:
+def normalise(text: str) -> str:
+    """Casefold, strip Arabic marks and punctuation, split scripts: the one matching form."""
     text = text.casefold().replace("®", "").replace("™", "")
     text = re.sub(r"[\u0640\u064b-\u065f\u0670]", "", text)
     text = text.translate(str.maketrans({"أ": "ا", "إ": "ا", "آ": "ا", "ٱ": "ا", "ى": "ي", "ة": "ه"}))
@@ -72,15 +73,15 @@ class Catalogue:
         country_code = country.upper() if country else None
         entries.sort(
             key=lambda entry: (
+                country_code is None or country_code not in {c.upper() for c in entry.countries},
                 entry.brand.casefold(),
-                country_code is not None and country_code not in entry.countries,
                 entry.countries,
             )
         )
         return entries[0]
 
     def _matches(self, text: str) -> list[tuple[int, int, CatalogueEntry, bool]]:
-        normalised = _normalise(text)
+        normalised = normalise(text)
         matches = []
         for entry in self.entries:
             names = [(entry.brand, True)]
@@ -90,7 +91,7 @@ class Catalogue:
                 aliases = [alias for alias, (target, _) in INN_ALIASES.items() if target == moiety]
                 names.extend((name, False) for name in (moiety, *aliases))
             for raw, brand in names:
-                name = _normalise(raw)
+                name = normalise(raw)
                 variants = [name]
                 if brand and " " in name:
                     variants.append(name.replace(" ", ""))
