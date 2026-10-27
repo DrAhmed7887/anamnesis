@@ -47,3 +47,10 @@ The ledger only covers calls made through our adapters. Muse Code (`muse` CLI) g
 - This Arabic run mixed all the variants seen so far: كونكور (Arabic script), "BelocZok" (joined), "الPanadol" (Arabic article on a Latin brand).
 - Builder change: batch 13 was built by a Claude Sonnet subagent at Ahmed's request. A plain-codex attempt (ChatGPT login, no Sol available on that account) was stopped before it changed any file.
 - Ledger total: $0.220 of the $5 cap (live adapter calls only; Muse grills are outside it, see above).
+
+## 2026-10-27: supervisor review (Astra) changes the plan
+- Found the blind spot every other reviewer shared: the showcase patient takes **two beta-blockers** (bisoprolol and metoprolol). The pairwise reconciler can't see it. A cross-medication overlap observation (templated, non-advisory) moves into B16.
+- Re-prioritised to ship: B15 time-boxed to 2 h → B16 clinician brief and overlap → B17 staged real-media cases → usability check → demo. Target submission Wed 4 Nov 20:00 CET.
+- Release gate narrowed: block only on harmful false agreement, wrong provenance, advice leakage, spend-cap failure, or a failure on the frozen demo path.
+- Open decision for Ahmed: cut the open-weight benchmark (gives up the $10K bonus), or keep a minimal Baseten comparison if time remains.
+- Full triage: `evidence/grills/supervisor-2026-10-27/effect.md`.
