@@ -11,7 +11,7 @@ A pre-visit intake agent. It takes the patient's voice note (any of 25 languages
 ## 2. Medication facts
 | Model | Fields | Rules |
 |---|---|---|
-| `IngredientAmount` | `inn`, `amount`, `unit` | `amount > 0` (Decimal). `unit` ∈ `mg, mcg, g, ml, iu`. INNs are compared in canonical form (trimmed, casefolded, synonyms such as acetaminophen → paracetamol) |
+| `IngredientAmount` | `inn`, `salt?`, `amount`, `unit` | `amount > 0` (Decimal). `unit` ∈ `mg, mcg, g, ml, iu`. `inn` holds the **active moiety**: a curated alias table splits salt names (`"Metoprolol succinate"` → `inn="metoprolol"`, `salt="succinate"`). Synonyms are handled the same way (acetaminophen → paracetamol). An unknown suffix is never stripped |
 | `Strength` | `ingredients: list[IngredientAmount]`, `per`, `release` | ≥1 ingredient (combinations: Augmentin 875/125) and **no duplicate canonical INNs**. `per` ∈ `tablet, capsule, ml, dose`. `release` ∈ `immediate, modified, unknown` (default `unknown`) |
 | `DoseRegimen` | `units_per_intake?`, `intakes_per_day?`, `as_needed?` | Decimals > 0 when present (0.5 means half a tablet). `as_needed` defaults to `None`: unknown, not "no" |
 | `PatientClaim` (from audio) | `claim_id`, `name_text`, `inn?`, `strength?`, `intake_amount?`, `regimen?`, `status`, `audio_evidence` | `audio_evidence` has ≥1 turn_id. `status` ∈ `active, discontinued, unknown`. `intake_amount` (what they take per intake) is kept separate from `strength` (what the tablet contains) |
@@ -62,6 +62,7 @@ The first rule that applies wins.
 9. **Formulation gate before `match`.** Release forms (explicit, otherwise implied by the brand):
    - both known and different → `formulation_mismatch`
    - one `modified`, the other `unknown` → `insufficient_information`
+   - both sides name a salt for the same ingredient, and the salts differ (succinate vs tartrate) → `formulation_mismatch`
 10. Otherwise → `match`.
 
 ### Pairing (`reconcile_all`)
