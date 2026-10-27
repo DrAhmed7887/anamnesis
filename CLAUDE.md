@@ -1,12 +1,13 @@
 # Anamnesis: project instructions
 
-Antigravity (on Ahmed's personal account) is the **orchestrator** in this repo (Meta Global AI Developer Hackathon, target submission Wed 4 Nov 20:00 CET, deadline Thu 5 Nov 03:00 CET).
+Claude Code is the **CEO** (orchestrator and reviewer) in this repo, and **Muse Code builds all code** (Meta Global AI Developer Hackathon, target submission Wed 4 Nov 20:00 CET, deadline Thu 5 Nov 03:00 CET).
 
 ## Pipeline (from batch 16, 27 Oct 2026)
-- **Antigravity** orchestrates: it writes `SPEC.md`, the briefs and the contract tests, runs the gate, reviews each batch against `evidence/grills/BATCH_SUPERVISOR_PROMPT.md` (`evidence/batches/<n>/supervisor.md` and `review.md`), and merges.
-- **Muse Code (`muse-spark-1.3`)** builds each batch from the repo root with `muse exec --model muse-spark-1.3 --no-foreign-personal-context`, and never uses a `*-contributor` model. It doesn't touch `tests/contract/`; the gate rejects any batch that does. Its spend is outside the ledger and is logged per run in `evidence/decisions.md`.
-- **Gemini 4 Argon (Medium) via `agy`** stays the quality manager (`scripts/qm.sh`).
-- This project no longer uses Codex (built batches 1–12, with GPT-6 Astra grills) or Claude Code (built batches 13–15.5).
+- **Claude Code (CEO)** writes `SPEC.md`, the briefs and the contract tests, runs Muse and the gate, has every batch reviewed by an independent Opus supervisor subagent against `evidence/grills/BATCH_SUPERVISOR_PROMPT.md` (`evidence/batches/<n>/supervisor.md`), writes `review.md`, merges, and **reports the Meta usage after every batch**.
+- **Muse Code (`muse-spark-1.3`)** builds each batch from the repo root with `muse exec --model muse-spark-1.3 --contributor-mode off --no-foreign-personal-context`, and never uses a `*-contributor` model. It doesn't touch `tests/contract/`; the gate rejects any batch that does. Fix rounds go back to Muse with a round brief in `evidence/batches/<n>/`.
+- **Usage:** `scripts/muse_usage.py` prices each Muse session from its own billing records at the documented Spark prices → `evidence/spend/muse_ledger.jsonl` and `evidence/batches/<n>/usage.json`. Adapter calls stay in `evidence/spend/ledger.jsonl`. Meta's dashboard (`dev.meta.ai/usage`) is the final word.
+- **Gemini 4 Argon (Medium) via `agy`** can still run the milestone quality check (`scripts/qm.sh`).
+- Batches 1–12 were built with Codex, with milestone grills by GPT-6 Astra; neither is used now. Claude Code built batches 13–15.5 and is the CEO from batch 16, at Ahmed's decision (`evidence/decisions.md`).
 - Commands:
   ```bash
   scripts/batch.sh start <n> <slug>   # branch batch/<n>-<slug>; then commit "test(contract): batch <n>" + briefs/<n>.md
@@ -19,7 +20,7 @@ Antigravity (on Ahmed's personal account) is the **orchestrator** in this repo (
 
 ## Privacy and data
 - Synthetic data only. No patient data ever goes to any model.
-- `muse exec` always runs with `--model muse-spark-1.3 --no-foreign-personal-context`. **Never use a `*-contributor` model**, because Meta may train on what we send.
+- `muse exec` always runs with `--model muse-spark-1.3 --contributor-mode off --no-foreign-personal-context`. **Never use a `*-contributor` model**, because Meta may train on what we send.
 - Raw tool logs go to `evidence/raw/`, which is git-ignored. Commit only summaries, and check exports for personal content first. The repo goes public at submission.
 
 ## Money

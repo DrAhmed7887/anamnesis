@@ -72,3 +72,8 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
 - Ahmed decided on 27 Oct 2026 that Muse Code builds every batch from 16 on. This closes pre-B16 J8.
 - From batch 16 on, Antigravity (Ahmed's personal account) orchestrates: it writes the contracts and briefs and runs the batch reviews. **Muse Code** builds on Ahmed's personal Meta account (`muse exec --model muse-spark-1.3 --no-foreign-personal-context`, never a `*-contributor` model). Gemini via `agy` stays the quality manager.
 - Muse Code build runs are billed by Meta outside our adapter ledger, so each run's cost is logged below.
+
+## 2026-10-27 (evening): roles revised: Claude Code is CEO, Muse Code builds everything
+- Ahmed decided that Claude Code acts as CEO. It writes `SPEC.md`, the briefs and the contract tests, runs Muse headless, gates, has each batch reviewed by an independent Opus supervisor, merges, and reports the Meta usage after every batch. **From batch 16 on, Muse Code writes all code.** Antigravity is no longer in the loop; its pipeline commit (`92dea05`) and SPEC v3.2 draft were kept, and the draft's unbuilt parts (crop-first reads, Spark estimates) are labelled batch 18.
+- Muse usage is priced per session from its own billing records at the documented Spark 1.3 prices (`scripts/muse_usage.py` → `evidence/spend/muse_ledger.jsonl`, `evidence/batches/<n>/usage.json`). Meta's dashboard is the final word.
+- GPT-family second opinions come from GPT-OSS 120B via Antigravity.
