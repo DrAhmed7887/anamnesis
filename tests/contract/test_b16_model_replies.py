@@ -10,10 +10,13 @@ from pathlib import Path
 
 import pytest
 
+from anamnesis.core.catalogue import load_catalogue
+from anamnesis.core.reconcile import reconcile_pair
 from anamnesis.providers.base import ProviderError
 from anamnesis.providers.claims import parse_claims_json
 from anamnesis.providers.spark import parse_label_json
-from anamnesis.schema import AudioTurn, PatientClaim
+from anamnesis.schema import AudioTurn, IngredientAmount, PackObservation, PatientClaim, Strength
+from anamnesis.schema import DiscrepancyType as D
 
 ROOT = Path(__file__).resolve().parents[2]
 TURNS = [
@@ -72,6 +75,38 @@ def test_one_unparseable_field_never_loses_the_other_claims():
     ), TURNS)
     assert [c.name_text for c in found] == ["Concor", "Panadol", "BelocZok"]
     assert found[0].intake_amount.amount == Decimal("2.5") and found[1].regimen.intakes_per_day is None
+
+
+@pytest.mark.parametrize("text,expected", [("1.000", None), ("2.500", None), ("10.000", None),
+                                           ("0.125", Decimal("0.125")), ("12.5", Decimal("12.5"))])
+def test_a_dot_before_exactly_three_digits_is_ambiguous_unless_the_whole_part_is_zero(text, expected):
+    [found] = parse_claims_json(claims_reply(claim(intake_amount=amount(text))), TURNS)
+    assert (found.intake_amount.amount if found.intake_amount else None) == expected
+
+
+PANADOL_PACK = PackObservation(observation_id="o1", label_text="Panadol 500 mg", readability="readable",
+                               strength=Strength(ingredients=[IngredientAmount(inn="paracetamol", amount=500,
+                                                                               unit="mg")], per="tablet",
+                                                 release="immediate"), visual_evidence=["r1"])
+CONCOR_PACK = PackObservation(observation_id="o1", label_text="Concor 5 mg", readability="readable",
+                              strength=Strength(ingredients=[IngredientAmount(inn="bisoprolol", amount=5, unit="mg")],
+                                                per="tablet", release="immediate"), visual_evidence=["r1"])
+
+
+@pytest.mark.parametrize("raw,pack", [
+    # supervisor 16 #1: a combination whose caffeine amount doesn't parse must not match plain Panadol
+    (claim("Panadol", ("turn-1",), intake_amount=amount("500", inn="paracetamol"),
+           strength={"ingredients": [amount("500", inn="paracetamol"), amount("65 mg", inn="caffeine")],
+                     "per": "tablet", "release": "unknown"}), PANADOL_PACK),
+    # an intake range must not leave the strength alone to match the pack
+    (claim(intake_amount=amount("5-10"), strength={"ingredients": [amount("5")], "per": "tablet",
+                                                   "release": "unknown"}), CONCOR_PACK),
+])
+def test_a_dropped_claim_amount_takes_the_other_with_it_so_nothing_false_matches(raw, pack):
+    [found] = parse_claims_json(claims_reply(raw), TURNS)
+    assert found.strength is None and found.intake_amount is None
+    finding = reconcile_pair(found, pack, load_catalogue())
+    assert finding.type is not D.MATCH and finding.needs_clinician_review
 
 
 def test_a_decimal_comma_on_a_label_parses():
