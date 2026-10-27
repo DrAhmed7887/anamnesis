@@ -1,5 +1,6 @@
 """Deterministic, evidence-linked comparison of claims and packs."""
 
+import re
 from decimal import Decimal
 
 from anamnesis.core.catalogue import Catalogue, normalise
@@ -24,16 +25,19 @@ def _identity(
     country: str | None = None,
 ) -> tuple[frozenset[str] | None, bool]:
     entry = catalogue.resolve(text, country)
+    ambiguous = entry is None and catalogue.is_ambiguous(text)
     name_inns = entry.inns if entry else None
     if strength:
         inns = frozenset(_resolve_inn(part.inn, catalogue) for part in strength.ingredients)
-        conflict = name_inns is not None and inns != name_inns
+        conflict = ambiguous or (name_inns is not None and inns != name_inns)
         if inn and _resolve_inn(inn, catalogue) not in inns:
             conflict = True
         return inns, conflict
     if inn:
         inns = frozenset({_resolve_inn(inn, catalogue)})
-        return inns, name_inns is not None and inns != name_inns
+        return inns, ambiguous or (name_inns is not None and inns != name_inns)
+    if ambiguous:
+        return None, True
     return name_inns, False
 
 
@@ -131,18 +135,29 @@ def _intake_type(
         return D.INSUFFICIENT_INFORMATION
     if stated_unit != observed_unit:
         return D.STRENGTH_MISMATCH
-    ratio = stated / observed
+    return _dose_ratio_type(stated / observed, pack.per.value, splittable)
+
+
+def _dose_ratio_type(ratio: Decimal, per: str, splittable: bool | None) -> D:
+    """Map an intake-to-unit ratio to a finding (SPEC §3 rule 8)."""
     if ratio == 1:
         return D.MATCH
     if ratio in {Decimal(2), Decimal(3), Decimal(4)}:
         return D.INTAKE_DIFFERS_FROM_UNIT_STRENGTH
     if ratio == Decimal("0.5"):
-        if pack.per.value == "capsule" or splittable is False:
+        if per == "capsule" or splittable is False:
             return D.STRENGTH_MISMATCH
         if splittable is None:
             return D.INSUFFICIENT_INFORMATION
         return D.INTAKE_DIFFERS_FROM_UNIT_STRENGTH
     return D.STRENGTH_MISMATCH
+
+
+def _units_type(units: Decimal, pack: Strength, splittable: bool | None) -> D:
+    """Map tablets-per-intake against one pack unit (SPEC §3 rule 8, batch 17)."""
+    if pack.per.value not in {"tablet", "capsule"}:
+        return D.INSUFFICIENT_INFORMATION
+    return _dose_ratio_type(units, pack.per.value, splittable)
 
 
 def _claim_has_salt(claim: PatientClaim, inn: str, catalogue: Catalogue) -> bool:
@@ -257,6 +272,42 @@ def _release(
     return catalogue.implied_release(text, country)
 
 
+_RELEASE_WORDS = frozenset({
+    "retard", "depot", "xr", "xl", "sr", "er", "cr", "mr", "prolonged", "extended",
+    "modified", "sustained", "controlled", "slow", "immediate", "ممتد", "بطيء",
+})
+
+_ARABIC_RELEASE_WORDS = frozenset({"ممتد", "بطيء"})
+_RELEASE_CLITICS = r"(?:وال|بال|فال|لل|ال|و|ف|ب|ل)?"
+
+
+def _says_release(normalised: str) -> bool:
+    """A curated release word said as a whole word; Arabic words accept attached clitics."""
+    if any(f" {word} " in f" {normalised} " for word in _RELEASE_WORDS - _ARABIC_RELEASE_WORDS):
+        return True
+    return any(
+        re.search(rf"(?<!\w){_RELEASE_CLITICS}{re.escape(word)}(?!\w)", normalised)
+        for word in _ARABIC_RELEASE_WORDS
+    )
+
+
+def _claim_release(
+    claim: PatientClaim, catalogue: Catalogue, pack_release: Release,
+) -> Release:
+    """A claim's explicit release counts when the claim says so (SPEC §3, C8).
+
+    An unsaid release that agrees with the pack is not trusted: it would
+    manufacture a match, so the brand-implied release is used instead. An
+    unsaid release that disagrees with the pack still flags a conflict.
+    """
+    strength = claim.strength
+    if strength and strength.release is not Release.UNKNOWN:
+        said = _says_release(normalise(claim.name_text))
+        if said or catalogue.matches_brand(claim.name_text) or strength.release is not pack_release:
+            return strength.release
+    return catalogue.implied_release(claim.name_text)
+
+
 def _finding(kind: D, claim: PatientClaim | None, pack: PackObservation | None) -> Finding:
     return Finding(
         finding_id=f"{claim.claim_id if claim else '-'}:{pack.observation_id if pack else '-'}",
@@ -276,6 +327,20 @@ def reconcile_pair(claim: PatientClaim, observation: PackObservation, catalogue:
     return _finding(_pair_type(claim, observation, catalogue), claim, observation)
 
 
+def _units_check(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue) -> D | None:
+    """Tablets-per-intake against one pack unit (SPEC §3 rule 8, C1).
+
+    Runs after rule 7 found equal strengths (an early return otherwise) or when
+    the claim states no strength. Returns None when it does not apply, or when
+    the units agree: units never produce a match and never count for rule 9.
+    """
+    units = claim.regimen.units_per_intake if claim.regimen else None
+    if pack.strength is None or units is None or units == 1:
+        return None
+    kind = _units_type(units, pack.strength, catalogue.splittable(pack.label_text or "", pack.country))
+    return kind if kind is not D.MATCH else None
+
+
 def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue) -> D:
     if pack.readability.value != "readable":
         return D.UNREADABLE_SOURCE
@@ -289,15 +354,12 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
         return D.INGREDIENT_MISMATCH
     if claim.status.value == "discontinued":
         return D.DISCONTINUED_BUT_PRESENT
-    claim_release = _release(claim.strength, claim.name_text, catalogue)
     pack_release = _release(pack.strength, pack.label_text or "", catalogue, pack.country)
+    claim_release = _claim_release(claim, catalogue, pack_release)
     if _salts_differ(claim, pack, catalogue):
         return D.FORMULATION_MISMATCH
-    if (
-        claim_release is not Release.UNKNOWN
-        and pack_release is not Release.UNKNOWN
-        and claim_release is not pack_release
-    ):
+    releases = {claim_release, pack_release}
+    if Release.UNKNOWN not in releases and claim_release is not pack_release:
         return D.FORMULATION_MISMATCH
     compared = False
     if claim.strength and pack.strength:
@@ -319,12 +381,12 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
         )
         if kind is not D.MATCH:
             return kind
+    units_kind = _units_check(claim, pack, catalogue)
+    if units_kind is not None:
+        return units_kind
     if not compared:
         return D.INSUFFICIENT_INFORMATION
-    if Release.MODIFIED in {claim_release, pack_release} and Release.UNKNOWN in {
-        claim_release,
-        pack_release,
-    }:
+    if Release.MODIFIED in releases and Release.UNKNOWN in releases:
         return D.INSUFFICIENT_INFORMATION
     return D.MATCH
 

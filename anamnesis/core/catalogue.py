@@ -80,6 +80,14 @@ class Catalogue:
         )
         return entries[0]
 
+    def is_ambiguous(self, text: str) -> bool:
+        """True when the text matches entries but names 2+ different products."""
+        return bool(self._matches(text)) and self.resolve(text) is None
+
+    def matches_brand(self, text: str) -> bool:
+        """True when the text matches a catalogue brand or alias name."""
+        return any(brand for _, _, _, brand in self._matches(text))
+
     def mentions_moiety(self, text: str, moiety: str) -> bool:
         """True when the text names the moiety, or a brand whose only INN is that moiety, as whole words."""
         if f" {normalise(moiety)} " in f" {normalise(text)} ":
