@@ -2,10 +2,11 @@
 
     PYTHONPATH=. uv run python scripts/zoom_live.py --tag before [--compare] [--cap 5.00] [--session-usd 0.15]
 
-Images only, no audio. Each photo goes through run_intake as an intake would: segment, read the top regions,
-one zoom per unreadable or partial reading. Recording wrappers keep the frame SAM reported and the size,
-tokens and readability of every read. --compare also reads a crop of every region the loop did not zoom,
-so a full-frame and a zoomed reading of the same pack sit side by side. The expected reading of each pack
+Images only, no audio. Each photo goes through run_intake as an intake would: segment, read a crop of each
+top region (since batch 18), one zoom per unreadable or partial reading. Recording wrappers keep the frame SAM
+reported and the size, tokens and readability of every read. --compare also reads the full photo for every
+region, with the box given as text (the read before batch 18), so a full-photo and a crop reading of the same
+pack sit side by side. The expected reading of each pack
 comes from evidence/raw/media/hard/manifest.json (scripts/make_hard_media.sh), written before any model saw
 the images.
 The key is read from the macOS Keychain (service META_API_KEY) and never printed or saved.
@@ -24,7 +25,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from anamnesis.agent import crop_region, run_intake
+from anamnesis.agent import run_intake
 from anamnesis.core.catalogue import load_catalogue
 from anamnesis.providers import SpendGuard
 from anamnesis.providers.meta import MetaClient, MetaLabelReader, MetaSegmenter
@@ -34,7 +35,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "evidence/raw/media/hard"
 LEDGER = ROOT / "evidence/spend/ledger.jsonl"
 MAX_CALLS = 10
-COMPARE_CALLS = 3  # one forced crop read per region the loop read (top_k = 3)
+COMPARE_CALLS = 3  # one full-photo read per region the loop read (top_k = 3)
 
 
 def keychain(service: str) -> str:
@@ -101,16 +102,19 @@ def prepared_bytes(data: bytes) -> bytes:
     return prepare_image(data, "image/jpeg")[0]
 
 
+def first_and_zoom(calls: list[dict], region_id: str) -> tuple[dict | None, dict | None]:
+    """A region's first read and its zoom. Since batch 18 both are crops, so they are told apart by order."""
+    reads = [c for c in calls if c["region_id"] == region_id] + [None, None]
+    return reads[0], reads[1]
+
+
 def compare_reads(report, reader, image: bytes) -> dict:
-    """Read a crop of every region the loop did not zoom; returns region_id -> (call record, reading)."""
-    zoomed = {c["region_id"] for c in reader.calls if c["cropped"]}
+    """Read the full photo for every region the loop read; returns region_id -> (call record, reading)."""
     regions = {r.region_id: r for r in report.regions}
     forced = {}
     for obs in report.observations:
         region = regions[obs.visual_evidence[0]]
-        if region.region_id in zoomed:
-            continue
-        reading, _ = reader.read(crop_region(image, region), region, mime="image/png", cropped=True)
+        reading, _ = reader.read(image, region, mime="image/jpeg")
         forced[region.region_id] = (reader.calls[-1], reading)
     return forced
 
@@ -129,7 +133,7 @@ def main() -> None:
     client = MetaClient(api_key=keychain("META_API_KEY"))
     catalogue = load_catalogue()
     start = ledger.total_usd
-    rows = ["| photo | region | staged pack | first read | zoom read | final | verdict | forced crop read |",
+    rows = ["| photo | region | staged pack | first read | zoom read | final | verdict | full-photo read |",
             "|---|---|---|---|---|---|---|---|"]
 
     for item in manifest:
@@ -141,7 +145,7 @@ def main() -> None:
         report = run_intake(None, [(data, "image/jpeg")], transcriber=None, extractor=None,
                             segmenter=segmenter, reader=reader, catalogue=catalogue,
                             max_provider_calls=MAX_CALLS)
-        loop_reads = len(reader.calls)  # the loop's own reads; forced crop reads come after
+        loop_reads = len(reader.calls)  # the loop's own reads; full-photo reads come after
         forced = compare_reads(report, reader, prepared_bytes(data)) if args.compare else {}
         record = {"photo": item["file"], "orientation": item["orientation"], "loop_reads": loop_reads,
                   "stored_size": Image.open(io.BytesIO(data)).size, "segment_calls": segmenter.calls,
@@ -156,9 +160,7 @@ def main() -> None:
         for obs in report.observations:
             region = regions[obs.visual_evidence[0]]
             pack = pack_for(region, item)
-            reads = [c for c in reader.calls[:loop_reads] if c["region_id"] == region.region_id]
-            first = next((c for c in reads if not c["cropped"]), None)
-            zoom = next((c for c in reads if c["cropped"]), None)
+            first, zoom = first_and_zoom(reader.calls[:loop_reads], region.region_id)
 
             def cell(call):
                 return "-" if call is None else f"{call['readability']}, {call['input_tokens']} tok"
