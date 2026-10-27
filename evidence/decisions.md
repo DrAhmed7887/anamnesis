@@ -84,3 +84,11 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
 - **Code half: Vertex AI.** `gemini-4-argon`, billed to the Google Developer Program credit ($50.95 available on 25 Oct), $0.12 est.
 - **Triage:** `evidence/grills/m4-muse-brief/effect.md`. The evidence half passed. The code half's HOLD rests on a by-design rule. Two majors (overlaps from conflicted claims, salts hidden in the brief) go to batch 19.1.
 - **Outside the Meta ledgers.** This Google spend is outside both Meta ledgers; Cloud Billing is the final word on it.
+
+## 2026-10-27 (night): batch 21 scope (Ahmed's call)
+- **Real media, first time.** Batch 21 runs the first real phone photos and a real human voice, under `docs/DATA_HANDLING.md`, written before anything was recorded. Ahmed records the photos, and fictional voice notes that he reads himself. The expected results are written before any model sees a file, the hero case runs 10 times, and staged runs are capped at $1.
+- **Contract items.** Its contract carries:
+  - the QM M4 round-2 items: a salt-or-release `formulation` patient question, a pin for a salt named only in free text, a SPEC line on Unicode digits;
+  - the supervisor's batch 19.1 pins: escaping and `dir="auto"` on the Ingredient rows;
+  - whatever the real media show.
+- **CEO tooling:** `scripts/intake_live.py` writes each brief next to its report (QM M4 code #8) and records the claim call's latency against the 30 s timeout. The live claim calls of 27 Oct took 11.6 and 13.1 s.

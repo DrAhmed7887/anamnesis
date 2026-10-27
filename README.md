@@ -16,4 +16,4 @@ A pre-visit telehealth intake agent for the Meta Global AI Developer Hackathon (
 
 **Partners:** Baseten's hackathon credit has been received and is unused. An open-weight comparison (Muse Spark Open on Baseten) was cut on 27 Oct for time and hardware reasons ([`evidence/decisions.md`](evidence/decisions.md)); it comes back only if time remains.
 
-All data is synthetic. This is not a medical device and gives no medical advice.
+All data is synthetic so far; the staged real-media tests follow [`docs/DATA_HANDLING.md`](docs/DATA_HANDLING.md) (real packaging, fictional histories, no patient data). This is not a medical device and gives no medical advice.
