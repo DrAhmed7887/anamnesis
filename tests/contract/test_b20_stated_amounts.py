@@ -15,6 +15,7 @@ import pytest
 
 from anamnesis.core.catalogue import load_catalogue
 from anamnesis.core.reconcile import reconcile_pair
+from anamnesis.providers.base import ProviderError
 from anamnesis.providers.claims import _SYSTEM_PROMPT as CLAIM_PROMPT
 from anamnesis.providers.claims import parse_claims_json
 from anamnesis.providers.meta import _SYSTEM_PROMPT as LABEL_PROMPT
@@ -256,3 +257,33 @@ def test_the_claim_prompt_says_never_convert_units():
 
 def test_the_label_prompt_says_never_convert_units():
     assert "Write each amount with the number and unit printed on the pack, and never convert units." in LABEL_PROMPT
+
+
+# --- round 2 (supervisor 20) -----------------------------------------------------------------------------
+
+@pytest.mark.parametrize("text,stated,unstated", [
+    ("Concor five, two tablets", ("5", "2"), ("7",)),
+    ("five. Two of them", ("5", "2"), ("7",)),
+    ("five; two", ("5", "2"), ("7",)),
+    ("five\ntwo", ("5", "2"), ("7",)),
+    ("كونكور خمسة، اتنين حباية", ("5", "2"), ("7",)),
+    ("twenty-five milligrams", ("25",), ()),
+    ("two and a half.", ("2.5",), ()),
+])
+def test_a_run_of_number_words_ends_at_punctuation(text, stated, unstated):
+    found = stated_amounts(text)
+    assert n(*stated) <= found and not (n(*unstated) & found) if unstated else n(*stated) <= found
+
+
+@pytest.mark.parametrize("text", ["zero point zero", "zero point zero zero"])
+def test_a_point_decimal_that_is_zero_states_nothing(text):
+    assert stated_amounts(text) == frozenset()
+
+
+@pytest.mark.parametrize("label_text", [5, ["Concor 5 mg"], {"text": "Concor 5 mg"}, True])
+def test_a_label_text_that_is_not_a_string_is_a_malformed_reply(label_text):
+    reply = json.dumps({"label_text": label_text, "inn": "bisoprolol", "country": None, "readability": "readable",
+                        "strength": strength(amount("5"), release="immediate")})
+    with pytest.raises(ProviderError) as caught:
+        parse_label_json(reply, "r1")
+    assert caught.value.retryable

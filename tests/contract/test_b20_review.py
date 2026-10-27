@@ -556,3 +556,34 @@ def test_the_new_text_on_the_brief_gives_no_advice(report):
     for text in (DRAFT, APPROVED, REQUESTED, REPLACED, "Waiting for the patient: new photos requested 2.",
                  "Photos requested 2, received 1.", UNREADABLE_MESSAGE):
         assert_no_advice(text)
+
+
+# --- round 2 (supervisor 20) -----------------------------------------------------------------------------
+
+def test_a_review_of_another_report_cannot_answer_a_request(report):
+    """Supervisor 20 #2: report B has its own media, so only the review check can refuse."""
+    other_audio = (b"RIFF another fixture voice note", "audio/wav")
+    reads = {RC.region_id: [reading("Concor 5 mg\nBisoprolol fumarate",
+                                    Strength(ingredients=[mg("bisoprolol fumarate", 5)], per="tablet",
+                                             release="immediate"))],
+             RU.region_id: [reading(readability="unreadable"), reading(readability="unreadable")]}
+    other = run_intake(other_audio[0], IMAGES, transcriber=Transcriber(), extractor=Extractor(),
+                       segmenter=Segmenter({RC.image_sha256: [RC, RU]}), reader=Reader(reads), catalogue=CAT)
+    assert other.intake_id != report.intake_id
+    review_of_a = request_photo(new_review(report), report, "o1")
+    segmenter = Segmenter({SHA2: [R2]})
+    with pytest.raises(ValueError):
+        add_photo(other, review_of_a, "r1", (PHOTO2, "image/png"), IMAGES, other_audio, segmenter=segmenter,
+                  reader=Reader({R2.region_id: [BELOC_50]}), catalogue=CAT)
+    assert segmenter.seen == []
+
+
+def test_a_region_found_twice_is_kept_once(report):
+    """Supervisor 20 #3: as in the loop, the report's regions are unique by region_id."""
+    review = request_photo(new_review(report), report, "o1")
+    after, answered, _, _ = answer(report, review, "r1", regions=(R2, R2),
+                                   reads={R2.region_id: [BELOC_50, BELOC_50]})
+    ids = [region.region_id for region in after.regions]
+    assert len(ids) == len(set(ids)) and ids.count(R2.region_id) == 1
+    page = page_of(after, IMAGES + [(PHOTO2, "image/png")], answered)
+    page.by_id(f"region:{R2.region_id}")  # exactly one element with that id
