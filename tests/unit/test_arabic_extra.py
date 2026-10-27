@@ -4,7 +4,7 @@ from decimal import Decimal
 
 import pytest
 
-from anamnesis.core.catalogue import _normalise, load_catalogue
+from anamnesis.core.catalogue import load_catalogue, normalise
 from anamnesis.core.reconcile import reconcile_pair
 from anamnesis.schema import (
     SALT_BASIS_EQUIVALENTS,
@@ -52,7 +52,7 @@ def _pack(amount: str, *, release: Release = Release.MODIFIED, salt: str = "succ
 
 
 def test_normalise_applies_arabic_character_and_script_rules() -> None:
-    assert _normalise("أَإِآٱ ى ةـ ١٢٣ الPanadol") == "اااا ي ه 123 ال panadol"
+    assert normalise("أَإِآٱ ى ةـ ١٢٣ الPanadol") == "اااا ي ه 123 ال panadol"
 
 
 @pytest.mark.parametrize(

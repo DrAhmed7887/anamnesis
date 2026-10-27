@@ -1,9 +1,8 @@
 """Deterministic, evidence-linked comparison of claims and packs."""
 
-import re
 from decimal import Decimal
 
-from anamnesis.core.catalogue import Catalogue
+from anamnesis.core.catalogue import Catalogue, normalise
 from anamnesis.schema import (
     INN_ALIASES,
     SALT_BASIS_EQUIVALENTS,
@@ -29,6 +28,8 @@ def _identity(
     if strength:
         inns = frozenset(_resolve_inn(part.inn, catalogue) for part in strength.ingredients)
         conflict = name_inns is not None and inns != name_inns
+        if inn and _resolve_inn(inn, catalogue) not in inns:
+            conflict = True
         return inns, conflict
     if inn:
         inns = frozenset({_resolve_inn(inn, catalogue)})
@@ -129,18 +130,7 @@ def _intake_type(
 
 
 def _claim_has_salt(claim: PatientClaim, inn: str, catalogue: Catalogue) -> bool:
-    stated = _salts(
-        claim.strength,
-        catalogue,
-        (claim.intake_amount.inn, claim.intake_amount.salt) if claim.intake_amount else None,
-        (claim.inn, salt_of(claim.inn)) if claim.inn else None,
-    )
-    words = f" {re.sub(r'[^\w\s]|_', ' ', claim.name_text.casefold()).strip()} "
-    named_salt = any(
-        salt and moiety == inn and f" {alias} " in words
-        for alias, (moiety, salt) in INN_ALIASES.items()
-    )
-    return bool(stated.get(inn)) or named_salt
+    return bool(_claim_salts(claim, catalogue).get(inn))
 
 
 def _nominal_pack_amount(
@@ -166,38 +156,59 @@ def _claim_strength_type(claim: PatientClaim, pack: Strength, catalogue: Catalog
     return _strength_type(claim.strength, pack, catalogue, nominal_amounts)
 
 
-def _salts(
+def _text_salts(text: str, catalogue: Catalogue) -> list[tuple[str, str]]:
+    """(moiety, salt) pairs for whole-word curated salt aliases in free text."""
+    padded = f" {normalise(text)} "
+    found = {
+        normalise(alias): target
+        for alias, target in INN_ALIASES.items()
+        if target[1] and f" {normalise(alias)} " in padded
+    }
+    return [
+        (_resolve_inn(moiety, catalogue), salt)
+        for alias, (moiety, salt) in found.items()
+        if not any(alias != other and f" {alias} " in f" {other} " for other in found)
+    ]
+
+
+def _side_salts(
     strength: Strength | None,
+    intake: IngredientAmount | None,
+    inn: str | None,
+    text: str,
     catalogue: Catalogue,
-    *named_salts: tuple[str, str | None] | None,
-) -> dict[str, set[str]]:
-    """Known salts per canonical ingredient, including name-derived salt facts."""
+) -> dict[str, frozenset[str]]:
+    """Known salts per canonical ingredient from strength, intake, scalar inn and free text."""
+    parts = list(strength.ingredients) if strength else []
+    parts.extend([intake] if intake else [])
+    pairs = [(_resolve_inn(part.inn, catalogue), part.salt or salt_of(part.inn)) for part in parts]
+    if inn:
+        pairs.append((_resolve_inn(inn, catalogue), salt_of(inn)))
+    pairs.extend(_text_salts(text, catalogue))
     salts: dict[str, set[str]] = {}
-    if strength:
-        for part in strength.ingredients:
-            salt = part.salt or salt_of(part.inn)
-            if salt:
-                salts.setdefault(_resolve_inn(part.inn, catalogue), set()).add(salt)
-    for named in named_salts:
-        if named is not None:
-            name, salt = named
-            if salt:
-                salts.setdefault(_resolve_inn(name, catalogue), set()).add(salt)
-    return salts
+    for moiety, salt in pairs:
+        if salt:
+            salts.setdefault(moiety, set()).add(salt)
+    return {moiety: frozenset(found) for moiety, found in salts.items()}
+
+
+def _claim_salts(claim: PatientClaim, catalogue: Catalogue) -> dict[str, frozenset[str]]:
+    return _side_salts(claim.strength, claim.intake_amount, claim.inn, claim.name_text, catalogue)
+
+
+def _pack_salts(pack: PackObservation, catalogue: Catalogue) -> dict[str, frozenset[str]]:
+    return _side_salts(pack.strength, None, pack.inn, pack.label_text or "", catalogue)
+
+
+def _salt_conflict(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue) -> bool:
+    """One side names two different salts of one ingredient: extraction conflict."""
+    sides = (_claim_salts(claim, catalogue), _pack_salts(pack, catalogue))
+    return any(len(found) > 1 for side in sides for found in side.values())
 
 
 def _salts_differ(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue) -> bool:
-    stated = _salts(
-        claim.strength,
-        catalogue,
-        (claim.intake_amount.inn, claim.intake_amount.salt) if claim.intake_amount else None,
-        (claim.inn, salt_of(claim.inn)) if claim.inn else None,
-    )
-    observed = _salts(
-        pack.strength,
-        catalogue,
-        (pack.inn, salt_of(pack.inn)) if pack.inn else None,
-    )
+    stated = _claim_salts(claim, catalogue)
+    observed = _pack_salts(pack, catalogue)
     return any(
         stated_salt != observed_salt
         for inn in stated.keys() & observed.keys()
@@ -238,7 +249,7 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
     pack_inns, pack_conflict = _pack_identity(pack, catalogue)
     if claim_inns is None or pack_inns is None:
         return D.UNRESOLVED_NAME
-    if claim_conflict or pack_conflict:
+    if claim_conflict or pack_conflict or _salt_conflict(claim, pack, catalogue):
         return D.INSUFFICIENT_INFORMATION
     if claim_inns != pack_inns:
         return D.INGREDIENT_MISMATCH
@@ -260,7 +271,9 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
         kind = _claim_strength_type(claim, pack.strength, catalogue)
         if kind is not D.MATCH:
             return kind
-    if claim.intake_amount and pack.strength and len(pack.strength.ingredients) == 1:
+    if claim.intake_amount and pack.strength and len(pack.strength.ingredients) > 1:
+        return D.INSUFFICIENT_INFORMATION
+    if claim.intake_amount and pack.strength:
         compared = True
         pack_part = pack.strength.ingredients[0]
         kind = _intake_type(
