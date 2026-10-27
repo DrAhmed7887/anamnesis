@@ -1,0 +1,66 @@
+{
+  "trace": {
+    "call_id": "chatcmpl-01a17d02-4495-74bf-bc15-b0c51f328a90",
+    "model_id": "muse-spark-1.3",
+    "latency_ms": 7643,
+    "input_tokens": 561,
+    "output_tokens": 2374,
+    "cost_usd": "0.01079075"
+  },
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "كونكور",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "كونكور",
+        "salt": null,
+        "amount": "5",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "1",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    },
+    {
+      "claim_id": "c2",
+      "name_text": "بلوك زوك",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "بلوك زوك",
+        "salt": null,
+        "amount": "50",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "2",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    },
+    {
+      "claim_id": "c3",
+      "name_text": "البنادول",
+      "inn": null,
+      "strength": null,
+      "intake_amount": null,
+      "regimen": null,
+      "status": "discontinued",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ]
+}

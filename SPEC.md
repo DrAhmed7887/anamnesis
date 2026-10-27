@@ -53,7 +53,7 @@ The first rule that applies wins.
 4. The identity sets differ → `ingredient_mismatch`.
 5. The claim's status is `discontinued` → `discontinued_but_present`.
 6. **Known formulation conflicts:** named salts for the same canonical ingredient differ, or both release forms (explicit, otherwise brand-implied) are known and differ → `formulation_mismatch`. Claim salts include strength ingredients, `intake_amount.salt` and `salt_of(inn)`; pack salts include strength ingredients and `salt_of(inn)`.
-7. Both sides have a strength: compare amounts in mg (g ×1000, mcg ×0.001; `ml` and `iu` only against the same unit). Unequal → `strength_mismatch` or `ratio_mismatch`, as in v1.
+7. Both sides have a strength: compare amounts in mg (g ×1000, mcg ×0.001; `ml` and `iu` only against the same unit). When the claim names no salt, curated pack salt-basis equivalents compare against the nominal amount for both strength and intake; formulation checks still apply first. Unequal → `strength_mismatch` or `ratio_mismatch`, as in v1.
 8. The claim has an `intake_amount` (also when 7 found equal strengths): compare its INN, resolved by the same ingredient resolver, with a single-ingredient pack strength; a mismatch → `insufficient_information`.
    - `per` ∉ {tablet, capsule} → `insufficient_information`.
    - Compute r = intake / unit strength. r = 1 → continue.
@@ -75,6 +75,7 @@ The first rule that applies wins.
 
 ### Catalogue resolution
 - `-` and `/` count as spaces and matching is on whole words. Each match records its character span; a match is suppressed only when its span is contained inside a longer match's span. Brand matches also cover INN or alias matches whose INN sets are within the brand's INNs. Text that names 2+ different brands or products → `None`; INN/alias-only matches sharing one INN set resolve deterministically by brand name.
+- Arabic names remove diacritics and tatweel, normalize alef/ya/ta marbuta and Arabic-Indic digits, split Arabic/Latin boundaries, and accept the attached clitics `ال`, `وال`, `بال`, `فال`, `لل`, `و`, `ف`, `ب` and `ل`; curated Arabic brand aliases retain the brand's release and splittability.
 - The country is a preference, never a filter.
 - Entries carry `release` and `splittable` (`true`, `false` or `null`). All entries are synthetic.
 

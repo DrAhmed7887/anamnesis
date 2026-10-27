@@ -1,46 +1,54 @@
 - brand: Concor
+  aliases: [كونكور]
   release: immediate
   splittable: true
   inns: [bisoprolol]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Beloc-Zok
+  aliases: [بيلوك زوك, بلوك زوك]
   release: modified
   splittable: true
   inns: [metoprolol]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Norvasc
+  aliases: [نورفاسك]
   release: immediate
   splittable: null
   inns: [amlodipine]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Glucophage
+  aliases: [جلوكوفاج]
   release: immediate
   splittable: null
   inns: [metformin]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Panadol
+  aliases: [بنادول, بانادول]
   release: immediate
   splittable: null
   inns: [paracetamol]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Panadol Extra
+  aliases: [بنادول اكسترا, بانادول اكسترا]
   release: immediate
   splittable: null
   inns: [paracetamol, caffeine]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Augmentin
+  aliases: [اوجمنتين]
   release: immediate
   splittable: false
   inns: [amoxicillin, clavulanic acid]
   countries: [DE, ES, GB]
   synthetic: true
 - brand: Lipitor
+  aliases: [ليبيتور]
   release: immediate
   splittable: false
   inns: [atorvastatin]
