@@ -19,7 +19,7 @@ section() { printf '\n\n===== %s =====\n' "$1"; }
     [[ -f $f ]] && { section "$f"; cat "$f"; }
   done
   for n in $(seq "$first" "$last"); do
-    for f in briefs/$n.md evidence/batches/$n/review.md evidence/batches/$n/gate.json; do
+    for f in briefs/$n.md evidence/batches/$n/review.md evidence/batches/$n/supervisor.md evidence/batches/$n/gate.json; do
       [[ -f $f ]] && { section "$f"; cat "$f"; }
     done
   done

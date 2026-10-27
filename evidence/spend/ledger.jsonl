@@ -51,3 +51,15 @@
 {"call_id": "resp_6ae095b7399e3946dcdf41a1", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-10-27T12:14:48.349129+00:00", "estimated": false}
 {"call_id": "chatcmpl-01a17d48-e434-74e6-b27e-3d212a5a0e35", "model_id": "muse-spark-1.3", "cost_usd": "0.00449575", "time_utc": "2026-10-27T12:14:51.599365+00:00", "estimated": false}
 {"call_id": "chatcmpl-01a17d48-f5ea-761b-9570-166b1a205a6b", "model_id": "muse-spark-1.3", "cost_usd": "0.00432875", "time_utc": "2026-10-27T12:14:56.166418+00:00", "estimated": false}
+{"call_id": "da70ac36-014c-486a-9b2c-c81fa7277031", "model_id": "muse-voice-transcribe-1.0", "cost_usd": "0.00050", "time_utc": "2026-10-27T12:50:04.080704+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d69-4f14-7282-b2a0-78233b06272b", "model_id": "muse-spark-1.3", "cost_usd": "0.01173825", "time_utc": "2026-10-27T12:50:16.066687+00:00", "estimated": false}
+{"call_id": "resp_6ae09e0862a806f151964bc6", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-10-27T12:50:17.311897+00:00", "estimated": false}
+{"call_id": "resp_6ae09e091b8e673749e84a45", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-10-27T12:50:18.599789+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d69-666f-7766-a374-19311799e8d7", "model_id": "muse-spark-1.3", "cost_usd": "0.00501425", "time_utc": "2026-10-27T12:50:22.033969+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d69-738d-7156-b6d0-0fedd3ec25a5", "model_id": "muse-spark-1.3", "cost_usd": "0.00468150", "time_utc": "2026-10-27T12:50:25.456087+00:00", "estimated": false}
+{"call_id": "057db8a3-068c-474a-8935-4aac38237da2", "model_id": "muse-voice-transcribe-1.0", "cost_usd": "0.00070", "time_utc": "2026-10-27T12:50:28.463950+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d69-ae3c-74fb-a909-0bf0c5d8f926", "model_id": "muse-spark-1.3", "cost_usd": "0.01153750", "time_utc": "2026-10-27T12:50:40.517255+00:00", "estimated": false}
+{"call_id": "resp_6ae09e227c096f03abf24558", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-10-27T12:50:42.466150+00:00", "estimated": false}
+{"call_id": "resp_6ae09e230fd1d2451c454f71", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-10-27T12:50:44.120890+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d69-c964-73e6-869c-186773a138e3", "model_id": "muse-spark-1.3", "cost_usd": "0.00436400", "time_utc": "2026-10-27T12:50:47.436178+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d69-d967-7231-ac02-53e6b3e489e2", "model_id": "muse-spark-1.3", "cost_usd": "0.00565475", "time_utc": "2026-10-27T12:50:51.445261+00:00", "estimated": false}

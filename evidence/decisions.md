@@ -19,7 +19,7 @@ Muse (M1 #3) said ER tablets can't be split. That is too broad: some scored ER t
 - `docs/SUGGESTIONS_FOR_CLAUDE.md`: decisions logged above. Kept **out of git**, because it contains the wrong price table and personal context. It stays as a local note.
 - `docs/DATASET_RESEARCH_AUDIT.md`: a reference for the eval stage (packaging-photo datasets, speech corpora, RxNorm/openFDA/CIMA APIs). **Unverified.** The DOIs and licences get checked before any dataset is used. Kept out of git until then.
 
-## 2026-10-27: first live run (synthetic media, $0.0325 on the ledger of a $5 cap)
+## 2026-10-27: first live run (synthetic media; the ledger total printed after that run, including 7 SAM debugging calls, was $0.03249 of a $5 cap)
 - **Voice Transcribe** (English, plus Egyptian Arabic with code-switching) and **Spark label reading** (strict JSON schema plus image input) worked on the first try. Spark also returned the correct release forms: Beloc-Zok `modified`, Concor `immediate`.
 - **SAM 3.1** found the packs only with the concept "label" ("medicine box" and 3 others gave 0 regions). Its output format differs from the docs; batch 6 fixed the parser using the real output as a fixture.
 - **New blocker, proven on live data:** Spark returns INNs with the salt ("bisoprolol fumarate", "metoprolol succinate"). The catalogue uses the active moiety, so `reconcile_all` pairs **nothing**: every finding comes back `missing_modality`. This is M1 finding #2, which we had deferred. **Next batch:** a curated salt-to-moiety mapping, with the salt kept as its own field (succinate vs tartrate stays visible to the clinician).
@@ -54,3 +54,9 @@ The ledger only covers calls made through our adapters. Muse Code (`muse` CLI) g
 - Release gate narrowed: block only on harmful false agreement, wrong provenance, advice leakage, spend-cap failure, or a failure on the frozen demo path.
 - Open decision for Ahmed: cut the open-weight benchmark (gives up the $10K bonus), or keep a minimal Baseten comparison if time remains.
 - Full triage: `evidence/grills/supervisor-2026-10-27/effect.md`.
+
+## 2026-10-27: open-weight benchmark cut (M2 F-09)
+Ahmed accepted the supervisor plan, which cuts the Baseten/Modal open-weight benchmark (and with it the $10K Open Weight bonus) for hardware, budget and schedule reasons. The Baseten $100 credit stays unused unless time remains after B17.
+
+## 2026-10-27: workflow change
+From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervisor subagent (high effort) must APPROVE each batch, read-only and independently; Claude Code orchestrates and gates. Batch 15 took 3 supervisor rounds. The supervisor caught a spend gap on the cap-refusal path and a contract test that proved nothing.
