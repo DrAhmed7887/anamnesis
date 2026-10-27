@@ -77,3 +77,10 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
 - Ahmed decided that Claude Code acts as CEO. It writes `SPEC.md`, the briefs and the contract tests, runs Muse headless, gates, has each batch reviewed by an independent Opus supervisor, merges, and reports the Meta usage after every batch. **From batch 16 on, Muse Code writes all code.** Antigravity is no longer in the loop; its pipeline commit (`92dea05`) and SPEC v3.2 draft were kept, and the draft's unbuilt parts (crop-first reads, Spark estimates) are labelled batch 18.
 - Muse usage is priced per session from its own billing records at the documented Spark 1.3 prices (`scripts/muse_usage.py` → `evidence/spend/muse_ledger.jsonl`, `evidence/batches/<n>/usage.json`). Meta's dashboard is the final word.
 - GPT-family second opinions come from GPT-OSS 120B via Antigravity.
+
+## 2026-10-27 (night): milestone M4 quality manager, Gemini 4 Argon by two routes
+- Ahmed asked for the Gemini 4 QM before the next batch, "either from agy or google cloud the 50$".
+- **Evidence half: Antigravity.** Free on AI Pro, but it cut the 315 KB package off at about 191 KB, then ran out of quota.
+- **Code half: Vertex AI.** `gemini-4-argon`, billed to the Google Developer Program credit ($50.95 available on 25 Oct), $0.12 est.
+- **Triage:** `evidence/grills/m4-muse-brief/effect.md`. The evidence half passed. The code half's HOLD rests on a by-design rule. Two majors (overlaps from conflicted claims, salts hidden in the brief) go to batch 19.1.
+- **Outside the Meta ledgers.** This Google spend is outside both Meta ledgers; Cloud Billing is the final word on it.

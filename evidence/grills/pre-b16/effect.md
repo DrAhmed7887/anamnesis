@@ -65,3 +65,12 @@ About 20 focused hours plus reserve to Wed 4 Nov 20:00 CET.
 6. **Video (about 6 h, J1):** screen recording, voiceover, captions; the judge's 20-second hook.
 7. **Package (about 1.5 h):** README, claims checklist (A1, J6), hosted replay, case table (A4).
 Total about 18.5 h, leaving some reserve. Open for Ahmed: the merge, this plan (video at 6 h), the usability check, and J8.
+
+## Where the plan landed (27 Oct, QM M4 #4)
+- B16a → batches 16 to 18:
+  - batch 16: C3 and C5;
+  - batch 17: C1, C4, C8, the narrowed `match` wording, QM M3 r2 #2/#3;
+  - batch 18: Z8, C6, C7.
+- B16b → batch 19: the clinician brief, with J2, J3, Z5, A3, the coverage block and the scope lines.
+- B17 (staged real media) → batch 21.
+- No Muse grill ran for this pre-B16 round: the idea grills were Astra and Claude, and the code grill was Claude. So there is no Muse spend to log.

@@ -14,6 +14,6 @@ A pre-visit telehealth intake agent for the Meta Global AI Developer Hackathon (
 
 **Meta tooling in the build:** from batch 16 on, all code is written by **Muse Code** (`muse-spark-1.3`, standard mode with contributor mode off). Each Muse session's tokens and cost are in [`evidence/spend/muse_ledger.jsonl`](evidence/spend/muse_ledger.jsonl) and `evidence/batches/<n>/usage.json`. Claude Code is the CEO: it writes the spec, the acceptance tests in `tests/contract/` (which Muse may not edit) and the reviews, and an independent Opus supervisor reviews every batch. Batches 1–12 were built with Codex and batches 13–15.5 with Claude Code ([`evidence/decisions.md`](evidence/decisions.md)).
 
-**Partners:** Baseten's hackathon credit has been received. Muse Spark Open (open weights) on Baseten is planned as a second claim extractor for an open-weight comparison; it isn't used yet.
+**Partners:** Baseten's hackathon credit has been received and is unused. An open-weight comparison (Muse Spark Open on Baseten) was cut on 27 Oct for time and hardware reasons ([`evidence/decisions.md`](evidence/decisions.md)); it comes back only if time remains.
 
 All data is synthetic. This is not a medical device and gives no medical advice.
