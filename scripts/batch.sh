@@ -1,10 +1,9 @@
 #!/bin/zsh
 # One build batch, gated. Every step leaves evidence in evidence/batches/<n>/.
 #   scripts/batch.sh start <n> <slug>   branch batch/<n>-<slug> from main (then commit tests/contract + briefs/<n>.md)
-#   scripts/batch.sh run <n> <luna|sol>  codex writes the code from briefs/<n>.md, then the gate runs
-#   BUILDER=codex scripts/batch.sh run <n> <model-id>   same, on plain `codex` (ChatGPT login), e.g. gpt-6-chat-thinking
-#   scripts/batch.sh gate <n>            rerun the gate (after a fix)
-#   scripts/batch.sh merge <n>           needs "Verdict: PASS" in evidence/batches/<n>/review.md
+#   scripts/batch.sh run <n>            Muse Code (muse-spark-1.3) writes the code from briefs/<n>.md, then the gate runs
+#   scripts/batch.sh gate <n>           rerun the gate (after a fix)
+#   scripts/batch.sh merge <n>          needs "Verdict: PASS" in evidence/batches/<n>/review.md
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
@@ -50,22 +49,20 @@ case $cmd in
     mkdir -p "$ev"
     ;;
   run)
-    model=${3:?luna|sol}
+    model=${3:-muse-spark-1.3}
+    [[ $model != *-contributor* ]] || { print -u2 "run: contributor models are forbidden"; exit 1; }
     [[ -f briefs/$n.md ]] || { print -u2 "run: briefs/$n.md missing"; exit 1; }
     [[ -n $(contract_base) ]] || { print -u2 "run: commit the contract tests first"; exit 1; }
     [[ -z $(build_changes) ]] || { print -u2 "run: working tree not clean"; exit 1; }
     mkdir -p "$ev" evidence/raw
-    raw="evidence/raw/batch-$n-codex.log"   # git-ignored: the full transcript can echo local files
-    if [[ ${BUILDER:-default} == codex ]]; then
-      tool=(codex); model_id=$model; label="codex-chatgpt"
-    else
-      tool=(codex); model_id="gpt-6-$model"; label="codex"
-    fi
-    print "$label $model_id, batch $n, started $(now)" > "$raw"
-    $tool exec -C "$PWD" -s workspace-write --skip-git-repo-check -m "$model_id" \
-      "$(cat briefs/_worker_preamble.md briefs/$n.md)" </dev/null >> "$raw" 2>&1 || print "codex exited non-zero" >> "$raw"
-    # Committed record: header, the builder's final report, token count.
-    { head -1 "$raw"; print; awk '/^codex$/{buf=""; keep=1; next} keep{buf=buf $0 "\n"} END{printf "%s", buf}' "$raw"; } > "$ev/codex.md"
+    raw="evidence/raw/batch-$n-muse.log"   # git-ignored: the full transcript can echo local files
+    print "muse $model, batch $n, started $(now)" > "$raw"
+    # Headless runs can't answer approval prompts; --disable-approval keeps the OS sandbox on (docs/muse/muse-code.md).
+    muse exec --model "$model" --no-foreign-personal-context --disable-approval \
+      "$(cat briefs/_worker_preamble.md briefs/$n.md)" </dev/null >> "$raw" 2>&1 || print "muse exited non-zero" >> "$raw"
+    muse export --last --redacted --out "evidence/raw/batch-$n-muse_session.json" </dev/null 2>/dev/null || true
+    grep -c -E "contributor" "evidence/raw/batch-$n-muse_session.json" 2>/dev/null && print -u2 "WARNING: contributor model in session" || true
+    cp "$raw" "$ev/builder.md"
     gate
     ;;
   gate)
@@ -78,13 +75,13 @@ case $cmd in
     title=$(head -1 "briefs/$n.md" | sed 's/^# *//')
     # Stage only build paths, so files another tool drops in the repo never ride along.
     git add anamnesis tests "$ev" "briefs/$n.md" SPEC.md pyproject.toml uv.lock
-    git commit -q -m "feat: batch $n - $title" -m "Built by the batch builder (see Built-by in the review), gated (ruff + pytest + contract lock), reviewed by Claude Code. Evidence: $ev/"
+    git commit -q -m "feat: batch $n - $title" -m "Built by the batch builder (see Built-by in the review), gated (ruff + pytest + contract lock), reviewed by Antigravity. Evidence: $ev/"
     git switch -q main
     git merge -q --no-ff "$branch" -m "merge: $branch"
     sha=$(git rev-parse --short HEAD)
     tests=$(grep -Eo '"tests_passed":[0-9]+' "$ev/gate.json" | grep -Eo '[0-9]+$')
-    model=$(head -1 "$ev/codex.md" 2>/dev/null | grep -Eo 'gpt-[0-9.]+-[a-z-]+' || print manual)
-    builder=$(head -1 "$ev/codex.md" 2>/dev/null | grep -Eo '^codex-[a-z]+' || print manual)
+    model=$(head -1 "$ev/builder.md" 2>/dev/null | awk '{print $2}' | sed 's/,$//' || print muse-spark-1.3)
+    builder=$(head -1 "$ev/builder.md" 2>/dev/null | awk '{print $1}' || print muse)
     # Who actually wrote the code: "Built-by: ..." in the review overrides the builder model (QM M2 #5).
     built_by=$(grep -m1 '^Built-by:' "$ev/review.md" | sed 's/^Built-by: *//' || true)
     built_by=${built_by:-$builder $model}

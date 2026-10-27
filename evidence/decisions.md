@@ -66,3 +66,9 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
 - A live check on 4 staged 12 MP phone photos found a **wrong-provenance bug**, not a zoom bug: SAM applies EXIF orientation and Spark doesn't, so on a portrait photo 2 of 3 labels were attached to the wrong pack. The crop-zoom also refused every rotated photo. Fix: every photo is prepared (upright pixels, all metadata including GPS dropped) before any model sees it, and a region is only read from the photo it was found on.
 - The zoom itself never fired: Spark read every upright label at full frame. It stays as the fallback; it goes in the demo only if a real B17 photo triggers it and the zoomed reading is correct.
 - Triage of the zoom check and of the pre-B16 idea and code grills: `evidence/grills/pre-b16/effect.md`.
+
+## 2026-10-27: Muse Code builds from batch 16
+- Batches 1–12 were built with Codex (with milestone grills by GPT-6 Astra), and batches 13–15.5 were built with Claude Code.
+- Ahmed decided on 27 Oct 2026 that Muse Code builds every batch from 16 on. This closes pre-B16 J8.
+- From batch 16 on, Antigravity (Ahmed's personal account) orchestrates: it writes the contracts and briefs and runs the batch reviews. **Muse Code** builds on Ahmed's personal Meta account (`muse exec --model muse-spark-1.3 --no-foreign-personal-context`, never a `*-contributor` model). Gemini via `agy` stays the quality manager.
+- Muse Code build runs are billed by Meta outside our adapter ledger, so each run's cost is logged below.
