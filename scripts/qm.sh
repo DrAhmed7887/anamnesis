@@ -66,7 +66,8 @@ size=$(wc -c < "$pkg" | tr -d ' ')
 print "package: $pkg ($size bytes)"
 (( size <= limit )) || print -u2 "WARNING: $size bytes is over the ${limit}-byte budget agy delivers whole; run the evidence and code halves"
 
-inbox="${QM_SESSIONS_INBOX:-/nonexistent}"
+inboxes=(${QM_SESSIONS_INBOX:-/nonexistent}(N/))
+inbox=${inboxes[1]:-/nonexistent}   # an inbox Antigravity must not write to (QM_SESSIONS_INBOX)
 before=$(ls "$inbox" 2>/dev/null | wc -l | tr -d ' ')
 if [[ ${QM_VIA:-agy} == vertex ]]; then
   # The same model on Vertex AI, billed to the gcloud project's billing account, when agy's quota is used up.
