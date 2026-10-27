@@ -1,0 +1,32 @@
+- brand: Concor
+  inns: [bisoprolol]
+  countries: [DE, ES, GB]
+  synthetic: true
+- brand: Beloc-Zok
+  inns: [metoprolol]
+  countries: [DE, ES, GB]
+  synthetic: true
+- brand: Norvasc
+  inns: [amlodipine]
+  countries: [DE, ES, GB]
+  synthetic: true
+- brand: Glucophage
+  inns: [metformin]
+  countries: [DE, ES, GB]
+  synthetic: true
+- brand: Panadol
+  inns: [paracetamol]
+  countries: [DE, ES, GB]
+  synthetic: true
+- brand: Panadol Extra
+  inns: [paracetamol, caffeine]
+  countries: [DE, ES, GB]
+  synthetic: true
+- brand: Augmentin
+  inns: [amoxicillin, clavulanic acid]
+  countries: [DE, ES, GB]
+  synthetic: true
+- brand: Lipitor
+  inns: [atorvastatin]
+  countries: [DE, ES, GB]
+  synthetic: true
