@@ -34,6 +34,27 @@ A pre-visit intake agent. It takes the patient's voice note (any of 25 languages
 - Every type except `match` requires `needs_clinician_review = true`.
 - All text comes from fixed templates. There is no free-text dosing advice.
 
+### Decision order for one claim and one pack (`reconcile_pair`)
+The first rule that applies wins.
+1. Pack `partial` or `unreadable` → `unreadable_source`.
+2. Claim INNs (`inn`, otherwise the catalogue resolves `name_text`) or pack INNs (`inn`, otherwise the catalogue resolves `label_text`) cannot be found → `unresolved_name`.
+3. The INN sets differ → `ingredient_mismatch`.
+4. The claim's status is `discontinued` → `discontinued_but_present`.
+5. Both sides have a strength. Amounts are converted to mg (g ×1000, mcg ×0.001); if `ml` or `iu` units differ, the result is `strength_mismatch`.
+   - Equal → `match`.
+   - Combinations with the same ratio but different amounts → `strength_mismatch`. A different ratio → `ratio_mismatch`.
+   - Single ingredient, unequal → `strength_mismatch`.
+6. The claim gives only an `intake_amount` and the pack has a single-ingredient strength. Compute r = intake / strength:
+   - r = 1 → `match`
+   - r ∈ {0.5, 2, 3, 4} → `intake_differs_from_unit_strength`
+   - otherwise → `strength_mismatch`
+7. Nothing to compare → `match`.
+
+`reconcile_all` pairs each claim, in order, with the first unpaired pack whose INN set overlaps. Anything left over becomes a one-sided finding:
+- An unreadable pack → `unreadable_source`.
+- A name that can't be resolved → `unresolved_name`.
+- Otherwise → `missing_modality`.
+
 ## 4. Agent loop bounds (Batch 4)
 - One tool: `submit_reconciliation`. `tool_choice="auto"`.
 - `max_grounding_iters = 2`, then abstain.
