@@ -67,6 +67,16 @@ def _amount(ingredient: IngredientAmount) -> tuple[Decimal, str]:
     return amount, unit
 
 
+_ACCEPTED_RATIOS = frozenset({Decimal(1), Decimal("0.5"), Decimal(2), Decimal(3), Decimal(4)})
+
+
+def _basis_amount(stated: Decimal, literal: Decimal, nominal: Decimal | None) -> Decimal:
+    """Pack amount to compare: the literal one if it explains the stated amount, else the nominal one."""
+    if nominal is None or literal == 0 or stated / literal in _ACCEPTED_RATIOS:
+        return literal
+    return nominal
+
+
 def _strength_type(
     claim: Strength,
     pack: Strength,
@@ -76,11 +86,14 @@ def _strength_type(
     if claim.per != pack.per:
         return D.STRENGTH_MISMATCH
     stated = {_resolve_inn(part.inn, catalogue): _amount(part) for part in claim.ingredients}
-    observed = {
-        inn: (nominal_amounts[inn], "mg") if nominal_amounts and inn in nominal_amounts else _amount(part)
-        for part in pack.ingredients
-        if (inn := _resolve_inn(part.inn, catalogue))
-    }
+    observed = {}
+    for part in pack.ingredients:
+        inn = _resolve_inn(part.inn, catalogue)
+        literal, unit = _amount(part)
+        nominal = (nominal_amounts or {}).get(inn)
+        if inn in stated and nominal is not None and unit == "mg":
+            literal = _basis_amount(stated[inn][0], literal, nominal)
+        observed[inn] = (literal, unit)
     if stated == observed:
         return D.MATCH
     if stated.keys() != observed.keys():
@@ -104,11 +117,9 @@ def _intake_type(
     if pack.per.value not in {"tablet", "capsule"}:
         return D.INSUFFICIENT_INFORMATION
     stated, stated_unit = _amount(intake)
-    observed, observed_unit = (
-        (nominal_amount, "mg")
-        if nominal_amount is not None
-        else _amount(pack.ingredients[0])
-    )
+    observed, observed_unit = _amount(pack.ingredients[0])
+    if nominal_amount is not None:
+        observed = _basis_amount(stated, observed, nominal_amount)
     intake_inn = _resolve_inn(intake.inn, catalogue)
     pack_inn = _resolve_inn(pack.ingredients[0].inn, catalogue)
     if intake_inn != pack_inn:
@@ -157,18 +168,34 @@ def _claim_strength_type(claim: PatientClaim, pack: Strength, catalogue: Catalog
 
 
 def _text_salts(text: str, catalogue: Catalogue) -> list[tuple[str, str]]:
-    """(moiety, salt) pairs for whole-word curated salt aliases in free text."""
+    """(moiety, salt) pairs for curated salt aliases and loose salt words in free text."""
     padded = f" {normalise(text)} "
     found = {
         normalise(alias): target
         for alias, target in INN_ALIASES.items()
         if target[1] and f" {normalise(alias)} " in padded
     }
-    return [
+    pairs = {
         (_resolve_inn(moiety, catalogue), salt)
         for alias, (moiety, salt) in found.items()
         if not any(alias != other and f" {alias} " in f" {other} " for other in found)
-    ]
+    }
+    pairs.update(_loose_salts(text, padded, catalogue))
+    return sorted(pairs)
+
+
+def _loose_salts(text: str, padded: str, catalogue: Catalogue) -> set[tuple[str, str]]:
+    """Curated salt words that sit apart from the moiety, when the text names the moiety or its brand."""
+    present = {
+        (moiety, normalise(salt))
+        for moiety, salt in INN_ALIASES.values()
+        if salt and f" {normalise(salt)} " in padded and catalogue.mentions_moiety(text, moiety)
+    }
+    return {
+        (moiety, salt)
+        for moiety, salt in present
+        if not any(m == moiety and salt != other and f" {salt} " in f" {other} " for m, other in present)
+    }
 
 
 def _side_salts(
@@ -217,10 +244,12 @@ def _salts_differ(claim: PatientClaim, pack: PackObservation, catalogue: Catalog
     )
 
 
-def _release(strength: Strength | None, text: str, catalogue: Catalogue) -> Release:
+def _release(
+    strength: Strength | None, text: str, catalogue: Catalogue, country: str | None = None
+) -> Release:
     if strength and strength.release is not Release.UNKNOWN:
         return strength.release
-    return catalogue.implied_release(text)
+    return catalogue.implied_release(text, country)
 
 
 def _finding(kind: D, claim: PatientClaim | None, pack: PackObservation | None) -> Finding:
@@ -256,7 +285,7 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
     if claim.status.value == "discontinued":
         return D.DISCONTINUED_BUT_PRESENT
     claim_release = _release(claim.strength, claim.name_text, catalogue)
-    pack_release = _release(pack.strength, pack.label_text or "", catalogue)
+    pack_release = _release(pack.strength, pack.label_text or "", catalogue, pack.country)
     if _salts_differ(claim, pack, catalogue):
         return D.FORMULATION_MISMATCH
     if (
@@ -279,7 +308,7 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
         kind = _intake_type(
             claim.intake_amount,
             pack.strength,
-            catalogue.splittable(pack.label_text or ""),
+            catalogue.splittable(pack.label_text or "", pack.country),
             catalogue,
             _nominal_pack_amount(claim, pack_part, catalogue),
         )

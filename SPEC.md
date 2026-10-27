@@ -1,4 +1,4 @@
-# Anamnesis contract (v1, 27 Oct 2026)
+# Anamnesis contract (v3, 27 Oct 2026)
 
 A pre-visit intake agent. It takes the patient's voice note (Voice Transcribe supports 25 languages; **tested live so far: English and Egyptian Arabic with code-switching**) and photos of their medicine packs, and gives the clinician a one-page brief. Every fact in the brief links to the audio turn and the image region it came from. **It reports where sources disagree. It never gives medical advice.** All data is synthetic.
 
@@ -54,7 +54,7 @@ The first rule that applies wins.
 4. The identity sets differ → `ingredient_mismatch`.
 5. The claim's status is `discontinued` → `discontinued_but_present`.
 6. **Known formulation conflicts:** named salts for the same canonical ingredient differ, or both release forms (explicit, otherwise brand-implied) are known and differ → `formulation_mismatch`. Salts for each side come from one shared path: strength ingredients, `intake_amount` (claim only), `salt_of(inn)` and whole-word curated salt aliases found in `name_text` / `label_text` after `catalogue.normalise` (a longer alias suppresses a shorter one it contains).
-7. Both sides have a strength: compare amounts in mg (g ×1000, mcg ×0.001; `ml` and `iu` only against the same unit). When the claim names no salt, curated pack salt-basis equivalents compare against the nominal amount for both strength and intake; formulation checks still apply first. Unequal → `strength_mismatch` or `ratio_mismatch`, as in v1.
+7. Both sides have a strength: compare amounts in mg (g ×1000, mcg ×0.001; `ml` and `iu` only against the same unit). When the claim names no salt, curated pack salt-basis equivalents compare against the nominal amount for both strength and intake; formulation checks still apply first. Unequal → `strength_mismatch` or `ratio_mismatch`.
 8. The claim has an `intake_amount` and the pack strength has more than one ingredient → `insufficient_information` (a single amount can't be checked against a combination; strength-only combination claims still compare under rule 7). Otherwise, when the claim has an `intake_amount` (also when 7 found equal strengths): compare its INN, resolved by the same ingredient resolver, with a single-ingredient pack strength; a mismatch → `insufficient_information`.
    - `per` ∉ {tablet, capsule} → `insufficient_information`.
    - Compute r = intake / unit strength. r = 1 → continue.
@@ -80,11 +80,18 @@ The first rule that applies wins.
 - The country is a preference, never a filter: candidate entries sort country-match first (case-insensitive), then by brand, so the result is deterministic.
 - Entries carry `release` and `splittable` (`true`, `false` or `null`). All entries are synthetic.
 
-## 4. Agent loop bounds (planned, batch 12 — not built yet)
-- One tool: `submit_reconciliation`. `tool_choice="auto"`.
-- `max_grounding_iters = 2`, then abstain.
-- Top-3 SAM regions per photo.
-- Full JSON is collected, then validated with Pydantic. Voice, SAM, and Spark calls retry once on retryable errors and use a 30 s timeout.
+## 4. Agent loop (`anamnesis/agent/`, batch 14)
+`run_intake(audio, images, ...)` runs a **fixed order**; no model chooses actions, nothing a model wrote is surfaced except source data (transcripts, label text), and there are no outer retries (adapters retry once themselves).
+1. `transcribe` if there is audio. 2. `extract_claims` if there are turns.
+3. Per image, `segment` with each concept in order (`medicine box`, `label`), stopping at the first that returns a region.
+4. `read` the `top_regions(k=3)` of each image.
+5. Each `unreadable` or `partial` reading gets **one** `zoom_read`: the source image is cropped with `crop_region` (+10% margin, clamped, refused unless the sha256 and frame size match the region), and the reader is called with `cropped=True`. The new reading keeps the **source** `region_id`, so provenance stays in source pixels. SAM never runs on a crop. At most 2 reads per region (`max_grounding_iters = 2`).
+6. `reconcile` with `reconcile_all`.
+- **Budget:** every provider call, including failed ones, counts 1 against `max_provider_calls` (default 12). The call that would exceed it is skipped, a `budget_exhausted` step is logged (it is then the last step), and every remaining provider call is skipped. Reconciliation still runs on what exists.
+- **Errors:** a provider error becomes a step whose `outcome` is `error: <provider> <ExceptionName>` (no message text); the loop continues with the next item.
+- **Report:** one `ReconciliationReport` (`anamnesis/schema/report.py`): turns, claims, regions, observations (`o0, o1, ...` in reading order, `visual_evidence=[region_id]`), findings, steps, `calls`, `spend_usd` (sum of `cost_usd + prior_cost_usd` over every returned trace) and a sha256 `intake_id` of the inputs. A validator rejects any evidence, claim or observation id that points nowhere.
+- **Session caps:** `SessionGuard(parent, max_usd, max_calls)` wraps the ledger guard with a per-session dollar and call cap and still writes every charge to the parent.
+- Voice, SAM, and Spark calls retry once on retryable errors and use a 30 s timeout.
 
 ## 5. Every model call logs
 - **Ledger** (`evidence/spend/ledger.jsonl`): `call_id`, `model_id`, `cost_usd`, `time_utc`, `estimated` (+ `reason`). Lines from before batch 12 have no `estimated` field; all of them are real charges.

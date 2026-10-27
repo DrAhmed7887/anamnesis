@@ -14,7 +14,8 @@ class AdviceLeak(Exception):
 _ADVICE = re.compile(
     r"\b(?:you should|you must|take|increase|decrease|reduce|stop taking|double|skip|"
     r"split|halve|continue|keep taking|safe|"
-    r"debe|tome|tomar|nehmen sie|sollten)\b",
+    r"debe|tome|tomar|nehmen sie|sollten|"
+    r"يجب|خذ|تناول|توقف|ضاعف|ينصح)\b",
     re.IGNORECASE,
 )
 
