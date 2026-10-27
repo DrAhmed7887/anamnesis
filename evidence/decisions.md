@@ -92,3 +92,26 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
   - the supervisor's batch 19.1 pins: escaping and `dir="auto"` on the Ingredient rows;
   - whatever the real media show.
 - **CEO tooling:** `scripts/intake_live.py` writes each brief next to its report (QM M4 code #8) and records the claim call's latency against the 30 s timeout. The live claim calls of 27 Oct took 11.6 and 13.1 s.
+
+## 2026-10-28: one plan to submission for both CEO sessions (Ahmed's call)
+- Two Claude Code sessions act as CEO on this repo. After checking the other session's open work, Ahmed approved one plan to submission in plan mode, just after midnight.
+- **Owners.**
+  - Session A: batch 21 (real media), the M5 grill and QM, and the README and repo prep.
+  - Session B: the eval scorecard, batch 22 (the "how it got here" timeline and the batch 20 follow-ups), and the photo-request demo script.
+  - A new session makes the video, from Fri 30 Oct.
+- **Rules.**
+  - Each session works in its own worktree and messages the other before it writes to `main` or merges.
+  - One Muse run at a time, and batch numbers are claimed by message.
+- **Held-out answers.** The scorecard's answer keys live in a separate private repo, outside Muse's workspace. They are published after the final pass.
+- **Dates.**
+  - Feature freeze Sat 31 Oct 23:59. After it, only release-gate fixes go in.
+  - Submission by Wed 4 Nov 16:00 CET. That is earlier than both deadline times on record: Wed 17:00 CET in an old calendar entry, and Thu 5 Nov 03:00 CET in our notes from the participant guide.
+- **Cut order if late:**
+  1. the batch 22 timeline;
+  2. the hosted brief;
+  3. the photo-request beat in the video;
+  4. extra scorecard passes.
+
+  Never cut: the batch 21 hero case, the video, the README or the submission.
+- **Tracks:** Indie and Best Agentic Use-Case. The open-weight bonus went with the cut benchmark.
+- **Money:** Meta $11.55 of $150 so far, about $30 projected by submission. Google only for the M5 QM.
