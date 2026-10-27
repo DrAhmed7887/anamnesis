@@ -15,7 +15,7 @@ section() { printf '\n\n===== %s =====\n' "$1"; }
 {
   cat evidence/grills/QM_PROMPT.md
   section "PACKAGE: milestone $m, batches $first-$last"
-  for f in "$dir"/effect.md SPEC.md evidence/decisions.md evidence/batch_log.jsonl; do
+  for f in evidence/grills/*/effect.md SPEC.md evidence/decisions.md evidence/batch_log.jsonl evidence/spend/ledger.jsonl; do
     [[ -f $f ]] && { section "$f"; cat "$f"; }
   done
   for n in $(seq "$first" "$last"); do
@@ -35,7 +35,7 @@ print "package: $pkg ($(wc -c < "$pkg" | tr -d ' ') bytes)"
 inbox="${QM_SESSIONS_INBOX:-/nonexistent}"
 before=$(ls "$inbox" 2>/dev/null | wc -l | tr -d ' ')
 # Flags must come before -p: agy reads the word right after -p as the prompt.
-agy --model gemini-4-argon-medium --mode plan --sandbox --disable-slash-commands --print-timeout 600s \
+agy --model gemini-4-argon-medium --sandbox --disable-slash-commands --print-timeout 600s \
   -p "$(cat "$pkg")" </dev/null > "evidence/raw/$m-qm.out" 2>&1 || print "agy exited non-zero" >> "evidence/raw/$m-qm.out"
 cp "evidence/raw/$m-qm.out" "$dir/qm.md"
 after=$(ls "$inbox" 2>/dev/null | wc -l | tr -d ' ')

@@ -30,3 +30,8 @@ Claude Code is the **only orchestrator** in this repo (Meta Global AI Developer 
 - Literature citations: none go in the submission unless verified against the source.
 - ICU or renal dosing cases: rejected (inpatient dosing advice).
 - Anamnesis reports where sources disagree. It **never** gives medical advice. All text comes from `anamnesis/schema/templates.py`.
+
+## Quality manager (every milestone)
+- After each milestone's grill and triage, run `scripts/qm.sh <milestone> <first-batch> <last-batch>`. Gemini 4 Argon (Medium), via `agy`, audits the **process and the evidence**, not the code: traceability, contract adequacy, gate integrity, spec/code consistency, safety invariants, honest claims and deadline risk. The prompt is `evidence/grills/QM_PROMPT.md`.
+- `VERDICT: HOLD` blocks the next milestone until its blocker is fixed. Every QM finding gets a verdict row in that milestone's `effect.md`.
+- To run it by hand: paste `evidence/raw/<milestone>-qm-package.md` into Antigravity with Gemini 4 Argon (Medium).

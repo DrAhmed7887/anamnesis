@@ -1,6 +1,6 @@
 # Anamnesis contract (v1, 27 Oct 2026)
 
-A pre-visit intake agent. It takes the patient's voice note (any of 25 languages) and photos of their medicine packs, and gives the clinician a one-page brief. Every fact in the brief links to the audio turn and the image region it came from. **It reports where sources disagree. It never gives medical advice.** All data is synthetic.
+A pre-visit intake agent. It takes the patient's voice note (Voice Transcribe supports 25 languages; **tested live so far: English and Egyptian Arabic with code-switching**) and photos of their medicine packs, and gives the clinician a one-page brief. Every fact in the brief links to the audio turn and the image region it came from. **It reports where sources disagree. It never gives medical advice.** All data is synthetic.
 
 ## 1. Evidence (independent IDs, no forced chain)
 | Model | Fields | Rules |
@@ -79,11 +79,11 @@ The first rule that applies wins.
 - The country is a preference, never a filter.
 - Entries carry `release` and `splittable` (`true`, `false` or `null`). All entries are synthetic.
 
-## 4. Agent loop bounds (Batch 4)
+## 4. Agent loop bounds (planned, batch 12 — not built yet)
 - One tool: `submit_reconciliation`. `tool_choice="auto"`.
 - `max_grounding_iters = 2`, then abstain.
 - Top-3 SAM regions per photo.
-- Full JSON is collected, then validated with Pydantic. A provider call gets 1 retry and a 30 s timeout.
+- Full JSON is collected, then validated with Pydantic. Spark calls get 1 retry and a 30 s timeout today; Voice and SAM retries land in batch 12a (QM M2 #4).
 
 ## 5. Every model call logs
 `model_id`, `latency_ms`, `input_tokens`, `output_tokens`, `cost_usd` → `evidence/`. Hosted Meta models are the default. Open weights (Glimmer on Modal, Spark Open on Baseten) are for comparison only.

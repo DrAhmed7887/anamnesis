@@ -78,7 +78,12 @@ case $cmd in
     sha=$(git rev-parse --short HEAD)
     tests=$(grep -Eo '"tests_passed":[0-9]+' "$ev/gate.json" | grep -Eo '[0-9]+$')
     model=$(head -1 "$ev/codex.md" 2>/dev/null | grep -Eo 'gpt-6-[a-z]+' || print manual)
-    print -r -- "{\"batch\":$n,\"branch\":\"$branch\",\"model\":\"$model\",\"tests_passed\":$tests,\"verdict\":\"pass\",\"merge_commit\":\"$sha\",\"at\":\"$(now)\"}" >> "$log"
+    # Who actually wrote the code: "Built-by: ..." in the review overrides the builder model (QM M2 #5).
+    built_by=$(grep -m1 '^Built-by:' "$ev/review.md" | sed 's/^Built-by: *//' || true)
+    built_by=${built_by:-codex $model}
+    contract=$(uv run pytest -q tests/contract 2>&1 | grep -Eo '[0-9]+ passed' | grep -Eo '[0-9]+' || print 0)
+    unit=$(uv run pytest -q tests/unit 2>&1 | grep -Eo '[0-9]+ passed' | grep -Eo '[0-9]+' || print 0)
+    print -r -- "{\"batch\":$n,\"branch\":\"$branch\",\"model\":\"$model\",\"built_by\":\"$built_by\",\"tests_passed\":$tests,\"contract_tests\":$contract,\"unit_tests\":$unit,\"verdict\":\"pass\",\"merge_commit\":\"$sha\",\"at\":\"$(now)\"}" >> "$log"
     git add "$log" && git commit -q -m "chore: log batch $n"
     git push -q origin main 2>/dev/null && print "pushed main" || print "push skipped (no remote?)"
     ;;

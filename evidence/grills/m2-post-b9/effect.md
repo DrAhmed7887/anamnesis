@@ -17,3 +17,22 @@ Source: an adversarial review pasted into the session by Ahmed (the tool that pr
 | F-09 | No single report artifact; no agentic ablation; no open-weight harness | True | **Accepted:** a `ReconciliationReport` bundle (B12). Open-weight benchmark, Baseten Spark Open first (B13). The 3 tables become the README's evidence plan | B12–B13 |
 
 **Effect:** 11 findings, all accepted. 7 code claims reproduced exactly; F-03a reproduced with a milder outcome than claimed (`insufficient_information`, then unpaired); the rest are design points. The most important catch is **F-01A**: a silent `match` across metoprolol salts. Earlier grills and contracts missed it, because every salt test so far put the salt on `strength`.
+
+## Quality manager review (Gemini 4 Argon Medium, `qm.md`): VERDICT HOLD
+Reviewer verdicts by Claude Code. The HOLD stands until the blocker (#8) is fixed: **no live runs until then.**
+
+| QM # | Finding | Verdict | Where |
+|---|---|---|---|
+| 1 | M2 can't close while F-04…F-09 are unapplied; M1 #9–#11 aren't visible in the B3 review | **Accepted.** M2 stays *open* until B13. `qm.sh` now includes every earlier `effect.md` (the M1 table was missing from the package) | tooling |
+| 2 | Salts that appear only in `name_text`/`label_text`, and salt conflicts within one side, are untested | **Accepted** | B12b |
+| 3a | `strength` and scalar `inn` coexist and contradict: the strength silently wins | **Accepted:** an extraction conflict | B12b |
+| 3b | Combination pack: the intake check is skipped, so a disagreeing intake is reported as `match` | **Accepted (real bug):** an intake against a combination pack → `insufficient_information` | B12b |
+| 4 | Voice and SAM have no retry, despite SPEC §4 | **Accepted** | B12a |
+| 5 | `batch_log.jsonl` says B7 was `gpt-6-sol`, but Claude Code wrote half of it; B4's reviewer test location isn't stated | **Accepted:** a `built_by` field in the log, with B7 corrected. B4's reviewer test went into `tests/unit/test_providers_extra.py` (not `tests/contract/`) | now |
+| 6 | Sorting by brand made the country preference dead code (the B10 note wasn't enough) | **Accepted:** country first, then brand | B12b |
+| 7 | SPEC §4 credits the agent loop to "Batch 4" and requires retries that don't exist | **Accepted:** §4 relabelled *planned (B12)* | now |
+| 8 | **Blocker:** timed-out or failed calls aren't charged to the ledger, and retry traces are lost | **Accepted.** No live runs until B12a: a timeout or failure after sending charges the pre-call estimate, and retries return every trace | B12a |
+| 9 | The ledger artifact wasn't in the package; test counts don't split contract vs unit | **Accepted:** `qm.sh` adds the ledger, and the merge log records both counts | now |
+| 10 | "Any of 25 languages" overstates what was tested | **Accepted:** SPEC now says English and Egyptian Arabic were tested live | now |
+
+Tooling note: `--mode plan` has no effect together with `--disable-slash-commands` (agy warning). The review still ran sandboxed with no tools, and no file appeared in the Drive Sessions inbox.
