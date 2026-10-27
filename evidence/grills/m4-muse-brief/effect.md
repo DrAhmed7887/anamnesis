@@ -45,3 +45,24 @@ Ahmed asked for the Gemini 4 quality manager before the next batch, through Anti
 - several photos at once may hit `max_provider_calls=12`, which matters for batch 21's multi-pack photos.
 
 **CEO verdict.** The HOLD's only blocker (#1) is behaviour the SPEC chose on purpose, and it fails safe. No release-gate class (harmful false agreement, wrong provenance, advice leakage, spend-cap failure, frozen demo path) is reproduced. Two accepted majors touch the demo path, though: #2 (overlaps from conflicted claims) and #5 (salts hidden in the brief). They land in a small batch 19.1 together with the minors. The code half then reruns for round 2.
+
+## Code half, round 2 (`qm-code.md`; round 1 is now `qm-code-r1.md`): VERDICT HOLD
+Rerun after batch 19.1, through `gemini-4-argon` on Vertex AI: 52,694 input and 1,906 output tokens, **$0.12 est.** None of round 1's accepted findings comes back. The table lists no blocker.
+
+| QM # | Finding | Verdict | Where |
+|---|---|---|---|
+| 1 | Pin all four rule-6 salt sources in the rendered brief (strength, intake, scalar `inn`, free text) | **Mostly done.** Batch 19.1 pins strength, intake and scalar `inn`, and `name_text` and label text are always shown verbatim. **Accepted, minor:** one pin for a salt found only in free text | Next contract |
+| 2 | Extended Arabic-Indic digits (U+06F0–06F9) parse but aren't in SPEC | **Accepted, minor: a SPEC line.** Probe: `۵` is 5 and `۲٫۵` is 2.5, the correct values | Next SPEC edit |
+| 3 | A salt-conflicted claim (strength tartrate, intake succinate) still counts in overlaps | **Rejected, by design.** A salt conflict never changes the moiety, so "metoprolol" is right under either reading. Probe: it gives `same_ingredient metoprolol`. Rule 3 already makes that claim's own pair `insufficient_information` | none |
+| 4 | The `formulation` patient question still asks only about release form after the note was broadened | **Accepted.** It asks "What release form is shown on your medicine pack?" for a salt-only mismatch too | Next contract: a salt-or-release question |
+| 5 | When a claim's amounts are dropped, a valid `units_per_intake` survives and can still fire rule 8 | **Rejected, by design.** SPEC rule 8 says units never produce `match` and never count as a comparison. Two tablets against one unit is a true "intake differs" flag, and the clinician is asked about the intake | none |
+| 6 | `charge_estimate` doesn't refuse `*-contributor` model ids | **Noted: the invariant holds.** The adapters refuse contributor models when they are built, and the QM reports all five safety invariants holding. Optional defence in depth | Later, if cheap |
+| 7 | Two identical photos: both figures draw the same boxes, and captions say photo 1 | **Rejected, by design.** Identical bytes are the same evidence. Every region figure appears once, every link resolves, and the coverage line for each photo is accurate | none |
+| 8 | No single command for judges that runs a live intake and writes the brief | **Accepted** | Batch 21 / packaging: `intake_live.py` writes each brief next to its report |
+
+**Deadline risks:**
+- real human speech can break the exact grounding check;
+- the claim call's 30 s timeout. The live calls took 11.6 s and 13.1 s for about 2.7K output tokens, so a long real note could pass 30 s; measure it in batch 21 before the demo;
+- units after dropped amounts (rejected above, as #5).
+
+**CEO verdict (round 2).** No blocker, and no release-gate class reproduced. M4 closes on the CEO's triage, and the QM's own verdict stays HOLD as written. The accepted items go into the next batch's contract with the supervisor's batch 19.1 pins: the formulation question, the free-text salt pin, escaping and `dir="auto"` on the Ingredient rows, and the SPEC line on Unicode digits.
