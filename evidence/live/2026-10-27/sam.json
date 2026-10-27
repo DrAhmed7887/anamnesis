@@ -1,8 +1,8 @@
 {
   "trace": {
-    "call_id": "resp_6ae07c6eacaadf1179b84da8",
+    "call_id": "resp_6ae07eccd63ee16b69c34215",
     "model_id": "sam-3.1",
-    "latency_ms": 943,
+    "latency_ms": 2923,
     "input_tokens": 0,
     "output_tokens": 0,
     "cost_usd": "0.0025"
@@ -18,7 +18,7 @@
       "y2": 539,
       "frame_w": 1280,
       "frame_h": 720,
-      "confidence": 0.5897435545921326
+      "confidence": 0.5936508178710938
     },
     {
       "region_id": "15595e0869ee-1",
@@ -30,7 +30,7 @@
       "y2": 499,
       "frame_w": 1280,
       "frame_h": 720,
-      "confidence": 0.5897435545921326
+      "confidence": 0.5936508178710938
     }
   ]
 }

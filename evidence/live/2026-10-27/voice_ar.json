@@ -1,8 +1,8 @@
 {
   "trace": {
-    "call_id": "c647b4a3-b05b-4652-a947-27633d7b6f89",
+    "call_id": "f14e9622-6fe0-416a-b079-a10535fe33f2",
     "model_id": "muse-voice-transcribe-1.0",
-    "latency_ms": 3022,
+    "latency_ms": 3424,
     "input_tokens": 0,
     "output_tokens": 0,
     "cost_usd": "0.00070"
@@ -12,7 +12,7 @@
       "turn_id": "turn-0",
       "start_ms": 0,
       "end_ms": 12620,
-      "transcript": "انا باخد كونكور خمسة ملي جرام مرة في اليوم وباخد وباخد BelocZok خمسين ملي جرام مرتين في اليوم وقفت البنادول من شهر",
+      "transcript": "أنا باخد كونكور خمسة ملي جرام مرة مرة في اليوم. وباخداخد BelocZok خمسين خمسين ملي جرام مرتين في اليوم. وقفت الPanadol من شهر",
       "speaker": null,
       "lang_hint": "ar"
     }
