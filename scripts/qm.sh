@@ -26,7 +26,7 @@ section() { printf '\n\n===== %s =====\n' "$1"; }
   section "git log (first-parent, last 40)"; git log --first-parent --oneline -40
   section "contract tests (names)"; uv run pytest -q --collect-only tests/contract 2>/dev/null | grep '::' | sed 's/\[.*//' | sort -u
   section "test totals"; uv run pytest -q 2>&1 | tail -1
-  for f in anamnesis/core/reconcile.py anamnesis/core/catalogue.py anamnesis/schema/findings.py anamnesis/providers/base.py; do
+  for f in anamnesis/core/reconcile.py anamnesis/core/catalogue.py anamnesis/schema/findings.py anamnesis/providers/base.py anamnesis/providers/spend.py anamnesis/agent/*.py anamnesis/schema/report.py; do
     section "$f"; cat "$f"
   done
 } > "$pkg"

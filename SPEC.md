@@ -85,7 +85,7 @@ The first rule that applies wins.
 1. `transcribe` if there is audio. 2. `extract_claims` if there are turns.
 3. Per image, `segment` with each concept in order (`medicine box`, `label`), stopping at the first that returns a region.
 4. `read` the `top_regions(k=3)` of each image.
-5. Each `unreadable` or `partial` reading gets **one** `zoom_read`: the source image is cropped with `crop_region` (+10% margin, clamped, refused unless the sha256 and frame size match the region), and the reader is called with `cropped=True`. The new reading keeps the **source** `region_id`, so provenance stays in source pixels. SAM never runs on a crop. At most 2 reads per region (`max_grounding_iters = 2`).
+5. Each `unreadable` or `partial` reading gets **one** `zoom_read`: the source image is cropped with `crop_region` (padded by 5% of the box size on each side, i.e. 10% in total, rounded down and clamped to the frame; refused unless the sha256 and frame size match the region), and the reader is called with `cropped=True`. The new reading keeps the **source** `region_id`, so provenance stays in source pixels. SAM never runs on a crop. At most 2 reads per region (`max_grounding_iters = 2`).
 6. `reconcile` with `reconcile_all`.
 - **Budget:** every provider call, including failed ones, counts 1 against `max_provider_calls` (default 12). The call that would exceed it is skipped, a `budget_exhausted` step is logged (it is then the last step), and every remaining provider call is skipped. Reconciliation still runs on what exists.
 - **Errors:** a provider error becomes a step whose `outcome` is `error: <provider> <ExceptionName>` (no message text); the loop continues with the next item.
