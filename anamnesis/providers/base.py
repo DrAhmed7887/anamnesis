@@ -22,6 +22,8 @@ class ProviderError(Exception):
         billable_uncertain: bool = False,
         estimated_reason: str | None = None,
         attempt_trace: ProviderTrace | None = None,
+        charged_call_ids: list[str] | None = None,
+        charged_usd: Decimal = Decimal(0),
     ) -> None:
         super().__init__(message)
         self.provider = provider
@@ -29,6 +31,8 @@ class ProviderError(Exception):
         self.billable_uncertain = billable_uncertain
         self.estimated_reason = estimated_reason
         self.attempt_trace = attempt_trace
+        self.charged_call_ids = list(charged_call_ids or [])
+        self.charged_usd = charged_usd
 
 
 class ProviderTrace(BaseModel):
@@ -51,6 +55,18 @@ class ProviderTrace(BaseModel):
         return value
 
 
+def _charged_attempt(
+    exc: ProviderError, guard: SpendGuard, model_id: str, estimate: Decimal
+) -> tuple[list[str], Decimal]:
+    """Call ids and cost that one failed attempt charged: a real trace, an estimate, or nothing."""
+    if exc.attempt_trace is not None:
+        return [exc.attempt_trace.call_id], exc.attempt_trace.cost_usd
+    if exc.billable_uncertain:
+        call_id = guard.charge_estimate(model_id, estimate, exc.estimated_reason or "billing uncertain")
+        return [call_id], estimate
+    return [], Decimal(0)
+
+
 def with_one_retry[T](
     fn: Callable[[], T], *, guard: SpendGuard | None = None, model_id: str | None = None,
     estimate: Decimal | None = None,
@@ -69,17 +85,18 @@ def with_one_retry[T](
     for attempt in range(2):
         try:
             result, trace = cast(tuple[T, ProviderTrace], fn())
-        except ProviderError as exc:
-            if exc.attempt_trace is not None:
-                prior_call_ids.append(exc.attempt_trace.call_id)
-                prior_cost_usd += exc.attempt_trace.cost_usd
-            elif exc.billable_uncertain:
-                reason = exc.estimated_reason or "billing uncertain"
-                call_id = guard.charge_estimate(model_id, estimate, reason)
-                prior_call_ids.append(call_id)
-                prior_cost_usd += estimate
-            if attempt or not exc.retryable:
-                raise
+        except Exception as exc:
+            if isinstance(exc, ProviderError):
+                call_id, cost = _charged_attempt(exc, guard, model_id, estimate)
+                prior_call_ids.extend(call_id)
+                prior_cost_usd += cost
+            if attempt == 0 and isinstance(exc, ProviderError) and exc.retryable:
+                continue
+            # Anything escaping after charged attempts (a retryable error, or the cap refusing attempt 2)
+            # carries them, so the caller's spend matches the ledger.
+            exc.charged_call_ids = list(prior_call_ids)  # type: ignore[attr-defined]
+            exc.charged_usd = prior_cost_usd  # type: ignore[attr-defined]
+            raise
         else:
             return cast(T, (result, trace.model_copy(update={
                 "prior_call_ids": prior_call_ids,

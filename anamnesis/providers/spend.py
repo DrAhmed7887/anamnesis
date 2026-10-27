@@ -10,7 +10,11 @@ from anamnesis.providers.base import ProviderTrace
 
 
 class SpendCapExceeded(Exception):
-    pass
+    def __init__(self, *args: object, charged_call_ids: list[str] | None = None,
+                 charged_usd: Decimal = Decimal(0)) -> None:
+        super().__init__(*args)
+        self.charged_call_ids = list(charged_call_ids or [])
+        self.charged_usd = charged_usd
 
 
 class SpendGuard:

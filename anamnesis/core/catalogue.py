@@ -82,12 +82,9 @@ class Catalogue:
 
     def mentions_moiety(self, text: str, moiety: str) -> bool:
         """True when the text names the moiety, or a brand whose only INN is that moiety, as whole words."""
-        padded = f" {normalise(text)} "
-        names = [moiety]
-        for entry in self.entries:
-            if entry.inns == frozenset({moiety}):
-                names.extend((entry.brand, *entry.aliases))
-        return any(f" {normalise(name)} " in padded for name in names)
+        if f" {normalise(moiety)} " in f" {normalise(text)} ":
+            return True
+        return any(entry.inns == frozenset({moiety}) for _, _, entry, _ in self._matches(text))
 
     def _matches(self, text: str) -> list[tuple[int, int, CatalogueEntry, bool]]:
         normalised = normalise(text)
