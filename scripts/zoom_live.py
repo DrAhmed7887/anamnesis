@@ -1,11 +1,13 @@
 """Live crop-zoom check on staged hard photos (batch 15.5): what the loop does, and whether the zoom helps.
 
-    PYTHONPATH=. uv run python scripts/zoom_live.py --tag before [--cap 5.00] [--session-usd 0.15]
+    PYTHONPATH=. uv run python scripts/zoom_live.py --tag before [--compare] [--cap 5.00] [--session-usd 0.15]
 
 Images only, no audio. Each photo goes through run_intake as an intake would: segment, read the top regions,
 one zoom per unreadable or partial reading. Recording wrappers keep the frame SAM reported and the size,
-tokens and readability of every read. The expected reading of each pack comes from
-evidence/raw/media/hard/manifest.json (scripts/make_hard_media.sh), written before any model saw the images.
+tokens and readability of every read. --compare also reads a crop of every region the loop did not zoom,
+so a full-frame and a zoomed reading of the same pack sit side by side. The expected reading of each pack
+comes from evidence/raw/media/hard/manifest.json (scripts/make_hard_media.sh), written before any model saw
+the images.
 The key is read from the macOS Keychain (service META_API_KEY) and never printed or saved.
 Output: evidence/live/<date>/zoom_<tag>/<photo>.json and summary.md.
 """
@@ -22,7 +24,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from anamnesis.agent import run_intake
+from anamnesis.agent import crop_region, run_intake
 from anamnesis.core.catalogue import load_catalogue
 from anamnesis.providers import SpendGuard
 from anamnesis.providers.meta import MetaClient, MetaLabelReader, MetaSegmenter
@@ -32,6 +34,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "evidence/raw/media/hard"
 LEDGER = ROOT / "evidence/spend/ledger.jsonl"
 MAX_CALLS = 10
+COMPARE_CALLS = 3  # one forced crop read per region the loop read (top_k = 3)
 
 
 def keychain(service: str) -> str:
@@ -92,11 +95,32 @@ def verdict(observation, pack) -> str:
         else "WRONG"
 
 
+def prepared_bytes(data: bytes) -> bytes:
+    from anamnesis.agent import prepare_image  # batch 15.5
+
+    return prepare_image(data, "image/jpeg")[0]
+
+
+def compare_reads(report, reader, image: bytes) -> dict:
+    """Read a crop of every region the loop did not zoom; returns region_id -> (call record, reading)."""
+    zoomed = {c["region_id"] for c in reader.calls if c["cropped"]}
+    regions = {r.region_id: r for r in report.regions}
+    forced = {}
+    for obs in report.observations:
+        region = regions[obs.visual_evidence[0]]
+        if region.region_id in zoomed:
+            continue
+        reading, _ = reader.read(crop_region(image, region), region, mime="image/png", cropped=True)
+        forced[region.region_id] = (reader.calls[-1], reading)
+    return forced
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--tag", required=True, help="before or after (the output folder name)")
     parser.add_argument("--cap", default="5.00", help="total USD cap across all live runs (ledger)")
     parser.add_argument("--session-usd", default="0.15", help="USD cap per photo")
+    parser.add_argument("--compare", action="store_true", help="also read a crop of every region")
     args = parser.parse_args()
     manifest = json.loads((MEDIA / "manifest.json").read_text(encoding="utf-8"))
     ledger = SpendGuard(LEDGER, cap_usd=Decimal(args.cap))
@@ -105,17 +129,19 @@ def main() -> None:
     client = MetaClient(api_key=keychain("META_API_KEY"))
     catalogue = load_catalogue()
     start = ledger.total_usd
-    rows = ["| photo | region | staged pack | first read | zoom read | final | verdict |",
-            "|---|---|---|---|---|---|---|"]
+    rows = ["| photo | region | staged pack | first read | zoom read | final | verdict | forced crop read |",
+            "|---|---|---|---|---|---|---|---|"]
 
     for item in manifest:
         data = (MEDIA / item["file"]).read_bytes()
-        guard = SessionGuard(ledger, max_usd=Decimal(args.session_usd), max_calls=MAX_CALLS)
+        guard = SessionGuard(ledger, max_usd=Decimal(args.session_usd),
+                             max_calls=MAX_CALLS + (COMPARE_CALLS if args.compare else 0))
         segmenter = RecordingSegmenter(MetaSegmenter(client, guard))
         reader = RecordingReader(MetaLabelReader(client, guard))
         report = run_intake(None, [(data, "image/jpeg")], transcriber=None, extractor=None,
                             segmenter=segmenter, reader=reader, catalogue=catalogue,
                             max_provider_calls=MAX_CALLS)
+        forced = compare_reads(report, reader, prepared_bytes(data)) if args.compare else {}
         record = {"photo": item["file"], "orientation": item["orientation"],
                   "stored_size": Image.open(io.BytesIO(data)).size, "segment_calls": segmenter.calls,
                   "reads": reader.calls, "report": report.model_dump(mode="json")}
@@ -138,12 +164,14 @@ def main() -> None:
 
             final = (obs.label_text or "-").splitlines()[0]
             staged = pack["label"] if pack else "-"
+            crop_read = forced.get(region.region_id)
+            crop_cell = "-" if crop_read is None else f"{cell(crop_read[0])}, {verdict(crop_read[1], pack)}"
             rows.append(f"| {item['file']} | {region.region_id} | {staged} | {cell(first)} | "
-                        f"{cell(zoom)} | {final} | {verdict(obs, pack)} |")
+                        f"{cell(zoom)} | {final} | {verdict(obs, pack)} | {crop_cell} |")
         missed = [p["label"] for p in item["packs"]
                   if not any(pack_for(regions[o.visual_evidence[0]], item) is p for o in report.observations)]
         if missed:
-            rows.append(f"| {item['file']} | - | {', '.join(missed)} | not read | - | - | missed |")
+            rows.append(f"| {item['file']} | - | {', '.join(missed)} | not read | - | - | missed | - |")
 
     spent = ledger.total_usd - start
     summary = "\n".join([f"# Crop-zoom live check ({args.tag})", "", *rows, "",

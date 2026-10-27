@@ -60,3 +60,9 @@ Ahmed accepted the supervisor plan, which cuts the Baseten/Modal open-weight ben
 
 ## 2026-10-27: workflow change
 From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervisor subagent (high effort) must APPROVE each batch, read-only and independently; Claude Code orchestrates and gates. Batch 15 took 3 supervisor rounds. The supervisor caught a spend gap on the cap-refusal path and a contract test that proved nothing.
+
+## 2026-10-27: batch 15.5 inserted before B16 (Ahmed's call): the zoom problem
+- Ahmed asked to solve "the zoom problem" before B16, on a worktree branch (`batch/15.5-zoom`) so `main` stays untouched. Numbered 15.5 so the B16 and B17 references in earlier tables keep their meaning.
+- A live check on 4 staged 12 MP phone photos found a **wrong-provenance bug**, not a zoom bug: SAM applies EXIF orientation and Spark doesn't, so on a portrait photo 2 of 3 labels were attached to the wrong pack. The crop-zoom also refused every rotated photo. Fix: every photo is prepared (upright pixels, all metadata including GPS dropped) before any model sees it, and a region is only read from the photo it was found on.
+- The zoom itself never fired: Spark read every upright label at full frame. It stays as the fallback; it goes in the demo only if a real B17 photo triggers it and the zoomed reading is correct.
+- Triage of the zoom check and of the pre-B16 idea and code grills: `evidence/grills/pre-b16/effect.md`.
