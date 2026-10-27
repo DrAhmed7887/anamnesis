@@ -11,7 +11,11 @@ from anamnesis.schema.medication import INN_ALIASES, Release, canonical_inn
 
 def _normalise(text: str) -> str:
     text = text.casefold().replace("®", "").replace("™", "")
-    text = re.sub(r"[^\w\s]", " ", text)
+    text = re.sub(r"[\u0640\u064b-\u065f\u0670]", "", text)
+    text = text.translate(str.maketrans({"أ": "ا", "إ": "ا", "آ": "ا", "ٱ": "ا", "ى": "ي", "ة": "ه"}))
+    text = text.translate(str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789"))
+    text = re.sub(r"(?<=[\u0600-\u06ff])(?=[a-z])|(?<=[a-z])(?=[\u0600-\u06ff])", " ", text)
+    text = re.sub(r"[^\w\s]|_", " ", text)
     return " ".join(text.split())
 
 
@@ -23,6 +27,7 @@ class CatalogueEntry:
     synthetic: bool
     release: Release
     splittable: bool | None
+    aliases: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -79,6 +84,7 @@ class Catalogue:
         matches = []
         for entry in self.entries:
             names = [(entry.brand, True)]
+            names.extend((alias, True) for alias in entry.aliases)
             if len(entry.inns) == 1:
                 (moiety,) = entry.inns
                 aliases = [alias for alias, (target, _) in INN_ALIASES.items() if target == moiety]
@@ -89,7 +95,8 @@ class Catalogue:
                 if brand and " " in name:
                     variants.append(name.replace(" ", ""))
                 for variant in dict.fromkeys(variants):
-                    pattern = re.compile(rf"(?<!\w){re.escape(variant)}(?!\w)")
+                    prefix = r"(?:وال|بال|فال|لل|ال|و|ف|ب|ل)?" if re.search(r"[\u0600-\u06ff]", name) else ""
+                    pattern = re.compile(rf"(?<!\w){prefix}{re.escape(variant)}(?!\w)")
                     matches.extend(
                         (found.start(), found.end(), entry, brand)
                         for found in pattern.finditer(normalised)
@@ -125,6 +132,7 @@ def load_catalogue(path: str | Path | None = None) -> Catalogue:
                 synthetic=record["synthetic"],
                 release=Release(record["release"]),
                 splittable=record["splittable"],
+                aliases=tuple(record.get("aliases", ())),
             )
             for record in records
         )

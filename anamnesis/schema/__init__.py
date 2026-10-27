@@ -4,6 +4,7 @@ from anamnesis.schema.evidence import AudioTurn, ImageRegion
 from anamnesis.schema.findings import DiscrepancyType, Finding
 from anamnesis.schema.medication import (
     INN_ALIASES,
+    SALT_BASIS_EQUIVALENTS,
     DoseRegimen,
     IngredientAmount,
     MedicationStatus,
@@ -31,6 +32,7 @@ __all__ = [
     "PatientClaim",
     "Readability",
     "Release",
+    "SALT_BASIS_EQUIVALENTS",
     "Strength",
     "StrengthPer",
     "Unit",

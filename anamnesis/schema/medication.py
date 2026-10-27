@@ -62,6 +62,13 @@ INN_ALIASES: dict[str, tuple[str, str | None]] = {
     "acetaminophen": ("paracetamol", None),
 }
 
+SALT_BASIS_EQUIVALENTS: dict[tuple[str, str, Decimal], Decimal] = {
+    ("metoprolol", "succinate", Decimal("23.75")): Decimal("25"),
+    ("metoprolol", "succinate", Decimal("47.5")): Decimal("50"),
+    ("metoprolol", "succinate", Decimal("95")): Decimal("100"),
+    ("metoprolol", "succinate", Decimal("190")): Decimal("200"),
+}
+
 
 def _inn_and_salt(name: str) -> tuple[str, str | None]:
     normalised = name.strip().casefold()

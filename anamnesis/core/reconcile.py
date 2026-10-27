@@ -1,12 +1,12 @@
 """Deterministic, evidence-linked comparison of claims and packs."""
 
+import re
 from decimal import Decimal
 
 from anamnesis.core.catalogue import Catalogue
 from anamnesis.schema import (
-    DiscrepancyType as D,
-)
-from anamnesis.schema import (
+    INN_ALIASES,
+    SALT_BASIS_EQUIVALENTS,
     Finding,
     IngredientAmount,
     PackObservation,
@@ -16,6 +16,7 @@ from anamnesis.schema import (
     canonical_inn,
     salt_of,
 )
+from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.templates import QUESTION_FOR, TEMPLATES
 
 
@@ -65,11 +66,20 @@ def _amount(ingredient: IngredientAmount) -> tuple[Decimal, str]:
     return amount, unit
 
 
-def _strength_type(claim: Strength, pack: Strength, catalogue: Catalogue) -> D:
+def _strength_type(
+    claim: Strength,
+    pack: Strength,
+    catalogue: Catalogue,
+    nominal_amounts: dict[str, Decimal] | None = None,
+) -> D:
     if claim.per != pack.per:
         return D.STRENGTH_MISMATCH
     stated = {_resolve_inn(part.inn, catalogue): _amount(part) for part in claim.ingredients}
-    observed = {_resolve_inn(part.inn, catalogue): _amount(part) for part in pack.ingredients}
+    observed = {
+        inn: (nominal_amounts[inn], "mg") if nominal_amounts and inn in nominal_amounts else _amount(part)
+        for part in pack.ingredients
+        if (inn := _resolve_inn(part.inn, catalogue))
+    }
     if stated == observed:
         return D.MATCH
     if stated.keys() != observed.keys():
@@ -84,12 +94,20 @@ def _strength_type(claim: Strength, pack: Strength, catalogue: Catalogue) -> D:
 
 
 def _intake_type(
-    intake: IngredientAmount, pack: Strength, splittable: bool | None, catalogue: Catalogue
+    intake: IngredientAmount,
+    pack: Strength,
+    splittable: bool | None,
+    catalogue: Catalogue,
+    nominal_amount: Decimal | None = None,
 ) -> D:
     if pack.per.value not in {"tablet", "capsule"}:
         return D.INSUFFICIENT_INFORMATION
     stated, stated_unit = _amount(intake)
-    observed, observed_unit = _amount(pack.ingredients[0])
+    observed, observed_unit = (
+        (nominal_amount, "mg")
+        if nominal_amount is not None
+        else _amount(pack.ingredients[0])
+    )
     intake_inn = _resolve_inn(intake.inn, catalogue)
     pack_inn = _resolve_inn(pack.ingredients[0].inn, catalogue)
     if intake_inn != pack_inn:
@@ -108,6 +126,44 @@ def _intake_type(
             return D.INSUFFICIENT_INFORMATION
         return D.INTAKE_DIFFERS_FROM_UNIT_STRENGTH
     return D.STRENGTH_MISMATCH
+
+
+def _claim_has_salt(claim: PatientClaim, inn: str, catalogue: Catalogue) -> bool:
+    stated = _salts(
+        claim.strength,
+        catalogue,
+        (claim.intake_amount.inn, claim.intake_amount.salt) if claim.intake_amount else None,
+        (claim.inn, salt_of(claim.inn)) if claim.inn else None,
+    )
+    words = f" {re.sub(r'[^\w\s]|_', ' ', claim.name_text.casefold()).strip()} "
+    named_salt = any(
+        salt and moiety == inn and f" {alias} " in words
+        for alias, (moiety, salt) in INN_ALIASES.items()
+    )
+    return bool(stated.get(inn)) or named_salt
+
+
+def _nominal_pack_amount(
+    claim: PatientClaim, part: IngredientAmount, catalogue: Catalogue
+) -> Decimal | None:
+    inn = _resolve_inn(part.inn, catalogue)
+    if _claim_has_salt(claim, inn, catalogue):
+        return None
+    amount, unit = _amount(part)
+    if unit != "mg":
+        return None
+    salt = part.salt or salt_of(part.inn)
+    return SALT_BASIS_EQUIVALENTS.get((inn, salt, amount)) if salt else None
+
+
+def _claim_strength_type(claim: PatientClaim, pack: Strength, catalogue: Catalogue) -> D:
+    assert claim.strength is not None
+    nominal_amounts = {
+        _resolve_inn(part.inn, catalogue): nominal
+        for part in pack.ingredients
+        if (nominal := _nominal_pack_amount(claim, part, catalogue)) is not None
+    }
+    return _strength_type(claim.strength, pack, catalogue, nominal_amounts)
 
 
 def _salts(
@@ -201,13 +257,18 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
     compared = False
     if claim.strength and pack.strength:
         compared = True
-        kind = _strength_type(claim.strength, pack.strength, catalogue)
+        kind = _claim_strength_type(claim, pack.strength, catalogue)
         if kind is not D.MATCH:
             return kind
     if claim.intake_amount and pack.strength and len(pack.strength.ingredients) == 1:
         compared = True
+        pack_part = pack.strength.ingredients[0]
         kind = _intake_type(
-            claim.intake_amount, pack.strength, catalogue.splittable(pack.label_text or ""), catalogue
+            claim.intake_amount,
+            pack.strength,
+            catalogue.splittable(pack.label_text or ""),
+            catalogue,
+            _nominal_pack_amount(claim, pack_part, catalogue),
         )
         if kind is not D.MATCH:
             return kind
@@ -233,7 +294,7 @@ def _pair_score(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue
     if (
         claim.strength
         and pack.strength
-        and _strength_type(claim.strength, pack.strength, catalogue) is D.MATCH
+        and _claim_strength_type(claim, pack.strength, catalogue) is D.MATCH
     ):
         return 3
     return 2
