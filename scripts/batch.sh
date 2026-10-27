@@ -58,8 +58,11 @@ muse_build() {
   uv run python scripts/muse_usage.py "$n" "$out" || print -u2 "usage: no export to price"
 }
 
+# Committed reports keep no local paths: repo-relative paths, and "the repository" for the root itself.
+repo_paths() { sed -e "s#$PWD/##g" -e "s#$PWD#the repository#g" "$@"; }
+
 # Did Muse pin its goal, close it, and work under it? The caller prints it and keeps it in goal.md.
-goal_check() { { uv run python scripts/goal_check.py "$1" || true; } | sed "s#$PWD/##g"; }
+goal_check() { { uv run python scripts/goal_check.py "$1" || true; } | repo_paths; }
 
 case $cmd in
   start)
@@ -80,8 +83,8 @@ case $cmd in
     out="evidence/raw/batch-$n-muse_session.json"
     muse_build "batch $n" "briefs/$n.md" "$raw" "$out" "$model"
     print "goal check, batch $n:"
-    goal_check "$out" | tee "$ev/goal.md"
-    sed "s#$PWD/##g" "$raw" > "$ev/builder.md"   # the committed report keeps repo-relative paths only
+    { print "## Round 1"; goal_check "$out"; } | tee "$ev/goal.md"
+    repo_paths "$raw" > "$ev/builder.md"
     gate
     ;;
   round)
@@ -95,7 +98,7 @@ case $cmd in
     muse_build "batch $n round $r" "$brief" "$raw" "$out" muse-spark-1.3
     print "goal check, batch $n round $r:"
     { print; print "## Round $r"; goal_check "$out"; } | tee -a "$ev/goal.md"
-    { print; print "## Round $r"; sed "s#$PWD/##g" "$raw"; } >> "$ev/builder.md"
+    { print; print "## Round $r"; repo_paths "$raw"; } >> "$ev/builder.md"
     gate
     ;;
   gate)
