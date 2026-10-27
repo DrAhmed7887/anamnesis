@@ -30,3 +30,8 @@ Muse (M1 #3) said ER tablets can't be split. That is too broad: some scored ER t
 - Batch 9 fixed two live findings: Spark puts the **brand** into `intake_amount.inn` (now resolved through the catalogue), and Voice writes "BelocZok" as one word (brands now also match their joined form).
 - **Arabic voice note varies between runs.** The same audio gave Concor in Latin script on one run and كونكور (Arabic script) on two others. Spark keeps the name as spoken, which is correct. The catalogue knows only Latin brands, so the latest run gave `unresolved_name` for Concor. **Next:** curated Arabic-script brand aliases in the catalogue (deterministic, auditable), not LLM transliteration.
 - Ledger total after the rerun: $0.129 of the $5 cap.
+
+## 2026-10-27: batch 10 live rerun
+- English chain unchanged and correct after the identity rewrite (no regression).
+- The Arabic note was transcribed with **all three brands in Arabic script** this time (كونكور, بلوك زوك, البنادول, the last with an attached article). All are `unresolved_name`. That makes 3 runs and 3 different spellings of the same audio. Batch 11 (Arabic-script aliases + Arabic letter normalisation + optional ال/وال/بال) is the planned fix.
+- Ledger total: $0.167 of the $5 cap.

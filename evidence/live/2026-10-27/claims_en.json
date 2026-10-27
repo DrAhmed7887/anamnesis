@@ -1,11 +1,11 @@
 {
   "trace": {
-    "call_id": "chatcmpl-01a17cef-0e1b-7264-83f6-20ade1f5b856",
+    "call_id": "chatcmpl-01a17d02-19c0-7493-91ef-86d4a4a796e4",
     "model_id": "muse-spark-1.3",
-    "latency_ms": 8200,
-    "input_tokens": 552,
-    "output_tokens": 2458,
-    "cost_usd": "0.01113650"
+    "latency_ms": 9434,
+    "input_tokens": 551,
+    "output_tokens": 2625,
+    "cost_usd": "0.01184500"
   },
   "claims": [
     {
@@ -31,8 +31,8 @@
     },
     {
       "claim_id": "c2",
-      "name_text": "metoprolol",
-      "inn": "metoprolol",
+      "name_text": "Metoprolol",
+      "inn": "Metoprolol",
       "strength": null,
       "intake_amount": {
         "inn": "metoprolol",
