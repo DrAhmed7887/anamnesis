@@ -1,0 +1,307 @@
+{
+  "photo": "drawer_portrait.jpg",
+  "orientation": 6,
+  "stored_size": [
+    4032,
+    3024
+  ],
+  "segment_calls": [
+    {
+      "concept": "medicine box",
+      "regions": 0,
+      "frames": []
+    },
+    {
+      "concept": "label",
+      "regions": 3,
+      "frames": [
+        [
+          3024,
+          4032
+        ]
+      ]
+    }
+  ],
+  "reads": [
+    {
+      "region_id": "d09ceceb993b-0",
+      "cropped": false,
+      "sent_size": [
+        3024,
+        4032
+      ],
+      "input_tokens": 4298,
+      "output_tokens": 912,
+      "readability": "readable",
+      "label_text": "Beloc-Zok 100 mg Metoprolol succinate Prolonged-release tablets"
+    },
+    {
+      "region_id": "d09ceceb993b-2",
+      "cropped": false,
+      "sent_size": [
+        3024,
+        4032
+      ],
+      "input_tokens": 4297,
+      "output_tokens": 752,
+      "readability": "readable",
+      "label_text": "Norvasc 10 mg\nAmlodipine\n28 tablets"
+    },
+    {
+      "region_id": "d09ceceb993b-1",
+      "cropped": false,
+      "sent_size": [
+        3024,
+        4032
+      ],
+      "input_tokens": 4297,
+      "output_tokens": 819,
+      "readability": "readable",
+      "label_text": "Concor 5 mg Bisoprolol fumarate 30 film-coated tablets"
+    },
+    {
+      "region_id": "d09ceceb993b-0",
+      "cropped": true,
+      "sent_size": [
+        626,
+        912
+      ],
+      "input_tokens": 965,
+      "output_tokens": 549,
+      "readability": "readable",
+      "label_text": "Beloc-Zok 100 mg Metoprolol succinate Prolonged-release tablets"
+    },
+    {
+      "region_id": "d09ceceb993b-2",
+      "cropped": true,
+      "sent_size": [
+        551,
+        805
+      ],
+      "input_tokens": 841,
+      "output_tokens": 847,
+      "readability": "readable",
+      "label_text": "Norvasc 10 mg Amlodipine 28 tablets"
+    },
+    {
+      "region_id": "d09ceceb993b-1",
+      "cropped": true,
+      "sent_size": [
+        586,
+        858
+      ],
+      "input_tokens": 912,
+      "output_tokens": 615,
+      "readability": "readable",
+      "label_text": "Concor 5 mg\nBisoprolol fumarate\n30 film-coated tablets"
+    }
+  ],
+  "report": {
+    "intake_id": "4e70232866969382a950d5c93aa6599ef0c3bb513986057249a95631b6d97630",
+    "turns": [],
+    "claims": [],
+    "regions": [
+      {
+        "region_id": "d09ceceb993b-0",
+        "image_sha256": "d09ceceb993b839cbcb9631b9590c58a8f4380eef2645de58286947120de4db8",
+        "object_id": 0,
+        "x1": 1589,
+        "y1": 1935,
+        "x2": 2158,
+        "y2": 2764,
+        "frame_w": 3024,
+        "frame_h": 4032,
+        "confidence": 0.7620818018913269
+      },
+      {
+        "region_id": "d09ceceb993b-1",
+        "image_sha256": "d09ceceb993b839cbcb9631b9590c58a8f4380eef2645de58286947120de4db8",
+        "object_id": 1,
+        "x1": 1757,
+        "y1": 510,
+        "x2": 2290,
+        "y2": 1289,
+        "frame_w": 3024,
+        "frame_h": 4032,
+        "confidence": 0.7575758099555969
+      },
+      {
+        "region_id": "d09ceceb993b-2",
+        "image_sha256": "d09ceceb993b839cbcb9631b9590c58a8f4380eef2645de58286947120de4db8",
+        "object_id": 2,
+        "x1": 524,
+        "y1": 1283,
+        "x2": 1024,
+        "y2": 2015,
+        "frame_w": 3024,
+        "frame_h": 4032,
+        "confidence": 0.7620818018913269
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "o0",
+        "label_text": "Beloc-Zok 100 mg Metoprolol succinate Prolonged-release tablets",
+        "inn": "metoprolol succinate",
+        "strength": {
+          "ingredients": [
+            {
+              "inn": "metoprolol",
+              "salt": "succinate",
+              "amount": "100",
+              "unit": "mg"
+            }
+          ],
+          "per": "tablet",
+          "release": "modified"
+        },
+        "readability": "readable",
+        "country": null,
+        "visual_evidence": [
+          "d09ceceb993b-0"
+        ]
+      },
+      {
+        "observation_id": "o1",
+        "label_text": "Norvasc 10 mg\nAmlodipine\n28 tablets",
+        "inn": "amlodipine",
+        "strength": {
+          "ingredients": [
+            {
+              "inn": "amlodipine",
+              "salt": null,
+              "amount": "10",
+              "unit": "mg"
+            }
+          ],
+          "per": "tablet",
+          "release": "immediate"
+        },
+        "readability": "readable",
+        "country": null,
+        "visual_evidence": [
+          "d09ceceb993b-2"
+        ]
+      },
+      {
+        "observation_id": "o2",
+        "label_text": "Concor 5 mg Bisoprolol fumarate 30 film-coated tablets",
+        "inn": "bisoprolol fumarate",
+        "strength": {
+          "ingredients": [
+            {
+              "inn": "bisoprolol",
+              "salt": "fumarate",
+              "amount": "5",
+              "unit": "mg"
+            }
+          ],
+          "per": "tablet",
+          "release": "immediate"
+        },
+        "readability": "readable",
+        "country": null,
+        "visual_evidence": [
+          "d09ceceb993b-1"
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "finding_id": "-:o0",
+        "type": "missing_modality",
+        "claim_id": null,
+        "observation_id": "o0",
+        "audio_evidence": [],
+        "visual_evidence": [
+          "d09ceceb993b-0"
+        ],
+        "needs_clinician_review": true,
+        "clinician_note": "Medication evidence is present in only one source.",
+        "patient_question_id": "source"
+      },
+      {
+        "finding_id": "-:o1",
+        "type": "missing_modality",
+        "claim_id": null,
+        "observation_id": "o1",
+        "audio_evidence": [],
+        "visual_evidence": [
+          "d09ceceb993b-2"
+        ],
+        "needs_clinician_review": true,
+        "clinician_note": "Medication evidence is present in only one source.",
+        "patient_question_id": "source"
+      },
+      {
+        "finding_id": "-:o2",
+        "type": "missing_modality",
+        "claim_id": null,
+        "observation_id": "o2",
+        "audio_evidence": [],
+        "visual_evidence": [
+          "d09ceceb993b-1"
+        ],
+        "needs_clinician_review": true,
+        "clinician_note": "Medication evidence is present in only one source.",
+        "patient_question_id": "source"
+      }
+    ],
+    "steps": [
+      {
+        "n": 0,
+        "action": "segment",
+        "target": "d09ceceb993b:medicine box",
+        "outcome": "0 regions",
+        "call_ids": [
+          "resp_6ae0a752ba8ef6c214124c4f"
+        ]
+      },
+      {
+        "n": 1,
+        "action": "segment",
+        "target": "d09ceceb993b:label",
+        "outcome": "3 regions",
+        "call_ids": [
+          "resp_6ae0a756c6224ee61ee24897"
+        ]
+      },
+      {
+        "n": 2,
+        "action": "read",
+        "target": "d09ceceb993b-0",
+        "outcome": "readable",
+        "call_ids": [
+          "chatcmpl-01a17d8d-c682-757a-bfa8-5e29a49871d2"
+        ]
+      },
+      {
+        "n": 3,
+        "action": "read",
+        "target": "d09ceceb993b-2",
+        "outcome": "readable",
+        "call_ids": [
+          "chatcmpl-01a17d8d-e0a7-7694-a180-168ffc21908c"
+        ]
+      },
+      {
+        "n": 4,
+        "action": "read",
+        "target": "d09ceceb993b-1",
+        "outcome": "readable",
+        "call_ids": [
+          "chatcmpl-01a17d8d-f889-70e5-868e-e8b741a552a1"
+        ]
+      },
+      {
+        "n": 5,
+        "action": "reconcile",
+        "target": "all",
+        "outcome": "3 findings",
+        "call_ids": []
+      }
+    ],
+    "calls": 5,
+    "spend_usd": "0.03166775"
+  }
+}

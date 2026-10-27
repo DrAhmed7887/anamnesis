@@ -1,0 +1,58 @@
+{
+  "photo": "foil_portrait.jpg",
+  "orientation": 6,
+  "stored_size": [
+    4032,
+    3024
+  ],
+  "segment_calls": [
+    {
+      "concept": "medicine box",
+      "regions": 0,
+      "frames": []
+    },
+    {
+      "concept": "label",
+      "regions": 0,
+      "frames": []
+    }
+  ],
+  "reads": [],
+  "report": {
+    "intake_id": "8b73f372bf6aa1cc32ced510707ae8d9f10c1414fcf827797d4b1d41ae2ba017",
+    "turns": [],
+    "claims": [],
+    "regions": [],
+    "observations": [],
+    "findings": [],
+    "steps": [
+      {
+        "n": 0,
+        "action": "segment",
+        "target": "500b3f23cc07:medicine box",
+        "outcome": "0 regions",
+        "call_ids": [
+          "resp_6ae0a1e4189b5b294f8546e7"
+        ]
+      },
+      {
+        "n": 1,
+        "action": "segment",
+        "target": "500b3f23cc07:label",
+        "outcome": "0 regions",
+        "call_ids": [
+          "resp_6ae0a1e827470809a2f74c84"
+        ]
+      },
+      {
+        "n": 2,
+        "action": "reconcile",
+        "target": "all",
+        "outcome": "0 findings",
+        "call_ids": []
+      }
+    ],
+    "calls": 2,
+    "spend_usd": "0.0050"
+  }
+}

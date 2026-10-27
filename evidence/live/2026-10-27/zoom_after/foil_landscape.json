@@ -1,0 +1,227 @@
+{
+  "photo": "foil_landscape.jpg",
+  "orientation": 1,
+  "stored_size": [
+    4032,
+    3024
+  ],
+  "segment_calls": [
+    {
+      "concept": "medicine box",
+      "regions": 0,
+      "frames": []
+    },
+    {
+      "concept": "label",
+      "regions": 2,
+      "frames": [
+        [
+          4032,
+          3024
+        ]
+      ]
+    }
+  ],
+  "reads": [
+    {
+      "region_id": "4ed135281ae9-1",
+      "cropped": false,
+      "sent_size": [
+        4032,
+        3024
+      ],
+      "input_tokens": 4298,
+      "output_tokens": 667,
+      "readability": "readable",
+      "label_text": "Glucophage 850 mg metformin hydrochloride"
+    },
+    {
+      "region_id": "4ed135281ae9-0",
+      "cropped": false,
+      "sent_size": [
+        4032,
+        3024
+      ],
+      "input_tokens": 4296,
+      "output_tokens": 736,
+      "readability": "readable",
+      "label_text": "Panadol 500 mg\nParacetamol\n24 tablets"
+    },
+    {
+      "region_id": "4ed135281ae9-1",
+      "cropped": true,
+      "sent_size": [
+        1025,
+        554
+      ],
+      "input_tokens": 1001,
+      "output_tokens": 647,
+      "readability": "readable",
+      "label_text": "Glucophage 850 mg metformin hydrochloride"
+    },
+    {
+      "region_id": "4ed135281ae9-0",
+      "cropped": true,
+      "sent_size": [
+        484,
+        343
+      ],
+      "input_tokens": 465,
+      "output_tokens": 599,
+      "readability": "readable",
+      "label_text": "Panadol 500 mg\nParacetamol\n24 tablets"
+    }
+  ],
+  "report": {
+    "intake_id": "c4b96bb0da3e94cfe69b44f8a5ad40620189146cf2f421a6a59d1178830b0fd9",
+    "turns": [],
+    "claims": [],
+    "regions": [
+      {
+        "region_id": "4ed135281ae9-0",
+        "image_sha256": "4ed135281ae9ffb09d9cb05809e11f74f54877cb9e8d98cdfa74a06f604ab90c",
+        "object_id": 0,
+        "x1": 3130,
+        "y1": 494,
+        "x2": 3569,
+        "y2": 806,
+        "frame_w": 4032,
+        "frame_h": 3024,
+        "confidence": 0.6640419960021973
+      },
+      {
+        "region_id": "4ed135281ae9-1",
+        "image_sha256": "4ed135281ae9ffb09d9cb05809e11f74f54877cb9e8d98cdfa74a06f604ab90c",
+        "object_id": 1,
+        "x1": 1433,
+        "y1": 1349,
+        "x2": 2365,
+        "y2": 1852,
+        "frame_w": 4032,
+        "frame_h": 3024,
+        "confidence": 0.6683937907218933
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "o0",
+        "label_text": "Glucophage 850 mg metformin hydrochloride",
+        "inn": "metformin hydrochloride",
+        "strength": {
+          "ingredients": [
+            {
+              "inn": "metformin",
+              "salt": "hydrochloride",
+              "amount": "850",
+              "unit": "mg"
+            }
+          ],
+          "per": "tablet",
+          "release": "unknown"
+        },
+        "readability": "readable",
+        "country": null,
+        "visual_evidence": [
+          "4ed135281ae9-1"
+        ]
+      },
+      {
+        "observation_id": "o1",
+        "label_text": "Panadol 500 mg\nParacetamol\n24 tablets",
+        "inn": "paracetamol",
+        "strength": {
+          "ingredients": [
+            {
+              "inn": "paracetamol",
+              "salt": null,
+              "amount": "500",
+              "unit": "mg"
+            }
+          ],
+          "per": "tablet",
+          "release": "unknown"
+        },
+        "readability": "readable",
+        "country": null,
+        "visual_evidence": [
+          "4ed135281ae9-0"
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "finding_id": "-:o0",
+        "type": "missing_modality",
+        "claim_id": null,
+        "observation_id": "o0",
+        "audio_evidence": [],
+        "visual_evidence": [
+          "4ed135281ae9-1"
+        ],
+        "needs_clinician_review": true,
+        "clinician_note": "Medication evidence is present in only one source.",
+        "patient_question_id": "source"
+      },
+      {
+        "finding_id": "-:o1",
+        "type": "missing_modality",
+        "claim_id": null,
+        "observation_id": "o1",
+        "audio_evidence": [],
+        "visual_evidence": [
+          "4ed135281ae9-0"
+        ],
+        "needs_clinician_review": true,
+        "clinician_note": "Medication evidence is present in only one source.",
+        "patient_question_id": "source"
+      }
+    ],
+    "steps": [
+      {
+        "n": 0,
+        "action": "segment",
+        "target": "4ed135281ae9:medicine box",
+        "outcome": "0 regions",
+        "call_ids": [
+          "resp_6ae0a77846228d82c9544269"
+        ]
+      },
+      {
+        "n": 1,
+        "action": "segment",
+        "target": "4ed135281ae9:label",
+        "outcome": "2 regions",
+        "call_ids": [
+          "resp_6ae0a77b0527fa999efd4e54"
+        ]
+      },
+      {
+        "n": 2,
+        "action": "read",
+        "target": "4ed135281ae9-1",
+        "outcome": "readable",
+        "call_ids": [
+          "chatcmpl-01a17d8e-54e9-74a3-b028-84931ee537f7"
+        ]
+      },
+      {
+        "n": 3,
+        "action": "read",
+        "target": "4ed135281ae9-0",
+        "outcome": "readable",
+        "call_ids": [
+          "chatcmpl-01a17d8e-6b24-750b-9553-4b38dcf7e580"
+        ]
+      },
+      {
+        "n": 4,
+        "action": "reconcile",
+        "target": "all",
+        "outcome": "2 findings",
+        "call_ids": []
+      }
+    ],
+    "calls": 4,
+    "spend_usd": "0.02170525"
+  }
+}

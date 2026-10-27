@@ -1,8 +1,12 @@
 """The bounded intake loop: a fixed order of actions, no model picks the next step (SPEC §4)."""
 
 import hashlib
+import io
+
+from PIL import Image as PILImage
 
 from anamnesis.agent.crop import crop_region
+from anamnesis.agent.media import prepare_image
 from anamnesis.agent.session import IntakeSession
 from anamnesis.core.catalogue import Catalogue
 from anamnesis.core.reconcile import reconcile_all
@@ -23,12 +27,31 @@ def _intake_id(audio: bytes | None, images: list[Image]) -> str:
     return digest.hexdigest()
 
 
-def _segment(session: IntakeSession, segmenter, image: Image, concepts: tuple[str, ...]) -> list[ImageRegion]:
+Prepared = tuple[Image, tuple[int, int] | None, str]  # photo, size (None if undecodable), its sha256
+
+
+def _prepare(images: list[Image]) -> list[Prepared]:
+    """Each photo prepared, sized and hashed once; an undecodable one keeps its original bytes."""
+    prepared = []
+    for data, mime in images:
+        try:
+            photo = prepare_image(data, mime)
+            with PILImage.open(io.BytesIO(photo[0])) as decoded:
+                size = decoded.size
+        except (ValueError, OSError):
+            photo, size = (data, mime), None
+        prepared.append((photo, size, hashlib.sha256(photo[0]).hexdigest()))
+    return prepared
+
+
+def _segment(
+    session: IntakeSession, segmenter, image: Image, sha: str, concepts: tuple[str, ...],
+) -> list[ImageRegion]:
     """First concept that returns at least one region wins; SAM only ever sees the source photo."""
     data, mime = image
     for concept in concepts:
         regions = session.call(
-            AgentAction.SEGMENT, f"{hashlib.sha256(data).hexdigest()[:12]}:{concept}",
+            AgentAction.SEGMENT, f"{sha[:12]}:{concept}",
             lambda concept=concept: segmenter.segment(data, concept, mime=mime),
             lambda found: f"{len(found)} regions",
         )
@@ -37,10 +60,34 @@ def _segment(session: IntakeSession, segmenter, image: Image, concepts: tuple[st
     return []
 
 
+def _read_photo(
+    session: IntakeSession, segmenter, reader, prepared: Prepared, concepts: tuple[str, ...], top_k: int,
+) -> tuple[list[ImageRegion], list[tuple[Image, ImageRegion, LabelReading]]]:
+    """Segment one photo, keep the regions that belong to it, read the best ones, log the rest as dropped."""
+    image, size, sha = prepared
+    found = _segment(session, segmenter, image, sha, concepts)
+    kept = [r for r in found if r.image_sha256 == sha and (r.frame_w, r.frame_h) == size]
+    for region in found:
+        if region not in kept:  # logged before the reads, so it can't be lost to the budget
+            session.note(AgentAction.READ, region.region_id, "error: region does not match the photo")
+    readings = []
+    for region in top_regions(kept, top_k):
+        reading = session.call(
+            AgentAction.READ, region.region_id,
+            lambda region=region: reader.read(image[0], region, mime=image[1]),
+            lambda new: new.readability.value,
+        )
+        if reading is not None:
+            readings.append((image, region, reading))
+    return kept, readings
+
+
 def _zoom(
     session: IntakeSession, reader, image: Image, region: ImageRegion, reading: LabelReading,
 ) -> LabelReading:
     """One crop-zoom re-read of the source region; keeps the source region id."""
+    if session.exhausted:  # budget_exhausted is the last step: no crop, no log
+        return reading
     try:
         crop = crop_region(image[0], region)
     except ValueError:
@@ -91,17 +138,15 @@ def run_intake(
         ) or []
     regions: dict[str, ImageRegion] = {}
     readings: list[tuple[Image, ImageRegion, LabelReading]] = []
-    for image in images:
-        found = _segment(session, segmenter, image, concepts)
-        regions.update({region.region_id: region for region in found})
-        for region in top_regions(found, top_k):
-            reading = session.call(
-                AgentAction.READ, region.region_id,
-                lambda image=image, region=region: reader.read(image[0], region, mime=image[1]),
-                lambda new: new.readability.value,
-            )
-            if reading is not None:
-                readings.append((image, region, reading))
+    photos = _prepare(images)
+    for prepared in photos:
+        if prepared[1] is None:
+            if not session.exhausted:
+                session.note(AgentAction.SEGMENT, prepared[2][:12], "error: image cannot be decoded")
+            continue
+        kept, read = _read_photo(session, segmenter, reader, prepared, concepts, top_k)
+        regions.update({region.region_id: region for region in kept})
+        readings += read
     final = [
         _zoom(session, reader, image, region, reading) if reading.readability in _NEEDS_ZOOM else reading
         for image, region, reading in readings
@@ -111,7 +156,8 @@ def run_intake(
     if not session.exhausted:
         session.note(AgentAction.RECONCILE, "all", f"{len(findings)} findings")
     return ReconciliationReport(
-        intake_id=_intake_id(audio, images), turns=turns, claims=claims, regions=list(regions.values()),
+        intake_id=_intake_id(audio, [photo for photo, _, _ in photos]), turns=turns, claims=claims,
+        regions=list(regions.values()),
         observations=observations, findings=findings, steps=session.steps, calls=session.calls,
         spend_usd=session.spend_usd,
     )
