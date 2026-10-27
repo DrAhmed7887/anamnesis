@@ -14,6 +14,7 @@ from anamnesis.schema import (
     Release,
     Strength,
     canonical_inn,
+    salt_of,
 )
 from anamnesis.schema.templates import QUESTION_FOR, TEMPLATES
 
@@ -23,12 +24,27 @@ def _identity(
     country: str | None = None,
 ) -> tuple[frozenset[str] | None, bool]:
     entry = catalogue.resolve(text, country)
+    name_inns = entry.inns if entry else None
     if strength:
-        inns = frozenset(canonical_inn(part.inn) for part in strength.ingredients)
-        return inns, entry is not None and inns != entry.inns
+        inns = frozenset(_resolve_inn(part.inn, catalogue) for part in strength.ingredients)
+        conflict = name_inns is not None and inns != name_inns
+        return inns, conflict
     if inn:
-        return frozenset({canonical_inn(inn)}), False
-    return (entry.inns if entry else None), False
+        inns = frozenset({_resolve_inn(inn, catalogue)})
+        return inns, name_inns is not None and inns != name_inns
+    return name_inns, False
+
+
+def _resolve_inn(name: str, catalogue: Catalogue) -> str:
+    """Resolve curated aliases and single-ingredient product names to a moiety."""
+    canonical = canonical_inn(name)
+    known_moieties = {inn for entry in catalogue.entries for inn in entry.inns}
+    if canonical in known_moieties:
+        return canonical
+    entry = catalogue.resolve(name)
+    if entry is not None and len(entry.inns) == 1:
+        return next(iter(entry.inns))
+    return canonical
 
 
 def _claim_identity(claim: PatientClaim, catalogue: Catalogue) -> tuple[frozenset[str] | None, bool]:
@@ -49,11 +65,11 @@ def _amount(ingredient: IngredientAmount) -> tuple[Decimal, str]:
     return amount, unit
 
 
-def _strength_type(claim: Strength, pack: Strength) -> D:
+def _strength_type(claim: Strength, pack: Strength, catalogue: Catalogue) -> D:
     if claim.per != pack.per:
         return D.STRENGTH_MISMATCH
-    stated = {canonical_inn(part.inn): _amount(part) for part in claim.ingredients}
-    observed = {canonical_inn(part.inn): _amount(part) for part in pack.ingredients}
+    stated = {_resolve_inn(part.inn, catalogue): _amount(part) for part in claim.ingredients}
+    observed = {_resolve_inn(part.inn, catalogue): _amount(part) for part in pack.ingredients}
     if stated == observed:
         return D.MATCH
     if stated.keys() != observed.keys():
@@ -74,13 +90,8 @@ def _intake_type(
         return D.INSUFFICIENT_INFORMATION
     stated, stated_unit = _amount(intake)
     observed, observed_unit = _amount(pack.ingredients[0])
-    intake_inn = canonical_inn(intake.inn)
-    pack_inn = canonical_inn(pack.ingredients[0].inn)
-    if intake_inn != pack_inn:
-        entry = catalogue.resolve(intake.inn)
-        if entry is None or len(entry.inns) != 1:
-            return D.INSUFFICIENT_INFORMATION
-        intake_inn = next(iter(entry.inns))
+    intake_inn = _resolve_inn(intake.inn, catalogue)
+    pack_inn = _resolve_inn(pack.ingredients[0].inn, catalogue)
     if intake_inn != pack_inn:
         return D.INSUFFICIENT_INFORMATION
     if stated_unit != observed_unit:
@@ -99,16 +110,44 @@ def _intake_type(
     return D.STRENGTH_MISMATCH
 
 
-def _salts(strength: Strength | None) -> dict[str, str]:
-    """Named salts per canonical ingredient, e.g. {"metoprolol": "succinate"}."""
-    if strength is None:
-        return {}
-    return {canonical_inn(part.inn): part.salt for part in strength.ingredients if part.salt}
+def _salts(
+    strength: Strength | None,
+    catalogue: Catalogue,
+    *named_salts: tuple[str, str | None] | None,
+) -> dict[str, set[str]]:
+    """Known salts per canonical ingredient, including name-derived salt facts."""
+    salts: dict[str, set[str]] = {}
+    if strength:
+        for part in strength.ingredients:
+            salt = part.salt or salt_of(part.inn)
+            if salt:
+                salts.setdefault(_resolve_inn(part.inn, catalogue), set()).add(salt)
+    for named in named_salts:
+        if named is not None:
+            name, salt = named
+            if salt:
+                salts.setdefault(_resolve_inn(name, catalogue), set()).add(salt)
+    return salts
 
 
-def _salts_differ(claim: Strength | None, pack: Strength | None) -> bool:
-    stated, observed = _salts(claim), _salts(pack)
-    return any(stated[inn] != observed[inn] for inn in stated.keys() & observed.keys())
+def _salts_differ(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue) -> bool:
+    stated = _salts(
+        claim.strength,
+        catalogue,
+        (claim.intake_amount.inn, claim.intake_amount.salt) if claim.intake_amount else None,
+        (claim.inn, salt_of(claim.inn)) if claim.inn else None,
+    )
+    observed = _salts(
+        pack.strength,
+        catalogue,
+        (pack.inn, salt_of(pack.inn)) if pack.inn else None,
+    )
+    return any(
+        stated_salt != observed_salt
+        for inn in stated.keys() & observed.keys()
+        for stated_salt in stated[inn]
+        for observed_salt in observed[inn]
+    )
 
 
 def _release(strength: Strength | None, text: str, catalogue: Catalogue) -> Release:
@@ -149,10 +188,20 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
         return D.INGREDIENT_MISMATCH
     if claim.status.value == "discontinued":
         return D.DISCONTINUED_BUT_PRESENT
+    claim_release = _release(claim.strength, claim.name_text, catalogue)
+    pack_release = _release(pack.strength, pack.label_text or "", catalogue)
+    if _salts_differ(claim, pack, catalogue):
+        return D.FORMULATION_MISMATCH
+    if (
+        claim_release is not Release.UNKNOWN
+        and pack_release is not Release.UNKNOWN
+        and claim_release is not pack_release
+    ):
+        return D.FORMULATION_MISMATCH
     compared = False
     if claim.strength and pack.strength:
         compared = True
-        kind = _strength_type(claim.strength, pack.strength)
+        kind = _strength_type(claim.strength, pack.strength, catalogue)
         if kind is not D.MATCH:
             return kind
     if claim.intake_amount and pack.strength and len(pack.strength.ingredients) == 1:
@@ -164,15 +213,11 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
             return kind
     if not compared:
         return D.INSUFFICIENT_INFORMATION
-    claim_release = _release(claim.strength, claim.name_text, catalogue)
-    pack_release = _release(pack.strength, pack.label_text or "", catalogue)
-    if claim_release is not Release.UNKNOWN and pack_release is not Release.UNKNOWN:
-        if claim_release is not pack_release:
-            return D.FORMULATION_MISMATCH
-    elif Release.MODIFIED in {claim_release, pack_release}:
+    if Release.MODIFIED in {claim_release, pack_release} and Release.UNKNOWN in {
+        claim_release,
+        pack_release,
+    }:
         return D.INSUFFICIENT_INFORMATION
-    if _salts_differ(claim.strength, pack.strength):  # succinate vs tartrate: not interchangeable mg for mg
-        return D.FORMULATION_MISMATCH
     return D.MATCH
 
 
@@ -185,7 +230,11 @@ def _pair_score(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue
         return 0
     if claim_inns != pack_inns:
         return 1
-    if claim.strength and pack.strength and _strength_type(claim.strength, pack.strength) is D.MATCH:
+    if (
+        claim.strength
+        and pack.strength
+        and _strength_type(claim.strength, pack.strength, catalogue) is D.MATCH
+    ):
         return 3
     return 2
 

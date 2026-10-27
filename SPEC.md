@@ -40,8 +40,9 @@ A pre-visit intake agent. It takes the patient's voice note (any of 25 languages
 - **Text is enforced, not just advised:** `clinician_note` must equal `TEMPLATES[type]`, and `patient_question_id` must equal `QUESTION_FOR[type]`. Both tables live in `anamnesis/schema/templates.py`. The blocklist (`assert_no_advice`) is a regression check, not the safety boundary.
 
 ### Identity of one side
-- **Identity set:** the canonical INNs of `strength.ingredients` if a strength exists. Otherwise `{inn}`, otherwise the INNs of the catalogue entry that `name_text` (or `label_text`) resolves to.
-- If a side has both a strength and a resolvable name, and their INN sets differ, that is an extraction conflict and the result is `insufficient_information`.
+- Every ingredient field uses one resolver: a known catalogue moiety is canonicalised with `canonical_inn`; otherwise a name resolving to a single-INN catalogue entry resolves to that INN; otherwise the canonicalised input stays unchanged (unknown names remain unknown).
+- **Identity set:** the resolved INNs of `strength.ingredients` if a strength exists. Otherwise the resolved scalar `{inn}`, otherwise the INNs of the catalogue entry that `name_text` (or `label_text`) resolves to.
+- If a side has a strength and a resolvable name, or (when strength is absent) a scalar `inn` and a resolvable name, and their INN sets differ, that is an extraction conflict and the result is `insufficient_information`.
 - **Brand-implied facts** (`release`, `splittable`) come from the catalogue only when the text matched a **brand** name, never an INN. "Beloc-Zok" implies modified release; "metoprolol" implies nothing.
 
 ### Decision order for one claim and one pack (`reconcile_pair`)
@@ -51,19 +52,17 @@ The first rule that applies wins.
 3. Extraction conflict on either side → `insufficient_information`.
 4. The identity sets differ → `ingredient_mismatch`.
 5. The claim's status is `discontinued` → `discontinued_but_present`.
-6. Both sides have a strength: compare amounts in mg (g ×1000, mcg ×0.001; `ml` and `iu` only against the same unit). Unequal → `strength_mismatch` or `ratio_mismatch`, as in v1.
-7. The claim has an `intake_amount` (also when 6 found equal strengths): resolve its INN through a single-INN catalogue entry when needed; unresolved or mismatched INN is an extraction conflict → `insufficient_information`, then compare with a single-ingredient pack strength.
+6. **Known formulation conflicts:** named salts for the same canonical ingredient differ, or both release forms (explicit, otherwise brand-implied) are known and differ → `formulation_mismatch`. Claim salts include strength ingredients, `intake_amount.salt` and `salt_of(inn)`; pack salts include strength ingredients and `salt_of(inn)`.
+7. Both sides have a strength: compare amounts in mg (g ×1000, mcg ×0.001; `ml` and `iu` only against the same unit). Unequal → `strength_mismatch` or `ratio_mismatch`, as in v1.
+8. The claim has an `intake_amount` (also when 7 found equal strengths): compare its INN, resolved by the same ingredient resolver, with a single-ingredient pack strength; a mismatch → `insufficient_information`.
    - `per` ∉ {tablet, capsule} → `insufficient_information`.
    - Compute r = intake / unit strength. r = 1 → continue.
    - r ∈ {2, 3, 4} → `intake_differs_from_unit_strength`.
    - r = 0.5 on a tablet. Splittability is per product, because some scored ER tablets such as Beloc-Zok may be halved: `splittable: true` → `intake_differs_from_unit_strength`; `false`, or a capsule → `strength_mismatch`; unknown → `insufficient_information`.
    - Otherwise → `strength_mismatch`.
-8. No amount comparison was possible on either rule 6 or rule 7 → `insufficient_information`.
-9. **Formulation gate before `match`.** Release forms (explicit, otherwise implied by the brand):
-   - both known and different → `formulation_mismatch`
-   - one `modified`, the other `unknown` → `insufficient_information`
-   - both sides name a salt for the same ingredient, and the salts differ (succinate vs tartrate) → `formulation_mismatch`
-10. Otherwise → `match`.
+9. No amount comparison was possible on either rule 7 or rule 8 → `insufficient_information`.
+10. One release is `modified` and the other is `unknown` → `insufficient_information`.
+11. Otherwise → `match`.
 
 ### Pairing (`reconcile_all`)
 - Only readable packs can pair. Candidate pairs have overlapping identity sets.
@@ -75,7 +74,7 @@ The first rule that applies wins.
   - otherwise → `missing_modality`
 
 ### Catalogue resolution
-- `-` and `/` count as spaces, matching is on whole words, and the longest match wins only over names contained inside it. Text that names 2+ different products → `None`.
+- `-` and `/` count as spaces and matching is on whole words. Each match records its character span; a match is suppressed only when its span is contained inside a longer match's span. Brand matches also cover INN or alias matches whose INN sets are within the brand's INNs. Text that names 2+ different brands or products → `None`; INN/alias-only matches sharing one INN set resolve deterministically by brand name.
 - The country is a preference, never a filter.
 - Entries carry `release` and `splittable` (`true`, `false` or `null`). All entries are synthetic.
 

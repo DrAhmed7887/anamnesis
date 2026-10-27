@@ -35,19 +35,46 @@ class Catalogue:
         if not matches:
             return None
         maximal = [
-            (name, entry, brand)
-            for name, entry, brand in matches
-            if not any(name != other and name in other for other, _, _ in matches)
+            match
+            for match in matches
+            if not any(
+                other[0] <= match[0]
+                and match[1] <= other[1]
+                and other[1] - other[0] > match[1] - match[0]
+                for other in matches
+            )
         ]
-        products = {entry.brand for _, entry, _ in maximal}
-        if len(products) != 1:
-            return None
-        entries = [entry for _, entry, _ in maximal]
-        if country:
-            entries.sort(key=lambda entry: country.upper() not in entry.countries)
+        brands = [match for match in maximal if match[3]]
+        if brands:
+            brand_products = {(entry.brand, entry.inns) for _, _, entry, _ in brands}
+            if len(brand_products) != 1:
+                return None
+            brand_inns = brands[0][2].inns
+            remaining = [
+                match
+                for match in maximal
+                if match[3] or not any(match[2].inns <= brand[2].inns for brand in brands)
+            ]
+            if any(entry.inns != brand_inns for _, _, entry, _ in remaining):
+                return None
+            entries = [entry for _, _, entry, _ in brands]
+        else:
+            inn_sets = {entry.inns for _, _, entry, _ in maximal}
+            if len(inn_sets) != 1:
+                return None
+            entries = [entry for _, _, entry, _ in maximal]
+        entries = list(dict.fromkeys(entries))
+        country_code = country.upper() if country else None
+        entries.sort(
+            key=lambda entry: (
+                entry.brand.casefold(),
+                country_code is not None and country_code not in entry.countries,
+                entry.countries,
+            )
+        )
         return entries[0]
 
-    def _matches(self, text: str) -> list[tuple[str, CatalogueEntry, bool]]:
+    def _matches(self, text: str) -> list[tuple[int, int, CatalogueEntry, bool]]:
         normalised = _normalise(text)
         matches = []
         for entry in self.entries:
@@ -61,16 +88,19 @@ class Catalogue:
                 variants = [name]
                 if brand and " " in name:
                     variants.append(name.replace(" ", ""))
-                for variant in variants:
-                    if re.search(rf"(?<!\w){re.escape(variant)}(?!\w)", normalised):
-                        matches.append((variant, entry, brand))
+                for variant in dict.fromkeys(variants):
+                    pattern = re.compile(rf"(?<!\w){re.escape(variant)}(?!\w)")
+                    matches.extend(
+                        (found.start(), found.end(), entry, brand)
+                        for found in pattern.finditer(normalised)
+                    )
         return matches
 
     def _brand_entry(self, text: str) -> CatalogueEntry | None:
         entry = self.resolve(text)
         if entry is None:
             return None
-        return entry if any(e is entry and brand for _, e, brand in self._matches(text)) else None
+        return entry if any(e is entry and brand for _, _, e, brand in self._matches(text)) else None
 
     def implied_release(self, text: str) -> Release:
         entry = self._brand_entry(text)
