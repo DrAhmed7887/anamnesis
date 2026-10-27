@@ -67,12 +67,23 @@ def _strength_type(claim: Strength, pack: Strength) -> D:
     return D.STRENGTH_MISMATCH
 
 
-def _intake_type(intake: IngredientAmount, pack: Strength, splittable: bool | None) -> D:
+def _intake_type(
+    intake: IngredientAmount, pack: Strength, splittable: bool | None, catalogue: Catalogue
+) -> D:
     if pack.per.value not in {"tablet", "capsule"}:
         return D.INSUFFICIENT_INFORMATION
     stated, stated_unit = _amount(intake)
     observed, observed_unit = _amount(pack.ingredients[0])
-    if stated_unit != observed_unit or canonical_inn(intake.inn) != canonical_inn(pack.ingredients[0].inn):
+    intake_inn = canonical_inn(intake.inn)
+    pack_inn = canonical_inn(pack.ingredients[0].inn)
+    if intake_inn != pack_inn:
+        entry = catalogue.resolve(intake.inn)
+        if entry is None or len(entry.inns) != 1:
+            return D.INSUFFICIENT_INFORMATION
+        intake_inn = next(iter(entry.inns))
+    if intake_inn != pack_inn:
+        return D.INSUFFICIENT_INFORMATION
+    if stated_unit != observed_unit:
         return D.STRENGTH_MISMATCH
     ratio = stated / observed
     if ratio == 1:
@@ -146,7 +157,9 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
             return kind
     if claim.intake_amount and pack.strength and len(pack.strength.ingredients) == 1:
         compared = True
-        kind = _intake_type(claim.intake_amount, pack.strength, catalogue.splittable(pack.label_text or ""))
+        kind = _intake_type(
+            claim.intake_amount, pack.strength, catalogue.splittable(pack.label_text or ""), catalogue
+        )
         if kind is not D.MATCH:
             return kind
     if not compared:

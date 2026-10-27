@@ -52,7 +52,7 @@ The first rule that applies wins.
 4. The identity sets differ → `ingredient_mismatch`.
 5. The claim's status is `discontinued` → `discontinued_but_present`.
 6. Both sides have a strength: compare amounts in mg (g ×1000, mcg ×0.001; `ml` and `iu` only against the same unit). Unequal → `strength_mismatch` or `ratio_mismatch`, as in v1.
-7. The claim has an `intake_amount` (also when 6 found equal strengths): compare it with a single-ingredient pack strength.
+7. The claim has an `intake_amount` (also when 6 found equal strengths): resolve its INN through a single-INN catalogue entry when needed; unresolved or mismatched INN is an extraction conflict → `insufficient_information`, then compare with a single-ingredient pack strength.
    - `per` ∉ {tablet, capsule} → `insufficient_information`.
    - Compute r = intake / unit strength. r = 1 → continue.
    - r ∈ {2, 3, 4} → `intake_differs_from_unit_strength`.

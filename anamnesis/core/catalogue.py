@@ -58,8 +58,12 @@ class Catalogue:
                 names.extend((name, False) for name in (moiety, *aliases))
             for raw, brand in names:
                 name = _normalise(raw)
-                if re.search(rf"(?<!\w){re.escape(name)}(?!\w)", normalised):
-                    matches.append((name, entry, brand))
+                variants = [name]
+                if brand and " " in name:
+                    variants.append(name.replace(" ", ""))
+                for variant in variants:
+                    if re.search(rf"(?<!\w){re.escape(variant)}(?!\w)", normalised):
+                        matches.append((variant, entry, brand))
         return matches
 
     def _brand_entry(self, text: str) -> CatalogueEntry | None:
