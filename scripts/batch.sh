@@ -2,6 +2,7 @@
 # One build batch, gated. Every step leaves evidence in evidence/batches/<n>/.
 #   scripts/batch.sh start <n> <slug>   branch batch/<n>-<slug> from main (then commit tests/contract + briefs/<n>.md)
 #   scripts/batch.sh run <n> <luna|sol>  codex writes the code from briefs/<n>.md, then the gate runs
+#   BUILDER=codex scripts/batch.sh run <n> <model-id>   same, on plain `codex` (ChatGPT login), e.g. gpt-6-chat-thinking
 #   scripts/batch.sh gate <n>            rerun the gate (after a fix)
 #   scripts/batch.sh merge <n>           needs "Verdict: PASS" in evidence/batches/<n>/review.md
 set -euo pipefail
@@ -55,8 +56,13 @@ case $cmd in
     [[ -z $(build_changes) ]] || { print -u2 "run: working tree not clean"; exit 1; }
     mkdir -p "$ev" evidence/raw
     raw="evidence/raw/batch-$n-codex.log"   # git-ignored: the full transcript can echo local files
-    print "codex gpt-6-$model, batch $n, started $(now)" > "$raw"
-    codex exec -C "$PWD" -s workspace-write --skip-git-repo-check -m "gpt-6-$model" \
+    if [[ ${BUILDER:-default} == codex ]]; then
+      tool=(codex); model_id=$model; label="codex-chatgpt"
+    else
+      tool=(codex); model_id="gpt-6-$model"; label="codex"
+    fi
+    print "$label $model_id, batch $n, started $(now)" > "$raw"
+    $tool exec -C "$PWD" -s workspace-write --skip-git-repo-check -m "$model_id" \
       "$(cat briefs/_worker_preamble.md briefs/$n.md)" </dev/null >> "$raw" 2>&1 || print "codex exited non-zero" >> "$raw"
     # Committed record: header, the builder's final report, token count.
     { head -1 "$raw"; print; awk '/^codex$/{buf=""; keep=1; next} keep{buf=buf $0 "\n"} END{printf "%s", buf}' "$raw"; } > "$ev/codex.md"
@@ -72,15 +78,16 @@ case $cmd in
     title=$(head -1 "briefs/$n.md" | sed 's/^# *//')
     # Stage only build paths, so files another tool drops in the repo never ride along.
     git add anamnesis tests "$ev" "briefs/$n.md" SPEC.md pyproject.toml uv.lock
-    git commit -q -m "feat: batch $n - $title" -m "Built by codex, gated (ruff + pytest + contract lock), reviewed by Claude Code. Evidence: $ev/"
+    git commit -q -m "feat: batch $n - $title" -m "Built by the batch builder (see Built-by in the review), gated (ruff + pytest + contract lock), reviewed by Claude Code. Evidence: $ev/"
     git switch -q main
     git merge -q --no-ff "$branch" -m "merge: $branch"
     sha=$(git rev-parse --short HEAD)
     tests=$(grep -Eo '"tests_passed":[0-9]+' "$ev/gate.json" | grep -Eo '[0-9]+$')
-    model=$(head -1 "$ev/codex.md" 2>/dev/null | grep -Eo 'gpt-6-[a-z]+' || print manual)
+    model=$(head -1 "$ev/codex.md" 2>/dev/null | grep -Eo 'gpt-[0-9.]+-[a-z-]+' || print manual)
+    builder=$(head -1 "$ev/codex.md" 2>/dev/null | grep -Eo '^codex-[a-z]+' || print manual)
     # Who actually wrote the code: "Built-by: ..." in the review overrides the builder model (QM M2 #5).
     built_by=$(grep -m1 '^Built-by:' "$ev/review.md" | sed 's/^Built-by: *//' || true)
-    built_by=${built_by:-codex $model}
+    built_by=${built_by:-$builder $model}
     contract=$(uv run pytest -q tests/contract 2>&1 | grep -Eo '[0-9]+ passed' | grep -Eo '[0-9]+' || print 0)
     unit=$(uv run pytest -q tests/unit 2>&1 | grep -Eo '[0-9]+ passed' | grep -Eo '[0-9]+' || print 0)
     print -r -- "{\"batch\":$n,\"branch\":\"$branch\",\"model\":\"$model\",\"built_by\":\"$built_by\",\"tests_passed\":$tests,\"contract_tests\":$contract,\"unit_tests\":$unit,\"verdict\":\"pass\",\"merge_commit\":\"$sha\",\"at\":\"$(now)\"}" >> "$log"
