@@ -5,7 +5,7 @@ import io
 
 from PIL import Image as PILImage
 
-from anamnesis.agent.crop import crop_region
+from anamnesis.agent.crop import crop_region, enlarge_crop
 from anamnesis.agent.media import prepare_image
 from anamnesis.agent.session import IntakeSession
 from anamnesis.core.catalogue import Catalogue
@@ -72,9 +72,16 @@ def _read_photo(
             session.note(AgentAction.READ, region.region_id, "error: region does not match the photo")
     readings = []
     for region in top_regions(kept, top_k):
+        if session.exhausted:  # budget_exhausted is the last step: no crop, no log
+            continue
+        try:
+            crop = crop_region(image[0], region)
+        except ValueError:
+            session.note(AgentAction.READ, region.region_id, "error: crop failed")
+            continue
         reading = session.call(
             AgentAction.READ, region.region_id,
-            lambda region=region: reader.read(image[0], region, mime=image[1]),
+            lambda crop=crop, region=region: reader.read(crop, region, mime="image/png", cropped=True),
             lambda new: new.readability.value,
         )
         if reading is not None:
@@ -93,9 +100,12 @@ def _zoom(
     except ValueError:
         session.note(AgentAction.ZOOM_READ, region.region_id, "error: crop failed")
         return reading
+    enlarged = enlarge_crop(crop)
+    if enlarged is None:  # already at the size cap: no zoom, no step, no call
+        return reading
     zoomed = session.call(
         AgentAction.ZOOM_READ, region.region_id,
-        lambda: reader.read(crop, region, mime="image/png", cropped=True),
+        lambda: reader.read(enlarged, region, mime="image/png", cropped=True),
         lambda new: new.readability.value,
     )
     if zoomed is None:

@@ -27,3 +27,20 @@ def crop_region(image: bytes, region: ImageRegion, margin: float = 0.10) -> byte
     except (UnidentifiedImageError, OSError) as exc:
         raise ValueError("image cannot be decoded") from exc
     return out.getvalue()
+
+
+_MAX_ZOOM_SIDE = 2048
+
+
+def enlarge_crop(crop: bytes) -> bytes | None:
+    """2x Lanczos upscale of a PNG crop, capped so the longest side is at most 2048 px."""
+    with Image.open(io.BytesIO(crop)) as source:
+        width, height = source.size
+        factor = min(2, _MAX_ZOOM_SIDE / max(width, height))
+        if factor <= 1:
+            return None
+        out = io.BytesIO()
+        source.convert("RGB").resize(
+            (round(width * factor), round(height * factor)), Image.Resampling.LANCZOS,
+        ).save(out, format="PNG")
+    return out.getvalue()

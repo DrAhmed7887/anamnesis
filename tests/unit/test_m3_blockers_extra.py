@@ -2,6 +2,7 @@
 
 import hashlib
 import io
+import json
 from decimal import Decimal
 
 import httpx
@@ -14,7 +15,7 @@ from anamnesis.core.catalogue import load_catalogue
 from anamnesis.core.reconcile import _strength_type
 from anamnesis.providers import SpendGuard
 from anamnesis.providers.claims import MetaClaimExtractor
-from anamnesis.providers.meta import MetaClient, MetaLabelReader, MetaSegmenter
+from anamnesis.providers.meta import MetaClient, MetaLabelReader, MetaSegmenter, spark_call_estimate
 from anamnesis.providers.spend import SessionCapExceeded, SessionGuard
 from anamnesis.schema import AudioTurn, ImageRegion, IngredientAmount, Strength
 from anamnesis.schema import DiscrepancyType as D
@@ -87,10 +88,11 @@ def test_stated_strength_equal_to_nominal_matches_but_a_multiple_of_the_literal_
     assert _strength_type(st(25), st(50), CAT, nominal) is D.STRENGTH_MISMATCH
 
 
-def _timeout_then_empty_id():
+def _timeout_then_empty_id(seen):
     replies = iter([httpx.ReadTimeout("slow"), None])
 
     def handler(request):
+        seen.append(json.loads(request.content))
         step = next(replies)
         if step is not None:
             raise step
@@ -99,14 +101,14 @@ def _timeout_then_empty_id():
     return handler
 
 
-def _read_label(guard):
-    reader = MetaLabelReader(_client(_timeout_then_empty_id()), guard)
+def _read_label(guard, seen):
+    reader = MetaLabelReader(_client(_timeout_then_empty_id(seen)), guard)
     return lambda: reader.read(IMAGE, REGION, mime="image/png")
 
 
-def _extract_claims(guard):
+def _extract_claims(guard, seen):
     turn = AudioTurn(turn_id="turn-0", start_ms=0, end_ms=10, transcript="Concor five")
-    extractor = MetaClaimExtractor(_client(_timeout_then_empty_id()), guard)
+    extractor = MetaClaimExtractor(_client(_timeout_then_empty_id(seen)), guard)
     return lambda: extractor.extract([turn])
 
 
@@ -115,8 +117,9 @@ def test_a_paid_spark_reply_with_an_empty_id_is_counted(tmp_path, make_call):
     parent = SpendGuard(tmp_path / "ledger.jsonl", cap_usd=Decimal("5"))
     guard = SessionGuard(parent, max_usd=Decimal("5"), max_calls=10)
     session = IntakeSession(max_provider_calls=5)
-    assert session.call(AgentAction.READ, "x", make_call(guard), str) is None
-    assert parent.total_usd == Decimal("0.06")  # two estimates at 0.03
+    seen = []
+    assert session.call(AgentAction.READ, "x", make_call(guard, seen), str) is None
+    assert parent.total_usd == 2 * spark_call_estimate(seen[0])  # each attempt charged at its bound
     assert session.spend_usd == parent.total_usd
     assert len(session.steps[-1].call_ids) == 2
 

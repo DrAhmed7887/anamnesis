@@ -20,7 +20,6 @@ from anamnesis.providers.spend import SpendGuard
 from anamnesis.providers.voice import parse_transcribe_response
 from anamnesis.schema import AudioTurn, ImageRegion, Readability, Release, StrengthPer, Unit
 
-SPARK_CALL_ESTIMATE_USD = Decimal("0.03")
 _VOICE_MODEL = "muse-voice-transcribe-1.0"
 _SAM_MODEL = "sam-3.1"
 _SYSTEM_PROMPT = (
@@ -66,6 +65,24 @@ LABEL_SCHEMA: dict[str, Any] = {
 
 def _data_url(data: bytes, mime: str) -> str:
     return f"data:{mime};base64,{base64.b64encode(data).decode('ascii')}"
+
+
+def spark_call_estimate(body: dict[str, Any]) -> Decimal:
+    """Upper-bound pre-call estimate from the request body about to be sent (SPEC §5)."""
+    chars, images = 0, 0
+    for message in body["messages"]:
+        content = message["content"]
+        if isinstance(content, str):
+            chars += len(content)
+        else:
+            for part in content:
+                if part.get("type") == "image_url":
+                    images += 1
+                elif part.get("type") == "text":
+                    chars += len(part.get("text", ""))
+    return cost_usd(
+        body["model"], input_tokens=chars // 2 + 5000 * images, output_tokens=body["max_tokens"],
+    )
 
 
 def _trace(call_id: str, model: str, latency_ms: int, *, cost: Decimal,
@@ -283,8 +300,10 @@ class MetaLabelReader:
             }},
         }
 
+        estimate = spark_call_estimate(body)
+
         def attempt() -> tuple[LabelReading, ProviderTrace]:
-            self.guard.check(SPARK_CALL_ESTIMATE_USD)
+            self.guard.check(estimate)
             payload, latency_ms = self.client.post("/chat/completions", json=body)
             try:
                 usage = payload["usage"]
@@ -303,6 +322,11 @@ class MetaLabelReader:
             trace = _trace(call_id, self.model, latency_ms, cost=cost,
                            input_tokens=input_tokens, output_tokens=output_tokens)
             self.guard.charge_prechecked(trace)
+            if payload["choices"][0].get("finish_reason") == "length":
+                raise ProviderError(
+                    "spark", "Spark reply stopped at the length limit", retryable=False,
+                    attempt_trace=trace,
+                )
             try:
                 reading = parse_label_json(content, region.region_id)
             except ProviderError as exc:
@@ -312,12 +336,10 @@ class MetaLabelReader:
                 ) from None
             return reading, trace
 
-        return with_one_retry(
-            attempt, guard=self.guard, model_id=self.model, estimate=SPARK_CALL_ESTIMATE_USD,
-        )
+        return with_one_retry(attempt, guard=self.guard, model_id=self.model, estimate=estimate)
 
 
 __all__ = [
-    "LABEL_SCHEMA", "SPARK_CALL_ESTIMATE_USD", "MetaClient", "MetaLabelReader",
-    "MetaSegmenter", "MetaTranscriber", "wav_duration_ms",
+    "LABEL_SCHEMA", "MetaClient", "MetaLabelReader", "MetaSegmenter", "MetaTranscriber",
+    "spark_call_estimate", "wav_duration_ms",
 ]
