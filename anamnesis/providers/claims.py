@@ -187,7 +187,10 @@ class MetaClaimExtractor:
                 call_id = str(payload["id"])
                 cost = cost_usd(self.model, input_tokens=input_tokens, output_tokens=output_tokens)
             except (KeyError, IndexError, TypeError, ValueError) as exc:
-                raise ProviderError("spark", "malformed Spark response", retryable=True) from exc
+                raise ProviderError(
+                    "spark", "malformed Spark response", retryable=True,
+                    billable_uncertain=True, estimated_reason="malformed Spark response",
+                ) from exc
             trace = ProviderTrace(
                 call_id=call_id,
                 model_id=self.model,
@@ -196,11 +199,16 @@ class MetaClaimExtractor:
                 output_tokens=output_tokens,
                 cost_usd=cost,
             )
-            self.guard.charge(trace)
+            self.guard.charge_prechecked(trace)
             try:
                 claims = parse_claims_json(content, turns)
             except ProviderError as exc:
-                raise ProviderError(exc.provider, self.client._safe(str(exc)), exc.retryable) from None
+                raise ProviderError(
+                    exc.provider, self.client._safe(str(exc)), retryable=True,
+                    attempt_trace=trace,
+                ) from None
             return claims, trace
 
-        return with_one_retry(attempt)
+        return with_one_retry(
+            attempt, guard=self.guard, model_id=self.model, estimate=SPARK_CALL_ESTIMATE_USD,
+        )
