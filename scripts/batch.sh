@@ -2,6 +2,7 @@
 # One build batch, gated. Every step leaves evidence in evidence/batches/<n>/.
 #   scripts/batch.sh start <n> <slug>   branch batch/<n>-<slug> from main (then commit tests/contract + briefs/<n>.md)
 #   scripts/batch.sh run <n>            Muse Code (muse-spark-1.3) writes the code from briefs/<n>.md, then the gate runs
+#   scripts/batch.sh round <n> <r>      fix round r: Muse works from evidence/batches/<n>/round<r>-brief.md, then the gate
 #   scripts/batch.sh gate <n>           rerun the gate (after a fix)
 #   scripts/batch.sh merge <n>          needs "Verdict: PASS" in evidence/batches/<n>/review.md
 set -euo pipefail
@@ -40,6 +41,26 @@ gate() {
   [[ $result == pass ]]
 }
 
+# One Muse build from a brief, with its goal pinned, priced from Muse's own billing records.
+#   muse_build <label> <brief> <raw log> <export> <model>
+muse_build() {
+  local label=$1 brief=$2 raw=$3 out=$4 model=$5
+  print "muse $model, $label, started $(now)" > "$raw"
+  # Muse's goal tracking (cookbook 07): headless "/goal" text isn't parsed as the command (probe, 27 Oct), so the
+  # prompt asks Muse to pin the goal with its own goal tool, with an oracle it can run inside its sandbox.
+  local goal="Before any other work, pin this objective as your session goal with your goal tool, and close it only when its check passes: $label is done ONLY when \`.venv/bin/ruff check .\` and \`.venv/bin/python -m pytest -q\` both pass and \`git status --porcelain tests/contract\` prints nothing."
+  # Headless runs can't answer approval prompts; --disable-approval keeps the OS sandbox on (docs/muse/muse-code.md).
+  muse exec --model "$model" --contributor-mode off --no-foreign-personal-context --disable-approval \
+    "$(print -r -- "$goal"; print; cat briefs/_worker_preamble.md "$brief")" </dev/null >> "$raw" 2>&1 \
+    || print "muse exited non-zero" >> "$raw"
+  # The full transcript (every tool call and file read) stays in the git-ignored export.
+  muse export --last --redacted --out "$out" </dev/null 2>/dev/null || true
+  uv run python scripts/muse_usage.py "$n" "$out" || print -u2 "usage: no export to price"
+}
+
+# Did Muse pin its goal, close it, and work under it? The caller prints it and keeps it in goal.md.
+goal_check() { { uv run python scripts/goal_check.py "$1" || true; } | sed "s#$PWD/##g"; }
+
 case $cmd in
   start)
     slug=${3:?slug}
@@ -56,22 +77,25 @@ case $cmd in
     [[ -z $(build_changes) ]] || { print -u2 "run: working tree not clean"; exit 1; }
     mkdir -p "$ev" evidence/raw
     raw="evidence/raw/batch-$n-muse.log"   # git-ignored: Muse's final report, with absolute local paths
-    print "muse $model, batch $n, started $(now)" > "$raw"
-    # Muse's goal tracking (cookbook 07): headless "/goal" text isn't parsed as the command (probe, 27 Oct), so the
-    # prompt asks Muse to pin the goal with its own goal tool, with an oracle it can run inside its sandbox.
-    goal="Before any other work, pin this objective as your session goal with your goal tool, and close it only when its check passes: batch $n is done ONLY when \`.venv/bin/ruff check .\` and \`.venv/bin/python -m pytest -q\` both pass and \`git status --porcelain tests/contract\` prints nothing."
-    # Headless runs can't answer approval prompts; --disable-approval keeps the OS sandbox on (docs/muse/muse-code.md).
-    muse exec --model "$model" --contributor-mode off --no-foreign-personal-context --disable-approval \
-      "$(print -r -- "$goal"; print; cat briefs/_worker_preamble.md briefs/$n.md)" </dev/null >> "$raw" 2>&1 \
-      || print "muse exited non-zero" >> "$raw"
-    # The full transcript (every tool call and file read) stays in the git-ignored export.
-    muse export --last --redacted --out "evidence/raw/batch-$n-muse_session.json" </dev/null 2>/dev/null || true
-    uv run python scripts/muse_usage.py "$n" "evidence/raw/batch-$n-muse_session.json" || print -u2 "usage: no export to price"
-    # Did Muse pin its goal, close it, and work under it? Printed now and kept with the batch evidence.
+    out="evidence/raw/batch-$n-muse_session.json"
+    muse_build "batch $n" "briefs/$n.md" "$raw" "$out" "$model"
     print "goal check, batch $n:"
-    { uv run python scripts/goal_check.py "evidence/raw/batch-$n-muse_session.json" || true; } \
-      | sed "s#$PWD/##g" | tee "$ev/goal.md"
+    goal_check "$out" | tee "$ev/goal.md"
     sed "s#$PWD/##g" "$raw" > "$ev/builder.md"   # the committed report keeps repo-relative paths only
+    gate
+    ;;
+  round)
+    r=${3:?round number}
+    brief="$ev/round$r-brief.md"
+    [[ -f $brief ]] || { print -u2 "round: $brief missing"; exit 1; }
+    [[ -f $ev/builder.md ]] || { print -u2 "round: run round 1 first (scripts/batch.sh run $n)"; exit 1; }
+    # A fix round builds on the previous round's uncommitted change, so the tree is expected to be dirty.
+    raw="evidence/raw/batch-$n-muse-r$r.log"
+    out="evidence/raw/batch-$n-muse_session-r$r.json"
+    muse_build "batch $n round $r" "$brief" "$raw" "$out" muse-spark-1.3
+    print "goal check, batch $n round $r:"
+    { print; print "## Round $r"; goal_check "$out"; } | tee -a "$ev/goal.md"
+    { print; print "## Round $r"; sed "s#$PWD/##g" "$raw"; } >> "$ev/builder.md"
     gate
     ;;
   gate)
