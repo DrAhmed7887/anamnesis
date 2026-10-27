@@ -31,6 +31,7 @@ gate() {
     result=fail reason="pytest failed (see pytest.log)"
   fi
   [[ -f $ev/pytest.log ]] && tests=$(grep -Eo '[0-9]+ passed' "$ev/pytest.log" | grep -Eo '[0-9]+' || print 0)
+  git add -N . 2>/dev/null || true   # count new files in the diff stat
   local stat; stat=$(git diff --shortstat "$base" | sed 's/^ //')
   print -r -- "{\"batch\":$n,\"result\":\"$result\",\"reason\":\"$reason\",\"tests_passed\":$tests,\"diff\":\"$stat\",\"at\":\"$(now)\"}" > "$ev/gate.json"
   cat "$ev/gate.json"
@@ -50,10 +51,13 @@ case $cmd in
     [[ -f briefs/$n.md ]] || { print -u2 "run: briefs/$n.md missing"; exit 1; }
     [[ -n $(contract_base) ]] || { print -u2 "run: commit the contract tests first"; exit 1; }
     [[ -z $(git status --porcelain) ]] || { print -u2 "run: working tree not clean"; exit 1; }
-    mkdir -p "$ev"
-    print "codex gpt-6-$model, batch $n, started $(now)" > "$ev/codex.log"
+    mkdir -p "$ev" evidence/raw
+    raw="evidence/raw/batch-$n-codex.log"   # git-ignored: the full transcript can echo local files
+    print "codex gpt-6-$model, batch $n, started $(now)" > "$raw"
     codex exec -C "$PWD" -s workspace-write --skip-git-repo-check -m "gpt-6-$model" \
-      "$(cat briefs/$n.md)" </dev/null >> "$ev/codex.log" 2>&1 || print "codex exited non-zero" >> "$ev/codex.log"
+      "$(cat briefs/_worker_preamble.md briefs/$n.md)" </dev/null >> "$raw" 2>&1 || print "codex exited non-zero" >> "$raw"
+    # Committed record: header, the builder's final report, token count.
+    { head -1 "$raw"; print; awk '/^codex$/{buf=""; keep=1; next} keep{buf=buf $0 "\n"} END{printf "%s", buf}' "$raw"; } > "$ev/codex.md"
     gate
     ;;
   gate)
@@ -70,7 +74,7 @@ case $cmd in
     git merge -q --no-ff "$branch" -m "merge: $branch"
     sha=$(git rev-parse --short HEAD)
     tests=$(grep -Eo '"tests_passed":[0-9]+' "$ev/gate.json" | grep -Eo '[0-9]+$')
-    model=$(head -1 "$ev/codex.log" | grep -Eo 'gpt-6-[a-z]+' || print manual)
+    model=$(head -1 "$ev/codex.md" 2>/dev/null | grep -Eo 'gpt-6-[a-z]+' || print manual)
     print -r -- "{\"batch\":$n,\"branch\":\"$branch\",\"model\":\"$model\",\"tests_passed\":$tests,\"verdict\":\"pass\",\"merge_commit\":\"$sha\",\"at\":\"$(now)\"}" >> "$log"
     git add "$log" && git commit -q -m "chore: log batch $n"
     git push -q origin main 2>/dev/null && print "pushed main" || print "push skipped (no remote?)"
