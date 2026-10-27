@@ -13,7 +13,7 @@ from decimal import Decimal
 import pytest
 from PIL import Image, ImageOps
 
-from anamnesis.agent import AgentAction, prepare_image, run_intake
+from anamnesis.agent import AgentAction, crop_region, prepare_image, run_intake
 from anamnesis.core.catalogue import load_catalogue
 from anamnesis.providers import ProviderTrace
 from anamnesis.providers.spark import LabelReading
@@ -164,10 +164,12 @@ def test_a_rotated_phone_photo_is_read_from_the_pixels_of_its_region(orientation
     [(sent, mime)] = seg.seen
     prepared = Image.open(io.BytesIO(sent))
     assert prepared.size == (W, H) and not prepared.getexif() and mime == "image/jpeg"  # SAM: upright, no metadata
-    assert [(img, m) for img, m, cropped in reader.calls if not cropped] == [(sent, mime)]  # Spark: the same bytes
+    # Spark: a crop of the same prepared pixels (since batch 18 every read is a crop, SPEC §4 step 4)
+    assert [(img, m, cropped) for img, m, cropped in reader.calls] == [
+        (crop_region(sent, report.regions[0]), "image/png", True)]
     assert report.regions[0].image_sha256 == hashlib.sha256(sent).hexdigest()
     [obs] = report.observations
-    assert obs.label_text == "Concor 5 mg"  # the zoom crop under the red pack's region showed the red pack
+    assert obs.label_text == "Concor 5 mg"  # the crop under the red pack's region showed the red pack
 
 
 def test_raw_and_prepared_photos_give_the_same_intake():
@@ -200,16 +202,27 @@ def test_a_region_that_does_not_match_its_photo_is_never_read(change):
 
 # --- QM M3 round 2 #1: budget_exhausted is the last step, whatever fails afterwards --------------------------------
 
-def test_nothing_is_logged_after_budget_exhausted_not_even_a_failed_crop(monkeypatch):
-    def broken(image, region, margin=0.10):
-        raise ValueError("crop failed")
+class Unreadable:
+    def read(self, image, region, *, mime, cropped=False):
+        return LabelReading(region_id=region.region_id, readability="unreadable"), trace("read")
 
-    monkeypatch.setattr("anamnesis.agent.loop.crop_region", broken)
+
+def test_nothing_is_logged_after_budget_exhausted_not_even_a_failed_crop(monkeypatch):
+    cuts = []
+
+    def zoom_cut_fails(image, region, margin=0.10):  # batch 18: the read's crop works, the zoom's re-cut fails
+        cuts.append(region.region_id)
+        if cuts.count(region.region_id) > 1:
+            raise ValueError("crop failed")
+        return crop_region(image, region, margin)
+
+    monkeypatch.setattr("anamnesis.agent.loop.crop_region", zoom_cut_fails)
     three = ((10, 10, 59, 49), (100, 70, 149, 109), (70, 10, 90, 30))
 
-    control = intake([(png(), "image/png")], UprightSegmenter(three), PixelReader())
+    control = intake([(png(), "image/png")], UprightSegmenter(three), Unreadable())
     assert "error: crop failed" in [s.outcome for s in control.steps if s.action is AgentAction.ZOOM_READ]
 
-    report = intake([(png(), "image/png")], UprightSegmenter(three), PixelReader(), max_provider_calls=3)
+    cuts.clear()
+    report = intake([(png(), "image/png")], UprightSegmenter(three), Unreadable(), max_provider_calls=3)
     actions = [s.action for s in report.steps]
     assert actions.count(AgentAction.BUDGET_EXHAUSTED) == 1 and actions[-1] is AgentAction.BUDGET_EXHAUSTED
