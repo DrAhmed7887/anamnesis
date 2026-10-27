@@ -3,10 +3,11 @@
     PYTHONPATH=. uv run python scripts/brief_live.py [--date 2026-10-27]
 
 Reads evidence/live/<date>/report_<lang>.json and the synthetic media those intakes ran on
-(evidence/raw/media), and writes evidence/raw/briefs/brief_<lang>.html, one self-contained page each (SPEC §7).
-The output is git-ignored because each page embeds its voice note and photo. Reports saved before batch 17
-carry the old `match` wording, so the findings are recomputed with today's reconciler from the saved claims
-and readings. render_brief still checks that the media are the ones the intake ran on (intake_id).
+(evidence/raw/media), and writes evidence/raw/briefs/brief_<lang>.html, one self-contained page
+each (SPEC §7). The output is git-ignored because each page embeds its voice note and photo.
+Reports saved before batch 17 carry the old `match` wording, so the findings are recomputed with
+today's reconciler from the saved claims and readings. render_brief still checks that the media
+are the ones the intake ran on (intake_id).
 """
 
 import argparse
