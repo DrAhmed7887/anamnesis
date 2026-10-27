@@ -68,7 +68,8 @@ case $cmd in
     gate
     branch=$(git branch --show-current)
     title=$(head -1 "briefs/$n.md" | sed 's/^# *//')
-    git add -A
+    # Stage only build paths, so files another tool drops in the repo never ride along.
+    git add anamnesis tests "$ev" "briefs/$n.md" SPEC.md pyproject.toml uv.lock
     git commit -q -m "feat: batch $n - $title" -m "Built by codex, gated (ruff + pytest + contract lock), reviewed by Claude Code. Evidence: $ev/"
     git switch -q main
     git merge -q --no-ff "$branch" -m "merge: $branch"
