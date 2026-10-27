@@ -32,13 +32,25 @@ def _events(export: dict) -> list[dict]:
     return found
 
 
+def _models(export: dict) -> set[str]:
+    """Model ids, which exports write as a string or as {"model_id": ...} depending on the version."""
+    models = set()
+    for item in export.get("events", []):
+        derived = item.get("derived", {}).get("model")
+        event = item.get("envelope", {}).get("payload", {}).get("event")
+        candidates = [derived, event.get("model") if isinstance(event, dict) else None]
+        for model in candidates:
+            model = model.get("model_id") if isinstance(model, dict) else model
+            if isinstance(model, str) and model and model != "same-as-main":
+                models.add(model)
+    return models
+
+
 def tally(export: dict) -> dict:
     """Token totals over the provider billing records, plus every model id the session used."""
     tokens = {"input_tokens": 0, "cached_tokens": 0, "output_tokens": 0, "reasoning_tokens": 0}
-    models, sessions = set(), set()
+    models, sessions = _models(export), set()
     for event in _events(export):
-        if isinstance(event.get("model"), dict) and event["model"].get("model_id"):
-            models.add(event["model"]["model_id"])
         record = event.get("record")
         if isinstance(record, dict) and record.get("usage_family") == "provider":
             quantity = record.get("quantity", {})
