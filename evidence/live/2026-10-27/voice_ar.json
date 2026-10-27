@@ -1,0 +1,20 @@
+{
+  "trace": {
+    "call_id": "e9674d17-429f-4c0c-8654-5971b022becf",
+    "model_id": "muse-voice-transcribe-1.0",
+    "latency_ms": 2901,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": "0.00070"
+  },
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 60,
+      "end_ms": 12620,
+      "transcript": "أنا باخد كوناكور خمسة ميلي جرام مرة في اليوم وباخدد BelocZok خمسين ملي جرام مرتين في اليوم وقفت البنادول من شهر",
+      "speaker": null,
+      "lang_hint": "ar"
+    }
+  ]
+}

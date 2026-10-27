@@ -18,3 +18,8 @@ Muse (M1 #3) said ER tablets can't be split. That is too broad: some scored ER t
 - `CLAUDE.md`: **rewritten** by Claude Code to match the decisions above (the draft had the barcode schema, the unverified citations and the ICU case as instructions, plus a wrong portal address). Committed.
 - `docs/SUGGESTIONS_FOR_CLAUDE.md`: decisions logged above. Kept **out of git**, because it contains the wrong price table and personal context. It stays as a local note.
 - `docs/DATASET_RESEARCH_AUDIT.md`: a reference for the eval stage (packaging-photo datasets, speech corpora, RxNorm/openFDA/CIMA APIs). **Unverified.** The DOIs and licences get checked before any dataset is used. Kept out of git until then.
+
+## 2026-10-27: first live run (synthetic media, $0.0325 on the ledger of a $5 cap)
+- **Voice Transcribe** (English, plus Egyptian Arabic with code-switching) and **Spark label reading** (strict JSON schema plus image input) worked on the first try. Spark also returned the correct release forms: Beloc-Zok `modified`, Concor `immediate`.
+- **SAM 3.1** found the packs only with the concept "label" ("medicine box" and 3 others gave 0 regions). Its output format differs from the docs; batch 6 fixed the parser using the real output as a fixture.
+- **New blocker, proven on live data:** Spark returns INNs with the salt ("bisoprolol fumarate", "metoprolol succinate"). The catalogue uses the active moiety, so `reconcile_all` pairs **nothing**: every finding comes back `missing_modality`. This is M1 finding #2, which we had deferred. **Next batch:** a curated salt-to-moiety mapping, with the salt kept as its own field (succinate vs tartrate stays visible to the clinician).

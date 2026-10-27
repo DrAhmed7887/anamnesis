@@ -1,0 +1,36 @@
+{
+  "trace": {
+    "call_id": "resp_6ae07b003ab41b0e711c4768",
+    "model_id": "sam-3.1",
+    "latency_ms": 1557,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": "0.0025"
+  },
+  "regions": [
+    {
+      "region_id": "15595e0869ee-0",
+      "image_sha256": "15595e0869ee9188297274f3c9ec55fb96d90588c739846db3d13b2ae74c47cb",
+      "object_id": 0,
+      "x1": 700,
+      "y1": 211,
+      "x2": 1170,
+      "y2": 539,
+      "frame_w": 1280,
+      "frame_h": 720,
+      "confidence": 0.5897435545921326
+    },
+    {
+      "region_id": "15595e0869ee-1",
+      "image_sha256": "15595e0869ee9188297274f3c9ec55fb96d90588c739846db3d13b2ae74c47cb",
+      "object_id": 1,
+      "x1": 110,
+      "y1": 171,
+      "x2": 580,
+      "y2": 499,
+      "frame_w": 1280,
+      "frame_h": 720,
+      "confidence": 0.5897435545921326
+    }
+  ]
+}

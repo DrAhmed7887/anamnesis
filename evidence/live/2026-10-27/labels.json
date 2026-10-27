@@ -1,0 +1,58 @@
+[
+  {
+    "trace": {
+      "call_id": "chatcmpl-01a17ce0-897b-73b6-bfcd-79a094ca93b4",
+      "model_id": "muse-spark-1.3",
+      "latency_ms": 3326,
+      "input_tokens": 1475,
+      "output_tokens": 703,
+      "cost_usd": "0.00483150"
+    },
+    "reading": {
+      "region_id": "15595e0869ee-0",
+      "label_text": "Beloc-Zok 100 mg Metoprolol succinate Prolonged-release tablets",
+      "inn": "Metoprolol succinate",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "Metoprolol succinate",
+            "amount": "100",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "modified"
+      },
+      "readability": "readable",
+      "country": null
+    }
+  },
+  {
+    "trace": {
+      "call_id": "chatcmpl-01a17ce0-97c9-718e-b744-f1f204db701c",
+      "model_id": "muse-spark-1.3",
+      "latency_ms": 3666,
+      "input_tokens": 1474,
+      "output_tokens": 803,
+      "cost_usd": "0.00525525"
+    },
+    "reading": {
+      "region_id": "15595e0869ee-1",
+      "label_text": "Concor 5 mg\nBisoprolol fumarate\n30 film-coated tablets",
+      "inn": "Bisoprolol fumarate",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "Bisoprolol fumarate",
+            "amount": "5",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "readable",
+      "country": null
+    }
+  }
+]
