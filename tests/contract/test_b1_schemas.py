@@ -19,6 +19,7 @@ from anamnesis.schema import (
     Readability,
     Strength,
 )
+from anamnesis.schema.templates import QUESTION_FOR, TEMPLATES
 
 SHA = "a" * 64
 
@@ -31,15 +32,18 @@ def strength(*pairs, per="tablet"):
 
 
 def finding(type_, audio=("t1",), visual=("r1",), review=True, **kw):
+    # Revised in batch 3: side IDs follow the evidence, and the text is the canonical template (SPEC §3).
+    t = DiscrepancyType(type_)
     return Finding(
         finding_id="f1",
-        type=type_,
-        claim_id=kw.pop("claim_id", "c1"),
-        observation_id=kw.pop("observation_id", "o1"),
+        type=t,
+        claim_id=kw.pop("claim_id", "c1" if audio else None),
+        observation_id=kw.pop("observation_id", "o1" if visual else None),
         audio_evidence=list(audio),
         visual_evidence=list(visual),
         needs_clinician_review=review,
-        clinician_note="Sources disagree; review with the patient.",
+        clinician_note=kw.pop("clinician_note", TEMPLATES[t]),
+        patient_question_id=kw.pop("patient_question_id", QUESTION_FOR[t]),
         **kw,
     )
 
@@ -107,7 +111,7 @@ def test_strength_supports_combinations_and_requires_one_ingredient():
 
 
 def test_dose_regimen_allows_half_tablets_and_rejects_zero():
-    assert DoseRegimen(units_per_intake=Decimal("0.5"), intakes_per_day=Decimal("2")).as_needed is False
+    assert DoseRegimen(units_per_intake=Decimal("0.5"), intakes_per_day=Decimal("2")).as_needed is None  # revised in batch 3 (M1 #12)
     with pytest.raises(ValidationError):
         DoseRegimen(units_per_intake=Decimal("0"))
 
@@ -147,7 +151,7 @@ def test_discrepancy_enum_is_closed_and_lowercase():
     assert {t.value for t in DiscrepancyType} == {
         "match", "strength_mismatch", "intake_differs_from_unit_strength", "ingredient_mismatch",
         "ratio_mismatch", "discontinued_but_present", "unreadable_source", "unresolved_name",
-        "missing_modality",
+        "missing_modality", "formulation_mismatch", "insufficient_information",
     }
 
 
@@ -164,7 +168,8 @@ def test_match_may_skip_review_but_others_may_not():
 
 
 @pytest.mark.parametrize("t", ["match", "strength_mismatch", "intake_differs_from_unit_strength",
-                               "ingredient_mismatch", "ratio_mismatch", "discontinued_but_present"])
+                               "ingredient_mismatch", "ratio_mismatch", "discontinued_but_present",
+                               "formulation_mismatch", "insufficient_information"])
 def test_two_sided_types_need_both_evidence_lists(t):
     finding(t)
     with pytest.raises(ValidationError):
@@ -197,18 +202,32 @@ def test_missing_modality_needs_exactly_one_side():
 
 # --- whole-model rules ------------------------------------------------------
 
-@pytest.mark.parametrize("model,kwargs", [
-    (AudioTurn, dict(turn_id="t1", start_ms=0, end_ms=1, transcript="x")),
-    (IngredientAmount, dict(inn="x", amount=Decimal("1"), unit="mg")),
-    (PackObservation, dict(observation_id="o1", readability="unreadable", visual_evidence=["r1"])),
-])
-def test_extra_fields_forbidden(model, kwargs):
+def _valid_kwargs():
+    one = [dict(inn="x", amount=Decimal(1), unit="mg")]
+    return [
+        (AudioTurn, dict(turn_id="t1", start_ms=0, end_ms=1, transcript="x")),
+        (ImageRegion, dict(region_id="r1", image_sha256=SHA, object_id=0, x1=0, y1=0, x2=1, y2=1,
+                           frame_w=2, frame_h=2)),
+        (IngredientAmount, one[0]),
+        (Strength, dict(ingredients=one, per="tablet")),
+        (DoseRegimen, {}),
+        (PatientClaim, dict(claim_id="c1", name_text="x", status="unknown", audio_evidence=["t1"])),
+        (PackObservation, dict(observation_id="o1", readability="unreadable", visual_evidence=["r1"])),
+        (Finding, dict(finding_id="f1", type="match", claim_id="c1", observation_id="o1",
+                       audio_evidence=["t1"], visual_evidence=["r1"], needs_clinician_review=False,
+                       clinician_note=TEMPLATES[DiscrepancyType.MATCH], patient_question_id=None)),
+    ]
+
+
+@pytest.mark.parametrize("model,kwargs", _valid_kwargs(), ids=lambda v: getattr(v, "__name__", ""))
+def test_extra_fields_forbidden_on_every_model(model, kwargs):
+    model(**kwargs)
     with pytest.raises(ValidationError):
         model(**kwargs, surprise=True)
 
 
 def test_json_round_trip():
-    f = finding("strength_mismatch", patient_question_id="q_strength")
+    f = finding("strength_mismatch")
     assert Finding.model_validate_json(f.model_dump_json()) == f
     c = PatientClaim(claim_id="c1", name_text="augmentin",
                      strength=strength(("amoxicillin", 875), ("clavulanic acid", 125)),
@@ -216,7 +235,29 @@ def test_json_round_trip():
     assert PatientClaim.model_validate_json(c.model_dump_json()) == c
 
 
-def test_json_schemas_are_not_recursive():
+def _refs(node):
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if k == "$ref":
+                yield v.rsplit("/", 1)[-1]
+            else:
+                yield from _refs(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _refs(v)
+
+
+def _reaches(graph, start, target, seen=()):
+    return any(n == target or (n not in seen and _reaches(graph, n, target, (*seen, n)))
+               for n in graph.get(start, ()))
+
+
+def test_json_schemas_have_no_reference_cycles():
     for model in (Finding, PatientClaim, PackObservation):
-        schema = json.dumps(model.model_json_schema())
-        assert f'"#/$defs/{model.__name__}"' not in schema
+        schema = model.model_json_schema()
+        defs = schema.get("$defs", {})
+        graph = {name: set(_refs(d)) for name, d in defs.items()}
+
+        assert not any(_reaches(graph, name, name) for name in graph), model.__name__
+        assert model.__name__ not in set(_refs(defs))
+    json.dumps(Finding.model_json_schema())

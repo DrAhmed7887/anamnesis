@@ -3,10 +3,10 @@
 from decimal import Decimal
 
 import pytest
+
 from anamnesis.core.catalogue import load_catalogue
 from anamnesis.core.guardrails import PATIENT_QUESTIONS, TEMPLATES, AdviceLeak, assert_no_advice
 from anamnesis.core.reconcile import reconcile_all, reconcile_pair
-
 from anamnesis.schema import (
     DiscrepancyType as D,
 )
@@ -124,9 +124,10 @@ def test_units_are_normalized(cat):
 
 
 def test_intake_equal_to_strength_is_match_and_odd_ratio_is_mismatch(cat):
-    o = pack("Beloc-Zok 100 mg", st(("metoprolol", 100)))
-    assert reconcile_pair(claim("metoprolol", intake=amt("metoprolol", 100)), o, cat).type is D.MATCH
-    odd = reconcile_pair(claim("metoprolol", intake=amt("metoprolol", 30)), o, cat)
+    # Revised in batch 3: Beloc-Zok is modified release, so an unknown-release claim can't be a plain match.
+    o = pack("Concor 5 mg", st(("bisoprolol", 5)))
+    assert reconcile_pair(claim("bisoprolol", intake=amt("bisoprolol", 5)), o, cat).type is D.MATCH
+    odd = reconcile_pair(claim("bisoprolol", intake=amt("bisoprolol", 3)), o, cat)
     assert odd.type is D.STRENGTH_MISMATCH
 
 
