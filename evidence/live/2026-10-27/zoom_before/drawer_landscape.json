@@ -1,0 +1,271 @@
+{
+  "photo": "drawer_landscape.jpg",
+  "orientation": 1,
+  "stored_size": [
+    4032,
+    3024
+  ],
+  "segment_calls": [
+    {
+      "concept": "medicine box",
+      "regions": 0,
+      "frames": []
+    },
+    {
+      "concept": "label",
+      "regions": 3,
+      "frames": [
+        [
+          4032,
+          3024
+        ]
+      ]
+    }
+  ],
+  "reads": [
+    {
+      "region_id": "ad38366112f9-0",
+      "cropped": false,
+      "sent_size": [
+        4032,
+        3024
+      ],
+      "input_tokens": 4298,
+      "output_tokens": 612,
+      "readability": "readable",
+      "label_text": "Norvasc 10 mg\nAmlodipine\n28 tablets"
+    },
+    {
+      "region_id": "ad38366112f9-2",
+      "cropped": false,
+      "sent_size": [
+        4032,
+        3024
+      ],
+      "input_tokens": 4297,
+      "output_tokens": 607,
+      "readability": "readable",
+      "label_text": "Beloc-Zok 100 mg\nMetoprolol succinate\nProlonged-release tablets"
+    },
+    {
+      "region_id": "ad38366112f9-1",
+      "cropped": false,
+      "sent_size": [
+        4032,
+        3024
+      ],
+      "input_tokens": 4296,
+      "output_tokens": 710,
+      "readability": "readable",
+      "label_text": "Concor 5 mg\nBisoprolol fumarate\n30 film-coated tablets"
+    }
+  ],
+  "report": {
+    "intake_id": "e3577fc2e3687bc0274d7514809b88fd90acd2135e21c22e053431791410e73a",
+    "turns": [],
+    "claims": [],
+    "regions": [
+      {
+        "region_id": "ad38366112f9-0",
+        "image_sha256": "ad38366112f935a7cd0603d7f01c528c97d1345ee5d3991cb89b66133ce5f93b",
+        "object_id": 0,
+        "x1": 1283,
+        "y1": 1999,
+        "x2": 2017,
+        "y2": 2500,
+        "frame_w": 4032,
+        "frame_h": 3024,
+        "confidence": 0.9064327478408813
+      },
+      {
+        "region_id": "ad38366112f9-1",
+        "image_sha256": "ad38366112f935a7cd0603d7f01c528c97d1345ee5d3991cb89b66133ce5f93b",
+        "object_id": 1,
+        "x1": 508,
+        "y1": 732,
+        "x2": 1290,
+        "y2": 1267,
+        "frame_w": 4032,
+        "frame_h": 3024,
+        "confidence": 0.9024390578269958
+      },
+      {
+        "region_id": "ad38366112f9-2",
+        "image_sha256": "ad38366112f935a7cd0603d7f01c528c97d1345ee5d3991cb89b66133ce5f93b",
+        "object_id": 2,
+        "x1": 1934,
+        "y1": 865,
+        "x2": 2764,
+        "y2": 1433,
+        "frame_w": 4032,
+        "frame_h": 3024,
+        "confidence": 0.9064327478408813
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "o0",
+        "label_text": "Norvasc 10 mg\nAmlodipine\n28 tablets",
+        "inn": "amlodipine",
+        "strength": {
+          "ingredients": [
+            {
+              "inn": "amlodipine",
+              "salt": null,
+              "amount": "10",
+              "unit": "mg"
+            }
+          ],
+          "per": "tablet",
+          "release": "immediate"
+        },
+        "readability": "readable",
+        "country": null,
+        "visual_evidence": [
+          "ad38366112f9-0"
+        ]
+      },
+      {
+        "observation_id": "o1",
+        "label_text": "Beloc-Zok 100 mg\nMetoprolol succinate\nProlonged-release tablets",
+        "inn": "Metoprolol succinate",
+        "strength": {
+          "ingredients": [
+            {
+              "inn": "metoprolol",
+              "salt": "succinate",
+              "amount": "100",
+              "unit": "mg"
+            }
+          ],
+          "per": "tablet",
+          "release": "modified"
+        },
+        "readability": "readable",
+        "country": null,
+        "visual_evidence": [
+          "ad38366112f9-2"
+        ]
+      },
+      {
+        "observation_id": "o2",
+        "label_text": "Concor 5 mg\nBisoprolol fumarate\n30 film-coated tablets",
+        "inn": "Bisoprolol fumarate",
+        "strength": {
+          "ingredients": [
+            {
+              "inn": "bisoprolol",
+              "salt": "fumarate",
+              "amount": "5",
+              "unit": "mg"
+            }
+          ],
+          "per": "tablet",
+          "release": "immediate"
+        },
+        "readability": "readable",
+        "country": null,
+        "visual_evidence": [
+          "ad38366112f9-1"
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "finding_id": "-:o0",
+        "type": "missing_modality",
+        "claim_id": null,
+        "observation_id": "o0",
+        "audio_evidence": [],
+        "visual_evidence": [
+          "ad38366112f9-0"
+        ],
+        "needs_clinician_review": true,
+        "clinician_note": "Medication evidence is present in only one source.",
+        "patient_question_id": "source"
+      },
+      {
+        "finding_id": "-:o1",
+        "type": "missing_modality",
+        "claim_id": null,
+        "observation_id": "o1",
+        "audio_evidence": [],
+        "visual_evidence": [
+          "ad38366112f9-2"
+        ],
+        "needs_clinician_review": true,
+        "clinician_note": "Medication evidence is present in only one source.",
+        "patient_question_id": "source"
+      },
+      {
+        "finding_id": "-:o2",
+        "type": "missing_modality",
+        "claim_id": null,
+        "observation_id": "o2",
+        "audio_evidence": [],
+        "visual_evidence": [
+          "ad38366112f9-1"
+        ],
+        "needs_clinician_review": true,
+        "clinician_note": "Medication evidence is present in only one source.",
+        "patient_question_id": "source"
+      }
+    ],
+    "steps": [
+      {
+        "n": 0,
+        "action": "segment",
+        "target": "ad38366112f9:medicine box",
+        "outcome": "0 regions",
+        "call_ids": [
+          "resp_6ae0a1a0bae421c73d2d4414"
+        ]
+      },
+      {
+        "n": 1,
+        "action": "segment",
+        "target": "ad38366112f9:label",
+        "outcome": "3 regions",
+        "call_ids": [
+          "resp_6ae0a1a3ee555ae7911c49b0"
+        ]
+      },
+      {
+        "n": 2,
+        "action": "read",
+        "target": "ad38366112f9-0",
+        "outcome": "readable",
+        "call_ids": [
+          "chatcmpl-01a17d77-7c50-703c-8f37-bbc83326241c"
+        ]
+      },
+      {
+        "n": 3,
+        "action": "read",
+        "target": "ad38366112f9-2",
+        "outcome": "readable",
+        "call_ids": [
+          "chatcmpl-01a17d77-9330-7172-a199-38602cabd495"
+        ]
+      },
+      {
+        "n": 4,
+        "action": "read",
+        "target": "ad38366112f9-1",
+        "outcome": "readable",
+        "call_ids": [
+          "chatcmpl-01a17d77-a937-75b3-9e33-6e2b58a29ae9"
+        ]
+      },
+      {
+        "n": 5,
+        "action": "reconcile",
+        "target": "all",
+        "outcome": "3 findings",
+        "call_ids": []
+      }
+    ],
+    "calls": 5,
+    "spend_usd": "0.02931200"
+  }
+}

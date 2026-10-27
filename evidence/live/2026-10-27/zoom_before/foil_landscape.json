@@ -1,0 +1,203 @@
+{
+  "photo": "foil_landscape.jpg",
+  "orientation": 1,
+  "stored_size": [
+    4032,
+    3024
+  ],
+  "segment_calls": [
+    {
+      "concept": "medicine box",
+      "regions": 0,
+      "frames": []
+    },
+    {
+      "concept": "label",
+      "regions": 2,
+      "frames": [
+        [
+          4032,
+          3024
+        ]
+      ]
+    }
+  ],
+  "reads": [
+    {
+      "region_id": "5e1bfd994d3f-1",
+      "cropped": false,
+      "sent_size": [
+        4032,
+        3024
+      ],
+      "input_tokens": 4298,
+      "output_tokens": 706,
+      "readability": "readable",
+      "label_text": "Glucophage 850 mg metformin hydrochloride"
+    },
+    {
+      "region_id": "5e1bfd994d3f-0",
+      "cropped": false,
+      "sent_size": [
+        4032,
+        3024
+      ],
+      "input_tokens": 4296,
+      "output_tokens": 611,
+      "readability": "readable",
+      "label_text": "Panadol 500 mg Paracetamol 24 tablets"
+    }
+  ],
+  "report": {
+    "intake_id": "ba9826afc8de19446f4c6589af199cce4c24b8b0870d5c6a4de756fc48f0ebb7",
+    "turns": [],
+    "claims": [],
+    "regions": [
+      {
+        "region_id": "5e1bfd994d3f-0",
+        "image_sha256": "5e1bfd994d3f42154f4571fcf8e60914f73f7a61fd499723c8ea97744a076ee2",
+        "object_id": 0,
+        "x1": 3130,
+        "y1": 494,
+        "x2": 3569,
+        "y2": 805,
+        "frame_w": 4032,
+        "frame_h": 3024,
+        "confidence": 0.6683937907218933
+      },
+      {
+        "region_id": "5e1bfd994d3f-1",
+        "image_sha256": "5e1bfd994d3f42154f4571fcf8e60914f73f7a61fd499723c8ea97744a076ee2",
+        "object_id": 1,
+        "x1": 1433,
+        "y1": 1349,
+        "x2": 2365,
+        "y2": 1852,
+        "frame_w": 4032,
+        "frame_h": 3024,
+        "confidence": 0.6717948913574219
+      }
+    ],
+    "observations": [
+      {
+        "observation_id": "o0",
+        "label_text": "Glucophage 850 mg metformin hydrochloride",
+        "inn": "metformin hydrochloride",
+        "strength": {
+          "ingredients": [
+            {
+              "inn": "metformin",
+              "salt": "hydrochloride",
+              "amount": "850",
+              "unit": "mg"
+            }
+          ],
+          "per": "tablet",
+          "release": "unknown"
+        },
+        "readability": "readable",
+        "country": null,
+        "visual_evidence": [
+          "5e1bfd994d3f-1"
+        ]
+      },
+      {
+        "observation_id": "o1",
+        "label_text": "Panadol 500 mg Paracetamol 24 tablets",
+        "inn": "paracetamol",
+        "strength": {
+          "ingredients": [
+            {
+              "inn": "paracetamol",
+              "salt": null,
+              "amount": "500",
+              "unit": "mg"
+            }
+          ],
+          "per": "tablet",
+          "release": "unknown"
+        },
+        "readability": "readable",
+        "country": null,
+        "visual_evidence": [
+          "5e1bfd994d3f-0"
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "finding_id": "-:o0",
+        "type": "missing_modality",
+        "claim_id": null,
+        "observation_id": "o0",
+        "audio_evidence": [],
+        "visual_evidence": [
+          "5e1bfd994d3f-1"
+        ],
+        "needs_clinician_review": true,
+        "clinician_note": "Medication evidence is present in only one source.",
+        "patient_question_id": "source"
+      },
+      {
+        "finding_id": "-:o1",
+        "type": "missing_modality",
+        "claim_id": null,
+        "observation_id": "o1",
+        "audio_evidence": [],
+        "visual_evidence": [
+          "5e1bfd994d3f-0"
+        ],
+        "needs_clinician_review": true,
+        "clinician_note": "Medication evidence is present in only one source.",
+        "patient_question_id": "source"
+      }
+    ],
+    "steps": [
+      {
+        "n": 0,
+        "action": "segment",
+        "target": "5e1bfd994d3f:medicine box",
+        "outcome": "0 regions",
+        "call_ids": [
+          "resp_6ae0a1d25d199d4b4ea64e1f"
+        ]
+      },
+      {
+        "n": 1,
+        "action": "segment",
+        "target": "5e1bfd994d3f:label",
+        "outcome": "2 regions",
+        "call_ids": [
+          "resp_6ae0a1d68d269dcbab4d4da5"
+        ]
+      },
+      {
+        "n": 2,
+        "action": "read",
+        "target": "5e1bfd994d3f-1",
+        "outcome": "readable",
+        "call_ids": [
+          "chatcmpl-01a17d78-48f5-7537-a313-49ad8efee1bf"
+        ]
+      },
+      {
+        "n": 3,
+        "action": "read",
+        "target": "5e1bfd994d3f-0",
+        "outcome": "readable",
+        "call_ids": [
+          "chatcmpl-01a17d78-5f03-7477-9320-27c31f177f5a"
+        ]
+      },
+      {
+        "n": 4,
+        "action": "reconcile",
+        "target": "all",
+        "outcome": "2 findings",
+        "call_ids": []
+      }
+    ],
+    "calls": 4,
+    "spend_usd": "0.02133975"
+  }
+}
