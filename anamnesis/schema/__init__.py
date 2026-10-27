@@ -3,6 +3,7 @@
 from anamnesis.schema.evidence import AudioTurn, ImageRegion
 from anamnesis.schema.findings import DiscrepancyType, Finding
 from anamnesis.schema.medication import (
+    INN_ALIASES,
     DoseRegimen,
     IngredientAmount,
     MedicationStatus,
@@ -14,9 +15,11 @@ from anamnesis.schema.medication import (
     StrengthPer,
     Unit,
     canonical_inn,
+    salt_of,
 )
 
 __all__ = [
+    "INN_ALIASES",
     "AudioTurn",
     "DiscrepancyType",
     "DoseRegimen",
@@ -32,4 +35,5 @@ __all__ = [
     "StrengthPer",
     "Unit",
     "canonical_inn",
+    "salt_of",
 ]
