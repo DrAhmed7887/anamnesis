@@ -1,4 +1,4 @@
-# Anamnesis contract (v3.2, 27 Oct 2026)
+# Anamnesis contract (v3.3, 27 Oct 2026)
 
 A pre-visit intake agent. It takes the patient's voice note (Voice Transcribe supports 25 languages; **tested live so far only on synthetic text-to-speech notes: English, and Egyptian Arabic text with brand names in Latin or Arabic script, spoken by a macOS voice; no human speech yet**) and photos of their medicine packs, and gives the clinician a one-page brief. Every fact in the brief links to the audio turn and the image region it came from. **It reports where sources disagree. It never gives medical advice.** All data is synthetic.
 
@@ -81,7 +81,8 @@ The first rule that applies wins.
 ### Pairing (`reconcile_all`)
 - Only readable packs can pair. Candidate pairs have overlapping identity sets.
 - Score each candidate: 3 = same identity and equal strength, 2 = same identity, 1 = overlap.
-- Take candidates greedily by score, then `claim_id`, then `observation_id`. Ties are broken by **ID**, not by list position, so the set of findings doesn't depend on the order of claims or packs. Findings come back sorted by `finding_id`.
+- **A named brand is compared with its own pack first** (batch 19): before the score, a pair whose claim `name_text` and pack `label_text` match the same catalogue brand comes first. With Panadol and Gelocatil both paracetamol, ID order alone could pair Panadol's claim with Gelocatil's pack. Ranking by score first could pair "Panadol 1 g" with an equal-strength Gelocatil 1 g pack and hide that the Panadol pack says 500 mg (supervisor 19 #4).
+- Take candidates greedily by that preference, then score, then `claim_id`, then `observation_id`. Ties are broken by **ID**, not by list position, so the set of findings doesn't depend on the order of claims or packs. Findings come back sorted by `finding_id`.
 - Leftovers:
   - an unreadable pack → `unreadable_source`
   - an unresolvable name → `unresolved_name`
@@ -116,9 +117,63 @@ The first rule that applies wins.
 Billing-uncertain failures are recorded at the pre-call estimate. Rejected 4xx and
 429 requests are not charged.
 
-**Spark estimates and length stops (C6, C7, batch 18).** A Spark call's pre-call estimate is an upper bound, not a constant, computed by `spark_call_estimate(body)` in `anamnesis/providers/meta.py` from the request body it will send: `cost_usd(model, input_tokens = (characters of all text in the messages) // 2 + 5,000 per attached image, output_tokens = max_tokens)`. The same figure is checked against every cap before the call and charged when billing is uncertain. Claim extraction uses `max_tokens = 16000` (reasoning counts toward it; live 3-medicine notes already used about 2,700). A reply with `finish_reason: "length"` is charged at its real usage and raised as a **non-retryable** `ProviderError` carrying its call id: a retry would stop on length again.
+**Spark estimates and length stops (C6, C7, batch 18; reply schema, batch 19).** A Spark call's pre-call estimate is an upper bound, not a constant, computed by `spark_call_estimate(body)` in `anamnesis/providers/meta.py` from the request body it will send: `cost_usd(model, input_tokens = (characters of all text in the messages + characters of json.dumps(body["response_format"]) when the body has one) // 2 + 5,000 per attached image, output_tokens = max_tokens)`. The reply schema is billed as prompt tokens: without it, the live claim calls of 27 Oct were bounded at 391 and 383 input tokens against 550 and 559 billed, and a length stop at that size ended $0.0002 over a cap set to the bound (supervisor 18 #1). The same figure is checked against every cap before the call and charged when billing is uncertain. Claim extraction uses `max_tokens = 16000` (reasoning counts toward it; live 3-medicine notes already used about 2,700); label reads use `max_tokens = 4000`. A reply with `finish_reason: "length"` is charged at its real usage and raised as a **non-retryable** `ProviderError` carrying its call id: a retry would stop on length again.
 
 ## 6. Build rules
 - All models use `extra="forbid"`. No recursive JSON schemas.
 - Tests pass offline, with no keys and no network.
 - `tests/contract/` is written by the reviewer before each batch. A batch that edits it is rejected.
+
+## 7. Clinician brief (`anamnesis/brief.py`, batch 19)
+`render_brief(report, images, audio, catalogue) -> str` turns one `ReconciliationReport`, plus the photos and the voice note that were given to `run_intake` (`images: list[(bytes, mime)]`, `audio: (bytes, mime) | None`), into **one self-contained static HTML page** that can be hosted as it is (J3). Every `src` is a `data:` URI and every `href` an in-page `#` link; there is no `<link>` element, and the only script is one inline `<script>` that plays a turn (no `on…` event attributes). It calls no model, and the same inputs give the same string. **It refuses media the report wasn't made from:** `render_brief` and `coverage_lines` first recompute `intake_id` exactly as `run_intake` does (the loop's own photo preparation, in input order, and the audio bytes) and raise `ValueError` if it differs from the report's. Otherwise a report could be shown against another recording or photo (supervisor 19 #3). Its fixed text comes from `anamnesis/schema/templates.py`. Source data (transcripts, `name_text`, label text, model-read values) is HTML-escaped and shown verbatim, never paraphrased.
+
+**Order: disagreements first** (supervisor #1, #6). After a `<header id="scope">`, the page has these `<section id="…">` elements, always all of them and in this order. An empty section shows "None.".
+| `id` | What goes in it |
+|---|---|
+| `disagree` | `strength_mismatch`, `intake_differs_from_unit_strength`, `ingredient_mismatch`, `ratio_mismatch`, `formulation_mismatch`, `discontinued_but_present` |
+| `across` | cross-medication observations (below) |
+| `unconfirmed` | `insufficient_information`, `unreadable_source`, `unresolved_name`, `missing_modality` (except the `stopped` row) |
+| `agree` | `match` |
+| `stopped` | `missing_modality` findings with only a claim, whose status is `discontinued` (historical statements) |
+| `coverage` | the coverage lines (below) |
+| `photos` | each photo that could be opened, upright, with its SAM boxes, then each region's crop |
+| `voice` | the voice note and its turns |
+
+**A finding** is `<article id="finding:<finding_id>" data-type="<type>">`, in report order, with:
+- its heading, an `<h3>`: the first non-blank line of the claim's `name_text`, otherwise of the label text, otherwise "Unnamed pack";
+- `TEMPLATES[type]`, and the patient question when there is one;
+- the two sides **side by side**: `data-side="patient"` (name, strength, intake amount, regimen and status, verbatim) and `data-side="pack"` (label text, strength, readability, country). Amounts print as plain decimals with their unit and never with a trailing zero ("100 mg", never "100.0 mg"; "0.5", never ".5"), the safe-notation rule for doses. A missing side says "Not mentioned." or "Not photographed.";
+- A3 wording: a `missing_modality` finding is labelled "Mentioned, not photographed" or "Photographed, not mentioned", and one in `stopped` "Reported as stopped, not photographed";
+- a link to every piece of its evidence: `href="#turn:<turn_id>"` for each audio turn, `href="#region:<region_id>"` for each region.
+
+**Evidence on the page.**
+- Each photo that opens is `<figure id="photo:<i>">` (input order, from 1), with one `<img>` of the **prepared** bytes (§4 step 0) under an `<svg viewBox="0 0 <frame_w> <frame_h>">`. The svg has one `<rect>` per report region of that photo, at `x1, y1`, `x2 − x1 + 1` wide and `y2 − y1 + 1` high, inside `<a href="#region:<region_id>">`. A box is an outline with a transparent fill, so the pack under it stays visible and the whole box is clickable. No image makes the page wider than the screen.
+- Each report region is `<figure id="region:<region_id>">` showing `crop_region(prepared photo, region)`. For a region that was read, these are exactly the pixels the reader saw; this is the click-to-zoom view.
+- The voice note is one `<audio src="data:…">`. Each turn is `<li id="turn:<turn_id>" data-start-ms="…" data-end-ms="…">` with its time range and transcript. Clicking it plays that turn only, from its start to its end, and starting another turn ends the first.
+- Every `#` link on the page points to an element on the page.
+
+**Cross-medication observations** (`cross_medication(claims, catalogue)` in `anamnesis/core/overlap.py`; supervisor #2, J2). Pairwise reconciliation can't see two medicines that overlap each other: the showcase patient reports Concor and Beloc-Zok, two beta-blockers. Only **claims** count, never the photos, because a pack can't show use and repeated photos never imply duplicate use.
+- A claim counts unless its status is `discontinued`, and only if its identity set (§3) can be built. Its *product* is the catalogue brand when `name_text` matches a brand or alias name, otherwise `normalise(name_text)`. A brand said twice, in either script, is one product.
+- `same_ingredient`: for each INN, the counted claims whose identity set contains it, when they name 2+ different products (Panadol + Gelocatil, Panadol + "paracetamol", Panadol + Panadol Extra).
+- `same_class`: for each class in the curated `DRUG_CLASSES` (only `beta-blockers`: bisoprolol, metoprolol), the counted claims whose identity set contains a member, when they hold 2+ different members and name 2+ different products.
+- One observation per INN or class, with `kind`, `key` (the INN or the class name), `claim_ids` (sorted), the claims' `audio_evidence` (sorted, no repeats) and its `note`. Order: `same_ingredient` by key, then `same_class` by key.
+- Notes (fixed): `same_ingredient`: "More than one product the patient mentioned, and did not report as stopped, contains this ingredient. Concurrent use is unconfirmed." `same_class`: "More than one medicine the patient mentioned, and did not report as stopped, belongs to this class. Concurrent use is unconfirmed."
+- In the brief, each observation is `<article data-kind="<kind>">` in `across`, with its note, its key, and each claim's `name_text` linked to that claim's turns.
+
+**Coverage** (`coverage_lines(report, images, audio) -> list[str]`; supervisor #4, Z5: a photo where nothing was found is never silent). A photo is prepared as the loop does it: `prepare_image`, then decoded; a `ValueError` or `OSError` means it could not be opened. A photo's `segment` steps are those whose target starts with the first 12 hex characters of its prepared sha256 followed by ":". Each line is one `<li>` of the `coverage` section. The lines, in order:
+1. `Photos received: <n>.`
+2. One line per photo, in input order from 1, the first that applies:
+   - `Photo <i>: could not be opened; no model saw it.`
+   - `Photo <i>: not examined; the call budget ran out first.` (no `segment` step for it)
+   - `Photo <i>: pack detection failed.` (every `segment` step for it is an error)
+   - `Photo <i>: no pack found.` (no report region on it)
+   - `Photo <i>: packs found <r>, labels read <o>, not fully readable <u>.` (r report regions on it, o observations of those regions, u of them `unreadable` or `partial`)
+3. The voice note, the first that applies: `Voice note: none.` (no audio), `Voice note: not transcribed.` (no turns), `Voice note: turns <t>; medicines could not be extracted.` (the `extract_claims` step is missing or an error), `Voice note: turns <t>, medicines mentioned <c>.`
+4. Only when the report has a `budget_exhausted` step: `The intake stopped early: the call budget ran out, so later steps were skipped.`
+
+**Scope lines**, in the header, always (supervisor #3, #4):
+- "Anamnesis reports where the patient's account and the pack photos disagree. It gives no medical advice."
+- "Prescribed directions, timing, adherence and supply were not assessed."
+- "Over-the-counter, herbal and non-tablet products may be missing from this brief: ask about them."
+
+**Catalogue:** one synthetic entry for the hero case (J2): Gelocatil (ES; paracetamol; immediate release; splittability unknown; Arabic aliases جيلوكاتيل and جلوكاتيل).

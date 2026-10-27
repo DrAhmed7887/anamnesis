@@ -409,12 +409,22 @@ def _pair_score(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue
     return 2
 
 
+def _same_brand(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue) -> bool:
+    """Both sides match the same catalogue brand (SPEC §3 pairing, batch 19)."""
+    claim_entry = catalogue.brand_entry(claim.name_text)
+    if claim_entry is None or pack.label_text is None:
+        return False
+    pack_entry = catalogue.brand_entry(pack.label_text, pack.country)
+    return pack_entry is not None and pack_entry.brand == claim_entry.brand
+
+
 def reconcile_all(
     claims: list[PatientClaim], observations: list[PackObservation], catalogue: Catalogue
 ) -> list[Finding]:
     """Pair readable, overlapping products by score with stable ID tie breaks."""
     candidates = [
-        (-score, claim.claim_id, pack.observation_id, ci, pi)
+        (0 if _same_brand(claim, pack, catalogue) else 1, -score,
+         claim.claim_id, pack.observation_id, ci, pi)
         for ci, claim in enumerate(claims)
         for pi, pack in enumerate(observations)
         if (score := _pair_score(claim, pack, catalogue))
@@ -422,7 +432,7 @@ def reconcile_all(
     paired_claims: set[int] = set()
     paired_packs: set[int] = set()
     findings: list[Finding] = []
-    for _, _, _, ci, pi in sorted(candidates):
+    for _, _, _, _, ci, pi in sorted(candidates):
         if ci not in paired_claims and pi not in paired_packs:
             paired_claims.add(ci)
             paired_packs.add(pi)
