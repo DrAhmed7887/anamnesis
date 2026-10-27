@@ -13,12 +13,14 @@ _RECORD = re.compile(
     r"(?:;c=(?P<c>(?:\d+(?:\.\d*)?|\.\d+)))?\|>"
     # Mask payloads are base85, whose alphabet includes "|" and ">": the payload ends only where
     # the next record starts or the text ends.
-    r"<\|mask;x=\d+;y=\d+;data=\d+,\d+,[~!].*?\|>(?=,\d+<\|box;|$)",
+    # Live sam-3.1 output also puts a confidence on the mask (`;c=…`) - seen 27 Oct 2026, not in the docs.
+    r"<\|mask;x=\d+;y=\d+(?:;c=[\d.]+)?;data=\d+,\d+,[~!].*?\|>(?=,\d+<\|box;|$)",
     re.DOTALL,
 )
 
 
 def parse_sam_output(text: str, image_sha256: str) -> list[ImageRegion]:
+    text = text.rstrip()  # live output ends with a newline
     if text == "":
         return []
     if not isinstance(text, str) or not text.startswith("<0f>"):
