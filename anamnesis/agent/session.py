@@ -44,10 +44,16 @@ class IntakeSession:
             value, trace = fn()
         except SpendCapExceeded as exc:  # a money cap ends the session, like the call budget
             self.exhausted = True
-            self.note(AgentAction.BUDGET_EXHAUSTED, target, _error_outcome(exc))
+            self.spend_usd += exc.charged_usd  # attempts charged before the cap refused the next one
+            self.note(AgentAction.BUDGET_EXHAUSTED, target, _error_outcome(exc), exc.charged_call_ids)
             return None
-        except (ProviderError, ValueError) as exc:
-            self.note(action, target, _error_outcome(exc))
+        except ProviderError as exc:  # charged attempts of a failed call still count as spend
+            self.spend_usd += exc.charged_usd
+            self.note(action, target, _error_outcome(exc), exc.charged_call_ids)
+            return None
+        except ValueError as exc:  # a non-provider error may still follow charged attempts
+            self.spend_usd += getattr(exc, "charged_usd", Decimal(0))
+            self.note(action, target, _error_outcome(exc), getattr(exc, "charged_call_ids", []))
             return None
         ids = self._charge(trace)
         self.note(action, target, describe(value), ids)

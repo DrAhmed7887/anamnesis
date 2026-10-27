@@ -184,7 +184,9 @@ class MetaClaimExtractor:
                 input_tokens = int(usage["prompt_tokens"])
                 output_tokens = int(usage["completion_tokens"])
                 content = payload["choices"][0]["message"]["content"]
-                call_id = str(payload["id"])
+                call_id = payload["id"]
+                if not isinstance(call_id, str) or not call_id:
+                    raise ValueError("missing id")
                 cost = cost_usd(self.model, input_tokens=input_tokens, output_tokens=output_tokens)
             except (KeyError, IndexError, TypeError, ValueError) as exc:
                 raise ProviderError(

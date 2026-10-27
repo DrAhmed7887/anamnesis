@@ -70,8 +70,13 @@ def _amount(ingredient: IngredientAmount) -> tuple[Decimal, str]:
 _ACCEPTED_RATIOS = frozenset({Decimal(1), Decimal("0.5"), Decimal(2), Decimal(3), Decimal(4)})
 
 
+def _strength_basis(stated: Decimal, literal: Decimal, nominal: Decimal | None) -> Decimal:
+    """Pack amount for a stated strength: exact, so the literal or the nominal amount, never a multiple."""
+    return stated if stated in (literal, nominal) else literal
+
+
 def _basis_amount(stated: Decimal, literal: Decimal, nominal: Decimal | None) -> Decimal:
-    """Pack amount to compare: the literal one if it explains the stated amount, else the nominal one."""
+    """Pack amount for an intake: the literal one if a dose multiple explains it, else the nominal one."""
     if nominal is None or literal == 0 or stated / literal in _ACCEPTED_RATIOS:
         return literal
     return nominal
@@ -92,7 +97,7 @@ def _strength_type(
         literal, unit = _amount(part)
         nominal = (nominal_amounts or {}).get(inn)
         if inn in stated and nominal is not None and unit == "mg":
-            literal = _basis_amount(stated[inn][0], literal, nominal)
+            literal = _strength_basis(stated[inn][0], literal, nominal)
         observed[inn] = (literal, unit)
     if stated == observed:
         return D.MATCH
@@ -327,12 +332,12 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
 def _pair_score(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue) -> int:
     if pack.readability.value != "readable":
         return 0
-    claim_inns, _ = _claim_identity(claim, catalogue)
-    pack_inns, _ = _pack_identity(pack, catalogue)
+    claim_inns, claim_conflict = _claim_identity(claim, catalogue)
+    pack_inns, pack_conflict = _pack_identity(pack, catalogue)
     if not claim_inns or not pack_inns or not claim_inns & pack_inns:
         return 0
-    if claim_inns != pack_inns:
-        return 1
+    if claim_inns != pack_inns or claim_conflict or pack_conflict or _salt_conflict(claim, pack, catalogue):
+        return 1  # a conflicted candidate never outranks a clean one
     if (
         claim.strength
         and pack.strength
