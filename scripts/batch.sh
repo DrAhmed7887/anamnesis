@@ -57,9 +57,13 @@ case $cmd in
     mkdir -p "$ev" evidence/raw
     raw="evidence/raw/batch-$n-muse.log"   # git-ignored: Muse's final report, with absolute local paths
     print "muse $model, batch $n, started $(now)" > "$raw"
+    # Muse's goal tracking (cookbook 07): headless "/goal" text isn't parsed as the command (probe, 27 Oct), so the
+    # prompt asks Muse to pin the goal with its own goal tool, with an oracle it can run inside its sandbox.
+    goal="Before any other work, pin this objective as your session goal with your goal tool, and close it only when its check passes: batch $n is done ONLY when \`.venv/bin/ruff check .\` and \`.venv/bin/python -m pytest -q\` both pass and \`git status --porcelain tests/contract\` prints nothing."
     # Headless runs can't answer approval prompts; --disable-approval keeps the OS sandbox on (docs/muse/muse-code.md).
     muse exec --model "$model" --contributor-mode off --no-foreign-personal-context --disable-approval \
-      "$(cat briefs/_worker_preamble.md briefs/$n.md)" </dev/null >> "$raw" 2>&1 || print "muse exited non-zero" >> "$raw"
+      "$(print -r -- "$goal"; print; cat briefs/_worker_preamble.md briefs/$n.md)" </dev/null >> "$raw" 2>&1 \
+      || print "muse exited non-zero" >> "$raw"
     # The full transcript (every tool call and file read) stays in the git-ignored export.
     muse export --last --redacted --out "evidence/raw/batch-$n-muse_session.json" </dev/null 2>/dev/null || true
     uv run python scripts/muse_usage.py "$n" "evidence/raw/batch-$n-muse_session.json" || print -u2 "usage: no export to price"
