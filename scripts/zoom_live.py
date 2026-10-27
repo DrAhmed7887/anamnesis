@@ -141,8 +141,9 @@ def main() -> None:
         report = run_intake(None, [(data, "image/jpeg")], transcriber=None, extractor=None,
                             segmenter=segmenter, reader=reader, catalogue=catalogue,
                             max_provider_calls=MAX_CALLS)
+        loop_reads = len(reader.calls)  # the loop's own reads; forced crop reads come after
         forced = compare_reads(report, reader, prepared_bytes(data)) if args.compare else {}
-        record = {"photo": item["file"], "orientation": item["orientation"],
+        record = {"photo": item["file"], "orientation": item["orientation"], "loop_reads": loop_reads,
                   "stored_size": Image.open(io.BytesIO(data)).size, "segment_calls": segmenter.calls,
                   "reads": reader.calls, "report": report.model_dump(mode="json")}
         target = out / item["file"].replace(".jpg", ".json")
@@ -155,7 +156,7 @@ def main() -> None:
         for obs in report.observations:
             region = regions[obs.visual_evidence[0]]
             pack = pack_for(region, item)
-            reads = [c for c in reader.calls if c["region_id"] == region.region_id]
+            reads = [c for c in reader.calls[:loop_reads] if c["region_id"] == region.region_id]
             first = next((c for c in reads if not c["cropped"]), None)
             zoom = next((c for c in reads if c["cropped"]), None)
 

@@ -14,6 +14,13 @@ Four staged 12 MP phone photos (`scripts/make_hard_media.sh`: a drawer of three 
 | Z5 | `foil_portrait.jpg`: SAM found no region for either concept, so nothing was read and nothing was reported | **Accepted for B16** | The coverage block must say "no pack found on photo N", never stay silent |
 | Z6 | "medicine box" returned 0 regions on all 4 photos (and on the synthetic photo before); "label" found them | Noted | B17: reorder or replace the concepts only with real-photo evidence |
 
+## After the fix (`evidence/live/2026-10-27/zoom_after/`, same 4 photos, $0.12)
+| # | Finding | Verdict | Where |
+|---|---|---|---|
+| Z7 | Portrait photo: **3/3 labels on the right pack** (before: 1/3). All 8 packs SAM found are read correctly | **Fixed** (Z1, Z2) | 15.5 |
+| Z8 | A forced crop read of every region, outside the loop: **8/8 correct at 465–1,001 input tokens**, against about 4,300 for the full-photo read | **Recommendation:** read the crop first. The reader then sees only the region's pixels (provenance by construction, closing C4 and J5) at about a quarter of the input tokens. It changes SPEC §4 step 4 and supersedes two B14 contract tests, so it needs its own contract commit | B16a |
+| Z9 | The loop still logged no `zoom_read` step: every first read was `readable` | Noted (Z4) | Demo: the on-screen zoom is the brief's click-to-region view plus the crop the reader saw, not a model re-read |
+
 ## Idea grill, GPT-6 Astra (`astra.md`)
 | # | Finding | Verdict | Where |
 |---|---|---|---|
@@ -47,3 +54,14 @@ Four staged 12 MP phone photos (`scripts/make_hard_media.sh`: a drawer of three 
 | C6 | Extraction `max_tokens` 4000 includes reasoning; live notes already at 66–69%; a longer note loses every claim | (e) | **Accepted**, must land before B17 records a longer real note | B16a: raise `max_tokens` and the estimate; don't retry a length stop |
 | C7 | Caps checked against a fixed $0.03 estimate; one call can overshoot a session cap | (d) minor | **Accepted** with the token correction in `code.md` | B16a, with C6's estimate |
 | C8 | A guessed claim-side `release: modified` gives `match` | (a) plausible | **Accepted** | B16a: prompt says "unknown unless stated"; trust a claim-side release only with a release word or brand in `name_text` |
+
+## Proposed plan to submission (Ahmed decides)
+About 20 focused hours plus reserve to Wed 4 Nov 20:00 CET.
+1. **Merge batch 15.5** into `main` (5 min, on Ahmed's word).
+2. **B16a, hardening (about 2 h):** crop-first reads (Z8); C1, C3, C4, C5, C6+C7, C8; plus QM M3 r2 #2, #3, #5, which were already assigned to B16.
+3. **B16b, the clinician brief (about 5 h):** one self-contained static HTML file, so it can be hosted (J3). Disagreements first; source values side by side; the photo with the SAM box, click-to-zoom on the region and the crop the reader saw; the turn-level audio link; a coverage block (skipped photos, photos with no pack found, unread regions: Z5); the scope lines; same ingredient across products (J2, plus one synthetic Gelocatil entry) and same-class overlap; the narrowed `match` wording; A3 wording.
+4. **B17, real media, cut to 4 cases (about 3 h, J1):** the hero (Ahmed's own fictional Arabic note, Panadol + Gelocatil), Concor + Beloc-Zok, a rambling note, glare or several packs. Annotate first; run the hero 10 times (J4).
+5. **Usability (1 h at most):** one outside pharmacist by 31 Oct, or report none (J6).
+6. **Video (about 6 h, J1):** screen recording, voiceover, captions; the judge's 20-second hook.
+7. **Package (about 1.5 h):** README, claims checklist (A1, J6), hosted replay, case table (A4).
+Total about 18.5 h, leaving some reserve. Open for Ahmed: the merge, this plan (video at 6 h), the usability check, and J8.
