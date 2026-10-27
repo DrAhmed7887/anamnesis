@@ -92,7 +92,12 @@ def main() -> None:
         ledger.write(json.dumps(line) + "\n")
     out_dir = ROOT / "evidence/batches" / batch
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "usage.json").write_text(json.dumps(line, indent=2) + "\n", encoding="utf-8")
+    usage_path = out_dir / "usage.json"  # one entry per Muse session (a fix round is another session)
+    previous = json.loads(usage_path.read_text(encoding="utf-8")) if usage_path.exists() else {}
+    rounds = previous.get("rounds", [previous] if "cost_usd" in previous else []) + [line]
+    total = sum((Decimal(entry["cost_usd"]) for entry in rounds), Decimal(0))
+    summary = {"batch": batch, "rounds": rounds, "total_cost_usd": str(total)}
+    usage_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     muse_total, adapter_total = _ledger_total(MUSE_LEDGER), _ledger_total(ADAPTER_LEDGER)
     meta_total = muse_total + adapter_total
     print(f"batch {batch} Muse: {usage['input_tokens']:,} input ({usage['cached_tokens']:,} cached), "
