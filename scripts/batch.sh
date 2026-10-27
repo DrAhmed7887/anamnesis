@@ -11,6 +11,8 @@ cmd=${1:?command}; n=${2:?batch number}
 ev="evidence/batches/$n"
 log="evidence/batch_log.jsonl"
 now() { date -u +%Y-%m-%dT%H:%M:%SZ; }
+# Changes in build paths only: files other tools leave elsewhere in the repo do not block a batch.
+build_changes() { git status --porcelain -- anamnesis tests briefs scripts SPEC.md pyproject.toml uv.lock; }
 
 contract_base() {
   # The commit that added this batch's contract tests: the reference the gate compares against.
@@ -41,7 +43,7 @@ gate() {
 case $cmd in
   start)
     slug=${3:?slug}
-    [[ -z $(git status --porcelain) ]] || { print -u2 "start: working tree not clean"; exit 1; }
+    [[ -z $(build_changes) ]] || { print -u2 "start: working tree not clean"; exit 1; }
     git switch -q main
     git switch -c "batch/$n-$slug"
     mkdir -p "$ev"
@@ -50,7 +52,7 @@ case $cmd in
     model=${3:?luna|sol}
     [[ -f briefs/$n.md ]] || { print -u2 "run: briefs/$n.md missing"; exit 1; }
     [[ -n $(contract_base) ]] || { print -u2 "run: commit the contract tests first"; exit 1; }
-    [[ -z $(git status --porcelain) ]] || { print -u2 "run: working tree not clean"; exit 1; }
+    [[ -z $(build_changes) ]] || { print -u2 "run: working tree not clean"; exit 1; }
     mkdir -p "$ev" evidence/raw
     raw="evidence/raw/batch-$n-codex.log"   # git-ignored: the full transcript can echo local files
     print "codex gpt-6-$model, batch $n, started $(now)" > "$raw"
