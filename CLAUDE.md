@@ -2,9 +2,11 @@
 
 Claude Code is the **only orchestrator** in this repo (Meta Global AI Developer Hackathon, deadline Thu 5 Nov 03:00 CET). Other agents (Antigravity, Muse, Astra) review or suggest. They don't write to build paths.
 
-## Pipeline
-- **Claude Code** writes `SPEC.md`, the briefs and the contract tests, runs the scripts, reviews every diff, merges, and keeps `evidence/`.
-- **codex** builds: Luna for mechanical work, Sol for logic. It doesn't touch `tests/contract/`; the gate rejects any batch that does.
+## Pipeline (since batch 13, at Ahmed's request)
+- **Claude Code (Opus 5.5)** orchestrates: it writes `SPEC.md`, the briefs and the contract tests, runs the gate, and merges.
+- **A Claude Sonnet subagent (high effort)** builds each batch. It doesn't touch `tests/contract/`; the gate rejects any batch that does.
+- **An Opus 5.5 supervisor subagent (high effort)** reviews every batch read-only and independently (`evidence/grills/BATCH_SUPERVISOR_PROMPT.md`). It must return `SUPERVISOR: APPROVE` before merge; its findings go back to the same builder. Its trail is kept in `evidence/batches/<n>/supervisor.md`.
+- codex (Luna/Sol) is no longer the default builder; it built batches 1–12.
 - Commands:
   ```bash
   scripts/batch.sh start <n> <slug>   # branch batch/<n>-<slug>; then commit "test(contract): batch <n>" + briefs/<n>.md
