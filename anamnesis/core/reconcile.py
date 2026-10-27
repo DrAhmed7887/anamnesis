@@ -88,6 +88,18 @@ def _intake_type(intake: IngredientAmount, pack: Strength, splittable: bool | No
     return D.STRENGTH_MISMATCH
 
 
+def _salts(strength: Strength | None) -> dict[str, str]:
+    """Named salts per canonical ingredient, e.g. {"metoprolol": "succinate"}."""
+    if strength is None:
+        return {}
+    return {canonical_inn(part.inn): part.salt for part in strength.ingredients if part.salt}
+
+
+def _salts_differ(claim: Strength | None, pack: Strength | None) -> bool:
+    stated, observed = _salts(claim), _salts(pack)
+    return any(stated[inn] != observed[inn] for inn in stated.keys() & observed.keys())
+
+
 def _release(strength: Strength | None, text: str, catalogue: Catalogue) -> Release:
     if strength and strength.release is not Release.UNKNOWN:
         return strength.release
@@ -146,6 +158,8 @@ def _pair_type(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue)
             return D.FORMULATION_MISMATCH
     elif Release.MODIFIED in {claim_release, pack_release}:
         return D.INSUFFICIENT_INFORMATION
+    if _salts_differ(claim.strength, pack.strength):  # succinate vs tartrate: not interchangeable mg for mg
+        return D.FORMULATION_MISMATCH
     return D.MATCH
 
 

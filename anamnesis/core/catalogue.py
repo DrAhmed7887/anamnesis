@@ -6,7 +6,7 @@ from pathlib import Path
 
 import yaml
 
-from anamnesis.schema.medication import Release, canonical_inn
+from anamnesis.schema.medication import INN_ALIASES, Release, canonical_inn
 
 
 def _normalise(text: str) -> str:
@@ -53,9 +53,9 @@ class Catalogue:
         for entry in self.entries:
             names = [(entry.brand, True)]
             if len(entry.inns) == 1:
-                names.extend((inn, False) for inn in entry.inns)
-                if "paracetamol" in entry.inns:
-                    names.append(("acetaminophen", False))
+                (moiety,) = entry.inns
+                aliases = [alias for alias, (target, _) in INN_ALIASES.items() if target == moiety]
+                names.extend((name, False) for name in (moiety, *aliases))
             for raw, brand in names:
                 name = _normalise(raw)
                 if re.search(rf"(?<!\w){re.escape(name)}(?!\w)", normalised):
