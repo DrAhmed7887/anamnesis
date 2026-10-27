@@ -80,6 +80,15 @@ class Catalogue:
         )
         return entries[0]
 
+    def mentions_moiety(self, text: str, moiety: str) -> bool:
+        """True when the text names the moiety, or a brand whose only INN is that moiety, as whole words."""
+        padded = f" {normalise(text)} "
+        names = [moiety]
+        for entry in self.entries:
+            if entry.inns == frozenset({moiety}):
+                names.extend((entry.brand, *entry.aliases))
+        return any(f" {normalise(name)} " in padded for name in names)
+
     def _matches(self, text: str) -> list[tuple[int, int, CatalogueEntry, bool]]:
         normalised = normalise(text)
         matches = []
@@ -104,18 +113,18 @@ class Catalogue:
                     )
         return matches
 
-    def _brand_entry(self, text: str) -> CatalogueEntry | None:
-        entry = self.resolve(text)
+    def _brand_entry(self, text: str, country: str | None = None) -> CatalogueEntry | None:
+        entry = self.resolve(text, country)
         if entry is None:
             return None
         return entry if any(e is entry and brand for _, _, e, brand in self._matches(text)) else None
 
-    def implied_release(self, text: str) -> Release:
-        entry = self._brand_entry(text)
+    def implied_release(self, text: str, country: str | None = None) -> Release:
+        entry = self._brand_entry(text, country)
         return entry.release if entry else Release.UNKNOWN
 
-    def splittable(self, text: str) -> bool | None:
-        entry = self._brand_entry(text)
+    def splittable(self, text: str, country: str | None = None) -> bool | None:
+        entry = self._brand_entry(text, country)
         return entry.splittable if entry else None
 
 

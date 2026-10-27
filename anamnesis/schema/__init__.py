@@ -18,9 +18,13 @@ from anamnesis.schema.medication import (
     canonical_inn,
     salt_of,
 )
+from anamnesis.schema.report import AgentAction, AgentStep, ReconciliationReport
 
 __all__ = [
     "INN_ALIASES",
+    "AgentAction",
+    "AgentStep",
+    "ReconciliationReport",
     "AudioTurn",
     "DiscrepancyType",
     "DoseRegimen",

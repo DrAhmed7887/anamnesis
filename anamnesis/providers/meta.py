@@ -260,11 +260,15 @@ class MetaLabelReader:
         self.guard = guard
         self.model = model
 
-    def read(self, image: bytes, region: ImageRegion, *, mime: str) -> tuple[LabelReading, ProviderTrace]:
-        user_text = (
-            f"Read the pack in box x1={region.x1}, y1={region.y1}, "
-            f"x2={region.x2}, y2={region.y2} on a {region.frame_w}×{region.frame_h} image."
-        )
+    def read(self, image: bytes, region: ImageRegion, *, mime: str,
+             cropped: bool = False) -> tuple[LabelReading, ProviderTrace]:
+        if cropped:
+            user_text = "Read the pack in this image, which is a cropped photo of one pack."
+        else:
+            user_text = (
+                f"Read the pack in box x1={region.x1}, y1={region.y1}, "
+                f"x2={region.x2}, y2={region.y2} on a {region.frame_w}×{region.frame_h} image."
+            )
         body = {
             "model": self.model, "reasoning_effort": "low", "max_tokens": 4000,
             "messages": [
