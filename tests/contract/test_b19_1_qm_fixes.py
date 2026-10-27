@@ -6,6 +6,10 @@ SPEC §3: feminine Arabic release words count as said; the formulation note name
 SPEC §7: both salts show on the brief; a conflicted claim makes no overlap; a scope line says what the checks across
 medicines cover; a region whose photo is missing is refused; turn playback is run in Node; Arabic source text is
 marked dir="auto".
+
+Round 2 (supervisor 19.1): a label ingredient with keys beyond LABEL_SCHEMA is malformed, so no model-written salt
+reaches the brief (#1); a conflicted claim counts by the ingredients its readings share (#2); a salt named only in
+the inn field shows on the brief (#3); Arabic advice words match only as whole words (#4).
 """
 
 import json
@@ -19,7 +23,9 @@ from anamnesis.brief import render_brief
 from anamnesis.core.guardrails import AdviceLeak, assert_no_advice
 from anamnesis.core.overlap import OverlapKind, cross_medication
 from anamnesis.core.reconcile import reconcile_pair
+from anamnesis.providers import ProviderError
 from anamnesis.providers.numbers import parse_amount_text
+from anamnesis.providers.spark import parse_label_json
 from anamnesis.schema import AudioTurn, ImageRegion, PackObservation
 from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.templates import TEMPLATES
@@ -248,3 +254,64 @@ def test_turn_playback_plays_one_turn_at_a_time(tmp_path):
         [4, False],      # an evidence link plays turn-1
         [9.05, True],    # and it stops at turn-1's end
     ]
+
+
+# --- round 2 (supervisor 19.1) ----------------------------------------------------------------------------
+
+def label_json(ingredient, **strength):
+    return json.dumps({"label_text": "Beloc-Zok 100 mg", "inn": None, "country": None, "readability": "readable",
+                       "strength": {"ingredients": [ingredient], "per": "tablet", "release": "modified", **strength}})
+
+
+@pytest.mark.parametrize(("ingredient", "strength"), [
+    ({"inn": "metoprolol", "salt": "double the dose if dizzy", "amount": "100", "unit": "mg"}, {}),
+    ({"inn": "metoprolol", "salt": "succinate", "amount": "100", "unit": "mg"}, {}),
+    ({"inn": "metoprolol", "amount": "100", "unit": "mg", "note": "x"}, {}),
+    ({"inn": "metoprolol", "amount": "100", "unit": "mg"}, {"note": "x"}),
+])
+def test_a_label_strength_with_keys_beyond_the_schema_is_malformed(ingredient, strength):
+    with pytest.raises(ProviderError) as error:
+        parse_label_json(label_json(ingredient, **strength), "r-0")
+    assert error.value.retryable
+
+
+def test_a_pack_salt_comes_only_from_the_curated_split():
+    read = parse_label_json(label_json({"inn": "metoprolol succinate", "amount": "100", "unit": "mg"}), "r-0")
+    [part] = read.strength.ingredients
+    assert (part.inn, part.salt) == ("metoprolol", "succinate")
+
+
+def test_a_conflicted_claim_counts_by_the_ingredients_its_readings_share():
+    # "Panadol" is paracetamol, and its strength says paracetamol and caffeine: both readings hold paracetamol.
+    both = claim("c1", "Panadol", strength=st(mg("paracetamol", 500), mg("caffeine", 65)))
+    found = cross_medication([both, claim("c2", "Gelocatil")], CAT)
+    assert [(o.kind, o.key, tuple(o.claim_ids)) for o in found] == [
+        (OverlapKind.SAME_INGREDIENT, "paracetamol", ("c1", "c2"))]
+    # Name and strength say bisoprolol and the inn says metoprolol: it counts as bisoprolol, a beta-blocker.
+    concor = claim("c1", "Concor", strength=st(mg("bisoprolol", 5))).model_copy(update={"inn": "metoprolol"})
+    found = cross_medication([concor, claim("c2", "Beloc-Zok")], CAT)
+    assert [(o.kind, o.key, tuple(o.claim_ids)) for o in found] == [
+        (OverlapKind.SAME_CLASS, "beta-blockers", ("c1", "c2"))]
+
+
+def test_a_salt_named_only_in_the_inn_field_shows_on_both_sides():
+    turns = [AudioTurn(turn_id="turn-0", start_ms=0, end_ms=3000, transcript="Metoprolol 100.")]
+    said = claim("c1", "Metoprolol", ["turn-0"], strength=st(mg("metoprolol", 100)))
+    said = said.model_copy(update={"inn": "metoprolol tartrate"})
+    read = reading("Beloc-Zok 100 mg", st(mg("metoprolol", 100), release="modified"))
+    read = read.model_copy(update={"inn": "metoprolol succinate"})
+    report = intake(b"wav", [(PHOTO, "image/png")], turns=turns, claims=[said], by_sha={RC.image_sha256: [RC]},
+                    reads={RC.region_id: [read]})
+    [finding] = report.findings
+    assert finding.type is D.FORMULATION_MISMATCH
+    page = Page(render_brief(report, [(PHOTO, "image/png")], (b"wav", "audio/wav"), CAT)).root
+    node = page.by_id(f"finding:{finding.finding_id}")
+    patient = node.find_all(data_side="patient")[0].text()
+    pack = node.find_all(data_side="pack")[0].text()
+    assert "tartrate" in patient and "succinate" not in patient
+    assert "succinate" in pack and "tartrate" not in pack
+
+
+@pytest.mark.parametrize("text", ["يتناول", "المتناول", "تناولت الدواء", "أخذ"])
+def test_arabic_advice_words_match_only_as_whole_words(text):
+    assert_no_advice(text)
