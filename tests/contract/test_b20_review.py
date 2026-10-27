@@ -23,7 +23,15 @@ from anamnesis.core.catalogue import load_catalogue
 from anamnesis.core.guardrails import assert_no_advice
 from anamnesis.providers import ProviderTrace
 from anamnesis.providers.spark import LabelReading
-from anamnesis.review import add_photo, approve, new_review, request_message, request_photo, requestable, withdraw
+from anamnesis.review import (
+    add_photo,
+    approve,
+    new_review,
+    request_message,
+    request_photo,
+    requestable,
+    withdraw,
+)
 from anamnesis.schema import AudioTurn, DoseRegimen, ImageRegion, IngredientAmount, PatientClaim, Strength
 from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.report import AgentAction, ReconciliationReport
