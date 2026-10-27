@@ -33,7 +33,7 @@ gate() {
     result=fail reason="pytest failed (see pytest.log)"
   fi
   [[ -f $ev/pytest.log ]] && tests=$(grep -Eo '[0-9]+ passed' "$ev/pytest.log" | grep -Eo '[0-9]+' || print 0)
-  git add -N . 2>/dev/null || true   # count new files in the diff stat
+  git add -N anamnesis tests 2>/dev/null || true   # count new build files in the diff stat
   local stat; stat=$(git diff --shortstat "$base" | sed 's/^ //')
   print -r -- "{\"batch\":$n,\"result\":\"$result\",\"reason\":\"$reason\",\"tests_passed\":$tests,\"diff\":\"$stat\",\"at\":\"$(now)\"}" > "$ev/gate.json"
   cat "$ev/gate.json"
