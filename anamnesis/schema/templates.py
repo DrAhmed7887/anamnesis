@@ -117,6 +117,17 @@ COVERAGE_VOICE_NOT_TRANSCRIBED = "Voice note: not transcribed."
 COVERAGE_VOICE_NO_EXTRACT = "Voice note: turns {t}; medicines could not be extracted."
 COVERAGE_VOICE_OK = "Voice note: turns {t}, medicines mentioned {c}."
 COVERAGE_BUDGET = "The intake stopped early: the call budget ran out, so later steps were skipped."
+COVERAGE_REQUESTS = "Photos requested {n}, received {m}."
+
+REVIEW_DRAFT = "Draft: not yet reviewed by a clinician."
+REVIEW_WAITING = "Waiting for the patient: new photos requested {n}."
+REVIEW_APPROVED = "Reviewed and approved by the clinician."
+REVIEW_REQUESTED = "A new photo has been requested from the patient."
+REVIEW_REPLACED = "Replaced by a newer photo."
+
+REQUEST_UNREADABLE = ("Please send one new photo of this medicine pack, with the label facing the camera, "
+                      "in good light.")
+REQUEST_NOT_PHOTOGRAPHED = "Please send one photo of the pack of the medicine you mentioned as “{name}”."
 
 QUESTION_FOR: dict[D, str | None] = {
     D.MATCH: None,

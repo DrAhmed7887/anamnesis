@@ -9,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_valida
 from anamnesis.core.guardrails import AdviceLeak, assert_no_advice, assert_no_advice_in_ingredients
 from anamnesis.providers.base import ProviderError
 from anamnesis.providers.numbers import coerce_strength
+from anamnesis.providers.stated import stated_amounts
 from anamnesis.schema import Readability, Strength
 
 _COUNTRY_RE = re.compile(r"[A-Za-z]{2}")
@@ -74,13 +75,19 @@ def parse_label_json(text: str, region_id: str) -> LabelReading:
             raise ValueError("expected a label object without region_id")
         _check_no_advice(data)
         _check_strength_shape(data.get("strength"))
+        strength = coerce_strength(data["strength"]) if data.get("strength") is not None else None
+        if isinstance(strength, dict):
+            label_text = data.get("label_text")
+            if label_text is not None and not isinstance(label_text, str):
+                raise ValueError("label_text is not a string")
+            printed = stated_amounts(label_text or "")
+            if not all(part["amount"] in printed for part in strength["ingredients"]):
+                strength = None
         validated = {
             **data,
             "region_id": region_id,
             "country": _coerce_country(data.get("country")),
-            "strength": (
-                coerce_strength(data["strength"]) if data.get("strength") is not None else None
-            ),
+            "strength": strength,
         }
         return LabelReading.model_validate(validated)
     except (TypeError, ValueError, ValidationError) as exc:

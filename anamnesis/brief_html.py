@@ -6,6 +6,7 @@ import html
 from anamnesis.agent.crop import crop_region
 from anamnesis.core.overlap import cross_medication
 from anamnesis.schema import DiscrepancyType as D
+from anamnesis.schema.review import RequestKind, RequestStatus, ReviewStatus
 from anamnesis.schema.templates import (
     BRIEF_TITLE,
     FIELD_COUNTRY,
@@ -37,6 +38,11 @@ from anamnesis.schema.templates import (
     REGION_ALT,
     REGION_CAPTION,
     REPORTED_STOPPED_NOT_PHOTOGRAPHED,
+    REVIEW_APPROVED,
+    REVIEW_DRAFT,
+    REVIEW_REPLACED,
+    REVIEW_REQUESTED,
+    REVIEW_WAITING,
     SCOPE_LINES,
     SEEN_IN,
     SEEN_REGION,
@@ -169,12 +175,31 @@ def _heading(finding, claims, observations) -> str:
     return UNNAMED_PACK
 
 
-def _finding_html(finding, claims, observations, turns) -> str:
+def _request_html(finding, review) -> str:
+    if review is None:
+        return ""
+    lines = []
+    for item in review.requests:
+        if item.status is not RequestStatus.OPEN:
+            continue
+        if item.kind is RequestKind.UNREADABLE and finding.observation_id == item.target_id:
+            lines.append(item.request_id)
+        elif (
+            item.kind is RequestKind.NOT_PHOTOGRAPHED
+            and finding.claim_id == item.target_id
+            and finding.observation_id is None
+        ):
+            lines.append(item.request_id)
+    return "".join(f'<p data-request="{_esc(rid)}">{REVIEW_REQUESTED}</p>' for rid in lines)
+
+
+def _finding_html(finding, claims, observations, turns, review=None) -> str:
     claim = claims.get(finding.claim_id) if finding.claim_id else None
     pack = observations.get(finding.observation_id) if finding.observation_id else None
     question = QUESTION_FOR[finding.type]
     extra = f"<p>{PATIENT_QUESTIONS[question]}</p>" if question else ""
     extra += _a3_html(finding, claim, pack)
+    extra += _request_html(finding, review)
     heard = []
     for tid in finding.audio_evidence:
         turn = turns.get(tid)
@@ -300,6 +325,10 @@ def _photos_html(report, prepared) -> str:
     for obs in report.observations:
         for rid in obs.visual_evidence:
             readability.setdefault(rid, obs.readability.value)
+    replaced = set()
+    for obs in report.observations:
+        if obs.observation_id in set(getattr(report, "superseded", [])):
+            replaced.update(obs.visual_evidence)
     for region in report.regions:
         source = by_sha.get(region.image_sha256)
         if source is None:
@@ -309,11 +338,12 @@ def _photos_html(report, prepared) -> str:
             i=index_by_sha[region.image_sha256], region_id=_esc(region.region_id),
             readability=readability.get(region.region_id, NOT_READ),
         )
+        extra = f"<p>{REVIEW_REPLACED}</p>" if region.region_id in replaced else ""
         parts.append(
             f'<figure id="region:{_esc(region.region_id)}">'
             f'<img src="data:image/png;base64,{_b64(crop)}" '
             f'alt="{REGION_ALT.format(region_id=_esc(region.region_id))}">'
-            f"<figcaption>{caption}</figcaption>"
+            f"<figcaption>{caption}</figcaption>{extra}"
             "</figure>"
         )
     return "".join(parts)
@@ -337,6 +367,16 @@ def _voice_html(report, audio) -> str:
     return parts + f"<ul>{items}</ul>"
 
 
-def _scope_html() -> str:
+def _review_status(review) -> str:
+    if review is None or review.status is ReviewStatus.DRAFT:
+        return REVIEW_DRAFT
+    if review.status is ReviewStatus.APPROVED:
+        return REVIEW_APPROVED
+    open_count = sum(1 for item in review.requests if item.status is RequestStatus.OPEN)
+    return REVIEW_WAITING.format(n=open_count)
+
+
+def _scope_html(review=None) -> str:
     lines = "".join(f"<p>{line}</p>" for line in SCOPE_LINES)
+    lines += f'<p id="review-status">{_review_status(review)}</p>'
     return f'<header id="scope"><h1>{BRIEF_TITLE}</h1>{lines}</header>'

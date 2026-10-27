@@ -24,6 +24,7 @@ _VOICE_MODEL = "muse-voice-transcribe-1.0"
 _SAM_MODEL = "sam-3.1"
 _SYSTEM_PROMPT = (
     "Read only what is printed on the pack inside the given box. "
+    "Write each amount with the number and unit printed on the pack, and never convert units. "
     "Give no advice. Use unreadable or partial rather than guessing."
 )
 
