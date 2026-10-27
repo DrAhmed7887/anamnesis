@@ -18,8 +18,9 @@ from pathlib import Path
 from anamnesis.core.catalogue import load_catalogue
 from anamnesis.core.reconcile import reconcile_all
 from anamnesis.providers import ProviderError, SpendCapExceeded, SpendGuard, top_regions
+from anamnesis.providers.claims import MetaClaimExtractor
 from anamnesis.providers.meta import MetaClient, MetaLabelReader, MetaSegmenter, MetaTranscriber
-from anamnesis.schema import IngredientAmount, PackObservation, PatientClaim, Strength
+from anamnesis.schema import PackObservation
 
 ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "evidence/raw/media"
@@ -62,6 +63,7 @@ def main() -> None:
 
     client = MetaClient(api_key=keychain("META_API_KEY"))
     brands = [e.brand for e in load_catalogue().entries]
+    claims_by_lang: dict = {}
 
     for lang, bias in [("en", ["English"]), ("ar", ["Arabic", "English"])]:
         wav = (MEDIA / f"voice_{lang}.wav").read_bytes()
@@ -73,6 +75,14 @@ def main() -> None:
             save(out, f"voice_{lang}", {"trace": trace.model_dump(), "turns": turn_dumps})
             for t in turns:
                 print(f"      {t.turn_id} {t.start_ms}-{t.end_ms} ms: {t.transcript}")
+            got = step(f"spark claims {lang}", lambda ts=turns: MetaClaimExtractor(client, guard).extract(ts))
+            if got:
+                claims_by_lang[lang], ctrace = got
+                save(out, f"claims_{lang}", {"trace": ctrace.model_dump() if ctrace else None,
+                                             "claims": [c.model_dump() for c in claims_by_lang[lang]]})
+                for c in claims_by_lang[lang]:
+                    amount = c.intake_amount or c.strength
+                    print(f"      {c.claim_id} {c.name_text!r} status={c.status.value} amount={amount}")
 
     image = (MEDIA / "packs.png").read_bytes()
     segmenter = MetaSegmenter(client, guard)
@@ -99,29 +109,21 @@ def main() -> None:
             print(f"      {reading.readability.value}: {reading.label_text!r} inn={reading.inn} "
                   f"strength={reading.strength.model_dump() if reading.strength else None}")
     save(out, "labels", [{"trace": r["trace"], "reading": r["reading"].model_dump()} for r in readings])
-    reconcile(out, readings)
+    for lang, claims in claims_by_lang.items():
+        reconcile(out, lang, claims, readings)
     finish(guard, start)
 
 
-def reconcile(out: Path, readings: list[dict]) -> None:
-    """Offline step: live pack readings against the English voice note's claims.
-
-    The claims are HAND-WRITTEN from the voice_en transcript until claim extraction exists (next batch).
-    """
-    mg = lambda inn, a: IngredientAmount(inn=inn, amount=Decimal(a), unit="mg")  # noqa: E731
-    claims = [
-        PatientClaim(claim_id="c1", name_text="Concor", status="active", audio_evidence=["turn-0"],
-                     strength=Strength(ingredients=[mg("bisoprolol", "5")], per="tablet")),
-        PatientClaim(claim_id="c2", name_text="metoprolol", status="active", audio_evidence=["turn-0"],
-                     intake_amount=mg("metoprolol", "50")),
-    ]
+def reconcile(out: Path, lang: str, claims: list, readings: list[dict]) -> None:
+    """Offline step: claims Spark extracted from one voice note against the live pack readings."""
     packs = [PackObservation(observation_id=f"o{i}", label_text=r["reading"].label_text, inn=r["reading"].inn,
                              strength=r["reading"].strength, readability=r["reading"].readability,
                              country=r["reading"].country, visual_evidence=[r["reading"].region_id])
              for i, r in enumerate(readings)]
     findings = reconcile_all(claims, packs, load_catalogue())
-    save(out, "findings", {"claims_source": "hand-written from voice_en transcript",
-                           "findings": [f.model_dump() for f in findings]})
+    save(out, f"findings_{lang}", {"claims_source": f"extracted by muse-spark-1.3 from voice_{lang}",
+                                   "findings": [f.model_dump() for f in findings]})
+    print(f"      findings ({lang}):")
     for f in findings:
         print(f"      {f.finding_id:7} {f.type.value:34} {f.clinician_note}")
 
