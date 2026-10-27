@@ -10,3 +10,4 @@
 {"batch":10,"branch":"batch/10-identity","model":"gpt-6-luna","tests_passed":284,"verdict":"pass","merge_commit":"d7cbbae","at":"2026-10-27T10:57:17Z"}
 {"batch":11,"branch":"batch/11-arabic","model":"gpt-6-luna","tests_passed":328,"verdict":"pass","merge_commit":"ad0eef9","at":"2026-10-27T11:08:34Z"}
 {"batch":7,"correction":"built_by","built_by":"codex gpt-6-sol (INN_ALIASES, salt split; cut off by 429) + Claude Code (exports, catalogue aliases, salt gate, unit tests)","source":"QM M2 #5","at":"2026-10-27"}
+{"batch":12,"branch":"batch/12-ledger","model":"gpt-6-luna","built_by":"codex gpt-6-luna (about 30 rate-limit retries; finished)","tests_passed":343,"contract_tests":278,"unit_tests":65,"verdict":"pass","merge_commit":"b2488f2","at":"2026-10-27T11:56:39Z"}
