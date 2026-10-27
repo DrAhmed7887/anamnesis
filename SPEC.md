@@ -1,4 +1,4 @@
-# Anamnesis contract (v3.4, 27 Oct 2026)
+# Anamnesis contract (v3.5, 27 Oct 2026)
 
 A pre-visit intake agent. It takes the patient's voice note (Voice Transcribe supports 25 languages; **tested live so far only on synthetic text-to-speech notes: English, and Egyptian Arabic text with brand names in Latin or Arabic script, spoken by a macOS voice; no human speech yet**) and photos of their medicine packs, and gives the clinician a one-page brief. Every fact in the brief links to the audio turn and the image region it came from. **It reports where sources disagree. It never gives medical advice.** All data is synthetic.
 
@@ -28,6 +28,20 @@ Every string a model writes is checked at the parser, before it can reach a repo
 - **`country`** is kept only as an ISO 3166-1 alpha-2 code (two letters, stored upper-case); anything else becomes null.
 - **A label reply's strength carries no key beyond `LABEL_SCHEMA`'s**, like the claim parser's shape check: `ingredients`, `per`, `release`, and for each ingredient `inn`, `amount`, `unit`. Any other key, `salt` included, makes the reply malformed (retryable); a missing `release` still defaults to `unknown`. A pack's salts come only from the curated split of `inn`, so no model-written salt can reach the brief (supervisor 19.1 #1).
 - **`assert_no_advice`** runs over `name_text`, the claim's `inn`, the label's `inn` and every ingredient `inn` (strength and intake). A hit makes the reply malformed (retryable). Its Arabic words (`يجب`, `خذ`, `تناول`, `توقف`, `ضاعف`, `ينصح`) also match with an attached clitic (`و`, `ف`, `ب`, `ل`, `ال`, `وال`, `بال`, `فال`, `لل`) and after diacritics and tatweel are removed as `normalise` removes them: `وتناول`, `فيجب`, `تَناوَل` (QM M4 code #7; batch 19.1). They stay whole words: `يتناول`, `المتناول`, `تناولت` and `أخذ` pass. `label_text` is exempt: it is quoted source text, and real packs print directions ("Take one tablet daily").
+
+### Amounts must be stated (batch 20)
+A number a model writes is kept only if the source states it. The workshop rule (a quote is refused unless it is on the page) applies to every amount, not just to `name_text`.
+- **`stated_amounts(text) -> frozenset[Decimal]`** (`anamnesis/providers/stated.py`) is every positive number the text states:
+  - **Digits.** Arabic-Indic digits count as digits and `٫` as a dot. Each run of digits, with at most one `.` or `,` and more digits after it, and no digit, `.` or `,` just before it, is read with `parse_amount_text`. So `"2,5"` is 2.5, `"100mg"` is 100, `"875 mg/125 mg"` is 875 and 125, and the ambiguous `"1,000"` or `"1.000"` states nothing.
+  - **Number words** in English and Egyptian or Modern Standard Arabic, matched on the tokens of `catalogue.normalise(text)` (so `ة` is `ه` and `أ` is `ا`). A word with the Arabic `و` ("and") attached in front counts as the word.
+    - English: `zero`–`nineteen` (zero states nothing on its own), `twenty`–`ninety` by tens, `hundred`, `thousand`, `half`.
+    - Arabic: 1 `واحد واحده احد`; 2 `اتنين اثنين اثنان اتنان اثنا اثني`; 3 `تلاته ثلاثه تلات ثلاث`; 4 `اربعه اربع`; 5 `خمسه خمس`; 6 `سته ست`; 7 `سبعه سبع`; 8 `تمانيه ثمانيه تماني ثماني تمن ثمان`; 9 `تسعه تسع`; 10 `عشره عشر`; 11–19 `حداشر اتناشر تلتاشر اربعتاشر خمستاشر ستاشر سبعتاشر تمنتاشر تسعتاشر`; the tens 20–90 `عشرين عشرون`, `تلاتين ثلاثين ثلاثون`, `اربعين اربعون`, `خمسين خمسون`, `ستين ستون`, `سبعين سبعون`, `تمانين ثمانين ثمانون`, `تسعين تسعون`; 200 `ميتين مايتين مئتين مئتان مائتين مائتان`; 300–900 as one word, a stem (`تلت ثلاث`, `ربع اربع`, `خمس`, `ست`, `سبع`, `تمن ثمان`, `تسع`) followed by `ميه`, `مايه`, `مائه` or `مئه` (`خمسميه` is 500); 2000 `الفين`. Hundred `ميه مايه مائه مئه ميت`, thousand `الف الاف`, half `نص نصف`.
+    - **A run** is consecutive number words, also joined by `and` or `و` (`a` is allowed only after `and`, as in "and a half"). **A run also ends at any of `, . ; : ! ? ، ؛ ؟` or a line break in the raw text** (a hyphen or a slash doesn't end it), so "five, two" states 5 and 2, never 7 (supervisor 20 #5); the digit pass is unaffected. Its value: start with total = current = 0; a plain number adds to current; hundred sets current to (current or 1) × 100; thousand adds (current or 1) × 1000 to total and resets current; half adds 0.5 to current. In English, `point` followed by digit words (`zero`–`nine`) adds them as decimals and ends the run. The run states total + current, and **each of its words also states its own value** (a hundred or thousand word states 100 or 1000, half 0.5).
+    - So "five" is 5, "twenty-five" 25, "two hundred and fifty" 250, "two and a half" 2.5, "two point five" 2.5, "خمسة" 5, "خمسين" 50, "خمسه وعشرين" 25, "ميتين وخمسين" 250, "اتنين ونص" 2.5, "تلات ميه" 300 and "خمسمية" 500. "once" and "twice" state nothing.
+- **Claims.** Each `strength` ingredient amount and the `intake_amount` amount must be in the union of `stated_amounts` over the turns the claim cites (only those). An amount that isn't stated is treated as one that doesn't parse: that field becomes null, and the existing rule then nulls the other one too. Live, 27 Oct: "Concor five milligrams" and "كونكور خمسة ملي جرام" both keep their 5 mg.
+- **Labels.** Each label `strength` ingredient amount must be in `stated_amounts(label_text)`; otherwise the label's `strength` becomes null (no `label_text`, no strength). The reading itself is kept. A `label_text` that is neither a string nor null makes the reply malformed (retryable), as before batch 20: it never reaches `stated_amounts` (supervisor 20 #1).
+- **Prompts.** The claim prompt adds "Write each amount with the number and unit the patient said, and never convert units." The label prompt adds "Write each amount with the number and unit printed on the pack, and never convert units." This is because "half a gram" written as 500 mg would not be stated.
+- **Known limits.** Only the value is checked, not its unit or the word next to it: "one tablet, 50 mg" also states 1. `regimen` numbers are not checked; `units_per_intake` can never produce `match` (rule 8). Spanish number words, digit-group speech ("eight seventy-five") and mixed forms ("2 and a half") state only their parts, so such an amount is dropped and the finding becomes `insufficient_information`. The rule fails closed.
 
 ## 3. Findings (closed enum, lowercase)
 | `DiscrepancyType` | Needs both sides | Meaning |
@@ -106,7 +120,7 @@ The first rule that applies wins.
 6. `reconcile` with `reconcile_all`.
 - **Budget:** every provider call, including failed ones, counts 1 against `max_provider_calls` (default 12). The call that would exceed it is skipped, a `budget_exhausted` step is logged (it is then the last step, whatever fails afterwards, including a crop), and every remaining provider call is skipped. Reconciliation still runs on what exists.
 - **Errors:** a provider error becomes a step whose `outcome` is `error: <provider> <ExceptionName>` (no message text); the loop continues with the next item.
-- **Report:** one `ReconciliationReport` (`anamnesis/schema/report.py`): turns, claims, regions, observations (`o0, o1, ...` in reading order, `visual_evidence=[region_id]`), findings, steps, `calls`, `spend_usd` (sum of `cost_usd + prior_cost_usd` over every returned trace) and a sha256 `intake_id` of the inputs. A validator rejects any evidence, claim or observation id that points nowhere.
+- **Report** (batch 20 adds `superseded`, §8): one `ReconciliationReport` (`anamnesis/schema/report.py`): turns, claims, regions, observations (`o0, o1, ...` in reading order, `visual_evidence=[region_id]`), findings, steps, `calls`, `spend_usd` (sum of `cost_usd + prior_cost_usd` over every returned trace) and a sha256 `intake_id` of the inputs. A validator rejects any evidence, claim or observation id that points nowhere.
 - **Session caps:** `SessionGuard(parent, max_usd, max_calls)` wraps the ledger guard with a per-session dollar and call cap and still writes every charge to the parent.
 - Voice, SAM, and Spark calls retry once on retryable errors and use a 30 s timeout.
 
@@ -182,3 +196,38 @@ Billing-uncertain failures are recorded at the pre-call estimate. Rejected 4xx a
 - "Checks across medicines cover shared ingredients and one curated class (beta-blockers); interactions were not assessed." (QM M4 code #8; batch 19.1)
 
 **Catalogue:** one synthetic entry for the hero case (J2): Gelocatil (ES; paracetamol; immediate release; splittability unknown; Arabic aliases جيلوكاتيل and جلوكاتيل).
+
+**Review (batch 20):** the review status, open photo requests, replaced packs and the request count on the brief are specified in §8 "On the brief".
+
+## 8. Clinician review and photo requests (`anamnesis/review.py`, batch 20)
+Nothing in a brief is final until a clinician approves it. Before approving, the clinician can ask the patient for **one new photo** of a pack that couldn't be read, or of a medicine the patient mentioned but didn't photograph. Only that photo is processed, and the intake continues from the saved report. This is the workshop's "the run pauses for a person, then resumes", without letting a model choose anything: the clinician chooses, and the code checks the choice is allowed.
+
+**Schema** (`anamnesis/schema/review.py`, `extra="forbid"`):
+- `RequestKind`: `unreadable` (the target is an `observation_id`), `not_photographed` (the target is a `claim_id`).
+- `RequestStatus`: `open`, `answered`, `withdrawn`.
+- `PhotoRequest`: `request_id` (`r1`, `r2`, … in the order they were made), `kind`, `target_id`, `status`, `photo_index` (the 1-based position of the answering photo in the full photo list; set exactly when `answered`).
+- `ReviewStatus`: `draft`, `awaiting_patient`, `approved`.
+- `Review`: `intake_id` (of the report it is about), `status`, `requests` (default empty). A validator enforces that `status` is `awaiting_patient` exactly when a request is `open`, and that an `approved` review has no open request.
+- `ReconciliationReport.superseded: list[str]` (default empty): observation ids replaced by an answered `unreadable` request. Each must name an existing observation, and no finding may cite one.
+
+**Functions.** All of them are pure: each returns new objects and never changes its inputs. Each raises `ValueError` when refused, and a refusal changes nothing.
+- `new_review(report) -> Review`: `draft`, no requests.
+- `requestable(report) -> list[tuple[RequestKind, str]]`, in report finding order: an `unreadable_source` finding with an observation gives `(unreadable, observation_id)`; a `missing_modality` finding with only a claim, whose claim is not `discontinued`, gives `(not_photographed, claim_id)`. Nothing else can be requested: a model's reading can't be argued with by asking again.
+- `request_photo(review, report, target_id) -> Review` adds an `open` request with the next `request_id`. Refused when the review's `intake_id` isn't the report's, the review is `approved`, the target isn't in `requestable(report)`, or an `open` request for that target already exists.
+- `withdraw(review, request_id) -> Review`: an `open` request becomes `withdrawn`; anything else is refused.
+- `request_message(report, request) -> str`: the text sent to the patient, from `templates.py`. `unreadable`: "Please send one new photo of this medicine pack, with the label facing the camera, in good light." `not_photographed`: "Please send one photo of the pack of the medicine you mentioned as “{name}”.", where `{name}` is the first non-blank line of the claim's `name_text`, verbatim.
+- `add_photo(report, review, request_id, photo, images, audio, *, segmenter, reader, catalogue, concepts=("medicine box", "label"), top_k=3, max_provider_calls=8) -> (ReconciliationReport, Review)` answers one `open` request with one photo.
+  - It is refused when the review's `intake_id` isn't the report's (supervisor 20 #2: a review of another report could otherwise hide a pack that was read), when the request isn't `open`, when `images` and `audio` aren't the media of `report` (recomputed exactly as the brief does), or when the photo's prepared bytes equal one already given (region ids would collide).
+  - The new photo goes through §4 steps 0 and 3–5 alone, with its own `IntakeSession(max_provider_calls)`. Turns and claims are kept and no other photo is sent to any model. An undecodable photo logs the same `segment` error step as in the loop.
+  - The new steps are appended to the report's, numbered on from the last `n`; a final `reconcile` step is logged unless the new session is exhausted. `calls` and `spend_usd` add the new session's.
+  - New observations are numbered on from the existing ones (`o<len>` …) and new regions appended, de-duplicated by `region_id` as the loop does (supervisor 20 #3). An `unreadable` request adds its target to `superseded`, **but only when the new photo gave at least one observation**: a photo that can't be opened, shows no pack or runs out of budget never hides the pack it was meant to replace. Then `reconcile_all(claims, observations not superseded, catalogue)` replaces the findings.
+  - The new `intake_id` is the loop's `_intake_id(audio bytes, prepared images + [prepared photo])`, so `render_brief(report, images + [photo], audio, …)` accepts it and nothing else.
+  - The request becomes `answered` with `photo_index = len(images) + 1`. The returned review carries the new `intake_id`, and its status is recomputed. The request counts as answered whatever the photo shows: a photo with no pack, or one that is again unreadable, is reported as such and can be requested again.
+- `approve(review, report) -> Review` → `approved`. Refused when the `intake_id`s differ or a request is `open`. An approved review is final: nothing more can be requested or withdrawn.
+
+**On the brief** (`render_brief(..., review=None)`):
+- The `scope` header gains `<p id="review-status">`. With no review, or a `draft` one: "Draft: not yet reviewed by a clinician." With `awaiting_patient`: "Waiting for the patient: new photos requested {n}." (`n` open requests). With `approved`: "Reviewed and approved by the clinician." A review whose `intake_id` isn't the report's is refused with `ValueError`.
+- A finding whose target (its `observation_id` for `unreadable`, its `claim_id` for `not_photographed`) has an open request of that kind shows `<p data-request="<request_id>">` with "A new photo has been requested from the patient."
+- The region figure of a superseded observation adds "Replaced by a newer photo." Coverage counts it like any other observation.
+- When the review has a request that isn't withdrawn, coverage ends with "Photos requested {n}, received {m}." (`n` the requests that aren't withdrawn, `m` the answered ones).
+- All of this text lives in `templates.py` and passes `assert_no_advice`.

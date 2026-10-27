@@ -12,6 +12,7 @@ from anamnesis.brief_html import (
     _voice_html,
 )
 from anamnesis.schema.report import AgentAction, ReconciliationReport
+from anamnesis.schema.review import RequestStatus
 from anamnesis.schema.templates import (
     BRIEF_TITLE,
     COVERAGE_BUDGET,
@@ -21,6 +22,7 @@ from anamnesis.schema.templates import (
     COVERAGE_NOT_OPENED,
     COVERAGE_PACKS_FOUND,
     COVERAGE_PHOTOS_RECEIVED,
+    COVERAGE_REQUESTS,
     COVERAGE_VOICE_NO_EXTRACT,
     COVERAGE_VOICE_NONE,
     COVERAGE_VOICE_NOT_TRANSCRIBED,
@@ -91,24 +93,27 @@ def _voice_line(report: ReconciliationReport, audio: Image | None) -> str:
 
 def render_brief(
     report: ReconciliationReport, images: list[Image], audio: Image | None, catalogue,
+    review=None,
 ) -> str:
     """Render one deterministic self-contained HTML page for a finished report."""
+    if review is not None and review.intake_id != report.intake_id:
+        raise ValueError("review is for another report")
     prepared = _checked_prepared(report, images, audio)
     claims = {claim.claim_id: claim for claim in report.claims}
     observations = {obs.observation_id: obs for obs in report.observations}
     turns = {turn.turn_id: turn for turn in report.turns}
     sections = {name: [] for name in SECTION_ORDER}
     for finding in report.findings:
-        html = _finding_html(finding, claims, observations, turns)
+        html = _finding_html(finding, claims, observations, turns, review)
         sections[_section_of(finding, claims)].append(html)
     sections["across"].append(_across_html(report, catalogue))
-    sections["coverage"].append(_coverage_html(report, prepared, audio))
+    sections["coverage"].append(_coverage_html(report, prepared, audio, review))
     sections["photos"].append(_photos_html(report, prepared))
     sections["voice"].append(_voice_html(report, audio))
     parts = [
         "<!DOCTYPE html>", '<html lang="en">',
         f"<head><meta charset=\"utf-8\"><title>{BRIEF_TITLE}</title><style>{_STYLE}</style></head>",
-        "<body>", _scope_html(),
+        "<body>", _scope_html(review),
     ]
     for name in SECTION_ORDER:
         body = "".join(sections[name]) or f"<p>{NONE_TEXT}</p>"
@@ -117,8 +122,13 @@ def render_brief(
     return "".join(parts)
 
 
-def _coverage_html(report, prepared, audio) -> str:
+def _coverage_html(report, prepared, audio, review=None) -> str:
     lines = _coverage_from_prepared(report, prepared, audio)
+    if review is not None:
+        live = [item for item in review.requests if item.status is not RequestStatus.WITHDRAWN]
+        if live:
+            done = sum(1 for item in live if item.status is RequestStatus.ANSWERED)
+            lines.append(COVERAGE_REQUESTS.format(n=len(live), m=done))
     return "<ul>" + "".join(f"<li>{line}</li>" for line in lines) + "</ul>"
 
 

@@ -2,6 +2,9 @@
 
 Written by the CEO (Claude Code); the builder (Muse Code) must not edit it. Findings: code grill C5 (numbers, nullable
 optional fields) and C3 (name grounding, ISO country, advice in model strings), evidence/grills/pre-b16/effect.md.
+
+Amended in the batch 20 contract commit: from batch 20 an amount must also be stated in a turn the claim cites (SPEC §2
+"Amounts must be stated"), so the two number-parsing tests now cite a turn that says the amount being parsed.
 """
 
 import json
@@ -30,6 +33,11 @@ def amount(value, inn="bisoprolol", unit="mg"):
     return {"inn": inn, "amount": value, "unit": unit}
 
 
+def saying(text):
+    """One turn that states the amount under test, so only the number rules decide (batch 20)."""
+    return [AudioTurn(turn_id="turn-0", start_ms=0, end_ms=4000, transcript=f"I take Concor {text} mg once a day.")]
+
+
 def regimen(units=None, per_day=None):
     return {"units_per_intake": units, "intakes_per_day": per_day, "as_needed": None}
 
@@ -56,7 +64,7 @@ def label_reply(**fields):
     ("1,000", None), ("1-2", None), ("two", None), ("0", None), ("-5", None), ("", None),
 ])
 def test_an_intake_amount_parses_or_becomes_null(text, expected):
-    [found] = parse_claims_json(claims_reply(claim(intake_amount=amount(text))), TURNS)
+    [found] = parse_claims_json(claims_reply(claim(intake_amount=amount(text))), saying(text))
     assert (found.intake_amount.amount if found.intake_amount else None) == expected
 
 
@@ -80,7 +88,7 @@ def test_one_unparseable_field_never_loses_the_other_claims():
 @pytest.mark.parametrize("text,expected", [("1.000", None), ("2.500", None), ("10.000", None),
                                            ("0.125", Decimal("0.125")), ("12.5", Decimal("12.5"))])
 def test_a_dot_before_exactly_three_digits_is_ambiguous_unless_the_whole_part_is_zero(text, expected):
-    [found] = parse_claims_json(claims_reply(claim(intake_amount=amount(text))), TURNS)
+    [found] = parse_claims_json(claims_reply(claim(intake_amount=amount(text))), saying(text))
     assert (found.intake_amount.amount if found.intake_amount else None) == expected
 
 

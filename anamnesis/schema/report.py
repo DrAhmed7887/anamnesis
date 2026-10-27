@@ -45,6 +45,7 @@ class ReconciliationReport(BaseModel):
     steps: list[AgentStep]
     calls: int = Field(ge=0)
     spend_usd: Decimal = Field(ge=0, allow_inf_nan=False)
+    superseded: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def check_references(self) -> "ReconciliationReport":
@@ -64,6 +65,9 @@ class ReconciliationReport(BaseModel):
               if f.claim_id is not None and f.claim_id not in claim_ids),
             *(f"finding {f.finding_id}: observation {f.observation_id}" for f in self.findings
               if f.observation_id is not None and f.observation_id not in observation_ids),
+            *(f"superseded {s}" for s in self.superseded if s not in observation_ids),
+            *(f"finding {f.finding_id}: superseded {f.observation_id}" for f in self.findings
+              if f.observation_id is not None and f.observation_id in self.superseded),
         ]
         if problems:
             raise ValueError("dangling references: " + "; ".join(problems))

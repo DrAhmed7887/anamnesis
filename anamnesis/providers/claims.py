@@ -11,6 +11,7 @@ from anamnesis.providers.base import ProviderError, ProviderTrace, cost_usd, wit
 from anamnesis.providers.meta import MetaClient, spark_call_estimate
 from anamnesis.providers.numbers import coerce_strength, parse_amount_text
 from anamnesis.providers.spend import SpendGuard
+from anamnesis.providers.stated import stated_amounts
 from anamnesis.schema import (
     AudioTurn,
     IngredientAmount,
@@ -28,7 +29,8 @@ _SYSTEM_PROMPT = (
     "is an intake_amount with regimen.intakes_per_day. Use strength only when the patient explicitly "
     "describes the tablet or pack, such as 'the 5 mg tablets'. 'I stopped' or 'no longer take' means "
     "discontinued. If unclear, use unknown. Leave anything not said as null. Cite the turn_ids each "
-    "claim comes from. Give no medical advice. Only report what the patient said."
+    "claim comes from. Write each amount with the number and unit the patient said, and never convert units. "
+    "Give no medical advice. Only report what the patient said."
 )
 
 _AMOUNT_SCHEMA: dict[str, Any] = {
@@ -199,6 +201,15 @@ def parse_claims_json(text: str, turns: list[AudioTurn]) -> list[PatientClaim]:
             )
             intake_amount = _coerce_intake(raw["intake_amount"])
             regimen = _coerce_regimen(raw["regimen"])
+            said: set = set()
+            for cited in turn_ids:
+                said |= stated_amounts(transcripts[cited])
+            if isinstance(strength, dict) and not all(
+                part["amount"] in said for part in strength["ingredients"]
+            ):
+                strength = None
+            if isinstance(intake_amount, dict) and intake_amount["amount"] not in said:
+                intake_amount = None
             units_sent = (
                 isinstance(raw.get("regimen"), dict)
                 and raw["regimen"].get("units_per_intake") is not None
