@@ -124,6 +124,10 @@ class Catalogue:
             return None
         return entry if any(e is entry and brand for _, _, e, brand in self._matches(text)) else None
 
+    def brand_entry(self, text: str, country: str | None = None) -> CatalogueEntry | None:
+        """The resolved entry, only when the text matched its brand or alias name."""
+        return self._brand_entry(text, country)
+
     def implied_release(self, text: str, country: str | None = None) -> Release:
         entry = self._brand_entry(text, country)
         return entry.release if entry else Release.UNKNOWN

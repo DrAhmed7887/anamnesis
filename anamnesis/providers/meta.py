@@ -70,6 +70,8 @@ def _data_url(data: bytes, mime: str) -> str:
 def spark_call_estimate(body: dict[str, Any]) -> Decimal:
     """Upper-bound pre-call estimate from the request body about to be sent (SPEC §5)."""
     chars, images = 0, 0
+    if "response_format" in body:
+        chars += len(json.dumps(body["response_format"]))
     for message in body["messages"]:
         content = message["content"]
         if isinstance(content, str):

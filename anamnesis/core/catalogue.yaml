@@ -54,3 +54,10 @@
   inns: [atorvastatin]
   countries: [DE, ES, GB]
   synthetic: true
+- brand: Gelocatil
+  aliases: [جيلوكاتيل, جلوكاتيل]
+  release: immediate
+  splittable: null
+  inns: [paracetamol]
+  countries: [ES]
+  synthetic: true
