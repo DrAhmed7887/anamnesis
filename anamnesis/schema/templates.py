@@ -8,7 +8,7 @@ TEMPLATES: dict[D, str] = {
     D.INTAKE_DIFFERS_FROM_UNIT_STRENGTH: "Reported intake differs from the strength of one pack unit.",
     D.INGREDIENT_MISMATCH: "Reported and pack ingredients differ.",
     D.RATIO_MISMATCH: "The reported and pack ingredient ratios differ.",
-    D.FORMULATION_MISMATCH: "Reported and pack release forms differ.",
+    D.FORMULATION_MISMATCH: "Reported and pack formulations differ (salt or release form).",
     D.INSUFFICIENT_INFORMATION: "The available evidence cannot confirm agreement.",
     D.DISCONTINUED_BUT_PRESENT: "The patient reports discontinuation, and the pack is present.",
     D.UNREADABLE_SOURCE: "The pack label is not fully readable.",
@@ -33,6 +33,8 @@ SCOPE_LINES: tuple[str, ...] = (
     "Anamnesis reports where the patient's account and the pack photos disagree. It gives no medical advice.",
     "Prescribed directions, timing, adherence and supply were not assessed.",
     "Over-the-counter, herbal and non-tablet products may be missing from this brief: ask about them.",
+    "Checks across medicines cover shared ingredients and one curated class (beta-blockers); "
+    "interactions were not assessed.",
 )
 
 SAME_INGREDIENT_NOTE = (
@@ -74,6 +76,7 @@ PATIENT_SIDE_HEADING = "Patient account"
 PACK_SIDE_HEADING = "Pack photo"
 
 FIELD_NAME = "Name"
+FIELD_INN = "Ingredient"
 FIELD_STRENGTH = "Strength"
 FIELD_INTAKE = "Intake amount"
 FIELD_REGIMEN = "Regimen"
@@ -81,7 +84,6 @@ FIELD_STATUS = "Status"
 FIELD_LABEL = "Label text"
 FIELD_READABILITY = "Readability"
 FIELD_COUNTRY = "Country"
-FIELD_EVIDENCE = "Evidence"
 
 STRENGTH_PER = " per "
 

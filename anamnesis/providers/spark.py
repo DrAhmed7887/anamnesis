@@ -42,6 +42,24 @@ def _check_no_advice(data: dict[str, Any]) -> None:
     assert_no_advice_in_ingredients(data)
 
 
+_STRENGTH_KEYS = frozenset({"ingredients", "per", "release"})
+_INGREDIENT_KEYS = frozenset({"inn", "amount", "unit"})
+
+
+def _check_strength_shape(strength: Any) -> None:
+    """Refuse strength keys beyond LABEL_SCHEMA's, so no model-written salt passes (SPEC §2)."""
+    if not isinstance(strength, dict):
+        return
+    if set(strength) - _STRENGTH_KEYS:
+        raise ValueError("label strength has keys beyond the schema")
+    ingredients = strength.get("ingredients")
+    if not isinstance(ingredients, list):
+        return
+    for part in ingredients:
+        if isinstance(part, dict) and set(part) - _INGREDIENT_KEYS:
+            raise ValueError("label strength ingredient has keys beyond the schema")
+
+
 def _coerce_country(value: Any) -> str | None:
     """Keep only an ISO 3166-1 alpha-2 code, stored upper-case."""
     if isinstance(value, str) and _COUNTRY_RE.fullmatch(value):
@@ -55,6 +73,7 @@ def parse_label_json(text: str, region_id: str) -> LabelReading:
         if not isinstance(data, dict) or "region_id" in data:
             raise ValueError("expected a label object without region_id")
         _check_no_advice(data)
+        _check_strength_shape(data.get("strength"))
         validated = {
             **data,
             "region_id": region_id,

@@ -31,7 +31,7 @@ def parse_amount_text(value: object) -> Decimal | None:
         value = str(value)
     if not isinstance(value, str):
         return None
-    text = value.strip()
+    text = value.strip().replace("٫", ".")
     if not _AMOUNT_RE.fullmatch(text):
         return None
     if "," in text:

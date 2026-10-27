@@ -3,7 +3,7 @@
 import re
 from decimal import Decimal
 
-from anamnesis.core.catalogue import Catalogue, normalise
+from anamnesis.core.catalogue import ARABIC_CLITICS, Catalogue, normalise
 from anamnesis.schema import (
     INN_ALIASES,
     SALT_BASIS_EQUIVALENTS,
@@ -275,10 +275,10 @@ def _release(
 _RELEASE_WORDS = frozenset({
     "retard", "depot", "xr", "xl", "sr", "er", "cr", "mr", "prolonged", "extended",
     "modified", "sustained", "controlled", "slow", "immediate", "ممتد", "بطيء",
+    "ممتده", "بطيئه",
 })
 
-_ARABIC_RELEASE_WORDS = frozenset({"ممتد", "بطيء"})
-_RELEASE_CLITICS = r"(?:وال|بال|فال|لل|ال|و|ف|ب|ل)?"
+_ARABIC_RELEASE_WORDS = frozenset({"ممتد", "بطيء", "ممتده", "بطيئه"})
 
 
 def _says_release(normalised: str) -> bool:
@@ -286,7 +286,7 @@ def _says_release(normalised: str) -> bool:
     if any(f" {word} " in f" {normalised} " for word in _RELEASE_WORDS - _ARABIC_RELEASE_WORDS):
         return True
     return any(
-        re.search(rf"(?<!\w){_RELEASE_CLITICS}{re.escape(word)}(?!\w)", normalised)
+        re.search(rf"(?<!\w){ARABIC_CLITICS}{re.escape(word)}(?!\w)", normalised)
         for word in _ARABIC_RELEASE_WORDS
     )
 
@@ -421,7 +421,7 @@ def _same_brand(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue
 def reconcile_all(
     claims: list[PatientClaim], observations: list[PackObservation], catalogue: Catalogue
 ) -> list[Finding]:
-    """Pair readable, overlapping products by score with stable ID tie breaks."""
+    """Pair readable, overlapping products by same brand first, then score, then ids."""
     candidates = [
         (0 if _same_brand(claim, pack, catalogue) else 1, -score,
          claim.claim_id, pack.observation_id, ci, pi)
