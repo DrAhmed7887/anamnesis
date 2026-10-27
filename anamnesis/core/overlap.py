@@ -28,14 +28,25 @@ DRUG_CLASSES: dict[str, frozenset[str]] = {
 
 
 def _counted(claims, catalogue: Catalogue):
-    """Claims with a buildable identity set that were not reported as stopped."""
+    """Counted claims: not stopped, with a buildable identity set.
+
+    A conflicted claim counts only by the ingredients its identity set shares
+    with the catalogue entry its name resolves to (SPEC §7).
+    """
     counted = []
     for claim in claims:
         if claim.status.value == "discontinued":
             continue
-        inns, _ = _claim_identity(claim, catalogue)
+        inns, conflict = _claim_identity(claim, catalogue)
         if inns is None:
             continue
+        if conflict:
+            resolved = catalogue.resolve(claim.name_text)
+            if resolved is None:
+                continue
+            inns = inns & resolved.inns
+            if not inns:
+                continue
         entry = catalogue.brand_entry(claim.name_text)
         product = entry.brand if entry is not None else normalise(claim.name_text)
         counted.append((claim, frozenset(inns), product))

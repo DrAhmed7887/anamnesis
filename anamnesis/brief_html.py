@@ -9,6 +9,7 @@ from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.templates import (
     BRIEF_TITLE,
     FIELD_COUNTRY,
+    FIELD_INN,
     FIELD_INTAKE,
     FIELD_LABEL,
     FIELD_NAME,
@@ -110,8 +111,13 @@ def _first_line(text: str) -> str | None:
     return None
 
 
+def _ingredient_html(part) -> str:
+    salt = f" {_esc(part.salt)}" if part.salt else ""
+    return f"{_esc(part.inn)}{salt} {_plain(part.amount)} {_esc(part.unit.value)}"
+
+
 def _strength_html(strength) -> str:
-    parts = [f"{_esc(p.inn)} {_plain(p.amount)} {_esc(p.unit.value)}" for p in strength.ingredients]
+    parts = [_ingredient_html(p) for p in strength.ingredients]
     text = ", ".join(parts) + STRENGTH_PER + _esc(strength.per.value)
     if strength.release.value != "unknown":
         text += f" ({_esc(strength.release.value)})"
@@ -216,12 +222,12 @@ def _patient_html(claim) -> str:
     if claim is None:
         return f"<p>{NOT_MENTIONED}</p>"
     fields = _field(FIELD_NAME, _esc(claim.name_text), auto=True)
+    if claim.inn is not None:
+        fields += _field(FIELD_INN, _esc(claim.inn), auto=True)
     if claim.strength is not None:
         fields += _field(FIELD_STRENGTH, _strength_html(claim.strength), auto=True)
     if claim.intake_amount is not None:
-        amount = claim.intake_amount
-        text = f"{_esc(amount.inn)} {_plain(amount.amount)} {_esc(amount.unit.value)}"
-        fields += _field(FIELD_INTAKE, text, auto=True)
+        fields += _field(FIELD_INTAKE, _ingredient_html(claim.intake_amount), auto=True)
     regimen = _regimen_html(claim.regimen)
     if regimen is not None:
         fields += _field(FIELD_REGIMEN, regimen)
@@ -235,6 +241,8 @@ def _pack_html(pack) -> str:
     fields = ""
     if pack.label_text:
         fields += _field(FIELD_LABEL, f'<span class="pre">{_esc(pack.label_text)}</span>', auto=True)
+    if pack.inn is not None:
+        fields += _field(FIELD_INN, _esc(pack.inn), auto=True)
     if pack.strength is not None:
         fields += _field(FIELD_STRENGTH, _strength_html(pack.strength), auto=True)
     fields += _field(FIELD_READABILITY, _esc(pack.readability.value))
@@ -295,7 +303,7 @@ def _photos_html(report, prepared) -> str:
     for region in report.regions:
         source = by_sha.get(region.image_sha256)
         if source is None:
-            continue
+            raise ValueError(f"region {region.region_id} has no photo among the given images")
         crop = crop_region(source, region)
         caption = REGION_CAPTION.format(
             i=index_by_sha[region.image_sha256], region_id=_esc(region.region_id),

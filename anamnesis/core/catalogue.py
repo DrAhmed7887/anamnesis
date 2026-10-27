@@ -20,6 +20,10 @@ def normalise(text: str) -> str:
     return " ".join(text.split())
 
 
+ARABIC_CLITICS = r"(?:وال|بال|فال|لل|ال|و|ف|ب|ل)?"
+"""Attached Arabic clitics accepted before a matched word (SPEC §2, §3)."""
+
+
 @dataclass(frozen=True)
 class CatalogueEntry:
     brand: str
@@ -110,7 +114,7 @@ class Catalogue:
                 if brand and " " in name:
                     variants.append(name.replace(" ", ""))
                 for variant in dict.fromkeys(variants):
-                    prefix = r"(?:وال|بال|فال|لل|ال|و|ف|ب|ل)?" if re.search(r"[\u0600-\u06ff]", name) else ""
+                    prefix = ARABIC_CLITICS if re.search(r"[\u0600-\u06ff]", name) else ""
                     pattern = re.compile(rf"(?<!\w){prefix}{re.escape(variant)}(?!\w)")
                     matches.extend(
                         (found.start(), found.end(), entry, brand)

@@ -3,6 +3,7 @@
 import re
 from typing import Any
 
+from anamnesis.core.catalogue import ARABIC_CLITICS, normalise
 from anamnesis.schema.templates import PATIENT_QUESTIONS, QUESTION_FOR, TEMPLATES
 
 __all__ = [
@@ -22,15 +23,16 @@ class AdviceLeak(Exception):
 _ADVICE = re.compile(
     r"\b(?:you should|you must|take|increase|decrease|reduce|stop taking|double|skip|"
     r"split|halve|continue|keep taking|safe|"
-    r"debe|tome|tomar|nehmen sie|sollten|"
-    r"يجب|خذ|تناول|توقف|ضاعف|ينصح)\b",
+    r"debe|tome|tomar|nehmen sie|sollten)\b",
     re.IGNORECASE,
 )
+
+_ARABIC_ADVICE = re.compile(r"\b" + ARABIC_CLITICS + r"(?:يجب|خذ|تناول|توقف|ضاعف|ينصح)\b")
 
 
 def assert_no_advice(text: str) -> None:
     """Reject phrases that could instruct medication dosing."""
-    if _ADVICE.search(text):
+    if _ADVICE.search(text) or _ARABIC_ADVICE.search(normalise(text)):
         raise AdviceLeak(text)
 
 
