@@ -1,11 +1,13 @@
 {
   "trace": {
-    "call_id": "resp_6ae083a95d409470b7ab4fd9",
+    "call_id": "resp_6ae095b7399e3946dcdf41a1",
     "model_id": "sam-3.1",
-    "latency_ms": 1886,
+    "latency_ms": 1434,
     "input_tokens": 0,
     "output_tokens": 0,
-    "cost_usd": "0.0025"
+    "cost_usd": "0.0025",
+    "prior_call_ids": [],
+    "prior_cost_usd": "0"
   },
   "regions": [
     {

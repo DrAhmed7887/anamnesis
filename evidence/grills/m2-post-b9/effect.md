@@ -51,3 +51,16 @@ The round-1 **blocker #8 (ledger) is cleared**: it isn't in round 2. The new blo
 | 7 | B9 review overstated "both live transcripts reconcile" | **Fixed now:** the review is corrected (offline fixtures only; no live Arabic run since B11) | done |
 | 8 | More Arabic contract pins (`وبيلوكزوك`, ة/ى/أ on both sides) | Accepted | B12b |
 | 9 | B4 `built_by`; earlier test-count split | **Fixed now:** log corrections appended (append-only) | done |
+
+## Quality manager, round 3 (after B12b / batch 13): **VERDICT PASS**
+The HOLD is lifted. Live runs are allowed again, and the live chain was run straight after (QM3 #7).
+
+| QM3 # | Finding | Verdict | Where |
+|---|---|---|---|
+| 1 | Batch numbering: B12a = batch 12, B12b = batch 13. Track the open items (M1 #10, F-06, F-07 caps and Arabic blocklist words, F-09) | Accepted: the agent loop is **batch 14**, the report bundle and open-weight benchmark follow | B14+ |
+| 2 | A saltless claim that states the **literal** EU strength ("Beloc-Zok 95 mg") vs a 95 mg succinate pack gives a false `strength_mismatch` (the pack is mapped to nominal 100) | **Accepted (real bug):** accept either the literal or the nominal amount | B14 |
+| 3 | Salt in text that isn't next to the moiety ("metoprolol 100 mg tartrate", "Beloc-Zok succinate") isn't found | Accepted: curated brand-plus-salt and separated-salt patterns | B14 |
+| 4 | Pass `country` through `implied_release` / `splittable` | Accepted (minor) | B14 |
+| 5 | "As in v1" left over in SPEC rule 7; version header | Accepted (minor): SPEC header bumped to v3 | B14 |
+| 6 | The 5 safety invariants hold; F-07 session caps and Arabic blocklist words still to do | Accepted | B14 |
+| 7 | Run the live Arabic check after B11 | **Done:** live, 27 Oct, both languages reconcile correctly (see `decisions.md`) | done |

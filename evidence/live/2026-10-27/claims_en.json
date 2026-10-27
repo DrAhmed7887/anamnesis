@@ -1,11 +1,15 @@
 {
   "trace": {
-    "call_id": "chatcmpl-01a17d02-19c0-7493-91ef-86d4a4a796e4",
+    "call_id": "chatcmpl-01a17d48-88b4-7007-bb32-8a080e9ef059",
     "model_id": "muse-spark-1.3",
-    "latency_ms": 9434,
-    "input_tokens": 551,
-    "output_tokens": 2625,
-    "cost_usd": "0.01184500"
+    "latency_ms": 11554,
+    "input_tokens": 550,
+    "output_tokens": 2651,
+    "cost_usd": "0.01195425",
+    "prior_call_ids": [
+      "chatcmpl-01a17d48-5b9c-7557-89d4-b37858d86e02"
+    ],
+    "prior_cost_usd": "0.01290200"
   },
   "claims": [
     {

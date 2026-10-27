@@ -41,3 +41,9 @@ The ledger only covers calls made through our adapters. Muse Code (`muse` CLI) g
 - **M0 plan grill** (run by Antigravity, 27 Oct morning): probably `muse-spark-1.3-contributor`. Cost not measured.
 - **M1 core grill:** `muse-spark-1.3-contributor`, about 2.67M input / 84k output tokens ≈ **$0.20** at contributor rates. Synthetic code only.
 - From M2 on, `scripts/grill.sh` pins Standard mode. Those runs will be billed at standard rates, still outside the ledger, and noted here.
+
+## 2026-10-27: first fully correct live run in both languages (after batch 13, QM PASS)
+- **English and Arabic voice notes both reconcile correctly, live and end to end, with Spark-extracted claims (nothing hand-written):** Concor → `match`; metoprolol 50 mg twice a day vs Beloc-Zok 100 mg → `intake_differs_from_unit_strength`; Panadol (stopped, no pack) → `missing_modality`.
+- This Arabic run mixed all the variants seen so far: كونكور (Arabic script), "BelocZok" (joined), "الPanadol" (Arabic article on a Latin brand).
+- Builder change: batch 13 was built by a Claude Sonnet subagent at Ahmed's request. A plain-codex attempt (ChatGPT login, no Sol available on that account) was stopped before it changed any file.
+- Ledger total: $0.220 of the $5 cap (live adapter calls only; Muse grills are outside it, see above).

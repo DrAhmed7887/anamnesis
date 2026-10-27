@@ -42,3 +42,12 @@
 {"call_id": "resp_6ae083a95d409470b7ab4fd9", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-10-27T10:57:46.747876+00:00"}
 {"call_id": "chatcmpl-01a17d02-5c36-75d0-91a7-d5893d020a59", "model_id": "muse-spark-1.3", "cost_usd": "0.00470825", "time_utc": "2026-10-27T10:57:49.191836+00:00"}
 {"call_id": "chatcmpl-01a17d02-670f-732e-970f-50fbd1c24e9e", "model_id": "muse-spark-1.3", "cost_usd": "0.00521275", "time_utc": "2026-10-27T10:57:52.034868+00:00"}
+{"call_id": "3e8475d0-695f-4b0a-8346-902079ae0da1", "model_id": "muse-voice-transcribe-1.0", "cost_usd": "0.00050", "time_utc": "2026-10-27T12:14:00.700674+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d48-5b9c-7557-89d4-b37858d86e02", "model_id": "muse-spark-1.3", "cost_usd": "0.01290200", "time_utc": "2026-10-27T12:14:16.584095+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d48-88b4-7007-bb32-8a080e9ef059", "model_id": "muse-spark-1.3", "cost_usd": "0.01195425", "time_utc": "2026-10-27T12:14:28.142410+00:00", "estimated": false}
+{"call_id": "8139618a-fc66-4f46-9bc9-8a38fccfb20a", "model_id": "muse-voice-transcribe-1.0", "cost_usd": "0.00070", "time_utc": "2026-10-27T12:14:30.899222+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d48-c64c-73bd-8ff4-9b73060aca80", "model_id": "muse-spark-1.3", "cost_usd": "0.01241175", "time_utc": "2026-10-27T12:14:44.035948+00:00", "estimated": false}
+{"call_id": "resp_6ae095b6925a373449f84b60", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-10-27T12:14:46.897760+00:00", "estimated": false}
+{"call_id": "resp_6ae095b7399e3946dcdf41a1", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-10-27T12:14:48.349129+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d48-e434-74e6-b27e-3d212a5a0e35", "model_id": "muse-spark-1.3", "cost_usd": "0.00449575", "time_utc": "2026-10-27T12:14:51.599365+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a17d48-f5ea-761b-9570-166b1a205a6b", "model_id": "muse-spark-1.3", "cost_usd": "0.00432875", "time_utc": "2026-10-27T12:14:56.166418+00:00", "estimated": false}

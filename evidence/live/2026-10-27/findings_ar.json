@@ -2,60 +2,38 @@
   "claims_source": "extracted by muse-spark-1.3 from voice_ar",
   "findings": [
     {
-      "finding_id": "-:o0",
-      "type": "missing_modality",
-      "claim_id": null,
+      "finding_id": "c1:o1",
+      "type": "match",
+      "claim_id": "c1",
+      "observation_id": "o1",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "15595e0869ee-1"
+      ],
+      "needs_clinician_review": false,
+      "clinician_note": "The reported medication details agree with the pack label.",
+      "patient_question_id": null
+    },
+    {
+      "finding_id": "c2:o0",
+      "type": "intake_differs_from_unit_strength",
+      "claim_id": "c2",
       "observation_id": "o0",
-      "audio_evidence": [],
+      "audio_evidence": [
+        "turn-0"
+      ],
       "visual_evidence": [
         "15595e0869ee-0"
       ],
       "needs_clinician_review": true,
-      "clinician_note": "Medication evidence is present in only one source.",
-      "patient_question_id": "source"
-    },
-    {
-      "finding_id": "-:o1",
-      "type": "missing_modality",
-      "claim_id": null,
-      "observation_id": "o1",
-      "audio_evidence": [],
-      "visual_evidence": [
-        "15595e0869ee-1"
-      ],
-      "needs_clinician_review": true,
-      "clinician_note": "Medication evidence is present in only one source.",
-      "patient_question_id": "source"
-    },
-    {
-      "finding_id": "c1:-",
-      "type": "unresolved_name",
-      "claim_id": "c1",
-      "observation_id": null,
-      "audio_evidence": [
-        "turn-0"
-      ],
-      "visual_evidence": [],
-      "needs_clinician_review": true,
-      "clinician_note": "A medication name could not be resolved in the catalogue.",
-      "patient_question_id": "name"
-    },
-    {
-      "finding_id": "c2:-",
-      "type": "unresolved_name",
-      "claim_id": "c2",
-      "observation_id": null,
-      "audio_evidence": [
-        "turn-0"
-      ],
-      "visual_evidence": [],
-      "needs_clinician_review": true,
-      "clinician_note": "A medication name could not be resolved in the catalogue.",
-      "patient_question_id": "name"
+      "clinician_note": "Reported intake differs from the strength of one pack unit.",
+      "patient_question_id": "intake"
     },
     {
       "finding_id": "c3:-",
-      "type": "unresolved_name",
+      "type": "missing_modality",
       "claim_id": "c3",
       "observation_id": null,
       "audio_evidence": [
@@ -63,8 +41,8 @@
       ],
       "visual_evidence": [],
       "needs_clinician_review": true,
-      "clinician_note": "A medication name could not be resolved in the catalogue.",
-      "patient_question_id": "name"
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
     }
   ]
 }
