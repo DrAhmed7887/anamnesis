@@ -2,3 +2,4 @@
 {"batch":2,"branch":"batch/2-reconcile","model":"gpt-6-sol","tests_passed":81,"verdict":"pass","merge_commit":"6bc4120","at":"2026-10-27T09:41:08Z"}
 {"batch":3,"branch":"batch/3-hardening","model":"gpt-6-sol","tests_passed":133,"verdict":"pass","merge_commit":"58b4d38","at":"2026-10-27T09:58:23Z"}
 {"batch":4,"branch":"batch/4-providers","model":"gpt-6-sol","tests_passed":165,"verdict":"pass","merge_commit":"c78e814","at":"2026-10-27T10:01:56Z"}
+{"batch":5,"branch":"batch/5-live-meta","model":"gpt-6-sol","tests_passed":195,"verdict":"pass","merge_commit":"0c8f231","at":"2026-10-27T10:18:03Z"}
