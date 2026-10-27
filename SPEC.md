@@ -81,8 +81,8 @@ The first rule that applies wins.
 ### Pairing (`reconcile_all`)
 - Only readable packs can pair. Candidate pairs have overlapping identity sets.
 - Score each candidate: 3 = same identity and equal strength, 2 = same identity, 1 = overlap.
-- Within a score, a pair whose claim `name_text` and pack `label_text` match the same catalogue brand comes first (batch 19: with Panadol and Gelocatil both paracetamol, ID order alone could pair Panadol's claim with Gelocatil's pack).
-- Take candidates greedily by score, then that preference, then `claim_id`, then `observation_id`. Ties are broken by **ID**, not by list position, so the set of findings doesn't depend on the order of claims or packs. Findings come back sorted by `finding_id`.
+- **A named brand is compared with its own pack first** (batch 19): before the score, a pair whose claim `name_text` and pack `label_text` match the same catalogue brand comes first. With Panadol and Gelocatil both paracetamol, ID order alone could pair Panadol's claim with Gelocatil's pack. Ranking by score first could pair "Panadol 1 g" with an equal-strength Gelocatil 1 g pack and hide that the Panadol pack says 500 mg (supervisor 19 #4).
+- Take candidates greedily by that preference, then score, then `claim_id`, then `observation_id`. Ties are broken by **ID**, not by list position, so the set of findings doesn't depend on the order of claims or packs. Findings come back sorted by `finding_id`.
 - Leftovers:
   - an unreadable pack → `unreadable_source`
   - an unresolvable name → `unresolved_name`
@@ -125,7 +125,7 @@ Billing-uncertain failures are recorded at the pre-call estimate. Rejected 4xx a
 - `tests/contract/` is written by the reviewer before each batch. A batch that edits it is rejected.
 
 ## 7. Clinician brief (`anamnesis/brief.py`, batch 19)
-`render_brief(report, images, audio, catalogue) -> str` turns one `ReconciliationReport`, plus the photos and the voice note that were given to `run_intake` (`images: list[(bytes, mime)]`, `audio: (bytes, mime) | None`), into **one self-contained static HTML page** that can be hosted as it is (J3). Every `src` is a `data:` URI and every `href` an in-page `#` link; there is no `<link>` element, and the only script is one inline `<script>` that plays a turn (no `on…` event attributes). It calls no model, and the same inputs give the same string. Its fixed text comes from `anamnesis/schema/templates.py`. Source data (transcripts, `name_text`, label text, model-read values) is HTML-escaped and shown verbatim, never paraphrased.
+`render_brief(report, images, audio, catalogue) -> str` turns one `ReconciliationReport`, plus the photos and the voice note that were given to `run_intake` (`images: list[(bytes, mime)]`, `audio: (bytes, mime) | None`), into **one self-contained static HTML page** that can be hosted as it is (J3). Every `src` is a `data:` URI and every `href` an in-page `#` link; there is no `<link>` element, and the only script is one inline `<script>` that plays a turn (no `on…` event attributes). It calls no model, and the same inputs give the same string. **It refuses media the report wasn't made from:** `render_brief` and `coverage_lines` first recompute `intake_id` exactly as `run_intake` does (the loop's own photo preparation, in input order, and the audio bytes) and raise `ValueError` if it differs from the report's. Otherwise a report could be shown against another recording or photo (supervisor 19 #3). Its fixed text comes from `anamnesis/schema/templates.py`. Source data (transcripts, `name_text`, label text, model-read values) is HTML-escaped and shown verbatim, never paraphrased.
 
 **Order: disagreements first** (supervisor #1, #6). After a `<header id="scope">`, the page has these `<section id="…">` elements, always all of them and in this order. An empty section shows "None.".
 | `id` | What goes in it |
@@ -140,16 +140,16 @@ Billing-uncertain failures are recorded at the pre-call estimate. Rejected 4xx a
 | `voice` | the voice note and its turns |
 
 **A finding** is `<article id="finding:<finding_id>" data-type="<type>">`, in report order, with:
-- its heading, an `<h3>`: the claim's `name_text`, otherwise the first line of the label text, otherwise "Unnamed pack";
+- its heading, an `<h3>`: the first non-blank line of the claim's `name_text`, otherwise of the label text, otherwise "Unnamed pack";
 - `TEMPLATES[type]`, and the patient question when there is one;
-- the two sides **side by side**: `data-side="patient"` (name, strength, intake amount, regimen and status, verbatim) and `data-side="pack"` (label text, strength, readability, country). Amounts print as plain decimals with their unit ("100 mg"). A missing side says "Not mentioned." or "Not photographed.";
+- the two sides **side by side**: `data-side="patient"` (name, strength, intake amount, regimen and status, verbatim) and `data-side="pack"` (label text, strength, readability, country). Amounts print as plain decimals with their unit and never with a trailing zero ("100 mg", never "100.0 mg"; "0.5", never ".5"), the safe-notation rule for doses. A missing side says "Not mentioned." or "Not photographed.";
 - A3 wording: a `missing_modality` finding is labelled "Mentioned, not photographed" or "Photographed, not mentioned", and one in `stopped` "Reported as stopped, not photographed";
 - a link to every piece of its evidence: `href="#turn:<turn_id>"` for each audio turn, `href="#region:<region_id>"` for each region.
 
 **Evidence on the page.**
-- Each photo that opens is `<figure id="photo:<i>">` (input order, from 1), with one `<img>` of the **prepared** bytes (§4 step 0) under an `<svg viewBox="0 0 <frame_w> <frame_h>">`. The svg has one `<rect>` per report region of that photo, at `x1, y1`, `x2 − x1 + 1` wide and `y2 − y1 + 1` high, inside `<a href="#region:<region_id>">`.
+- Each photo that opens is `<figure id="photo:<i>">` (input order, from 1), with one `<img>` of the **prepared** bytes (§4 step 0) under an `<svg viewBox="0 0 <frame_w> <frame_h>">`. The svg has one `<rect>` per report region of that photo, at `x1, y1`, `x2 − x1 + 1` wide and `y2 − y1 + 1` high, inside `<a href="#region:<region_id>">`. A box is an outline with a transparent fill, so the pack under it stays visible and the whole box is clickable. No image makes the page wider than the screen.
 - Each report region is `<figure id="region:<region_id>">` showing `crop_region(prepared photo, region)`. For a region that was read, these are exactly the pixels the reader saw; this is the click-to-zoom view.
-- The voice note is one `<audio src="data:…">`. Each turn is `<li id="turn:<turn_id>" data-start-ms="…" data-end-ms="…">` with its transcript, and clicking it plays that turn only.
+- The voice note is one `<audio src="data:…">`. Each turn is `<li id="turn:<turn_id>" data-start-ms="…" data-end-ms="…">` with its time range and transcript. Clicking it plays that turn only, from its start to its end, and starting another turn ends the first.
 - Every `#` link on the page points to an element on the page.
 
 **Cross-medication observations** (`cross_medication(claims, catalogue)` in `anamnesis/core/overlap.py`; supervisor #2, J2). Pairwise reconciliation can't see two medicines that overlap each other: the showcase patient reports Concor and Beloc-Zok, two beta-blockers. Only **claims** count, never the photos, because a pack can't show use and repeated photos never imply duplicate use.

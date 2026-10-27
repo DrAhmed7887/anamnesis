@@ -5,6 +5,10 @@ SPEC §7 (supervisor 27 Oct #1-#4 and #6; pre-B16 J2, J3, Z5, A3) and the §3 pa
 static HTML page per intake: disagreements first, both sources side by side, every fact linked to its audio turn and
 image region, the crop the reader saw, a coverage block that is never silent, and fixed scope lines. Observations
 across medicines come from what the patient reports, never from the photos.
+
+Round 2 (supervisor 19): the brief refuses media the report wasn't made from (#3), a named brand is compared with its
+own pack before the score (#4), headings skip blank lines (#5), four mutants that survived round 1 are pinned (#7),
+and amounts never print a trailing zero.
 """
 
 import base64
@@ -473,6 +477,7 @@ def test_an_empty_intake_still_renders_every_section():
     (["Concor", "كونكور"], []),
     (["Concor", "Xyzzy"], []),  # an unresolvable name has no identity set
     (["Concor", "Norvasc"], []),
+    (["Concor", "bisoprolol"], [("same_ingredient", "bisoprolol", ("c1", "c2"))]),  # one member: no class
     (["Panadol", "Gelocatil", "Panadol Extra"], [("same_ingredient", "paracetamol", ("c1", "c2", "c3"))]),
     (["Gelocatil", "Beloc-Zok", "Panadol", "Concor"],
      [("same_ingredient", "paracetamol", ("c1", "c3")), ("same_class", "beta-blockers", ("c2", "c4"))]),
@@ -574,3 +579,84 @@ def test_two_brand_names_one_medicine_in_the_brief():
     assert node.attrs["data-kind"] == "same_ingredient"
     assert SAME_INGREDIENT in node.text() and "paracetamol" in node.text()
     assert {"#turn:turn-0", "#turn:turn-1"} <= hrefs(node)
+
+
+# --- round 2 (supervisor 19) -------------------------------------------------------------------------------
+
+def test_the_brief_refuses_media_the_report_was_not_made_from():
+    report = showcase()[0]
+    other_photo = [(png(600, 300, (10, 10, 10)), "image/png")]
+    for images, audio in [([(PHOTO, "image/png")], (b"RIFF a different recording", "audio/wav")),
+                          (other_photo, AUDIO), ([], AUDIO), ([(PHOTO, "image/png")], None)]:
+        with pytest.raises(ValueError):
+            render_brief(report, images, audio, CAT)
+        with pytest.raises(ValueError):
+            coverage_lines(report, images, audio)
+    two = png(300, 200, (90, 90, 90))
+    images = [(two, "image/png"), (png(300, 200, (30, 30, 30)), "image/png")]
+    report = intake(None, images)
+    assert render_brief(report, images, None, CAT)
+    with pytest.raises(ValueError):  # intake_id hashes the photos in input order
+        render_brief(report, images[::-1], None, CAT)
+
+
+def test_a_named_brand_is_compared_with_its_own_pack_first():
+    # The patient says Panadol 1 g; the photo shows Panadol 500 mg and Gelocatil 1 g. Ranking by score first would
+    # match the claim with Gelocatil's equal strength and hide that the Panadol pack disagrees.
+    claims = [claim("c1", "Panadol", strength=st(mg("paracetamol", 1, "g")))]
+    findings = reconcile_all(claims, hero_packs(), CAT)
+    assert {(f.claim_id, f.observation_id): f.type for f in findings} == {
+        ("c1", "o0"): D.STRENGTH_MISMATCH, (None, "o1"): D.MISSING_MODALITY}
+
+
+def test_a_heading_skips_blank_lines():
+    label = "\n  \nNorvasc 5 mg\nAmlodipine"
+    report = intake(None, [(PHOTO, "image/png")], by_sha={RC.image_sha256: [RC]},
+                    reads={RC.region_id: [reading(label, st(mg("amlodipine", 5)))]})
+    page = Page(render_brief(report, [(PHOTO, "image/png")], None, CAT)).root
+    [finding] = report.findings
+    assert page.by_id(f"finding:{finding.finding_id}").find_all("h3")[0].text() == "Norvasc 5 mg"
+
+
+def test_ids_and_model_values_are_escaped_in_attributes_too():
+    turn_id = 'turn-0" onfocus="go()'
+    turns = [AudioTurn(turn_id=turn_id, start_ms=0, end_ms=1000, transcript="Concor 5 mg")]
+    read = reading("Concor 5 mg", st(mg("bisoprolol", 5))).model_copy(update={"country": "<marquee>"})
+    report = intake(b"wav", [(PHOTO, "image/png")], turns=turns, claims=[claim("c1", "Concor", [turn_id])],
+                    by_sha={RC.image_sha256: [RC]}, reads={RC.region_id: [read]})
+    page = Page(render_brief(report, [(PHOTO, "image/png")], (b"wav", "audio/wav"), CAT)).root
+    nodes = list(page.walk())
+    assert not [name for node in nodes for name in node.attrs if name.startswith("on")]
+    assert "marquee" not in [node.tag for node in nodes] and "<marquee>" in page.text()
+    assert page.by_id(f"turn:{turn_id}").tag == "li"
+    ids = {node.attrs["id"] for node in nodes if "id" in node.attrs}
+    assert all(node.attrs["href"][1:] in ids for node in nodes if "href" in node.attrs)
+
+
+class FirstConceptFails:
+    """SAM errors on the first concept and finds nothing on the second."""
+
+    def segment(self, image, concept, *, mime):
+        if concept == "medicine box":
+            raise ProviderError("sam", "unavailable")
+        return [], trace("sam")
+
+
+def test_a_failed_concept_then_an_empty_one_means_no_pack_found():
+    images = [(PHOTO, "image/png")]
+    report = run_intake(None, images, transcriber=None, extractor=None, segmenter=FirstConceptFails(),
+                        reader=Reader({}), catalogue=CAT)
+    assert coverage_lines(report, images, None) == ["Photos received: 1.", "Photo 1: no pack found.",
+                                                    "Voice note: none."]
+
+
+def test_amounts_never_print_a_trailing_zero():
+    turns = [AudioTurn(turn_id="turn-0", start_ms=0, end_ms=3000, transcript="Beloc-Zok, half of the 100.")]
+    said = PatientClaim(claim_id="c1", name_text="Beloc-Zok", intake_amount=mg("metoprolol", "100.0"),
+                        regimen=DoseRegimen(units_per_intake=Decimal("0.50"), intakes_per_day=Decimal("2.0")),
+                        status="active", audio_evidence=["turn-0"])
+    report = intake(b"wav", [], turns=turns, claims=[said])
+    page = Page(render_brief(report, [], (b"wav", "audio/wav"), CAT)).root
+    text = page.by_id("finding:c1:-").find_all(data_side="patient")[0].text()
+    assert "100 mg" in text and "0.5" in text
+    assert "100.0" not in text and "0.50" not in text and "2.0" not in text and "E+" not in text
