@@ -49,3 +49,28 @@ The verdict rests on finding 1. The other findings are minor and don't block the
 - Request messages are byte-identical to `MetaLabelReader`'s, cropped and uncropped, apart from the one appended schema sentence; no `reasoning_effort`, and no `response_format` with JSON mode off.
 - Spend: the estimate is priced by `price_key` while the real model id is sent; the cap refuses before any request; both attempts are charged on a retry; a length stop is charged once and not retried.
 - Fence strip removes one surrounding ```` ``` ```` or ```` ```json ```` fence. Everything else (```` ```JSON ````, ```` ```js ````, prose before the fence, two fences, a lone ```` ``` ````) goes to `parse_label_json` as is and fails safe as a malformed reply, retried once with both attempts charged. A fence inside a JSON string is left alone.
+
+## Round 2 (28 Oct). Builder: Muse Code (`muse-spark-1.3`)
+
+SUPERVISOR: APPROVE
+
+Round 2 fixes findings 1–3 as asked. Nothing else changed between rounds: the round-1 files diffed against the worktree differ only by items 1–5 of the round-2 brief. In `after-r2`, pytest gives 1122 passed and ruff passes, and the copy matches the worktree's `anamnesis/`, `tests/` and `SPEC.md`.
+
+**1. minor: `tests/contract/test_b22_round2.py`, `test_the_key_never_appears_in_a_parse_error`. The pin can't fail, and the reason given for accepting that is wrong.**
+- The reference note says "No parse message echoes the reply". That isn't so: `parse_label_json` puts pydantic's `ValidationError` into the message, and pydantic includes `input_value=…`.
+- Ran, in a throwaway copy of `after-r2`, with `_safe` removed from the parse-error path: a reply of `json.dumps(dict(LABEL, readability=KEY))` puts the key in `str(exc)`, and so does `json.dumps(dict(LABEL, inn=[KEY]))`. The pinned input, `"not json KEY"`, never leaks, because the JSON error doesn't quote the input, so the mutant survives.
+- As built, the code is correct: with `_safe` present, all three inputs show no key. The practical risk is low, since the key goes only in the Authorization header and a model can't echo what it never sees.
+- **Fix (contract, CEO's call):** use `reply(json.dumps(dict(LABEL, readability=KEY)))` as the pin's input, which kills the mutant.
+
+**Checks requested**
+- **Finding 1 is fixed.** End to end (`run_intake`, pack "Concor 5 mg"), `"<five"` for "less than five milligrams" gives intake None and `insufficient_information`, and so do `">five"`, `"~five"`, `"five?"` and `"-five"`, the same as the digit form `"<5"`. `parse_amount_text` gives None for `"(five)"`, `"five."`, `"five,"`, `"five+"`, `"five%"`, `"≈five"`, «خُمس», «عُشر», «سُبع», «تُسع» and «خَمْسَة». These still parse: "five", "FIVE", «خمـــسة» (tatweel), «أربعة», «إثنين», «اثنى», «واحدة», «خمسمية», «خمسمائة», «تلتمية», «ميتين», «مئتين» and «الفين».
+- **New probes on the fix:** None for mixed script ("fiveخمسة", "aتلتمية"), a bare tatweel, "five²", "½", a leading RLM, and other languages ("пять", "cinco"). 5, harmlessly, for tatweel on a Latin word ("fiveـ"), a trailing NBSP, and "ſix" (6). The tatweel in `_WORD_RE` is U+0640.
+- **The removed post-`normalise` split check is dead, as claimed.** After `_WORD_RE`, `normalise` can only add a space at a Latin/Arabic boundary. No key in `ENGLISH_NUMBERS`, `ARABIC_NUMBERS`, `ARABIC_HUNDRED_STEMS` or `ARABIC_HUNDRED_SUFFIXES` contains whitespace, so `_combined_hundreds` can't match either.
+- **Finding 2 is fixed.** `"-contributor" in model.strip().casefold()` refuses all four ids from round 1, matching `scripts/batch.sh`'s `*-contributor*`.
+- **Finding 3 is fixed.** The malformed-response, length-stop and label-parse errors carry `fireworks` or `baseten`, and the advice-in-`inn` probe gives `provider == "fireworks"`. The contract covers all three errors for both providers.
+- **Item 4 is done.** `_data_url` is imported from `meta` and `base64` is gone. With JSON mode off, the request messages are still byte-identical to `MetaLabelReader`'s, cropped and uncropped, apart from the schema sentence.
+- **Item 5 is done.** Unit None cases for `<five`, `-five`, `five?`, `(five)` and «خُمس», and two contributor ids. They overlap the round-2 contract, which covers more inputs.
+- **No regression in the inherited `MetaClient` behaviour.** Timeout, transport error, 500, non-JSON body and a JSON array are retryable and billable-uncertain, each with 2 estimated ledger lines. 401 is not retryable and not charged. The key is redacted from every message and absent from `repr`.
+- **The other finding-4 pins hold on this build:** the estimate is priced by `price_key`, estimated ledger lines name `price_key`, and the read timeout is 60 s.
+
+**The CEO's action on finding 1:** the pin's input is now a reply with the key as `readability`. It passes on the round 2 build and fails with `_safe` removed (checked on a scratch copy). No code change was needed, so there was no Muse round 3.

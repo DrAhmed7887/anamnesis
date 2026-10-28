@@ -121,6 +121,7 @@ def test_the_client_waits_60_seconds_by_default(tmp_path):
 
 
 def test_the_key_never_appears_in_a_parse_error(tmp_path):
+    echoed = json.dumps(dict(LABEL, readability=KEY))  # pydantic quotes the bad value in its error
     with pytest.raises(ProviderError) as caught:
-        reader(tmp_path, lambda request: reply(f"not json {KEY}")).read(PHOTO, RC, mime="image/png")
+        reader(tmp_path, lambda request: reply(echoed)).read(PHOTO, RC, mime="image/png")
     assert KEY not in str(caught.value)

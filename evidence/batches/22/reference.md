@@ -17,4 +17,4 @@
   - estimate priced as `muse-spark-1.3`: caught;
   - `with_one_retry(..., model_id=self.model)`: caught;
   - the 60 s timeout dropped: caught;
-  - `_safe` removed from the parse-error path: survives. No parse message echoes the reply, so the pin holds either way; `_safe` stays as defence in depth.
+  - `_safe` removed from the parse-error path: survived with the first input, `"not json KEY"`, because the JSON error doesn't quote the reply. The reason first recorded here ("no parse message echoes the reply") was wrong: pydantic's validation error quotes the bad value (supervisor, round 2). The pin's input is now a reply with the key as `readability`. It passes on the round 2 build and fails with `_safe` removed.
