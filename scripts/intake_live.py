@@ -33,12 +33,12 @@ from anamnesis.core.catalogue import load_catalogue
 from anamnesis.providers import SpendGuard
 from anamnesis.providers.claims import MetaClaimExtractor
 from anamnesis.providers.meta import MetaClient, MetaLabelReader, MetaSegmenter, MetaTranscriber
+from anamnesis.agent.loop import SAM_CONCEPTS
 from anamnesis.providers.spend import SessionGuard
 
 ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "evidence/raw/media"
 LEDGER = ROOT / "evidence/spend/ledger.jsonl"
-MAX_CALLS = 12
 LANGUAGES = {"en": ["English"], "ar": ["Arabic", "English"]}
 MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
 
@@ -80,7 +80,10 @@ class Run:
 
 
 def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]], lang: str) -> None:
-    guard = SessionGuard(run.ledger, max_usd=run.session_usd, max_calls=MAX_CALLS)
+    # The loop's own default budget (SPEC §4 Budget): every call it can make. The dollar cap bounds the spend;
+    # a fixed 12 dropped a sent pack on a four-photo intake (supervisor 23, round 2 #1).
+    calls = 2 + (len(SAM_CONCEPTS) + 2 * run.top_k) * len(images)
+    guard = SessionGuard(run.ledger, max_usd=run.session_usd, max_calls=calls)
     timed = TimedClient(run.client)
     keywords = [n for entry in run.catalogue.entries for n in (entry.brand, *entry.aliases)]
     start = time.monotonic()
@@ -89,7 +92,7 @@ def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]], l
         transcriber=MetaTranscriber(run.client, guard), extractor=MetaClaimExtractor(timed, guard),
         segmenter=MetaSegmenter(run.client, guard), reader=MetaLabelReader(run.client, guard),
         catalogue=run.catalogue, language_bias=LANGUAGES[lang], keywords=keywords, lang_hint=lang,
-        max_provider_calls=MAX_CALLS, top_k=run.top_k,
+        max_provider_calls=calls, top_k=run.top_k,
     )
     wall_s = round(time.monotonic() - start, 1)
     (run.reports / f"report_{name}.json").write_text(report.model_dump_json(indent=2) + "\n", "utf-8")
