@@ -14,7 +14,7 @@ def normalise(text: str) -> str:
     text = text.casefold().replace("®", "").replace("™", "")
     text = re.sub(r"[\u0640\u064b-\u065f\u0670]", "", text)
     text = text.translate(str.maketrans({"أ": "ا", "إ": "ا", "آ": "ا", "ٱ": "ا", "ى": "ي", "ة": "ه"}))
-    text = text.translate(str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789"))
+    text = text.translate(str.maketrans("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹", "01234567890123456789"))
     text = re.sub(r"(?<=[\u0600-\u06ff])(?=[a-z])|(?<=[a-z])(?=[\u0600-\u06ff])", " ", text)
     text = re.sub(r"[^\w\s]|_", " ", text)
     return " ".join(text.split())

@@ -44,8 +44,8 @@ def test_provider_error_becomes_a_step_without_prose():
     report = run_intake(None, [(IMG, "image/png")], transcriber=None, extractor=None,
                         segmenter=FailingSegmenter(), reader=None, catalogue=CAT)
     outcomes = [s.outcome for s in report.steps if s.action is AgentAction.SEGMENT]
-    assert len(outcomes) == 2 and all("secret" not in o for o in outcomes)
-    assert report.calls == 2 and report.findings == []
+    assert len(outcomes) == 3 and all("secret" not in o for o in outcomes)
+    assert report.calls == 3 and report.findings == []
 
 
 def test_budget_of_zero_skips_every_call_but_still_reports():

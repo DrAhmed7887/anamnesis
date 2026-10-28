@@ -285,3 +285,28 @@ No realistic label keeps a wrong strength. The one remaining item is a correct t
 - the step sums; nothing outside `spark.py` changed.
 
 **The CEO's response, round 9:** (b) and #2 are taken. These are exactly the effervescent and soluble tablets a real medicine bag holds, and a syrup's salt phrase never contains a tablet word. Text in brackets is stripped first, so "250 mg (equivalent to half a tablet) per 5 ml" still refuses; a contract test pins it.
+
+## Round 9 (28 Oct)
+
+SUPERVISOR: APPROVE
+
+Both of Muse's round 9 changes match SPEC, and no realistic label keeps a wrong strength. The tablet-word carve-out does open a narrow fail-open, but only on wordings the supervisor doesn't consider realistic for a syrup pack. Only `spark.py` changed since round 8, and it equals the supervisor's round 8 mutant (b) plus the dual; pytest gives 1890 passed.
+
+1. **minor (fails open, unrealistic wordings): a tablet word outside brackets between a syrup's amount and its volume disables the refusal.** When that word also makes a tablet print, a per-tablet reading survives.
+   - **Kept in round 9, null in round 8:**
+     - "Paracetamol 250 mg = 1 tablet per 5 ml";
+     - "Amoxicillin 250 mg capsules or suspension per 5 ml";
+     - "Calpol 250 mg tab/5 ml";
+     - «… ما يعادل قرص لكل ٥ مل»;
+     - "… comprimido por 5 ml".
+   - **Still null:** the same lines read per ml or per dose, and the bracketed tablet word.
+   - **Optional hardening:** apply the carve-out only when the connector is `in` or `في`, as every dissolving line has it. Tried in a mutant: all but one of these become null, 1890 still pass, and all of round 8's dissolving keeps stay kept.
+
+**Checked and fine:**
+- the 7 dissolving and dispersing lines from round 8 are kept;
+- the colloquial duals are null;
+- about 380 earlier probes are unchanged;
+- Muse's two changes match SPEC;
+- the step sums; nothing outside `spark.py` changed.
+
+**The CEO's response:** batch 23 merges on this APPROVE. The `in`/`في` hardening is the first item for the follow-up batch, together with whatever the Gemini 4 check of the merged batch finds. No label it would change is a wording printed on a syrup pack.

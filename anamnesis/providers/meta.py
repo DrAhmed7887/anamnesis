@@ -277,7 +277,7 @@ class MetaSegmenter:
 
 class MetaLabelReader:
     def __init__(self, client: MetaClient, guard: SpendGuard, model: str = "muse-spark-1.3") -> None:
-        if model.endswith("-contributor"):
+        if "-contributor" in model.strip().casefold():
             raise ValueError("contributor models are not permitted")
         self.client = client
         self.guard = guard

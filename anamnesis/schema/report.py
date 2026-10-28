@@ -4,7 +4,7 @@ from decimal import Decimal
 from enum import StrEnum
 from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from anamnesis.schema.evidence import AudioTurn, ImageRegion
 from anamnesis.schema.findings import Finding
@@ -31,6 +31,18 @@ class AgentStep(BaseModel):
     target: str
     outcome: str
     call_ids: list[str] = Field(default_factory=list)
+    model_id: str | None = None
+    input_tokens: int = Field(default=0, ge=0)
+    output_tokens: int = Field(default=0, ge=0)
+    latency_ms: int = Field(default=0, ge=0)
+    cost_usd: Decimal = Field(default=Decimal(0), ge=0, allow_inf_nan=False)
+
+    @field_validator("model_id")
+    @classmethod
+    def reject_contributor(cls, value: str | None) -> str | None:
+        if value is not None and "-contributor" in value.strip().casefold():
+            raise ValueError("contributor models are not permitted")
+        return value
 
 
 class ReconciliationReport(BaseModel):
