@@ -36,3 +36,24 @@ The CEO reproduced every finding on the after copy.
 - **SPEC:** §2's rule on a new number is reworded to the supervisor's rule. The SPEC wording was the CEO's error.
 - **Reference build:** 1,002 passed (scratch `supervisor-21/ref-r2`).
 - **No contract case:** #5 is a refactor. The suite must stay green.
+
+## Round 2: CHANGES (1 blocker, 1 major, 2 minor, 2 follow-ups)
+
+The CEO reproduced #1 before the review, prompted by Muse's own note in round 2.
+
+1. **blocker** `stated.py` `_run_value` and `_since_thousand` treat «ألفين» (a plain worth 2000) as an ordinary plain. The round 2 rule, that a plain of 100 or more splits, then breaks every Arabic number from 2100 to 2999.
+   - Brute force over Arabic 1–2999 on round 2: **900 numbers not stated**. «ألفين وخمسمية وخمسين» states a **550** nobody said.
+   - The CEO's round 2 brief caused it.
+   - On base, the «ألفين ومية» family (100 numbers) became 200000.
+   - Fix: a plain worth 1000 or more closes the thousands part, in both functions. Result: 0 of 2999 missed.
+2. **major** "and a hundred" now moves the earlier number's final units word: "eight hundred seventy-five and a hundred twenty-five" states **870 and 525**. Round 1 gave 875 and 125. Fix: after the filler `a`, nothing moves.
+3. **minor** Round 1 fix #6 was wrong; the supervisor corrected its own advice. With `(?!\d)`, the decimal part can backtrack, so "1.5５ mg" states 1. Fix: an atomic group.
+4. **minor** No test covered «ألفين» or "and a hundred". That is why #1 and #2 passed all 1,004 tests.
+5. **follow-up** NFC is applied only in `_inn_and_salt`. `catalogue.normalise` still splits decomposed accents. It fails safe.
+6. **follow-up** A thousand word after a group of 100 or more multiplies it: "two hundred and one thousand" gives 201000. This happens on base and on every round.
+
+**Ran clean:** the round 2 contract; English 1–2999 with and without "and" (0 missed); lists of two numbers apart from #1, #2 and #6; items 4–6; scope.
+
+**CEO triage:**
+- #1–4 go into round 3. The contract gets "round 3" cases (10 fail on round 2; all 1,016 tests pass on the supervisor's fix copy) and SPEC §2 lines.
+- #5 and #6 are logged as follow-ups for after the freeze. Neither is a regression, and both fail safe or are out of scope.
