@@ -9,32 +9,47 @@ provider in a ledger also stops it. The ledgers are estimates; each provider's d
 
 import argparse
 import json
+import subprocess
 import sys
 from decimal import Decimal
 from pathlib import Path
 
-SPEND = Path(__file__).resolve().parents[1] / "evidence/spend"
+ROOT = Path(__file__).resolve().parents[1]
 # The credits as recorded in the plan and Notion (Credits & Subscriptions), 28 Oct 2026.
 CREDITS = {"meta": Decimal(150), "fireworks": Decimal(100), "baseten": Decimal(100),
            "google": Decimal("50.95"), "modal": Decimal(100)}
 
 
-def _lines(name: str) -> list[dict]:
-    path = SPEND / name
-    if not path.exists():
-        return []
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+def _worktrees() -> list[Path]:
+    listing = subprocess.run(["git", "-C", str(ROOT), "worktree", "list", "--porcelain"],
+                             capture_output=True, text=True).stdout
+    trees = [Path(line[len("worktree "):]) for line in listing.splitlines() if line.startswith("worktree ")]
+    return trees or [ROOT]
+
+
+def ledger_lines(name: str) -> list[dict]:
+    """Every line of one ledger across all worktrees of this repo, each once. A batch branch lags main's
+    adapter ledger and main lags the branch's Muse ledger, so no single copy is the whole spend (28 Oct)."""
+    seen: set[str] = set()
+    rows = []
+    for tree in _worktrees():
+        path = tree / "evidence/spend" / name
+        for line in path.read_text(encoding="utf-8").splitlines() if path.exists() else []:
+            if line.strip() and line not in seen:
+                seen.add(line)
+                rows.append(json.loads(line))
+    return rows
 
 
 def spent() -> dict[str, Decimal]:
     total = dict.fromkeys(CREDITS, Decimal(0))
-    for line in _lines("muse_ledger.jsonl"):
+    for line in ledger_lines("muse_ledger.jsonl"):
         total["meta"] += Decimal(str(line["cost_usd"]))
-    for line in _lines("ledger.jsonl"):  # open-weight calls carry their provider: muse-spark-open@fireworks
+    for line in ledger_lines("ledger.jsonl"):  # open weights carry their provider: muse-spark-open@fireworks
         provider = line.get("model_id", "").partition("@")[2] or "meta"
         total[provider] = total.get(provider, Decimal(0)) + Decimal(str(line["cost_usd"]))
     for provider in ("google", "modal"):
-        for line in _lines(f"{provider}_ledger.jsonl"):
+        for line in ledger_lines(f"{provider}_ledger.jsonl"):
             total[provider] += Decimal(str(line["cost_usd"]))
     return total
 
