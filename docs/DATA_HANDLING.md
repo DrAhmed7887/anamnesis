@@ -29,6 +29,7 @@ If something slips in, the file is retaken, never edited afterwards.
   - the prepared photo and the crops cut from it, to SAM 3.1 and Muse Spark 1.3;
   - the WAV, to Muse Voice Transcribe.
 - **Standard models only**, never a `*-contributor` id. Meta's pricing page says contributor mode lets Meta train on prompts, files and responses. Our notes (`docs/muse/`) don't record what Meta keeps in standard mode, so anything sent counts as having left our control.
+- **Public test photos only, for the open-weight comparison (batch 22):** the Wikimedia Commons and Cairo University CC BY photos may also go to Fireworks or Baseten, to be read by Meta's open-weight Muse Spark Open. **Ahmed's own photos and voice never go there.**
 - **The reviewers never see the media.** The batch supervisor (Claude) and the quality manager (Gemini) get code and text evidence only.
 
 ## What is committed or published

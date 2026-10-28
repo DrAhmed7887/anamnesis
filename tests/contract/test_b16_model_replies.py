@@ -59,9 +59,11 @@ def label_reply(**fields):
 
 # --- numbers: decimal commas parse; anything else that isn't one positive number becomes null --------------------
 
+# Batch 22: one number word as the whole amount now parses ("two" is 2), and it must still be stated; the turn here
+# says "two". Live, Spark wrote "five" for "five milligrams" and the dose was dropped (batch 21 live-after, U5).
 @pytest.mark.parametrize("text,expected", [
     ("2.5", Decimal("2.5")), ("2,5", Decimal("2.5")), ("0,25", Decimal("0.25")), ("850", Decimal("850")),
-    ("1,000", None), ("1-2", None), ("two", None), ("0", None), ("-5", None), ("", None),
+    ("1,000", None), ("1-2", None), ("two", Decimal("2")), ("0", None), ("-5", None), ("", None),
 ])
 def test_an_intake_amount_parses_or_becomes_null(text, expected):
     [found] = parse_claims_json(claims_reply(claim(intake_amount=amount(text))), saying(text))
