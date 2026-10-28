@@ -63,7 +63,7 @@
   - The loop now drops such a strength (batch 23, part 4).
 - **Janumet, `pk092_b`, Fireworks:** it put "not_printed_in_visible_crop" in the INN field of a readable reading. By the pre-registered rule that is an INN shown as fact. In the loop it would fail to resolve, so it fails safe there.
 
-**The errors:** Baseten stopped at the 4,000-token limit on two crops. That gave no reading, was charged, and failed safe.
+**The errors:** Baseten stopped at the 4,000-token limit on two crops. That gave no reading, was charged, and failed safe. Diagnostic 4 below read both crops again.
 
 ## A scorer fix after the run
 The scorer splits the `inn` field into a set at "+", "/", "&", "and" and "with". Readers also wrote combinations with a comma ("sitagliptin, metformin"), so the comma was added after the run. It changed four verdicts, all from harmful:
@@ -92,13 +92,16 @@ The one other comma entry, Fireworks' "not printed, Janumet brand name only", wa
    - 1 harmful: the CETAL syrup again, `pk035_b`, read as 250 mg per ml.
 
    With "package" as a third concept, Spark 1.3 would have read **22 of the 30** Cairo phone photos correctly, not 7. Batch 23 makes it the loop's third concept, tried only when the first two find nothing.
+4. **Baseten's two length stops, read again** the same evening (`evidence/batches/22/diagnostics.py baseten-cap`), with max_tokens 8,000 instead of 4,000 and nothing else changed. Both came back correct: `augmentin_1g_gsk_box` as amoxicillin 875 mg + clavulanic acid 125 mg, and `bloxazoc_50mg_krka_box` as metoprolol 50 mg. It cost $0.038, at 16.4 and 17.4 s a read (`reader_eval_baseten_cap8k.jsonl`).
+   - **The higher cap didn't fix them.** Both replies ended under the old cap, at 2,556 and 3,675 tokens, so this was a second draw.
+   - **The table keeps both as errors.** Only Baseten got a second draw, and only on these two crops. The reader keeps its 4,000-token cap.
 
 ## Cost
 - **The pass:** $0.85.
   - Meta $0.40: SAM $0.22 and Spark 1.3 $0.19.
   - Fireworks $0.20.
   - Baseten $0.25.
-- **Pilots and diagnostics:** another $0.36, $0.28 of it on Meta (SAM and Spark 1.3). The rest was Fireworks and Baseten.
+- **Pilots and diagnostics:** another $0.40, $0.28 of it on Meta (SAM and Spark 1.3). The rest was Fireworks and Baseten, including diagnostic 4's $0.04 on Baseten.
 - **The Meta total** stays far under the 50% pause line (`scripts/spend_check.py`). The Fireworks and Baseten lines are billed by those providers, not Meta.
 
 ## Limits
