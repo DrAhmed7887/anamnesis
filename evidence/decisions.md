@@ -157,3 +157,13 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
 - **What:** `scripts/intake_live.py --reader baseten` makes Muse Spark Open on Baseten the label reader of the full intake. Voice Transcribe, the claim extraction (Spark 1.3) and SAM 3.1 stay on Meta. It runs on U1–U8, with a Spark 1.3 control on the same code, as planned in `evidence/batches/22/intake-openweight.md`.
 - **Why:** the open-weight bonus (above). The comparison read crops outside the loop; this run puts the open-weight model inside it.
 - **Data:** U1–U8 are Wikimedia Commons photos with synthetic `say` notes. U9 and U10 (DailyMed) are left out, because `docs/DATA_HANDLING.md` lets only Commons and Cairo CC BY photos go to Baseten. That line now names this run too. The script refuses any other photo before the first call, and it was tested on Ahmed's media folder, the DailyMed photos and a path that climbs out of the folder. None of the tests made a call.
+
+## 2026-10-28: no recording for now; four engine tracks instead (Ahmed's call)
+- **What:** Ahmed doesn't want to record voice notes or photos for now. The engine runs four tracks in their place:
+  1. the clinician's pause, live, on public photos (Cairo pack pk025: one photo read as partial, the other read fully);
+  2. a staged disagreement on public photos as the film's hero case, run 10 times;
+  3. RxNorm grounding of the catalogue;
+  4. a LoRA fine-tune of Meta's open-weight Muse Glimmer 30B on Fireworks, as `finetune-eval-plan.md` laid out and as the Fireworks credit request said.
+- **Who:** the engine owns all four, with the same gate, ledgers and pre-registration. Antigravity, which proposed the fine-tune and partner work, may review results but doesn't write to the repo.
+- **What it replaces:** the 27 Oct note that no fine-tune fits before the freeze (above). Batch 24's low items (`evidence/grills/m7-pre-freeze/effect.md`) are cut first if time runs short.
+- **Limits that stay:** synthetic voice notes are used only for runs, never in the film (the macOS licence). The fine-tune trains and tests on generated text, so it measures the task on generated speech, not real speech. Ahmed's own photos and voice still go only to Meta.
