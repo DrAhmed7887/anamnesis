@@ -13,7 +13,7 @@ Numbers in brackets, such as [4.13], are rows of [`docs/CLAIMS.md`](docs/CLAIMS.
 ## Why
 In a Lancet feasibility study, primary care doctors who read an AI pre-visit chat said it helped them prepare in 33 of 44 cases. But a chat can't see the pack. [6.2]
 
-<sub>Brodeur PG et al. Conversational diagnostic artificial intelligence in ambulatory primary care: a prospective feasibility study. *Lancet* 2026;408(10565):1732–44.</sub>
+<sub>Brodeur PG et al. Conversational diagnostic artificial intelligence in ambulatory primary care: a prospective feasibility study. *Lancet* 2026;408(10565):1732–44. [doi:10.1016/S0140-6736(26)01535-7](https://doi.org/10.1016/S0140-6736%2826%2901535-7)</sub>
 
 ## How it works
 ```mermaid
@@ -58,6 +58,8 @@ flowchart LR
 - The pause is built and tested offline. [2.1] There is no clinician app yet: the request is one function call, and in the demo the developer plays the clinician. [2.6]
 
 ## Results, as measured
+Every run below predates batch 23. The synthetic notes ran on the code of 27 Oct, of batch 20 and of batch 21, the public photos on batch 20's and batch 21's, and the comparison on batch 22's. Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on any of them. [4.1, 4.11, 4.13, 4.14, 1.19]
+
 These are staged tests, not a validation. The expected results come first, and every run is reported as it came out, failures included. [4.15] No patient data: the pack photos are real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3]
 
 ### Ten public pack photos, before and after batch 21
@@ -76,13 +78,24 @@ The expected results were committed before the first run (8b993ff). [4.4] On the
 | U9 Panadol Extra carton | `ingredient_mismatch` | no pack found | the same: SAM finds no pack in flat label artwork (fails safe) |
 | U10 Panadol Extra Strength 500 | `match` | no pack found | the same (fails safe) |
 
-- **U5 is still a miss.** The patient's Norvasc is paired with the 10 mg box instead of the 5 mg one, and the brief says it can't confirm agreement. After batch 21 it is a tie between the two boxes, because both amounts were dropped. [4.11]
-- **U7 is a miss in both runs:** its expected result was itself written wrong, and it is kept as written. [4.11]
+- **U5 is still a miss.** The patient's Norvasc is paired with the 10 mg box instead of the 5 mg one, and the brief says it can't confirm agreement. [4.11] Before batch 21, the claim tied with both boxes and the tie went by id. Batch 21 lets the patient's stated dose break such a tie, but in its run the claim and the 5 mg box both came back without amounts, so the two boxes tied again. Spark still sometimes writes an amount as a word, and on batch 21's code that word was dropped. [4.11, 1.13]
+- **U7 is a miss in both runs.** Its expected result was written wrong: it assumed the patient stated a strength, but Spark read "Lipitor twenty milligrams" as an intake. The expected result is kept as written. [4.11]
 - These two runs are the scope of the "no false match" line. In the comparison below, Spark 1.3 showed a wrong strength as fact on 2 of 20 crops. [4.11]
 - Every case, cause and cost: [`evidence/batches/21/live-after.md`](evidence/batches/21/live-after.md).
 
 ### Two synthetic voice notes
-On two synthetic notes, one English and one Egyptian Arabic, 3 of 6 findings came out as expected before batch 21, and 6 of 6 after it. [4.12] Before batch 21, each dose spoken in words was dropped: Spark copied the word ("five") into the amount, and every such case failed safe to `insufficient_information`. Batch 21 asks for digits. [1.13]
+On two synthetic notes, one English and one Egyptian Arabic, 3 of 6 findings came out as expected before batch 21, and 6 of 6 after it. [4.12] On 27 Oct, with that day's code, all three findings came out right on both notes. [4.1]
+
+| Note | Expected | 27 Oct | 28 Oct, before batch 21 | After batch 21 |
+|---|---|---|---|---|
+| English: Concor "five milligrams once a day" | `match` | ✓ | `insufficient_information` | ✓ |
+| English: metoprolol 50 mg twice a day vs Beloc-Zok 100 mg | `intake_differs_from_unit_strength` | ✓ | ✓ | ✓ |
+| English: Panadol, stopped | stopped | ✓ | ✓ | ✓ |
+| Arabic: كونكور خمسة ملي جرام (Concor, five milligrams) | `match` | ✓ | `insufficient_information` | ✓ |
+| Arabic: بيلوك زوك خمسين ملي جرام (Beloc-Zok, fifty milligrams) vs Beloc-Zok 100 mg | `intake_differs_from_unit_strength` | ✓ | `insufficient_information` | ✓ |
+| Arabic: البنادول (Panadol), stopped | stopped | ✓ | ✓ | ✓ |
+
+The three misses on 28 Oct came from the batch 20 prompt. Spark copied each dose spoken in words ("five") into the amount, the stated-amount rule dropped it, and every such case failed safe to `insufficient_information`. Batch 21 asks for digits. [1.13, 4.1]
 
 ### Cost and time
 About 3 cents per intake (12 live intakes, 28 Oct). [4.2] One intake took 17 to 49 seconds (12 live intakes, 28 Oct). [4.9]
@@ -141,7 +154,7 @@ uv run pytest
 - Only one class is curated, beta-blockers, and interactions aren't checked. [1.10]
 - SAM 3.1 doesn't always find the pack: in the comparison it found one in 20 of 39 public photos. [1.2, 4.13]
 - The volume rule gives up some coverage on purpose, prefilled syringes and pens read per dose the main one. It doesn't read every syrup wording. [1.19]
-- Every miss on the ten public photos and the two synthetic notes is in the tables above. [4.11, 4.12]
+- Every miss on the ten public photos and the two synthetic notes is in their two tables above. [4.11, 4.12]
 
 ## Data and privacy
 - No patient data. The pack photos are real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3] The rules for real media are in [`docs/DATA_HANDLING.md`](docs/DATA_HANDLING.md).
@@ -163,5 +176,5 @@ By Ahmed Zayed, physician (MBBCh). [6.1]
 
 <!-- Draft from docs/CLAIMS.md (judge/claims-video, 28 Oct). To add once each row lands, never before:
 the hero's N of 10 (4.5) and its disagreement (4.10); Ahmed's real cases (4.6) and his voice (4.7, and 3.3's second
-wording); the pause, live (2.5); countries (1.18); the Cairo set's full citation (§8); a hosted sample brief, once it
+wording); the pause, live (2.5); one medicine under another brand name in another country (1.18); the Cairo set's full citation (§8); a hosted sample brief, once it
 has a row (§7). An open-weight track only once decisions.md records Ahmed's call (6.4). -->
