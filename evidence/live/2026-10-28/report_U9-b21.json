@@ -1,0 +1,101 @@
+{
+  "intake_id": "4ce8d5c9ab1ab0b2d7eba9c41a19782e474901e3c4ac9a3a2fdf49ee334ae14d",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 2220,
+      "transcript": "I take Panadol 500 milligrams",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Panadol",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "panadol",
+        "salt": null,
+        "amount": "500",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": null,
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [],
+  "observations": [],
+  "findings": [
+    {
+      "finding_id": "c1:-",
+      "type": "missing_modality",
+      "claim_id": "c1",
+      "observation_id": null,
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [],
+      "needs_clinician_review": true,
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "ffb63b6e-9e10-4b07-b8d3-5b19abcf2e56"
+      ]
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "chatcmpl-01a18203-1024-7735-9f0f-899251fb758a"
+      ]
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "db13ab0032b3:medicine box",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae1cb8a1ddf92ec277946f9"
+      ]
+    },
+    {
+      "n": 3,
+      "action": "segment",
+      "target": "db13ab0032b3:label",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae1cb8b4cfec872df93493f"
+      ]
+    },
+    {
+      "n": 4,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "1 findings",
+      "call_ids": []
+    }
+  ],
+  "calls": 4,
+  "spend_usd": "0.01646175",
+  "superseded": []
+}

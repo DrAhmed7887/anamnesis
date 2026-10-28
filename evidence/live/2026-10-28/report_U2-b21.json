@@ -1,0 +1,149 @@
+{
+  "intake_id": "8b2a731e9d49fcd3905e2959952e6013fc11508872e8060ea00a84cab1a785e3",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 5580,
+      "transcript": "I take Augmentin, 875 and 125 milligrams twice a day",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Augmentin",
+      "inn": null,
+      "strength": null,
+      "intake_amount": null,
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "2",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "46b401ed11e9-0",
+      "image_sha256": "46b401ed11e9182a2bee9587b2153f346644638ce95ac7c0ecd0e539daf69043",
+      "object_id": 0,
+      "x1": 94,
+      "y1": 5,
+      "x2": 1686,
+      "y2": 1487,
+      "frame_w": 1920,
+      "frame_h": 2560,
+      "confidence": 0.8048780560493469
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "Augmentin® 875 mg/125 mg\ncomprimés pelliculés\nAmoxicilline/acide clavulanique\n20 comprimés pelliculés",
+      "inn": null,
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "amoxicillin",
+            "salt": null,
+            "amount": "875",
+            "unit": "mg"
+          },
+          {
+            "inn": "clavulanic acid",
+            "salt": null,
+            "amount": "125",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "readable",
+      "country": null,
+      "visual_evidence": [
+        "46b401ed11e9-0"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "c1:o0",
+      "type": "insufficient_information",
+      "claim_id": "c1",
+      "observation_id": "o0",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "46b401ed11e9-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "The available evidence cannot confirm agreement.",
+      "patient_question_id": "information"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "cd65a000-772b-4695-8cb4-e2d18aff57ff"
+      ]
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "chatcmpl-01a181ff-562e-7106-844b-40792ac4afba"
+      ]
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "46b401ed11e9:medicine box",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae1ca97427dfd80798d42f7"
+      ]
+    },
+    {
+      "n": 3,
+      "action": "read",
+      "target": "46b401ed11e9-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a181ff-8a64-7552-a438-bb1c3823605e"
+      ]
+    },
+    {
+      "n": 4,
+      "action": "zoom_read",
+      "target": "46b401ed11e9-0",
+      "outcome": "readable",
+      "call_ids": [
+        "chatcmpl-01a181ff-b52f-753b-b6db-8230930c6da3"
+      ]
+    },
+    {
+      "n": 5,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "1 findings",
+      "call_ids": []
+    }
+  ],
+  "calls": 5,
+  "spend_usd": "0.03745625",
+  "superseded": []
+}

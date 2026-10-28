@@ -1,0 +1,157 @@
+{
+  "intake_id": "2c3b47eca66fc6711d60339527d05bcc1b192e63d344137bc060f26719655a1d",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 2780,
+      "transcript": "I take BelocZok 100 milligrams once a day",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "BelocZok",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "beloczok",
+        "salt": null,
+        "amount": "100",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "1",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "671a2544ef7d-0",
+      "image_sha256": "671a2544ef7dbadfa13ab3291c4a6978e16057c744f34bf863b61da68e6ca01c",
+      "object_id": 0,
+      "x1": 130,
+      "y1": 333,
+      "x2": 381,
+      "y2": 541,
+      "frame_w": 673,
+      "frame_h": 898,
+      "confidence": 0.8947368264198303
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "Betaloc® ZOK 100\ntablety s prodlouženým uvolňováním\nmetoprololi succinas\nperorální podání.\nUchovávejte při teplotě do 30°C.\n30 potahovaných tablet",
+      "inn": "metoprolol",
+      "strength": null,
+      "readability": "partial",
+      "country": null,
+      "visual_evidence": [
+        "671a2544ef7d-0"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "-:o0",
+      "type": "unreadable_source",
+      "claim_id": null,
+      "observation_id": "o0",
+      "audio_evidence": [],
+      "visual_evidence": [
+        "671a2544ef7d-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "The pack label is not fully readable.",
+      "patient_question_id": "unreadable"
+    },
+    {
+      "finding_id": "c1:-",
+      "type": "missing_modality",
+      "claim_id": "c1",
+      "observation_id": null,
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [],
+      "needs_clinician_review": true,
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "80e3b5f2-8923-41bd-9bd2-5520c21b3c39"
+      ]
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "chatcmpl-01a18202-906f-7058-988d-872f0c7226bf"
+      ]
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "671a2544ef7d:medicine box",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae1cb6900baab0659054190"
+      ]
+    },
+    {
+      "n": 3,
+      "action": "segment",
+      "target": "671a2544ef7d:label",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae1cb6a6a2606addcd1459a"
+      ]
+    },
+    {
+      "n": 4,
+      "action": "read",
+      "target": "671a2544ef7d-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a18202-b98a-724c-b4bf-acb090515136"
+      ]
+    },
+    {
+      "n": 5,
+      "action": "zoom_read",
+      "target": "671a2544ef7d-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a18202-d64a-70fb-8462-2c947ef17cc3"
+      ]
+    },
+    {
+      "n": 6,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "2 findings",
+      "call_ids": []
+    }
+  ],
+  "calls": 6,
+  "spend_usd": "0.03200350",
+  "superseded": []
+}

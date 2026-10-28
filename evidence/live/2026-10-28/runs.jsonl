@@ -10,3 +10,15 @@
 {"run": "U8", "at": "2026-10-28T08:05:13+00:00", "calls": 6, "spend_usd": "0.03674025", "wall_s": 28.2, "claim_request_ms": [13783], "findings": [["unreadable_source", null, "o0"], ["missing_modality", "c1", null]]}
 {"run": "U9", "at": "2026-10-28T08:05:31+00:00", "calls": 4, "spend_usd": "0.01899525", "wall_s": 17.1, "claim_request_ms": [12546], "findings": [["missing_modality", "c1", null]]}
 {"run": "U10", "at": "2026-10-28T08:05:46+00:00", "calls": 4, "spend_usd": "0.01585450", "wall_s": 14.4, "claim_request_ms": [9946], "findings": [["missing_modality", "c1", null]]}
+{"run": "en-b21", "at": "2026-10-28T10:11:30+00:00", "calls": 6, "spend_usd": "0.03453500", "wall_s": 31.2, "claim_request_ms": [16174], "findings": [["match", "c1", "o1"], ["intake_differs_from_unit_strength", "c2", "o0"], ["missing_modality", "c3", null]]}
+{"run": "ar-b21", "at": "2026-10-28T10:12:01+00:00", "calls": 6, "spend_usd": "0.03051475", "wall_s": 30.3, "claim_request_ms": [13136], "findings": [["match", "c1", "o1"], ["intake_differs_from_unit_strength", "c2", "o0"], ["missing_modality", "c3", null]]}
+{"run": "U1-b21", "at": "2026-10-28T10:12:23+00:00", "calls": 4, "spend_usd": "0.02010475", "wall_s": 20.6, "claim_request_ms": [9657], "findings": [["match", "c1", "o0"]]}
+{"run": "U2-b21", "at": "2026-10-28T10:13:02+00:00", "calls": 5, "spend_usd": "0.03745625", "wall_s": 38.2, "claim_request_ms": [11073], "findings": [["insufficient_information", "c1", "o0"]]}
+{"run": "U3-b21", "at": "2026-10-28T10:13:25+00:00", "calls": 4, "spend_usd": "0.02136900", "wall_s": 23.4, "claim_request_ms": [10354], "findings": [["match", "c1", "o0"]]}
+{"run": "U4-b21", "at": "2026-10-28T10:14:08+00:00", "calls": 5, "spend_usd": "0.03867825", "wall_s": 42.1, "claim_request_ms": [18870], "findings": [["intake_differs_from_unit_strength", "c1", "o0"]]}
+{"run": "U5-b21", "at": "2026-10-28T10:14:34+00:00", "calls": 5, "spend_usd": "0.02913225", "wall_s": 24.8, "claim_request_ms": [8281], "findings": [["missing_modality", null, "o1"], ["insufficient_information", "c1", "o0"]]}
+{"run": "U6-b21", "at": "2026-10-28T10:15:04+00:00", "calls": 5, "spend_usd": "0.02770725", "wall_s": 29.7, "claim_request_ms": [12435], "findings": [["unresolved_name", null, "o0"], ["missing_modality", "c1", null]]}
+{"run": "U7-b21", "at": "2026-10-28T10:15:54+00:00", "calls": 6, "spend_usd": "0.05158700", "wall_s": 48.7, "claim_request_ms": [15666], "findings": [["unreadable_source", null, "o0"], ["unreadable_source", null, "o1"], ["missing_modality", "c1", null]]}
+{"run": "U8-b21", "at": "2026-10-28T10:16:26+00:00", "calls": 6, "spend_usd": "0.03200350", "wall_s": 31.6, "claim_request_ms": [11506], "findings": [["unreadable_source", null, "o0"], ["missing_modality", "c1", null]]}
+{"run": "U9-b21", "at": "2026-10-28T10:16:43+00:00", "calls": 4, "spend_usd": "0.01646175", "wall_s": 17.0, "claim_request_ms": [12327], "findings": [["missing_modality", "c1", null]]}
+{"run": "U10-b21", "at": "2026-10-28T10:17:15+00:00", "calls": 4, "spend_usd": "0.02871025", "wall_s": 31.0, "claim_request_ms": [26444], "findings": [["missing_modality", "c1", null]]}
