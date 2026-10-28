@@ -23,3 +23,9 @@
   - the `ملجم` guard removed: 1;
   - `add_photo` back to two concepts: 2;
   - `٫` not translated: 9.
+
+## Round 3 (28 Oct): the supervisor's round 2 #2–#3 and the Gemini check's round 2 #4–#6, pinned in `tests/contract/test_b23_round3.py`
+- **On Muse's round 2:** 41 of the 53 new tests fail: 33 syrup wordings, all 7 packs that aren't syrups, and the timeline's `colspan`. The 12 that pass are wordings round 2 already drops.
+- **The CEO's own fixes (scripts, not the build):** `intake_live.py` uses the loop's budget formula for `run_intake` and for its `SessionGuard` (f5a9326, ccebce0; supervisor round 2 #1). SPEC §4 Budget now says every caller that spends wraps the providers in a `SessionGuard` (#4).
+- **Reference build** (round 2 plus the round 3 volume forms and the `colspan`): all 153 batch 23 contract tests pass, and the full suite gives **1322 passed**. Muse's round 2 unit case "Every 5 cc has ibuprofen 100 mg" led the CEO to add `has` to the contains words, which only drops more.
+- **Mutants,** each alone, all caught: the water skip removed (3 failures); the container check removed (1); the contains-word requirement removed (4); `cada`/`chaque` removed (6); the `colspan` removed (1).

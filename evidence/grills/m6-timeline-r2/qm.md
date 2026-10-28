@@ -1,0 +1,18 @@
+VERDICT: HOLD
+
+| # | severity (blocker/major/minor) | area (1–8) | evidence (file or section) | required action |
+|---|---|---|---|---|
+| 1 | blocker | 6 | `SPEC.md` §4 & `evidence/batches/22/` | Commit and include `evidence/batches/22/comparison.md` in the package; SPEC §4 cites it for the 30-photo SAM/Spark 1.3/Spark Open results (19/30 `package` concept, 15/19 read right), and M5 QM #1 / M6 QM #2 required the comparison results to be in the package. |
+| 2 | blocker | 3, 6 | `evidence/batches/23/` & `evidence/batch_log.jsonl` | Complete batch 23 round 2 supervisor review (`supervisor.md` only has Round 1 `CHANGES`), write `evidence/batches/23/review.md`, merge batch 23, and log it in `batch_log.jsonl`. |
+| 3 | major | 5 | `evidence/spend/ledger.jsonl` & `SPEC.md` §4 | Verify whether the batch 22 comparison run (`reader_eval.py`) has executed; if it has (as `SPEC.md` §4 implies), explain why zero `muse-spark-open@...` or 39-photo SAM/Spark 1.3 calls appear in `ledger.jsonl`, or include the separate evaluation ledger so every live call is audited. |
+| 4 | minor | 2 | `anamnesis/providers/spark.py` (`_PER_VOLUME_RE`) | Pin or fix volume expressions with parentheses when no spoon word is present (e.g., `250 mg / (5 ml)` or `250 mg per (5 ml)`), which currently bypass `_per_other_volume` and retain a 5x strength error, as noted by the builder in `evidence/batches/23/builder.md`. |
+| 5 | minor | 2 | `anamnesis/providers/spark.py` (`_PER_VOLUME_RE`, `_PER_VOLUME_FIRST_RE`) | Add contract/unit coverage or regex support for decimal commas in the volume denominator (e.g., `250 mg / 2,5 ml`, `Each 2,5 ml`) and metric liter symbols (`mL`, `ملي`). |
+| 6 | minor | 4 | `anamnesis/brief_html.py` (`_timeline_html`) & `SPEC.md` §7 | Add `colspan="9"` to the `<tfoot><tr><td>` cell in `_timeline_html` so the single summary cell spans the 9-column table cleanly. |
+| 7 | minor | 4, 6 | `README.md` vs `SPEC.md` & `evidence/decisions.md` | Merge the judge-facing session's `README.md` updates to resolve contradictions with `SPEC.md` ("all code is written by Muse Code", "All data is synthetic so far", and "open-weight comparison... was cut"). |
+| 8 | minor | 5 | `anamnesis/providers/spend.py` & `CLAUDE.md` | All 5 safety invariants hold in code (`templates.py` allowlist, `-contributor` casefolded substring checks across readers/extractor/traces/steps, no secrets in git, public/synthetic media per `DATA_HANDLING.md`, `SpendGuard`), subject to Finding #3 and removing the M1 Muse export skill catalog before going public. |
+| 9 | minor | 8 | `evidence/grills/m5-openweight/effect.md` #10 & `plan-2026-10-28/effect.md` | Complete the remaining judge- and clinician-facing deliverables before submission: `LICENSE` file, hosted static brief, 10x hero real-media live runs (with Ahmed's voice), claims checklist, and demo video. |
+
+**Deadline risks (Thu 5 Nov 03:00 CET):**
+1. **Unrecorded human voice and hero 10x live runs:** `SPEC.md` notes human speech has not yet been tested live; recording Ahmed's voice notes and running the 10x hero case may expose new ASR/grounding edge cases after the feature freeze.
+2. **Video production and judge-facing artifacts:** The 3-minute demo video, hosted static HTML brief, claims verification table, and `LICENSE` are not yet in the repository and must be finalized before the Wed 4 Nov target.
+3. **Public repository history filtering:** Rewriting git history on Tue 3 Nov to strip the committed M1 Muse export (personal skill catalog) and map commit emails will invalidate all commit SHAs cited across `evidence/` unless automated SHA-remapping runs cleanly.

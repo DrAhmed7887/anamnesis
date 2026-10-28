@@ -44,3 +44,37 @@ SUPERVISOR: CHANGES
 - **`package`:** it runs only when the first two concepts return nothing or fail, so it can't add a second set of regions to a photo.
 - **Claims:** the volume rule never touches one. `parse_label_json` is called only by the readers and the fixtures.
 - **Not reviewed:** `tests/contract/test_b23_round2.py` (an untracked CEO draft) and commits `155dcc6` and `7261a49` (scripts only) appeared while I worked. `anamnesis/` and `tests/unit/` still matched the after copy.
+
+## Round 2 (28 Oct)
+
+SUPERVISOR: CHANGES
+
+Muse's round 2 code does what the round 2 brief and the SPEC ask, and the round 1 inputs now come out right. Two changes are still needed before the merge, both on the CEO's side. The 1269 count reproduces in the after-r2 copy.
+
+1. **major: `scripts/intake_live.py:41, :83, :92`. Round 1 #3 is fixed only for the default budget.** The live intake passes `MAX_CALLS = 12` as `max_provider_calls`, and again as `SessionGuard(max_calls=12)`.
+   - **Ran:** the four-photo case with `max_provider_calls=12`. It stops at `budget_exhausted` on photo 3's segment step, and Concor becomes `missing_modality`.
+   - **With the default:** 16 calls, and Concor is `match`. With `partial` readings: 19 calls, still `match`.
+   - **Fix:** pass the default, and give `SessionGuard` the same formula or a high call cap. `scripts/zoom_live.py` (10 calls, one photo, no audio, needs 9) is fine.
+2. **major (a SPEC §2 gap): the volume-first form allows no spoon word or bracket, and no Spanish or French.** All of these kept 250 per ml:
+   - "Each teaspoonful (5 ml) contains 250 mg"; "كل ملعقة (٥ مل) تحتوي على ٢٥٠ مجم"; "Each spoonful of 5 ml contains 250 mg";
+   - Spanish, which matters most here because the patients are in Spain: "Cada 5 ml contiene 250 mg de amoxicilina" and "Amoxicilina 250 mg por 5 ml";
+   - French: "Chaque 5 ml contient 250 mg" and "250 mg par 5 ml";
+   - "250 mg per 5-mL teaspoon" and "250 mg in 5 millilitres".
+
+   Muse's bracket gap ("250 mg per (5 ml)", "250 mg/(5 ml)") is rare alone, but the same gap in the volume-first form is common.
+   - **Fix:** an optional `(` after the connector, and an optional spoon word with an optional `of` and `(`, in both forms; `cada` and `chaque`, `por` and `par`; and `-` and `millilit(re|er)s?`.
+3. **minor (SPEC §2): the new forms drop correct strengths on packs that aren't syrups.** These all fail closed, but cost coverage:
+   - dissolving lines through `in`/`في`: "Aspirin 300 mg. Dissolve 300 mg in 100 ml of water"; "فيتامين سي ١٠٠٠ مجم في ٢٠٠ مل ماء"; "Movicol sachet 13.8 g in 125 ml of water";
+   - pack-size lines through volume-first `each`/`every`: "Paracetamol 50 mg/ml, each 5 ml bottle"; "Insulin glargine 100 units/ml, each 3 ml pen contains 300 units"; "Insulin 100 IU/ml. Each 3 ml cartridge";
+   - and "Every 5 mL use the measuring cup; Concor 5 mg tablets" drops a tablet's 5 mg.
+
+   The SPEC's own "Kept" examples still pass.
+   - **Fix:** skip `in`/`في` when water follows within a few words. For volume-first, skip a container word, or require a contains word.
+4. **minor (SPEC §4 Budget): the default budget grows with the number of photos, with no limit.**
+   - **Ran:** 10 package-only photos with partial readings.
+     - At the fixed 12: 12 calls, $0.030.
+     - At the new default: 52 calls, $0.157.
+     - Under `SessionGuard(max_usd=0.05)`: it stops after 20 calls with `SessionCapExceeded`, at $0.0485, and the steps still add up.
+   - **Fix:** cap the photos, or make the SPEC say every live caller wraps the providers in a `SessionGuard`.
+
+**Rerun on after-r2:** round 1 #1 (the Arabic decimal sign), #2 (all its forms), #4 (`add_photo`'s three concepts), #5 (the `ملجم` tablet, kept) and #6 (the step sum after `add_photo`) are all fixed. #3 is fixed with the default budget, but not live (see #1). The 10 session paths still add up. The page is still 8 sections, one collapsed `<details>` and no dangling `#` link. Every input kept in round 1 is still kept. The regexes follow the round 2 brief item by item. Muse made the bracket after a spoon word optional, which is the safe side. `add_photo`'s default budget, `len(concepts) + 2*top_k`, covers every call one photo can make.
