@@ -162,3 +162,50 @@ def test_an_intake_amount_pairs_with_the_pack_of_that_strength(order):
     by_pair = {(f.claim_id, f.observation_id): f.type for f in findings}
     assert by_pair[("c1", "o1")] is D.MATCH
     assert by_pair[(None, "o0")] is D.MISSING_MODALITY
+
+
+# --- round 2 (supervisor 21) -------------------------------------------------------------------------------
+# #1, #2: the new hundreds group takes as its multiplier only a final plain worth 1-9 just before it; none when the
+# hundred word carries its own و. #3: a one-word Arabic hundred (ميتين, تلتمية ... تسعمية) after a hundreds part
+# also starts a new number. None of these may state a value the patient never said.
+
+@pytest.mark.parametrize("text,values,absent", [
+    ("eight hundred seventy-five one hundred twenty-five milligrams", {"875", "125"}, "876"),
+    ("five hundred one hundred twenty-five", {"500", "125"}, "501"),
+    ("three hundred three hundred", {"300"}, "303"),
+    ("خمسمية وتلات مية", {"500", "300"}, "503"),
+    ("ميتين وخمسين وخمسة مية", {"250", "500"}, "255"),
+    ("خمسمية وميتين", {"500", "200"}, "700"),
+    ("خمسمية وتلتمية", {"500", "300"}, "800"),
+    ("تمنمية خمسة وسبعين وتلتمية خمسة وعشرين", {"875", "325"}, "1200"),
+])
+def test_round_2_a_second_hundreds_group_states_nothing_unsaid(text, values, absent):
+    found = stated_amounts(text)
+    assert {Decimal(v) for v in values} <= found
+    assert Decimal(absent) not in found
+
+
+@pytest.mark.parametrize("text,value", [
+    ("ألف وميتين", "1200"), ("ألف وخمسمية", "1500"), ("one hundred one", "101"), ("twelve hundred", "1200"),
+])
+def test_round_2_one_number_with_a_thousand_or_units_stays_one(text, value):
+    assert Decimal(value) in stated_amounts(text)
+
+
+# #6: a digit run next to a digit of another set states nothing.
+@pytest.mark.parametrize("text", ["١5 mg".replace("١", "１"), "5５ mg", "५5 mg"])
+def test_round_2_a_run_touching_a_foreign_digit_states_nothing(text):
+    assert Decimal("5") not in stated_amounts(text)
+
+
+# #7: accented alias keys match decomposed input too.
+def test_round_2_decomposed_accents_still_resolve():
+    import unicodedata
+    assert canonical_inn(unicodedata.normalize("NFD", "ácido clavulánico")) == "clavulanic acid"
+    assert canonical_inn(unicodedata.normalize("NFD", "Paracétamol")) == "paracetamol"
+
+
+# #4: the advice sentences of both prompts are pinned.
+def test_round_2_both_prompts_keep_their_advice_sentences():
+    assert "Give no advice. Use unreadable or partial rather than guessing." in LABEL_PROMPT
+    assert "Give no medical advice. Only report what the patient said." in CLAIM_PROMPT
