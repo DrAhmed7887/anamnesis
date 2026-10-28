@@ -23,7 +23,7 @@ flowchart LR
     photo["Pack photos"] --> clean["Turned upright,<br/>metadata stripped"]
     clean --> sam["SAM 3.1:<br/>marks each pack it finds"]
     sam --> rd["Muse Spark 1.3:<br/>reads each crop"]
-    cx --> st["A number is kept only if it is<br/>in the turns or the label text"]
+    cx --> st["A number is kept only if it is in<br/>the patient's turns or the reader's label text"]
     rd --> st
     st --> cmp["Plain code compares<br/>the two sides"]
     cmp --> brief["One-page brief:<br/>each finding linked to its turn and crop"]
@@ -55,10 +55,10 @@ flowchart LR
 - If a label can't be read, the clinician can ask the patient for one new photo. Only that photo is processed, and the brief updates. The run pauses for a person, then resumes. [2.1]
 - The brief stays a draft until the clinician approves it. [2.2]
 - The code fixes the order. The clinician decides the pause. No model chooses an action. [2.3]
-- The pause is built and tested offline. [2.1] There is no clinician app yet: the request is one function call, and in the demo the developer plays the clinician. [2.6]
+- The pause is built and tested offline. [2.1, 2.5] There is no clinician app yet: the request is one function call, and in the demo the developer plays the clinician. [2.6]
 
 ## Results, as measured
-Every run below predates batch 23. The synthetic notes ran on the code of 27 Oct, of batch 20 and of batch 21, the public photos on batch 20's and batch 21's, and the comparison on batch 22's. Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on any of them. [4.1, 4.11, 4.13, 4.14, 1.19]
+Every run below predates batch 23: batches 23 and 23.1 made no live calls. [5.6] The synthetic notes ran on 27 Oct's code, then on batches 1–20 and on batch 21; the public photos on batches 1–20 and on batch 21; and the comparison on batch 22's code. [4.1, 4.11, 4.12, 4.13] Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on any of them. [4.14, 1.19]
 
 These are staged tests, not a validation. The expected results come first, and every run is reported as it came out, failures included. [4.15] No patient data: the pack photos are rendered test images or real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3]
 
@@ -84,7 +84,7 @@ The expected results were committed before the first run (8b993ff). [4.4] On the
 - Every case, cause and cost: [`evidence/batches/21/live-after.md`](evidence/batches/21/live-after.md).
 
 ### Two synthetic voice notes
-On two synthetic notes, one English and one Egyptian Arabic, 3 of 6 findings came out as expected before batch 21, and 6 of 6 after it. [4.12] On 27 Oct, with that day's code, all three findings came out right on both notes. [4.1]
+On two synthetic notes, one English and one Egyptian Arabic, 3 of 6 findings came out as expected before batch 21, and 6 of 6 after it. [4.1, 4.12]
 
 | Note | Expected | 27 Oct | 28 Oct, before batch 21 | After batch 21 |
 |---|---|---|---|---|
@@ -153,11 +153,11 @@ uv run pytest
 - The number check looks only at the number, not its unit, and doesn't check the regimen's counts. On the pack side it checks the label text the reader itself returned. Spanish number words aren't read, so such a dose is dropped. [1.13]
 - Only one class is curated, beta-blockers, and interactions aren't checked. [1.10]
 - SAM 3.1 doesn't always find the pack: in the comparison it found one in 20 of 39 public photos. [1.2, 4.13]
-- The volume rule gives up some coverage on purpose, listed in SPEC §2, prefilled syringes and pens read per dose the main one. It doesn't read every syrup wording, and at least one wording still keeps a per-tablet reading on purpose: "Paracetamol 250 mg = one tablet in each 5 ml". [1.19]
+- The volume rule gives up some coverage on purpose, listed in SPEC §2, prefilled syringes and pens read per dose the main one. It doesn't read every syrup wording. One kind of wording still keeps a per-tablet reading on purpose: a tablet word before "in" or "في" and the volume, as in "Paracetamol 250 mg = one tablet in each 5 ml". [1.19]
 - Every miss on the ten public photos and the two synthetic notes is in their two tables above. [4.11, 4.12]
 
 ## Data and privacy
-- No patient data. The pack photos are rendered test images or real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3] The rules for real media are in [`docs/DATA_HANDLING.md`](docs/DATA_HANDLING.md).
+- No patient data. The pack photos are rendered test images or real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3] The rules for the developer's own photos and voice are in [`docs/DATA_HANDLING.md`](docs/DATA_HANDLING.md).
 - Every product call used Meta's standard models. [3.4]
 
 ## Built with
