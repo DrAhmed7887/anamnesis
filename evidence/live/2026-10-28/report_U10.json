@@ -1,0 +1,96 @@
+{
+  "intake_id": "4d6cd1b90e27cbb2af12dba8847b661e356b592ac6d7c393f715a9104f29f75e",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 2220,
+      "transcript": "I take Panadol 500 milligrams",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Panadol",
+      "inn": null,
+      "strength": null,
+      "intake_amount": null,
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": null,
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [],
+  "observations": [],
+  "findings": [
+    {
+      "finding_id": "c1:-",
+      "type": "missing_modality",
+      "claim_id": "c1",
+      "observation_id": null,
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [],
+      "needs_clinician_review": true,
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "0b0cfc54-555b-4bcf-80bc-a44fdadd2537"
+      ]
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "chatcmpl-01a1818b-2bd8-77dc-86e2-6a719b2698bc"
+      ]
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "0883d61ab5b9:medicine box",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae1acd8d5533466c60e4a8b"
+      ]
+    },
+    {
+      "n": 3,
+      "action": "segment",
+      "target": "0883d61ab5b9:label",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae1acd989b32ff980964e78"
+      ]
+    },
+    {
+      "n": 4,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "1 findings",
+      "call_ids": []
+    }
+  ],
+  "calls": 4,
+  "spend_usd": "0.01585450",
+  "superseded": []
+}

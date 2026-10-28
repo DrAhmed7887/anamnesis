@@ -1,21 +1,34 @@
-"""Live intake: the bounded agent loop on real Meta models, synthetic media, one report per voice note.
+"""Live intake: the bounded agent loop on real Meta models, one report per voice note.
 
     PYTHONPATH=. uv run python scripts/intake_live.py [--cap 5.00] [--session-usd 0.25]
+    PYTHONPATH=. uv run python scripts/intake_live.py --case R1 --voice v1.wav --photo p1.jpg --lang ar \
+        [--repeat 10] [--top-k 3]
 
-The key is read from the macOS Keychain (service META_API_KEY) and never printed or saved.
-Each intake runs inside a SessionGuard (per-intake $ and call caps) in front of evidence/spend/ledger.jsonl.
-Output: evidence/live/<date>/report_<lang>.json (the ReconciliationReport).
-Media: scripts/make_synthetic_media.sh.
+With no --case it runs the two synthetic notes (media: scripts/make_synthetic_media.sh). With --case it runs
+one staged case (evidence/batches/21/manifest.md): that voice note and those photos, in order, --repeat times.
+The key comes from MODEL_API_KEY in the environment or the macOS Keychain (service META_API_KEY), and is never
+printed or saved. Each intake runs inside a SessionGuard (per-intake $ and call caps) in front of
+evidence/spend/ledger.jsonl.
+Output, per run:
+- evidence/live/<date>/report_<name>.json, the ReconciliationReport (<name>: the language, or case and run);
+- one summary line in evidence/live/<date>/runs.jsonl: findings, calls, spend, wall-clock time, and the
+  latency of each claim-extraction request against the client's 30 s timeout;
+- the brief, evidence/raw/briefs/<date>/<name>.html (git-ignored: it embeds the photos and the voice note).
 """
 
 import argparse
+import json
+import os
 import subprocess
 import sys
+import time
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
 from pathlib import Path
 
 from anamnesis.agent import run_intake
+from anamnesis.brief import render_brief
 from anamnesis.core.catalogue import load_catalogue
 from anamnesis.providers import SpendGuard
 from anamnesis.providers.claims import MetaClaimExtractor
@@ -26,6 +39,8 @@ ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "evidence/raw/media"
 LEDGER = ROOT / "evidence/spend/ledger.jsonl"
 MAX_CALLS = 12
+LANGUAGES = {"en": ["English"], "ar": ["Arabic", "English"]}
+MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
 
 
 def keychain(service: str) -> str:
@@ -36,35 +51,101 @@ def keychain(service: str) -> str:
     return key
 
 
+class TimedClient:
+    """The same client, recording how long each request took, a timeout included."""
+
+    def __init__(self, client: MetaClient) -> None:
+        self.client, self.latencies_ms = client, []
+
+    def post(self, *args, **kwargs):
+        start = time.monotonic()
+        try:
+            return self.client.post(*args, **kwargs)
+        finally:
+            self.latencies_ms.append(int((time.monotonic() - start) * 1000))
+
+    def __getattr__(self, name):
+        return getattr(self.client, name)
+
+
+@dataclass
+class Run:
+    ledger: SpendGuard
+    client: MetaClient
+    catalogue: object
+    session_usd: Decimal
+    top_k: int
+    reports: Path
+    briefs: Path
+
+
+def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]], lang: str) -> None:
+    guard = SessionGuard(run.ledger, max_usd=run.session_usd, max_calls=MAX_CALLS)
+    timed = TimedClient(run.client)
+    keywords = [n for entry in run.catalogue.entries for n in (entry.brand, *entry.aliases)]
+    start = time.monotonic()
+    report = run_intake(
+        audio, images,
+        transcriber=MetaTranscriber(run.client, guard), extractor=MetaClaimExtractor(timed, guard),
+        segmenter=MetaSegmenter(run.client, guard), reader=MetaLabelReader(run.client, guard),
+        catalogue=run.catalogue, language_bias=LANGUAGES[lang], keywords=keywords, lang_hint=lang,
+        max_provider_calls=MAX_CALLS, top_k=run.top_k,
+    )
+    wall_s = round(time.monotonic() - start, 1)
+    (run.reports / f"report_{name}.json").write_text(report.model_dump_json(indent=2) + "\n", "utf-8")
+    brief = render_brief(report, images, (audio, "audio/wav"), run.catalogue)
+    (run.briefs / f"{name}.html").write_text(brief, encoding="utf-8")
+    line = {"run": name, "at": datetime.now(UTC).isoformat(timespec="seconds"), "calls": report.calls,
+            "spend_usd": str(report.spend_usd), "wall_s": wall_s, "claim_request_ms": timed.latencies_ms,
+            "findings": [[f.type.value, f.claim_id, f.observation_id] for f in report.findings]}
+    with (run.reports / "runs.jsonl").open("a", encoding="utf-8") as out:
+        out.write(json.dumps(line) + "\n")
+    print(f"intake {name}: {report.calls} calls, ${report.spend_usd:.5f}, {wall_s} s, "
+          f"claim requests {timed.latencies_ms} ms (timeout 30000)")
+    for step in report.steps:
+        print(f"      {step.n:2} {step.action.value:16} {step.target[:28]:28} {step.outcome}")
+    for f in report.findings:
+        print(f"      {f.finding_id:7} {f.type.value:34} {f.clinician_note}")
+
+
+def photo(path: str) -> tuple[bytes, str]:
+    file = Path(path)
+    if file.suffix.lower() not in MIME:
+        sys.exit(f"{file}: PNG or JPEG only (convert HEIC with sips first)")
+    return file.read_bytes(), MIME[file.suffix.lower()]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cap", default="5.00", help="total USD cap across all live runs (ledger)")
     parser.add_argument("--session-usd", default="0.25", help="USD cap per intake")
+    parser.add_argument("--case", help="a staged case id from the batch 21 manifest")
+    parser.add_argument("--voice", help="the case's voice note (16 kHz mono WAV)")
+    parser.add_argument("--photo", action="append", default=[], help="a photo of the case, in order")
+    parser.add_argument("--lang", choices=sorted(LANGUAGES), default="en")
+    parser.add_argument("--repeat", type=int, default=1)
+    parser.add_argument("--top-k", type=int, default=3, help="SAM regions kept per photo")
     args = parser.parse_args()
-    ledger = SpendGuard(LEDGER, cap_usd=Decimal(args.cap))
-    out = ROOT / "evidence/live" / datetime.now(UTC).strftime("%Y-%m-%d")
-    out.mkdir(parents=True, exist_ok=True)
-    client = MetaClient(api_key=keychain("META_API_KEY"))
-    catalogue = load_catalogue()
-    keywords = [name for entry in catalogue.entries for name in (entry.brand, *entry.aliases)]
-    image = (MEDIA / "packs.png").read_bytes()
-    start = ledger.total_usd
-
-    for lang, bias in [("en", ["English"]), ("ar", ["Arabic", "English"])]:
-        guard = SessionGuard(ledger, max_usd=Decimal(args.session_usd), max_calls=MAX_CALLS)
-        report = run_intake(
-            (MEDIA / f"voice_{lang}.wav").read_bytes(), [(image, "image/png")],
-            transcriber=MetaTranscriber(client, guard), extractor=MetaClaimExtractor(client, guard),
-            segmenter=MetaSegmenter(client, guard), reader=MetaLabelReader(client, guard),
-            catalogue=catalogue, language_bias=bias, keywords=keywords, lang_hint=lang,
-            max_provider_calls=MAX_CALLS,
-        )
-        (out / f"report_{lang}.json").write_text(report.model_dump_json(indent=2) + "\n", encoding="utf-8")
-        print(f"intake {lang}: {report.calls} calls, ${report.spend_usd:.5f}")
-        for step in report.steps:
-            print(f"      {step.n:2} {step.action.value:16} {step.target[:28]:28} {step.outcome}")
-        for f in report.findings:
-            print(f"      {f.finding_id:7} {f.type.value:34} {f.clinician_note}")
+    if args.case and not (args.voice and args.photo):
+        sys.exit("--case needs --voice and at least one --photo")
+    day = datetime.now(UTC).strftime("%Y-%m-%d")
+    run = Run(SpendGuard(LEDGER, cap_usd=Decimal(args.cap)),
+              MetaClient(api_key=os.environ.get("MODEL_API_KEY") or keychain("META_API_KEY")),
+              load_catalogue(), Decimal(args.session_usd), args.top_k,
+              ROOT / "evidence/live" / day, ROOT / "evidence/raw/briefs" / day)
+    run.reports.mkdir(parents=True, exist_ok=True)
+    run.briefs.mkdir(parents=True, exist_ok=True)
+    start = run.ledger.total_usd
+    if args.case:
+        audio, images = Path(args.voice).read_bytes(), [photo(p) for p in args.photo]
+        for i in range(1, args.repeat + 1):
+            name = args.case if args.repeat == 1 else f"{args.case}_r{i:02d}"
+            intake(run, name, audio, images, args.lang)
+    else:
+        image = [((MEDIA / "packs.png").read_bytes(), "image/png")]
+        for lang in ("en", "ar"):
+            intake(run, lang, (MEDIA / f"voice_{lang}.wav").read_bytes(), image, lang)
+    ledger = run.ledger
     spent = ledger.total_usd - start
     print(f"spend this run ${spent:.5f} · ledger total ${ledger.total_usd:.5f} of ${ledger.cap_usd} cap")
 

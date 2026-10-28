@@ -1,0 +1,151 @@
+{
+  "intake_id": "8b2a731e9d49fcd3905e2959952e6013fc11508872e8060ea00a84cab1a785e3",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 5340,
+      "transcript": "I take Augmentin 875 and 125 milligrams twice a day",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Augmentin",
+      "inn": null,
+      "strength": null,
+      "intake_amount": null,
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": null,
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "46b401ed11e9-0",
+      "image_sha256": "46b401ed11e9182a2bee9587b2153f346644638ce95ac7c0ecd0e539daf69043",
+      "object_id": 0,
+      "x1": 94,
+      "y1": 5,
+      "x2": 1686,
+      "y2": 1487,
+      "frame_w": 1920,
+      "frame_h": 2560,
+      "confidence": 0.8048780560493469
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "Augmentin® 875 mg/125 mg comprimés pelliculés Amoxicilline/acide clavulanique 20 comprimés pelliculés",
+      "inn": "Amoxicilline/acide clavulanique",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "amoxicilline",
+            "salt": null,
+            "amount": "875",
+            "unit": "mg"
+          },
+          {
+            "inn": "acide clavulanique",
+            "salt": null,
+            "amount": "125",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "readable",
+      "country": null,
+      "visual_evidence": [
+        "46b401ed11e9-0"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "-:o0",
+      "type": "missing_modality",
+      "claim_id": null,
+      "observation_id": "o0",
+      "audio_evidence": [],
+      "visual_evidence": [
+        "46b401ed11e9-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
+    },
+    {
+      "finding_id": "c1:-",
+      "type": "missing_modality",
+      "claim_id": "c1",
+      "observation_id": null,
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [],
+      "needs_clinician_review": true,
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "3cc3b126-ebd3-483b-8039-b6d664b5ebcd"
+      ]
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "chatcmpl-01a18188-20b0-729e-9191-9337baa5538f"
+      ]
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "46b401ed11e9:medicine box",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae1ac12cae61d569b554fb4"
+      ]
+    },
+    {
+      "n": 3,
+      "action": "read",
+      "target": "46b401ed11e9-0",
+      "outcome": "readable",
+      "call_ids": [
+        "chatcmpl-01a18188-40e7-76fb-acdb-13ed230a2010"
+      ]
+    },
+    {
+      "n": 4,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "2 findings",
+      "call_ids": []
+    }
+  ],
+  "calls": 4,
+  "spend_usd": "0.02706425",
+  "superseded": []
+}

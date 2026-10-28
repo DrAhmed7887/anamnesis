@@ -8,7 +8,7 @@ from pydantic import ValidationError
 
 from anamnesis.schema import Strength
 
-_AMOUNT_RE = re.compile(r"\d+(?:[.,]\d+)?")
+_AMOUNT_RE = re.compile(r"[0-9٠-٩۰-۹]+(?:[.,][0-9٠-٩۰-۹]+)?")
 
 
 def parse_amount_text(value: object) -> Decimal | None:

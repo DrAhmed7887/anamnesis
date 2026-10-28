@@ -1,5 +1,6 @@
 """Medication facts stated by a patient or observed on a pack."""
 
+import unicodedata
 from decimal import Decimal
 from enum import StrEnum
 from typing import Annotated
@@ -60,6 +61,41 @@ INN_ALIASES: dict[str, tuple[str, str | None]] = {
     "potassium clavulanate": ("clavulanic acid", "potassium"),
     "clavulanate potassium": ("clavulanic acid", "potassium"),
     "acetaminophen": ("paracetamol", None),
+    "amoxicilline": ("amoxicillin", None),
+    "amoxicilina": ("amoxicillin", None),
+    "amoxicillinum": ("amoxicillin", None),
+    "acide clavulanique": ("clavulanic acid", None),
+    "ácido clavulánico": ("clavulanic acid", None),
+    "clavulansäure": ("clavulanic acid", None),
+    "acidum clavulanicum": ("clavulanic acid", None),
+    "paracétamol": ("paracetamol", None),
+    "paracetamolum": ("paracetamol", None),
+    "métoprolol": ("metoprolol", None),
+    "metoprololum": ("metoprolol", None),
+    "metoprololi succinas": ("metoprolol", "succinate"),
+    "metoprololsuccinat": ("metoprolol", "succinate"),
+    "metoprololi tartras": ("metoprolol", "tartrate"),
+    "metoprololtartrat": ("metoprolol", "tartrate"),
+    "bisoprololum": ("bisoprolol", None),
+    "bisoprololi fumaras": ("bisoprolol", "fumarate"),
+    "bisoprololfumarat": ("bisoprolol", "fumarate"),
+    "amlodipino": ("amlodipine", None),
+    "amlodipinum": ("amlodipine", None),
+    "amlodipini besilas": ("amlodipine", "besilate"),
+    "amlodipinbesilat": ("amlodipine", "besilate"),
+    "metformina": ("metformin", None),
+    "metformine": ("metformin", None),
+    "metforminum": ("metformin", None),
+    "metformini hydrochloridum": ("metformin", "hydrochloride"),
+    "metforminhydrochlorid": ("metformin", "hydrochloride"),
+    "atorvastatina": ("atorvastatin", None),
+    "atorvastatine": ("atorvastatin", None),
+    "atorvastatinum": ("atorvastatin", None),
+    "atorvastatinum calcicum": ("atorvastatin", "calcium"),
+    "caféine": ("caffeine", None),
+    "cafeína": ("caffeine", None),
+    "coffein": ("caffeine", None),
+    "coffeinum": ("caffeine", None),
 }
 
 SALT_BASIS_EQUIVALENTS: dict[tuple[str, str, Decimal], Decimal] = {
@@ -71,7 +107,7 @@ SALT_BASIS_EQUIVALENTS: dict[tuple[str, str, Decimal], Decimal] = {
 
 
 def _inn_and_salt(name: str) -> tuple[str, str | None]:
-    normalised = name.strip().casefold()
+    normalised = unicodedata.normalize("NFC", name).strip().casefold()
     if normalised.endswith(")") and " (as " in normalised:
         moiety, alias = normalised[:-1].split(" (as ", 1)
         mapped = INN_ALIASES.get(alias)

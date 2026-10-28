@@ -24,7 +24,10 @@ _VOICE_MODEL = "muse-voice-transcribe-1.0"
 _SAM_MODEL = "sam-3.1"
 _SYSTEM_PROMPT = (
     "Read only what is printed on the pack inside the given box. "
-    "Write each amount with the number and unit printed on the pack, and never convert units. "
+    "Copy all of its printed text into label_text, including every amount you report. "
+    "Write each amount as digits with the unit printed on the pack, and never convert units. "
+    "Name each ingredient by its English INN (amoxicillin, not amoxicilline or amoxicillinum), "
+    "even when the pack prints it in another language or script. "
     "Give no advice. Use unreadable or partial rather than guessing."
 )
 

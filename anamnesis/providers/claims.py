@@ -29,7 +29,9 @@ _SYSTEM_PROMPT = (
     "is an intake_amount with regimen.intakes_per_day. Use strength only when the patient explicitly "
     "describes the tablet or pack, such as 'the 5 mg tablets'. 'I stopped' or 'no longer take' means "
     "discontinued. If unclear, use unknown. Leave anything not said as null. Cite the turn_ids each "
-    "claim comes from. Write each amount with the number and unit the patient said, and never convert units. "
+    "claim comes from. Write every amount and count as digits, even when the patient said it in words "
+    "('five' is 5, 'خمسة' is 5, 'twice a day' is 2), with the unit the patient said, "
+    "and never convert units. "
     "Give no medical advice. Only report what the patient said."
 )
 

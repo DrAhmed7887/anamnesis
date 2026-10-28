@@ -112,9 +112,17 @@ case $cmd in
     # Stage only build paths, so files another tool drops in the repo never ride along.
     git add anamnesis tests "$ev" "briefs/$n.md" SPEC.md pyproject.toml uv.lock
     git commit -q -m "feat: batch $n - $title" -m "Built by the batch builder (see Built-by in the review), gated (ruff + pytest + contract lock), reviewed by Claude Code (CEO). Evidence: $ev/"
-    git switch -q main
-    git merge -q --no-ff "$branch" -m "merge: $branch"
-    sha=$(git rev-parse --short HEAD)
+    # The engine may build in its own worktree while main stays checked out in the main checkout: merge there.
+    root=$(git worktree list --porcelain | awk '/^worktree /{wt=substr($0, 10)} $0 == "branch refs/heads/main" {print wt}')
+    if [[ -n $root && $root != "$PWD" ]]; then
+      [[ -z $(git -C "$root" status --porcelain --untracked-files=no) ]] || { print -u2 "merge: $root has uncommitted changes"; exit 1; }
+      git -C "$root" merge -q --no-ff "$branch" -m "merge: $branch"
+    else
+      root=$PWD
+      git switch -q main
+      git merge -q --no-ff "$branch" -m "merge: $branch"
+    fi
+    sha=$(git -C "$root" rev-parse --short HEAD)
     tests=$(grep -Eo '"tests_passed":[0-9]+' "$ev/gate.json" | grep -Eo '[0-9]+$')
     model=$(head -1 "$ev/builder.md" 2>/dev/null | awk '{print $2}' | sed 's/,$//' || print muse-spark-1.3)
     builder=$(head -1 "$ev/builder.md" 2>/dev/null | awk '{print $1}' || print muse)
@@ -123,9 +131,9 @@ case $cmd in
     built_by=${built_by:-$builder $model}
     contract=$(uv run pytest -q tests/contract 2>&1 | grep -Eo '[0-9]+ passed' | grep -Eo '[0-9]+' || print 0)
     unit=$(uv run pytest -q tests/unit 2>&1 | grep -Eo '[0-9]+ passed' | grep -Eo '[0-9]+' || print 0)
-    print -r -- "{\"batch\":$n,\"branch\":\"$branch\",\"model\":\"$model\",\"built_by\":\"$built_by\",\"tests_passed\":$tests,\"contract_tests\":$contract,\"unit_tests\":$unit,\"verdict\":\"pass\",\"merge_commit\":\"$sha\",\"at\":\"$(now)\"}" >> "$log"
-    git add "$log" && git commit -q -m "chore: log batch $n"
-    git push -q origin main 2>/dev/null && print "pushed main" || print "push skipped (no remote?)"
+    print -r -- "{\"batch\":$n,\"branch\":\"$branch\",\"model\":\"$model\",\"built_by\":\"$built_by\",\"tests_passed\":$tests,\"contract_tests\":$contract,\"unit_tests\":$unit,\"verdict\":\"pass\",\"merge_commit\":\"$sha\",\"at\":\"$(now)\"}" >> "$root/$log"
+    git -C "$root" add "$log" && git -C "$root" commit -q -m "chore: log batch $n"
+    git -C "$root" push -q origin main 2>/dev/null && print "pushed main" || print "push skipped (no remote?)"
     ;;
   *) print -u2 "unknown command: $cmd"; exit 1 ;;
 esac

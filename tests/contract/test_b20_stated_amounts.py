@@ -251,12 +251,14 @@ def test_a_spanish_decimal_comma_on_a_label_is_printed():
 
 # --- prompts: amounts as said or printed, never converted ------------------------------------------------
 
+# Batch 21 rewrote both sentences after the 28 Oct live runs: "with the number the patient said" made Spark copy
+# number words ("five"), which never parse. The rule that matters here, never convert units, stays pinned.
 def test_the_claim_prompt_says_never_convert_units():
-    assert "Write each amount with the number and unit the patient said, and never convert units." in CLAIM_PROMPT
+    assert "never convert units" in CLAIM_PROMPT
 
 
 def test_the_label_prompt_says_never_convert_units():
-    assert "Write each amount with the number and unit printed on the pack, and never convert units." in LABEL_PROMPT
+    assert "never convert units" in LABEL_PROMPT
 
 
 # --- round 2 (supervisor 20) -----------------------------------------------------------------------------
