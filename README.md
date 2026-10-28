@@ -4,7 +4,7 @@
 
 The patient sends a voice note and photos of their medicine packs. The clinician gets a one-page brief. [1.1] Every finding links back to the audio turn and the image region it came from. [1.3]
 
-Built for the Meta Global AI Developer Hackathon. Track: Indie. Also entered for the Best Agentic Use-Case bonus prize. [6.4]
+Built for the Meta Global AI Developer Hackathon. Track: Indie. Also entered for two bonus prizes: Best Agentic Use-Case and Best Build on Meta Open Weight Models. [6.4]
 
 Anamnesis is not a medical device and gives no medical advice. [1.15]
 
@@ -177,4 +177,4 @@ By Ahmed Zayed, physician (MBBCh). [6.1]
 <!-- Draft from docs/CLAIMS.md (judge/claims-video, 28 Oct). To add once each row lands, never before:
 the hero's N of 10 (4.5) and its disagreement (4.10); Ahmed's real cases (4.6) and his voice (4.7, and 3.3's second
 wording); the pause, live (2.5); one medicine under another brand name in another country (1.18); the Cairo set's full citation (§8); a hosted sample brief, once it
-has a row (§7). An open-weight bonus prize only once decisions.md records Ahmed's call (6.4). -->
+has a row (§7). -->
