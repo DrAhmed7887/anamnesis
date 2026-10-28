@@ -115,3 +115,22 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
   Never cut: the batch 21 hero case, the video, the README or the submission.
 - **Tracks:** Indie and Best Agentic Use-Case. The open-weight bonus went with the cut benchmark.
 - **Money:** Meta $11.55 of $150 so far, about $30 projected by submission. Google only for the M5 QM.
+
+## 2026-10-28: the plan revised after its grill (Ahmed's call)
+- An independent Opus subagent grilled the approved plan. Its verdict: the video got one pass at the end, real media came with no fix slot, and the repo could not go public as it was. The CEO verified each factual claim. Triage: `evidence/grills/plan-2026-10-28/effect.md`.
+- Ahmed adopted the revision.
+  - **Sessions:** one engine session runs Muse, the live calls, the one ledger and merges, from the main checkout. A judge-facing session starts today on the claims table, the storyboard, the video and the README. Session B retires before starting any of its part.
+  - **Cuts:** the synthetic scorecard and its private answer-key repo. In their place:
+    - pre-registered real cases, with expected results committed before any run;
+    - the hero's N/10, with every miss reported.
+
+    Batch 22 is only the "how it got here" timeline. Also cut: the `run_intake` refactor, the Unicode-break and Arabic-form follow-ups (unless real media reproduce them), and the M5 Muse grill. The M5 QM stays.
+  - **New:**
+    - a live run of current `main` before batch 21: it hasn't run end to end live since 27 Oct;
+    - a second fix slot on Fri;
+    - a rough cut on Sat;
+    - a claims table before the voiceover;
+    - gate hardening and a `demo-freeze` tag on Sat;
+    - a handoff note;
+    - submission by Wed 4 Nov 15:00 CET.
+  - **Privacy, before going public:** a committed Muse export (M1) holds a personal skill catalog from work outside this project. Every Muse run also sends that catalog, because those skills load from `~/.agents/skills`, which `--no-foreign-personal-context` does not cover. So the skills get disabled in Muse before the next build, and the public repo is a filtered copy without that file.
