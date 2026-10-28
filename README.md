@@ -158,8 +158,9 @@ With Muse Spark Open as its label reader, the full intake ran end to end on eigh
 - In batch 22, a separate Claude Opus reviewer caught a spec error: as briefed, "less than five milligrams" could have been read as exactly five, if a model wrote the amount as "<five". The contract now pins that case. [5.10]
 - Batch 23 took nine rounds: a separate Claude Opus reviewer sent it back seven times before approving it. Before each round, Claude Code checked its own contract on a throwaway reference build. At the end, all 44 deliberate single-rule breaks of that reference were caught by the contract. Its follow-up, batch 23.1, passed review in one round with nothing to change. [5.11]
 - Before the freeze, a Gemini 4 grill claimed 11 breaks, and each was run against the code. Two were real: the comparison script's photo check was wider than the data rule and was fixed, though no photo outside the rule was ever sent, and a volume written in words stays a known limit. [5.12]
+- Before the freeze, Muse Code audited the repository read-only and found 7 minor gaps, each checked against the code and fixed. It pinned the audit as its goal with its own goal tool, kept to the seven-step plan it wrote, and closed the goal complete: 31 of its 32 model calls ran under that goal. [5.13]
 - Batches 1 to 20 were each specified, built, gated and reviewed in one day, 27 Oct. [5.8]
-- Muse Code's sessions cost about $26.87 of Meta credit so far, priced from its own billing records (28 Oct). [5.5] About $29.08 of the $150 credit in logged calls so far (28 Oct). Muse grill runs are billed separately. [5.6]
+- Muse Code's sessions cost about $28.06 of Meta credit so far, priced from its own billing records (28 Oct). [5.5] About $30.27 of the $150 credit in logged calls so far (28 Oct). Muse grill runs are billed separately. [5.6]
 - Each Muse batch's record is in `evidence/batches/<n>/`: `builder.md`, `gate.json`, `supervisor.md` and `review.md`. [5.1]
 
 ## Run the tests
