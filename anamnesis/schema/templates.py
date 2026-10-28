@@ -21,7 +21,7 @@ PATIENT_QUESTIONS: dict[str, str] = {
     "intake": "How much do you use at each intake?",
     "ingredients": "Which ingredients are listed on your medicine?",
     "ratio": "What amounts are listed for each ingredient?",
-    "formulation": "What release form is shown on your medicine pack?",
+    "formulation": "What salt or release form is shown on your medicine pack?",
     "information": "Could you provide the missing medication details?",
     "discontinued": "When did you stop using this medicine?",
     "unreadable": "Could you provide a clearer image of the pack label?",

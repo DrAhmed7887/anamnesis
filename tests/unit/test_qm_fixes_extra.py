@@ -96,11 +96,14 @@ def test_conflicted_claim_is_skipped_while_clean_claims_still_pair():
 
 
 def test_strength_row_shows_each_salt_after_its_inn():
-    assert _strength_html(st(mg("metoprolol tartrate", 100))) == "metoprolol tartrate 100 mg per tablet"
+    assert (
+        _strength_html(st(mg("metoprolol tartrate", 100)))
+        == 'metoprolol tartrate <bdi dir="ltr">100 mg</bdi> per tablet'
+    )
 
 
 def test_saltless_strength_row_is_unchanged():
-    assert _strength_html(st(mg("bisoprolol", 5))) == "bisoprolol 5 mg per tablet"
+    assert _strength_html(st(mg("bisoprolol", 5))) == 'bisoprolol <bdi dir="ltr">5 mg</bdi> per tablet'
 
 
 def test_a_hostile_salt_is_escaped():

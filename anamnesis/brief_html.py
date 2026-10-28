@@ -119,7 +119,8 @@ def _first_line(text: str) -> str | None:
 
 def _ingredient_html(part) -> str:
     salt = f" {_esc(part.salt)}" if part.salt else ""
-    return f"{_esc(part.inn)}{salt} {_plain(part.amount)} {_esc(part.unit.value)}"
+    dose = f"{_plain(part.amount)} {_esc(part.unit.value)}"
+    return f'{_esc(part.inn)}{salt} <bdi dir="ltr">{dose}</bdi>'
 
 
 def _strength_html(strength) -> str:

@@ -406,6 +406,13 @@ def _pair_score(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue
         and _claim_strength_type(claim, pack.strength, catalogue) is D.MATCH
     ):
         return 3
+    if (
+        claim.strength is None
+        and claim.intake_amount is not None
+        and pack.strength is not None
+        and _pair_type(claim, pack, catalogue) is D.MATCH
+    ):
+        return 3
     return 2
 
 

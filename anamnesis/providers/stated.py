@@ -59,7 +59,7 @@ _HUNDRED = ENGLISH_HUNDRED | ARABIC_HUNDRED
 _THOUSAND = ENGLISH_THOUSAND | ARABIC_THOUSAND
 _HALF = ENGLISH_HALF | ARABIC_HALF
 
-_DIGIT_RUN = re.compile(r"(?<![0-9٠-٩.,])[0-9٠-٩]+(?:[.,][0-9٠-٩]+)?")
+_DIGIT_RUN = re.compile(r"(?<![\d.,٬])(?>[0-9٠-٩۰-۹]+(?:[.,٬][0-9٠-٩۰-۹]+)?)(?!\d)")
 _RUN_BREAK = re.compile(r"[,.;:!?،؛؟\r\n]+")
 
 
@@ -112,7 +112,11 @@ def _run_value(words: list[tuple[str, int | None]]) -> Decimal:
     total, current = Decimal(0), Decimal(0)
     for kind, value in words:
         if kind == "plain" and value is not None:
-            current += Decimal(value)
+            if value >= 1000:
+                total += Decimal(value)
+                current = Decimal(0)
+            else:
+                current += Decimal(value)
         elif kind == "hundred":
             current = (current if current != 0 else Decimal(1)) * 100
         elif kind == "thousand":
@@ -145,6 +149,23 @@ def _close(words: list[tuple[str, int | None]], found: set[Decimal]) -> None:
     words.clear()
 
 
+def _since_thousand(words: list[tuple[str, int | None]]) -> Decimal:
+    """Run value after its last thousand word (SPEC §2, batch 21)."""
+    start = 0
+    for pos, (kind, value) in enumerate(words):
+        if kind == "thousand" or (kind == "plain" and value is not None and value >= 1000):
+            start = pos + 1
+    return _run_value(words[start:])
+
+
+def _hundred_cut(words: list[tuple[str, int | None]], token: str) -> int:
+    """Where a new hundreds group starts; a final 1-9 moves with it."""
+    if words and words[-1][0] == "plain" and words[-1][1] is not None:
+        if 1 <= words[-1][1] <= 9 and not token.startswith("و"):
+            return len(words) - 1
+    return len(words)
+
+
 def _word_amounts(part: str, found: set[Decimal]) -> None:
     """Number-word runs in one punctuation-delimited part (SPEC §2)."""
     tokens = catalogue.normalise(part).split()
@@ -154,9 +175,18 @@ def _word_amounts(part: str, found: set[Decimal]) -> None:
     while index < len(tokens):
         kind, value = kinds[index]
         if kind in ("plain", "hundred", "thousand", "half"):
+            if kind == "hundred" and _since_thousand(words) >= 100:
+                if index > 0 and kinds[index - 1][0] == "a":
+                    cut = len(words)
+                else:
+                    cut = _hundred_cut(words, tokens[index])
+                earlier = words[:cut]
+                words = words[cut:]
+                _close(earlier, found)
+            elif kind == "plain" and value is not None and value >= 100:
+                if _since_thousand(words) >= 100:
+                    _close(words, found)
             words.append((kind, value))
-        elif kind == "and":
-            pass
         elif kind == "a":
             if index == 0 or kinds[index - 1][0] != "and":
                 _close(words, found)
@@ -180,7 +210,7 @@ def _word_amounts(part: str, found: set[Decimal]) -> None:
                 index = look - 1
             else:
                 _close(words, found)
-        else:
+        elif kind != "and":
             _close(words, found)
         index += 1
     _close(words, found)
