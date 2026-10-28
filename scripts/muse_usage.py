@@ -100,7 +100,11 @@ def main() -> None:
     total = sum((Decimal(entry["cost_usd"]) for entry in rounds), Decimal(0))
     summary = {"batch": batch, "rounds": rounds, "total_cost_usd": str(total)}
     usage_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-    muse_total, adapter_total = _ledger_total(MUSE_LEDGER), _ledger_total(ADAPTER_LEDGER, meta_only=True)
+    from spend_check import ledger_lines  # every worktree's copy, each line once (28 Oct)
+    muse_lines = ledger_lines("muse_ledger.jsonl")
+    muse_total = sum((Decimal(str(line["cost_usd"])) for line in muse_lines), Decimal(0))
+    adapter_total = sum((Decimal(str(line["cost_usd"])) for line in ledger_lines("ledger.jsonl")
+                         if "@" not in line.get("model_id", "")), Decimal(0))
     meta_total = muse_total + adapter_total
     print(f"batch {batch} Muse: {usage['input_tokens']:,} input ({usage['cached_tokens']:,} cached), "
           f"{usage['output_tokens']:,} output -> ${cost}")
