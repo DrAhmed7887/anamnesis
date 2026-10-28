@@ -16,6 +16,7 @@ from anamnesis.schema import ImageRegion, PackObservation, Readability
 from anamnesis.schema.report import AgentAction, ReconciliationReport
 
 Image = tuple[bytes, str]
+SAM_CONCEPTS = ("medicine box", "label", "package")
 _NEEDS_ZOOM = {Readability.UNREADABLE, Readability.PARTIAL}
 
 
@@ -127,10 +128,12 @@ def _observation(index: int, reading: LabelReading) -> PackObservation:
 def run_intake(
     audio: bytes | None, images: list[Image], *, transcriber, extractor, segmenter, reader,
     catalogue: Catalogue, language_bias: list[str] | None = None, keywords: list[str] | None = None,
-    lang_hint: str | None = None, concepts: tuple[str, ...] = ("medicine box", "label"),
-    top_k: int = 3, max_provider_calls: int = 12,
+    lang_hint: str | None = None, concepts: tuple[str, ...] = SAM_CONCEPTS,
+    top_k: int = 3, max_provider_calls: int | None = None,
 ) -> ReconciliationReport:
     """Run one patient intake in a fixed order and return the single report artifact."""
+    if max_provider_calls is None:
+        max_provider_calls = 2 + (len(concepts) + 2 * top_k) * len(images)
     session = IntakeSession(max_provider_calls)
     turns = []
     if audio is not None:
@@ -173,4 +176,4 @@ def run_intake(
     )
 
 
-__all__ = ["run_intake"]
+__all__ = ["SAM_CONCEPTS", "run_intake"]

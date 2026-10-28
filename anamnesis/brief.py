@@ -9,6 +9,7 @@ from anamnesis.brief_html import (
     _photos_html,
     _scope_html,
     _section_of,
+    _timeline_html,
     _voice_html,
 )
 from anamnesis.schema.report import AgentAction, ReconciliationReport
@@ -118,6 +119,7 @@ def render_brief(
     for name in SECTION_ORDER:
         body = "".join(sections[name]) or f"<p>{NONE_TEXT}</p>"
         parts.append(f'<section id="{name}"><h2>{SECTION_HEADINGS[name]}</h2>{body}</section>')
+    parts.append(_timeline_html(report))
     parts.append(f"<script>{_SCRIPT}</script></body></html>")
     return "".join(parts)
 

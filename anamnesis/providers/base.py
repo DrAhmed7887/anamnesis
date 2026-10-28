@@ -50,7 +50,7 @@ class ProviderTrace(BaseModel):
     @field_validator("model_id")
     @classmethod
     def reject_contributor(cls, value: str) -> str:
-        if value.endswith("-contributor"):
+        if "-contributor" in value.strip().casefold():
             raise ValueError("contributor models are not permitted")
         return value
 

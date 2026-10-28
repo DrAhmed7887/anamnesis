@@ -129,6 +129,11 @@ REQUEST_UNREADABLE = ("Please send one new photo of this medicine pack, with the
                       "in good light.")
 REQUEST_NOT_PHOTOGRAPHED = "Please send one photo of the pack of the medicine you mentioned as “{name}”."
 
+TIMELINE_HEADING = "How it got here"
+TIMELINE_COLUMNS = ("#", "Step", "Target", "Outcome", "Model", "Tokens in", "Tokens out", "Time", "Cost")
+TIMELINE_NONE = "—"
+TIMELINE_TOTAL = "Total: {calls} calls, ${usd}"
+
 QUESTION_FOR: dict[D, str | None] = {
     D.MATCH: None,
     D.STRENGTH_MISMATCH: "strength",

@@ -48,6 +48,10 @@ from anamnesis.schema.templates import (
     SEEN_REGION,
     STRENGTH_PER,
     TEMPLATES,
+    TIMELINE_COLUMNS,
+    TIMELINE_HEADING,
+    TIMELINE_NONE,
+    TIMELINE_TOTAL,
     TURN_BUTTON,
     UNNAMED_PACK,
     YES,
@@ -70,6 +74,10 @@ _STYLE = (
     ".photo svg rect{fill:transparent;stroke:#d9480f;stroke-width:3;vector-effect:non-scaling-stroke}"
     ".pre{white-space:pre-wrap}"
     "@media print{.sides{grid-template-columns:1fr 1fr}}"
+    "#timeline table{border-collapse:collapse;width:100%}"
+    "#timeline th,#timeline td{border:1px solid #ccc;padding:.25rem .5rem;text-align:left}"
+    "#timeline td:nth-child(1),#timeline td:nth-child(6),#timeline td:nth-child(7),"
+    "#timeline td:nth-child(8),#timeline td:nth-child(9){text-align:right}"
 )
 
 _SCRIPT = (
@@ -381,3 +389,30 @@ def _scope_html(review=None) -> str:
     lines = "".join(f"<p>{line}</p>" for line in SCOPE_LINES)
     lines += f'<p id="review-status">{_review_status(review)}</p>'
     return f'<header id="scope"><h1>{BRIEF_TITLE}</h1>{lines}</header>'
+
+
+def _timeline_html(report) -> str:
+    head = "".join(f"<th>{_esc(column)}</th>" for column in TIMELINE_COLUMNS)
+    rows = []
+    for step in report.steps:
+        called = step.model_id is not None
+        none = _esc(TIMELINE_NONE)
+        cells = [
+            _esc(str(step.n)),
+            _esc(step.action.value),
+            _esc(step.target),
+            _esc(step.outcome),
+            _esc(step.model_id) if called else none,
+            _esc(str(step.input_tokens)) if called else none,
+            _esc(str(step.output_tokens)) if called else none,
+            _esc(f"{step.latency_ms / 1000:.1f} s") if called else none,
+            _esc(f"${step.cost_usd:.5f}"),
+        ]
+        rows.append("<tr>" + "".join(f"<td>{cell}</td>" for cell in cells) + "</tr>")
+    total = _esc(TIMELINE_TOTAL.format(calls=report.calls, usd=f"{report.spend_usd:.5f}"))
+    span = len(TIMELINE_COLUMNS)
+    return (
+        f'<details id="timeline"><summary>{_esc(TIMELINE_HEADING)}</summary><table>'
+        f"<thead><tr>{head}</tr></thead><tbody>{''.join(rows)}</tbody>"
+        f'<tfoot><tr><td colspan="{span}">{total}</td></tr></tfoot></table></details>'
+    )
