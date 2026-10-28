@@ -29,3 +29,14 @@
 - **The CEO's own fixes (scripts, not the build):** `intake_live.py` uses the loop's budget formula for `run_intake` and for its `SessionGuard` (f5a9326, ccebce0; supervisor round 2 #1). SPEC §4 Budget now says every caller that spends wraps the providers in a `SessionGuard` (#4).
 - **Reference build** (round 2 plus the round 3 volume forms and the `colspan`): all 153 batch 23 contract tests pass, and the full suite gives **1322 passed**. Muse's round 2 unit case "Every 5 cc has ibuprofen 100 mg" led the CEO to add `has` to the contains words, which only drops more.
 - **Mutants,** each alone, all caught: the water skip removed (3 failures); the container check removed (1); the contains-word requirement removed (4); `cada`/`chaque` removed (6); the `colspan` removed (1).
+
+## Round 4 (28 Oct): one clause rule, pinned in `tests/contract/test_b23_round4.py`
+- **On Muse's round 3:** 85 of the 87 new tests fail: every wording the supervisor's round 3 found, the containers read per ml, and 5 of the 7 kept lines. The 2 that pass are per-ml strengths printed per 1 ml.
+- **Reference build** (round 3 plus the clause rule in `spark.py`): all **1100** contract tests pass, 253 of them batch 23's. Every round 1–3 case still holds under the new rule.
+  - 14 of Muse's own round 2–3 unit tests fail. They call the old helper, or pin pattern behaviour the clause rule changes on purpose: the container exemption, "peach", "within", and kept lines with a dose volume in another clause and no tablet word.
+- **Mutants,** each alone against all four batch 23 volume contracts, all caught:
+  - the water exemption removed: 7 failures;
+  - the per-1-ml exemption removed: 6;
+  - the tablet-word rule removed: 2;
+  - the not-dissolving exclusion removed: 6;
+  - the clause split removed: 4.

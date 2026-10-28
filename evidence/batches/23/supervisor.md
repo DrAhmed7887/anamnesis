@@ -78,3 +78,39 @@ Muse's round 2 code does what the round 2 brief and the SPEC ask, and the round 
    - **Fix:** cap the photos, or make the SPEC say every live caller wraps the providers in a `SessionGuard`.
 
 **Rerun on after-r2:** round 1 #1 (the Arabic decimal sign), #2 (all its forms), #4 (`add_photo`'s three concepts), #5 (the `ملجم` tablet, kept) and #6 (the step sum after `add_photo`) are all fixed. #3 is fixed with the default budget, but not live (see #1). The 10 session paths still add up. The page is still 8 sections, one collapsed `<details>` and no dangling `#` link. Every input kept in round 1 is still kept. The regexes follow the round 2 brief item by item. Muse made the bracket after a spoon word optional, which is the safe side. `add_photo`'s default budget, `len(concepts) + 2*top_k`, covers every call one photo can make.
+
+## Round 3 (28 Oct)
+
+SUPERVISOR: CHANGES
+
+Round 3 fixes every round 2 input except an OCR'd "5 mI", and Muse's code follows the SPEC text it was given. But the SPEC's volume-first wording still keeps the fivefold error on the commonest suspension wording, so #1–#3 are needed before the merge.
+
+1. **major: the three-word window and the contains-word list miss standard carton wordings.** All of these kept 250 per ml:
+   - "Each 5 ml of reconstituted suspension contains amoxicillin 250 mg", the amoxicillin and co-amoxiclav standard;
+   - "Each 5 ml of the suspension contains 250 mg";
+   - Spanish: «Cada 5 ml de suspensión contienen…», «Cada 5 ml contienen 250 mg» and «… suspensión reconstituida contiene…»;
+   - Arabic: «كل ٥ مل تحتوى…» and «يحتوى» (the usual Egyptian spelling), «كل ٥ مل من المعلق بعد التحضير تحتوي…» and «كل ٥ مل بها…»;
+   - "Each 5 ml provides 250 mg" and "Each 5 ml containing 250 mg".
+2. **major: volume-first needs a starter word, so a bare volume with a contains word, or one after `per`, is kept.** Examples: "5 ml contains…", "Composition: 5 ml suspension contains…", "Per 5 ml: …", "Per 5 ml\n…", "One teaspoonful (5 ml) contains…", "A 5 ml spoonful contains…", and "Chaque cuillère-mesure de 5 ml contient…".
+3. **major: the container exemption keeps a container's total read per ml.**
+   - "each 2 ml ampoule contains 40 mg", read as 40 per ml, a 2× error;
+   - "each 3 ml pen contains 300 units", read as 300 per ml;
+   - "Each 5 ml bottle: 250 mg";
+   - "Each 5 ml cup contains 250 mg", where the cup is the measuring cup.
+
+   "Insulin 100 units/ml. Each 3 ml pen contains 300 units", read as 100 per ml, is still kept.
+4. **minor: the water skip crosses line breaks and matches composition water.** Kept at 120 per ml: "… in 5 ml\nPurified water q.s.", «… في ٥ مل ماء مقطر» and "… in 5 ml water-based syrup".
+5. **minor, but fix before the merge: plain `spoon`.** The CEO's uncommitted SPEC edit lists it; the code doesn't; and a unit test pins "250 mg per spoon (5 ml)" as kept.
+6. **minor: `scripts/intake_live.py:85–86`.** `SessionGuard(max_calls=calls)` counts every charged attempt, retries included, so retries end a live intake early: 8 loop calls of 11. Fix: `max_calls=2 * calls`.
+7. **minor (fails closed, coverage only): correct tablet and dissolving strengths still dropped.** Examples: "… in 200 ml of lukewarm drinking water" (water is the fourth word), "… (a glass) of water", "1000 mg per 200 ml of water", "Each 5 ml = 1 teaspoon. Concor 5 mg tablets", and "Every 10 ml of water: dissolve one tablet. Panadol 500 mg".
+
+**Checked and fine:**
+- every round 2 drop and keep case;
+- the timeline `<tfoot>` cell has `colspan="9"`;
+- the step sums, including `add_photo`;
+- the four-photo budget case (16 calls, Concor `match`);
+- the live script's loop budget.
+
+**The CEO's response, round 4:**
+- **#6:** fixed directly in `intake_live.py` (447a85c).
+- **#1–#5 and #7:** handled by replacing the round 1–3 wording patterns with one clause rule (SPEC §2). It asks whether a clause that isn't about water prints a dose volume at all, so no list of starters, connectors, spoons or contains words is needed.
