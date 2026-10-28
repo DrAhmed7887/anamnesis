@@ -192,3 +192,39 @@ Round 5 drops every harmful keep from rounds 1–4, and Muse's `spark.py` matche
 - **#5, the own print:** for a reading per ml or per dose, the amount's own print in that unit no longer counts as printed beside the volume (`3 ml pen, 100 U/ml`). A tablet print still counts: it is matched by proximity, and excusing it would keep "Each 5 ml contains 250 mg, 500 mg tablets also available" read per tablet.
 - **#5, the bracket:** a bracket that closes after the volume may come before the water lead-in.
 - **Symbicort and `F.C.`:** recorded as coverage SPEC gives up.
+
+## Round 6 (28 Oct)
+
+SUPERVISOR: CHANGES
+
+Round 6 closes every round 5 input. But the new sentence end still lets an abbreviation keep the fivefold error. Muse's code matches the SPEC line by line, and only `spark.py` changed since round 5; pytest gives 1741 passed.
+
+1. **major: a `.` followed by a space and a capital ends the sentence, and that is how `Ph. Eur.`, `B. P.` and a pharmacopoeia mark before the INN are printed.**
+   - **Kept:**
+     - "Each 5 ml contains Amoxicillin Ph. Eur. 250 mg. Also 250 mg/ml drops", read as 250 per ml;
+     - the same line with "Amoxil 250 mg capsules also available", read per capsule;
+     - "… B.P. Paracetamol 250 mg. …" and "… Paracetamol B. P. 250 mg. …";
+     - "Each 5 ml contains: Paracetamol Ph. Eur.\n250 mg\n250 mg/ml drops also available".
+   - **Fix:** don't end a sentence at a `.` after a word of at most three letters.
+2. **The CEO's known round 7 gaps, rated:**
+   - **brackets in the before-form: major.** "Amoxicillin 250 mg (as trihydrate) per 5 ml. Amoxil 250 mg capsules", read per capsule, is kept. Apply the brackets to the always-counts form too.
+   - **the Arabic dual: minor**, but unconditional, because no volume is found at all;
+   - **the line break after a `.`:** fails closed, so it's fine.
+3. **minor (fails closed, common packs): prefilled syringes and pens read per dose are null.** Examples: "Clexane 40 mg/0.4 ml prefilled syringe", "Humira 40 mg/0.4 ml pre-filled pen", "Fragmin 5000 IU/0.2 ml", "Metoject 10 mg/0.2 ml", and "Ozempic 0.25 mg dose, 1.34 mg/ml, 1.5 ml pen". **Fix:** for a reading per dose, exempt a volume when a single-dose container is named, and accept `amount unit dose` with no connector.
+4. **minor (fails closed): a spelled-out Arabic milligram reads as ml.** «كونكور ٥ مللي جرام ٣٠ قرص», «… ملليجرام أقراص» and «أملور ١٠ ملي جرام أقراص» are null. **Fix:** exclude `مل` before these forms, and add them and `ميكروجرام` to the units.
+5. **minor (fails closed):**
+   - "Vitamin D3 1000 IU per drop, 10 ml", read per dose, is null. Add `drop`, `gota`, `goutte` and «نقطة» as dose words.
+   - "Disperse each 500 mg tablet in 10 ml of milk or juice" is null. It's rare, so accept it.
+
+**Checked and fine:**
+- all round 5 inputs, 26 of them changed as intended;
+- the round 5 over-drops are now kept: the drop bottles, Ventolin "micrograms", Fosfomycin, and «ماء -»;
+- the own-print skip passes only self-contradicting labels;
+- the lone-volume bracket after water;
+- the per-volume rule for `/`, `per` and `لكل`;
+- the step sums; nothing outside `spark.py` changed.
+
+**The CEO's response, round 7:**
+- **#1, #2, #4 and #5's drop words:** taken. The before-form now skips bracketed text entirely, so a longer salt name, "250 mg (as amoxicillin trihydrate)/5 ml", is caught as well. The always-counts form allows bracketed text between the amount and the connector.
+- **The stricter sentence end of round 6:** a `.` before a line break doesn't end a sentence. Muse's reading was the stricter one, and it is now SPEC.
+- **#3, not taken; recorded as coverage SPEC gives up.** An exemption keyed to `syringe` or `pen` would also cover a syrup's oral measuring syringe and multi-dose insulin and GLP-1 pens. Dropping these strengths fails closed: the brief asks for the pack.

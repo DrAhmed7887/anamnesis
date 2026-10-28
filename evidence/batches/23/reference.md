@@ -80,3 +80,20 @@
   - no closing bracket before the lead-in.
 
   One of the 14, "any bracket after water", first survived. A drop now pins the closing side: "Reconstitute with water (5 ml contains 250 mg)".
+
+## Round 7 (28 Oct): the SPEC's own loose wording and the supervisor's round 6 review, pinned in `tests/contract/test_b23_round7.py`
+- **The CEO's differential check after round 6:** Muse's round 6 and the round 6 reference differed on 6 of 788 checks (197 labels × 4 `per` values). Both inputs traced to loose SPEC wording, not to Muse:
+  - "at most three words (its unit, `base`, a salt)" let Muse exclude brackets, so "250 mg (as base) per 5 ml" escaped the refusal;
+  - "`ملعقة` with any suffix" missed the dual `ملعقتين`.
+
+  The SPEC now says it exactly. Muse's stricter sentence end (not before a line break) became the SPEC.
+- **On Muse's round 6:** 29 of the 47 new tests fail.
+- **Reference build** (the round 6 reference plus round 7): all **1342** contract tests pass, and all 171 of Muse's round 6 unit cases pass on it too.
+- **Mutants:** each applied alone to the reference and run against every contract test. All 38 were caught: the 30 from round 6 and 8 for round 7:
+  - the sentence ending after a short word, or before a line break;
+  - no brackets in the always-counts form, and bracket text counted in the before-form;
+  - the spoon stem `ملعقة` only;
+  - a spelled-out milligram read as ml, and no spelled-out milligram units;
+  - no drop words.
+
+  Three of these first survived, because two rules covered the same inputs. One pin each now needs that rule alone: «كونكور ٥ مللي جرام» with no tablet word, «فنتولين ١٠٠ ميكروجرام لكل بخة، ٢٠٠ بخة، ١٨ مل», and a long word before `.\n`.
