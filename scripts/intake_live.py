@@ -42,6 +42,7 @@ from anamnesis.providers.claims import MetaClaimExtractor
 from anamnesis.providers.meta import MetaClient, MetaLabelReader, MetaSegmenter, MetaTranscriber
 from anamnesis.providers.openweight import PRESETS, OpenWeightClient, OpenWeightLabelReader
 from anamnesis.providers.spend import SessionGuard
+from anamnesis.schema import ReconciliationReport
 
 ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "evidence/raw/media"
@@ -89,7 +90,8 @@ class Run:
     open_client: OpenWeightClient | None = None  # set: Muse Spark Open on Baseten reads the labels
 
 
-def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]], lang: str) -> None:
+def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]],
+           lang: str) -> ReconciliationReport:
     # The loop's own default budget (SPEC §4 Budget): every call it can make. The dollar cap bounds the spend;
     # a fixed 12 dropped a sent pack on a four-photo intake (supervisor 23, round 2 #1).
     calls = 2 + (len(SAM_CONCEPTS) + 2 * run.top_k) * len(images)
@@ -128,6 +130,7 @@ def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]], l
         print(f"      {step.n:2} {step.action.value:16} {step.target[:28]:28} {step.outcome}")
     for f in report.findings:
         print(f"      {f.finding_id:7} {f.type.value:34} {f.clinician_note}")
+    return report
 
 
 def photo(path: str) -> tuple[bytes, str]:
