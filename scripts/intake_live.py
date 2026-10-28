@@ -28,12 +28,12 @@ from decimal import Decimal
 from pathlib import Path
 
 from anamnesis.agent import run_intake
+from anamnesis.agent.loop import SAM_CONCEPTS
 from anamnesis.brief import render_brief
 from anamnesis.core.catalogue import load_catalogue
 from anamnesis.providers import SpendGuard
 from anamnesis.providers.claims import MetaClaimExtractor
 from anamnesis.providers.meta import MetaClient, MetaLabelReader, MetaSegmenter, MetaTranscriber
-from anamnesis.agent.loop import SAM_CONCEPTS
 from anamnesis.providers.spend import SessionGuard
 
 ROOT = Path(__file__).resolve().parents[1]
