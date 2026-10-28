@@ -157,6 +157,7 @@ With Muse Spark Open as its label reader, the full intake ran end to end on eigh
 - Batches 1–12 were built with GPT-6 Sol and Luna through Codex, some with Claude Code fixes, and batch 6 by Claude Code directly. Batches 13–15.5 were built by Claude Sonnet subagents. [5.3]
 - In batch 22, a separate Claude Opus reviewer caught a spec error: as briefed, "less than five milligrams" could have been read as exactly five, if a model wrote the amount as "<five". The contract now pins that case. [5.10]
 - Batch 23 took nine rounds: a separate Claude Opus reviewer sent it back seven times before approving it. Before each round, Claude Code checked its own contract on a throwaway reference build. At the end, all 44 deliberate single-rule breaks of that reference were caught by the contract. Its follow-up, batch 23.1, passed review in one round with nothing to change. [5.11]
+- Before the freeze, a Gemini 4 grill claimed 11 breaks, and each was run against the code. Two were real: the comparison script's photo check was wider than the data rule and was fixed, though no photo outside the rule was ever sent, and a volume written in words stays a known limit. [5.12]
 - Batches 1 to 20 were each specified, built, gated and reviewed in one day, 27 Oct. [5.8]
 - Muse Code's sessions cost about $26.87 of Meta credit so far, priced from its own billing records (28 Oct). [5.5] About $29.08 of the $150 credit in logged calls so far (28 Oct). Muse grill runs are billed separately. [5.6]
 - Each Muse batch's record is in `evidence/batches/<n>/`: `builder.md`, `gate.json`, `supervisor.md` and `review.md`. [5.1]
@@ -176,8 +177,11 @@ uv run pytest
 - The number check looks only at the number, not its unit, and doesn't check the regimen's counts. On the pack side it checks the label text the reader itself returned. Spanish number words aren't read, so such a dose is dropped. [1.13]
 - Only one class is curated, beta-blockers, and interactions aren't checked. [1.10]
 - SAM 3.1 doesn't always find the pack: in the comparison it found one in 20 of 39 public photos. [1.2, 4.13]
-- The volume rule gives up some coverage on purpose, listed in SPEC §2, prefilled syringes and pens read per dose the main one. It doesn't read every syrup wording. One kind of wording still keeps a per-tablet reading on purpose: a tablet word before "in" or "في" and the volume, as in "Paracetamol 250 mg = one tablet in each 5 ml". [1.19]
-- Every miss on the ten public photos and the two synthetic notes is in their two tables above. [4.11, 4.12]
+- The volume rule gives up some coverage on purpose, listed in SPEC §2: single-dose injectables and pens read per dose, such as "40 mg/0.4 ml", lose their strength, which fails closed. It doesn't read every syrup wording, and three kinds of wording are known to keep a strength they shouldn't: a tablet word before "in" or «في» and the volume, kept on purpose ("Paracetamol 250 mg = one tablet in each 5 ml"); a volume written in words ("Each five ml contains 250 mg"); and a per-1-ml print beside another volume, read per dose ("Each 5 ml contains 250 mg/ml"). Packs print volumes in digits. [1.19, 4.17]
+- Salt names that aren't curated, such as rosuvastatin calcium, sitagliptin phosphate and candesartan cilexetil, stay as written, so a pack read with its salt doesn't pair with the patient's claim. [4.17]
+- Decomposed accents (Unicode NFD) in catalogue names aren't normalised, so such a name goes unpaired, which fails safe. [4.17]
+- Spoken numbers with a thousand after a hundred or another thousand are a known gap: "two hundred and one thousand" parses as 201,000, and «ألفين وألف» as 3,000. [4.17]
+- Every miss is in the tables above: the ten public photos, the two synthetic notes and the intake run with Muse Spark Open. [4.11, 4.12, 4.16]
 
 ## Data and privacy
 - No patient data. The pack photos are rendered test images or real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3] The rules for the developer's own photos and voice are in [`docs/DATA_HANDLING.md`](docs/DATA_HANDLING.md).
