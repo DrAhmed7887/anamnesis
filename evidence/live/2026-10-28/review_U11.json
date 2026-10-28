@@ -1,0 +1,23 @@
+{
+  "request": {
+    "request_id": "r1",
+    "kind": "unreadable",
+    "target_id": "o0",
+    "status": "open",
+    "photo_index": null
+  },
+  "message": "Please send one new photo of this medicine pack, with the label facing the camera, in good light.",
+  "answered": {
+    "intake_id": "bf1fcb6e25c5a10228e79b106e5f2aed7a59170ada41c4b69e9cd140417cd1bb",
+    "status": "draft",
+    "requests": [
+      {
+        "request_id": "r1",
+        "kind": "unreadable",
+        "target_id": "o0",
+        "status": "answered",
+        "photo_index": 2
+      }
+    ]
+  }
+}
