@@ -141,3 +141,8 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
 - **Photos:** only the 39 public ones: 30 Cairo University phone photos (CC BY 4.0) and 9 Wikimedia Commons photos. Their expected readings and scoring rules were committed before any call (c1b5b6e). Ahmed's own photos and voice never go to these providers (`docs/DATA_HANDLING.md`).
 - **How it is reported:** a descriptive comparison, n = 39, with every miss published per photo and reader. Never a "benchmark", and never "beats". Entering the open-weight prize track waits for Ahmed to read the guide's wording.
 - **Spend:** about $2 a pass on Meta's credit for SAM and Spark 1.3. The open-weight reads go on the Fireworks or Baseten credit, which the Meta total leaves out (a81c9d1).
+
+## 2026-10-28: three AI-written notes moved to the Trash (Ahmed's call)
+- **Moved to the macOS Trash:** `docs/SUGGESTIONS_FOR_CLAUDE.md`, `docs/DATASET_RESEARCH_AUDIT.md` (both 27 Oct, from Antigravity) and `docs/PUBLICATION_BLUEPRINT_LUNA.md` (28 Oct, "generated via GPT-6 Luna"). They can be restored from the Trash until it is emptied.
+- **Why:** they were never committed, and the repo goes public at submission. The suggestions file held the wrong price table, personal context, and citations already flagged as non-existent (27 Oct, above).
+- **What stays:** the decisions made from the suggestions file stay in the 27 Oct entries above. Briefs 14, 15 and 15.5 still tell Muse to leave the files alone, which is now moot.
