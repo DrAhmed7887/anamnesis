@@ -83,7 +83,9 @@ def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]], l
     # The loop's own default budget (SPEC §4 Budget): every call it can make. The dollar cap bounds the spend;
     # a fixed 12 dropped a sent pack on a four-photo intake (supervisor 23, round 2 #1).
     calls = 2 + (len(SAM_CONCEPTS) + 2 * run.top_k) * len(images)
-    guard = SessionGuard(run.ledger, max_usd=run.session_usd, max_calls=calls)
+    # The guard counts every charged attempt and a call charges at most two (one retry), so twice the loop's
+    # budget keeps --session-usd the real bound (supervisor 23 round 3 #6).
+    guard = SessionGuard(run.ledger, max_usd=run.session_usd, max_calls=2 * calls)
     timed = TimedClient(run.client)
     keywords = [n for entry in run.catalogue.entries for n in (entry.brand, *entry.aliases)]
     start = time.monotonic()
