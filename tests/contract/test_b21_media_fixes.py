@@ -209,3 +209,33 @@ def test_round_2_decomposed_accents_still_resolve():
 def test_round_2_both_prompts_keep_their_advice_sentences():
     assert "Give no advice. Use unreadable or partial rather than guessing." in LABEL_PROMPT
     assert "Give no medical advice. Only report what the patient said." in CLAIM_PROMPT
+
+
+# --- round 3 (supervisor 21, round 2) ----------------------------------------------------------------------
+# #1: a plain worth 1000 or more (ألفين) closes the thousands part like a thousand word. #2: after the filler "a"
+# ("and a hundred") nothing moves. #3: a digit run is atomic, so a decimal touching a foreign digit states nothing.
+
+@pytest.mark.parametrize("text,values,absent", [
+    ("ألفين وخمسمية", {"2500"}, None),
+    ("ألفين و ميتين", {"2200"}, None),
+    ("ألفين ومية", {"2100"}, "200000"),
+    ("ألفين وخمسمية وخمسين", {"2550"}, "550"),
+    ("eight hundred seventy-five and a hundred twenty-five", {"875", "125"}, "870"),
+    ("eight hundred seventy-five and a hundred twenty-five", {"875", "125"}, "525"),
+    ("one hundred twenty-five and a hundred", {"125", "100"}, "120"),
+])
+def test_round_3_thousands_words_and_the_filler_a_state_only_what_was_said(text, values, absent):
+    found = stated_amounts(text)
+    assert {Decimal(v) for v in values} <= found
+    if absent:
+        assert Decimal(absent) not in found
+
+
+@pytest.mark.parametrize("text", ["1.5５ mg", "2,5５ mg", "٢٫٥५"])
+def test_round_3_a_decimal_touching_a_foreign_digit_states_nothing(text):
+    assert stated_amounts(text) == frozenset()
+
+
+@pytest.mark.parametrize("text,values", [("I take 5.", {"5"}), ("Augmentin 875 mg/125 mg", {"875", "125"})])
+def test_round_3_plain_digit_runs_are_unchanged(text, values):
+    assert {Decimal(v) for v in values} <= stated_amounts(text)
