@@ -97,3 +97,10 @@
   - no drop words.
 
   Three of these first survived, because two rules covered the same inputs. One pin each now needs that rule alone: «كونكور ٥ مللي جرام» with no tablet word, «فنتولين ١٠٠ ميكروجرام لكل بخة، ٢٠٠ بخة، ١٨ مل», and a long word before `.\n`.
+
+## Round 8 (28 Oct): the supervisor's round 7 review, pinned in `tests/contract/test_b23_round8.py`
+- **The CEO's differential check after round 7:** Muse's round 7 and the round 7 reference gave the same answer on all 844 checks: 211 labels × 4 `per` values.
+- **On Muse's round 7:** 14 of the 16 new tests fail. The two that pass are the Euthyrox keep, which a three-word limit never reaches, and the six-word bracket, which Muse's bracket skipping already handles.
+- **Reference build** (the round 7 reference plus round 8): all **1358** contract tests pass, and all 204 of Muse's round 7 unit cases pass on it. Round 8 changes no answer on the 844 earlier differential checks.
+- **Mutants,** each applied alone to the reference and run against every contract test. All 41 were caught: the 38 from round 7, plus three words instead of five, the before-form crossing a sentence end, and no colloquial spoon.
+  - "Before-form counts bracket text" first survived, because five words also fit the four-word bracketed salt. A six-word bracket now pins it.

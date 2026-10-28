@@ -228,3 +228,33 @@ Round 6 closes every round 5 input. But the new sentence end still lets an abbre
 - **#1, #2, #4 and #5's drop words:** taken. The before-form now skips bracketed text entirely, so a longer salt name, "250 mg (as amoxicillin trihydrate)/5 ml", is caught as well. The always-counts form allows bracketed text between the amount and the connector.
 - **The stricter sentence end of round 6:** a `.` before a line break doesn't end a sentence. Muse's reading was the stricter one, and it is now SPEC.
 - **#3, not taken; recorded as coverage SPEC gives up.** An exemption keyed to `syringe` or `pen` would also cover a syrup's oral measuring syringe and multi-dose insulin and GLP-1 pens. Dropping these strengths fails closed: the brief asks for the pack.
+
+## Round 7 (28 Oct)
+
+SUPERVISOR: CHANGES
+
+Round 7 closes every round 6 input, with no regressions across about 330 probe labels from rounds 1–7. One fail-open remains. It is the same class as the "another product's line" cases the contract already treats as realistic. If the CEO judged a same-amount sibling line unrealistic on a single pack photo, the batch would meet the merge bar. Only `spark.py` changed since round 6; pytest gives 1821 passed.
+
+1. **major (fails open): a salt phrase of four or more words without brackets, between the amount and the connector, escapes the before-form.**
+   - **Kept:**
+     - "Amoxicillin 250 mg as amoxicillin trihydrate per 5 ml oral suspension. Amoxil 250 mg capsules also available", read per capsule;
+     - the same line with `;`;
+     - two Arabic forms with «على هيئة … لكل ٥ مل»;
+     - "… as amoxicillin trihydrate BP per 5 ml. 250 mg/ml drops", read per ml.
+   - **Fix:** raise the word limit from three to five, and stop those words at a sentence end. Otherwise the change would drop "Euthyrox 50 µg tablets; crush and suspend in 10 ml of liquid".
+2. **minor (fails open, rare):** «معلقة», the colloquial Egyptian spelling of «ملعقة», isn't a spoon. «باراسيتامول ٢٥٠ مجم لكل معلقة» is kept for any `per`. The stem «معلق» alone means a suspension.
+3. **minor (fails open, contrived):** a sentence end SPEC allows, followed by a same-amount line: a four-letter `Ph.Helv.`, "BP 2009.", and "paracetamol. Strength 250 mg." No change needed.
+4. **minor (fails closed, recorded as given up): prefilled syringes and pens read per dose.** Accepted under the merge bar; the CEO's reason against a container exemption is sound.
+
+**Checked and fine:**
+- every round 6 input, now dropped or kept as intended;
+- bracket and abbreviation variants: two groups, nested brackets, non-breaking spaces, blank lines;
+- the Arabic volumes and spoon variants;
+- the new units and dose words, which create no false own print a syrup could use;
+- Muse's code against SPEC, including the one-group form, which is harmless;
+- the step sums; nothing outside `spark.py` changed.
+
+**The CEO's response, round 8:**
+- **#1 and #2:** taken. The before-form takes up to five words, none of them across a sentence end, and the colloquial spoon spellings count as whole words.
+- **#3:** no change, as the supervisor advises.
+- **#4:** stays recorded as coverage given up.
