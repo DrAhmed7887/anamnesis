@@ -60,3 +60,23 @@
   - no water before brackets;
   - no Arabic tablet words;
   - a four-word window instead of the lead-in words.
+
+## Round 6 (28 Oct): the supervisor's round 5 review and the CEO's differential check, pinned in `tests/contract/test_b23_round6.py`
+- **The CEO's differential check after round 5:** Muse's `spark.py` and the round 5 reference gave the same answer on 684 checks. That is 171 labels × 4 `per` values: every batch 23 contract label plus 34 edge cases. Reading the edge cases showed correct strengths the shared rule dropped. Insulin pens and drops printed volume first (`Lantus SoloStar 3 ml pen, 100 U/ml`) and ampoules with the per-ml figure in brackets lost theirs: the refusal counted the reading's own print. So did effervescents written `in a glass (200 ml) of water`.
+- **On Muse's round 5:** 44 of the 69 first-draft tests fail: the supervisor's round 5 inputs and the CEO's.
+- **Reference build** (the round 5 reference plus round 6): all **1295** contract tests pass.
+  - One Muse round 5 unit case caught a CEO error before the lock. "Not followed by a letter" for `مل` also excluded `ملي`, and that kept a 250 mg/5 ملي syrup. The rule now excludes only `ملجم`, `ملغ` and `ملعقة`, and two drops pin `ملي`.
+  - One Muse round 5 unit case changes on purpose: "500 mg capsules in 5 ml syrup" now drops, because the before-form takes words between the amount and `in`.
+- **Mutants,** each applied alone to the reference and run against every contract test. All 30 were caught: the 16 from round 5, and 14 for round 6:
+  - the sentence ending at any `.`;
+  - the before-form with nothing between, or without `each`;
+  - no per-volume rule for dose and tablet;
+  - the tablet print across a comma;
+  - no `mililitros`/`cm3`, and `مل` not followed by any letter;
+  - any bracket after water;
+  - the spaced dash as `water-based`;
+  - no `micrograms`;
+  - no own-print skip, a tablet print excused, per dose skipping only per-dose prints;
+  - no closing bracket before the lead-in.
+
+  One of the 14, "any bracket after water", first survived. A drop now pins the closing side: "Reconstitute with water (5 ml contains 250 mg)".

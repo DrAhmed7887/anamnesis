@@ -144,3 +144,51 @@ The clause rule is a real improvement: every syrup wording from rounds 1–3 is 
 - **#4 and #7:** with no clauses, nothing is cut. A tablet print must sit within three words of the amount, with no sentence or line break between them.
 - **#5 and #6:** `ال` and the Arabic suffixes, `U`, `unidades`, `unités`, `وحدة دولية`, and a per-dose print.
 - **Two earlier keeps move to the drops, on purpose (they fail closed):** "1000 mg per 200 ml of water" (round 4), and "Panadol 500 mg\n24 tablets, 100 ml bottle" (round 1), where a line break comes between the amount and the tablet word.
+
+## Round 5 (28 Oct)
+
+SUPERVISOR: CHANGES
+
+Round 5 drops every harmful keep from rounds 1–4, and Muse's `spark.py` matches the SPEC text. One gap remains in the refusal, and it keeps the fivefold error. Only `spark.py` changed since round 4; pytest gives 1628 passed.
+
+1. **major: the refusal misses the strength in two ways, so a same-amount print in the reading's own unit elsewhere rescues a wrong reading.**
+   - The sentence ends at any `.`, including those of abbreviations (`B.P.`, `Ph.Eur.`, `USP.`, `approx.`), so the amount after its volume falls outside the window.
+   - The before form allows nothing between the connector and the volume, so `in each 5 ml` isn't caught.
+   - **Kept:**
+     - "Each 5 ml contains Paracetamol B.P. 250 mg. Also as 250 mg/ml drops", read as 250 per ml;
+     - "… Ph.Eur. 250 mg\nParacetamol 250 mg/ml drops also available";
+     - the `B.P.` and `USP.` lines with "250 mg tablets also available", read per tablet;
+     - "Each 5 ml contains approx. 250 mg. 250 mg/ml drops";
+     - "Paracetamol 250 mg in each 5 ml. …", "250 mg base/5 ml. …" and "250 milligrams per 5 ml. …".
+   - These are SPEC's own dropped example with `B.P.` added, the way Egyptian composition lines print it.
+   - **Fix:** a `.` ends the sentence only before a space and a capital or Arabic letter, or at the end of the text. Allow `each`/`every`/`cada`/`chaque`/`كل` after the connector.
+2. **minor: a dosing line or another product's line satisfies the own-unit print.** Kept:
+   - "Paracetamol 120 mg/5 ml. Children 6-12 years: 250 mg per dose", read as 250 per dose;
+   - "… Equivalent to half a 250 mg tablet", read as 250 per tablet;
+   - "Paracetamol 250 mg oral suspension, not tablets. Shake. 5 ml", read per tablet.
+
+   **Fix:** a reading per dose, tablet or capsule is dropped whenever an amount is printed right before a counting volume through `/` or `per`.
+3. **minor: no volume found, so nothing counts.** "Cada 5 mililitros contienen 250 mg" and "Each 5 cm3 contains 250 mg" are kept. **Fix:** add `mililitros`, `cm3` and `cm³`.
+4. **minor: brackets after a water word exempt everything inside them.** "Reconstitute with water (each 5 ml then contains 250 mg)", read per dose, is kept. **Fix:** exempt only a bracket holding just a volume, optionally with `approx.`.
+5. **minor: the CEO's four known losses, rated.**
+   - The own per-ml print counted by the refusal is the commonest. It also nulls "Each 10 ml bottle contains 50 mg/ml" and "Each 15 ml dropper bottle contains 40 mg/ml".
+   - The bracket that closes after the volume hits effervescents and sachets.
+   - Symbicort and `F.C.` are low impact.
+   - "Ventolin Evohaler 100 micrograms per actuation, 200 doses, 18 ml" is null, because `micrograms` isn't a unit.
+6. **minor (code nits):**
+   - `\s*-` refuses "water - shake well", but SPEC means the hyphen of `water-based`;
+   - Arabic `مل` has no end check, so `لكل ملعقة` reads as a per-1-ml print (the refusal catches it today);
+   - Muse's `(?:ال)?` grouping fix is right, and no other grouping error was found in 25 patterns.
+
+**Checked and fine:**
+- About 230 labels from rounds 1–4. All 34 round 4 harmful keeps are now null, and all round 4 over-drops are now kept.
+- Seven earlier keeps now drop, including the drop-bottle lines above.
+- The step sums; nothing outside `spark.py` changed.
+
+**The CEO's response, round 6:**
+- **#1 and #2:** taken as proposed. The before-form also takes up to three words between the amount and the connector (`250 mg base/5 ml`), so it doesn't depend on the sentence window.
+- **#2's third input:** a comma now also blocks the tablet print.
+- **#3, #4, `micrograms`, and the two nits:** taken.
+- **#5, the own print:** for a reading per ml or per dose, the amount's own print in that unit no longer counts as printed beside the volume (`3 ml pen, 100 U/ml`). A tablet print still counts: it is matched by proximity, and excusing it would keep "Each 5 ml contains 250 mg, 500 mg tablets also available" read per tablet.
+- **#5, the bracket:** a bracket that closes after the volume may come before the water lead-in.
+- **Symbicort and `F.C.`:** recorded as coverage SPEC gives up.

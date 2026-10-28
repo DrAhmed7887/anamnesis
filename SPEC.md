@@ -53,34 +53,34 @@ A number a model writes is kept only if the source states it. The workshop rule 
         - After the filler `a` ("and a hundred"), nothing moves. So "eight hundred seventy-five and a hundred twenty-five" states 875 and 125, never 870 or 525.
 - **Claims.** Each `strength` ingredient amount and the `intake_amount` amount must be in the union of `stated_amounts` over the turns the claim cites (only those). An amount that isn't stated is treated as one that doesn't parse: that field becomes null, and the existing rule then nulls the other one too. Live, 27 Oct: "Concor five milligrams" and "كونكور خمسة ملي جرام" both keep their 5 mg.
 - **Labels.** Each label `strength` ingredient amount must be in `stated_amounts(label_text)`; otherwise the label's `strength` becomes null (no `label_text`, no strength). The reading itself is kept. A `label_text` that is neither a string nor null makes the reply malformed (retryable), as before batch 20: it never reaches `stated_amounts` (supervisor 20 #1).
-- **A volume other than 1 ml** (batch 23). Rounds 1–3 listed wordings; round 4 cut the text into clauses; round 5 drops the clauses and asks instead whether each amount is printed in the reading's own unit. Both Arabic-Indic digit sets and the Arabic decimal sign `٫` are read as ASCII first, and matching ignores case.
-  - **A volume** is a number other than 1 (`5`, `2,5`), an optional `-`, and `ml`, `cc`, `millilitre(s)`, `milliliter(s)` or `مل` (not the start of `ملجم` or `ملغ`).
+- **A volume other than 1 ml** (batch 23). Rounds 1–3 listed wordings; round 4 cut the text into clauses; round 5 asked instead whether each amount is printed in the reading's own unit; round 6 closed the gaps the supervisor's round 5 review found in that rule. Both Arabic-Indic digit sets and the Arabic decimal sign `٫` are read as ASCII first, and matching ignores case.
+  - **A volume** is a number other than 1 (`5`, `2,5`), an optional `-`, and `ml`, `cc`, `cm3`, `cm³`, `millilitre(s)`, `milliliter(s)`, `mililitro(s)`, or `مل`, but not where it starts `ملجم`, `ملغ` or `ملعقة` (`ملي` counts, as Egyptian labels write it).
   - **A spoon counts as a volume too:**
     - `teaspoon`, `tablespoon`, `dessertspoon` and `spoon`, each with `ful` or a plural; `tsp`; `tbsp`;
     - `measure` after `per`, `each`, `every`, `a`, `one` or `1`;
     - `ملعقة` and `ملاعق`, with or without `ال` and with any suffix;
     - `cuchara`, `cucharada`, `cucharadita`, `cuillère`, `cuillerée` and `cuillère-mesure`, with their plurals.
   - **Water to dissolve in doesn't count, but only for a reading per `tablet`, `capsule` or `dose`.** It is either of these:
-    - **a volume or spoon followed by a water word.** Text in brackets isn't counted. Only these may come between: an optional `of`, `de`, `d'`, `du` or `من`, then any of `warm`, `lukewarm`, `cold`, `cool`, `cooled`, `boiled`, `drinking`, `tap`, `fresh`, `clean` and `plain`;
-    - **a volume inside brackets that open right after a water word** (`a glass of water (200 ml)`).
+    - **a volume or spoon followed by a water word.** Text in brackets isn't counted, and a bracket that closes after the volume may come first (`a glass (200 ml) of water`). Only these may come between: an optional `of`, `de`, `d'`, `du` or `من`, then any of `warm`, `lukewarm`, `cold`, `cool`, `cooled`, `boiled`, `drinking`, `tap`, `fresh`, `clean` and `plain`;
+    - **a volume alone in brackets right after a water word,** optionally after `approx`, `aprox`, `about`, `ca`, `env`, `environ` or `حوالي` (`a glass of water (200 ml)`, `water (approx. 200 ml)`).
   - **The water words** are `water`, `agua`, `eau`, and `ماء` with or without `ال`. They aren't water words when followed by:
-    - `-`;
+    - a hyphen joined to a word (`water-based`; a dash with spaces around it doesn't count);
     - `for injection`;
     - `purificada`, `destilada`, `estéril`, `purifiée`, `distillée` or `stérile`;
     - `مقطر`, `معقم` or `للحقن`.
-  - **A volume or spoon right after an amount always counts, water or not.** That is a number, its unit if any, one of `/`, `∕`, `／`, `per`, `por`, `par` or `لكل`, an optional `(`, then the volume or spoon: `250 mg/5 ml when reconstituted with water`.
+  - **A volume or spoon right after an amount always counts, water or not.** That is a number, its unit if any, one of `/`, `∕`, `／`, `per`, `por`, `par` or `لكل`, an optional `(`, then the volume or spoon: `250 mg/5 ml when reconstituted with water`. For a reading per `tablet`, `capsule` or `dose`, such a volume nulls the strength outright. The pack prints a strength per volume, so a dosing line or another product's line can't stand in for the reading's own print (`120 mg/5 ml. Children: 250 mg per dose`).
   - **The strength becomes null** when a volume or spoon counts, unless both of these hold:
     - each ingredient's amount is printed in the reading's own unit;
     - no amount of the reading is also printed beside a volume or spoon. That means either of these:
-      - right before it: the amount, its unit if any, one of those connectors or `in` or `في`, an optional `(`, then the volume or spoon (`250 mg / 5 ml`);
-      - after it in the same sentence: no `.` (except between two digits), `;`, `!`, `?` or `؛` between them; a line break doesn't end the sentence (`Each 5 ml contains 250 mg`).
+      - **right before it:** the amount, at most three words (its unit, `base`, a salt), one of the connectors above or `in` or `في`, an optional `each`, `every`, `cada`, `chaque` or `كل`, an optional `(`, then the volume or spoon (`250 mg / 5 ml`, `250 mg base in each 5 ml`);
+      - **later in its sentence.** A sentence ends at `;`, `!`, `?` or `؛`, and at a `.` followed by a space and a capital or Arabic letter, or by the end of the text. So `B.P. 250 mg` and `approx. 250 mg` stay in the sentence, and so does the next line. For a reading per `ml` or `dose`, the amount's own print in that unit doesn't count here (`3 ml pen, 100 U/ml`). A tablet or capsule print still counts, because it is matched by proximity (`Each 5 ml contains 250 mg, 500 mg tablets`).
   - **The reading's own unit:**
-    - **per `ml`:** the amount, its unit if any, a connector or `in` or `في`, an optional `1`, then `ml` or `مل` (`50 mg/ml`, `100 U/ml`);
+    - **per `ml`:** the amount, its unit if any, a connector or `in` or `في`, an optional `1`, then `ml`, `millilitre`, `milliliter`, `mililitro` or `مل` (with the same rule as in a volume) (`50 mg/ml`, `100 U/ml`);
     - **per `dose`:**
       - per 1 ml as above; or
       - the amount, its unit if any, a connector, an optional `1` or `metered`, then `dose`, `dosis`, `actuation`, `spray`, `puff`, `inhalation`, `pulverización`, `pulvérisation`, `بخة` or `جرعة` (`100 mcg per dose`);
-    - **per `tablet` or `capsule`:** the amount and its unit, then at most three words, then a tablet or capsule word, with no `.`, `;`, `!`, `?`, `؛` or line break between them (`5 mg tablets`, `500 mg 24 tablets`, `٢٠ مجم كبسولة`).
-  - **The units:** `mg`, `mcg`, `µg`, `μg`, `g`, `IU`, `UI`, `U`, `unit(s)`, `unidades`, `unités`, `مجم`, `ملجم`, `ملغ`, `مغ`, `جم`, `غ`, `وحدة` and `وحدة دولية`.
+    - **per `tablet` or `capsule`:** the amount and its unit, then at most three words, then a tablet or capsule word, with no `.`, `,`, `،`, `;`, `!`, `?`, `؛` or line break between them (`5 mg tablets`, `500 mg 24 tablets`, `٢٠ مجم كبسولة`).
+  - **The units:** `mg`, `mcg`, `µg`, `μg`, `g`, `IU`, `UI`, `U`, `unit(s)`, `unidades`, `unités`, `milligram(s)`, `microgram(s)`, `gram(s)`, `miligramo(s)`, `microgramo(s)`, `gramo(s)`, `milligramme(s)`, `microgramme(s)`, `gramme(s)`, `مجم`, `ملجم`, `ملغ`, `مغ`, `جم`, `غ`, `وحدة` and `وحدة دولية`.
   - **The tablet and capsule words:**
     - `tablet`, `tab`, `capsule`, `caps`, `comprimido`, `cápsula`, `comprimé` and `gélule`, with their plurals;
     - `قرص`, `أقراص`, `اقراص` and `كبسول`, with or without `ال` and with any suffix.
@@ -89,27 +89,35 @@ A number a model writes is kept only if the source states it. The workshop rule 
     - `Each 5 ml of reconstituted suspension contains 250 mg`;
     - `Amoxicillin 250 mg/5 ml when reconstituted with water`;
     - `Each 5 ml reconstituted with water contains 250 mg`;
-    - `Cada 5 ml contienen 250 mg (reconstituir con agua)`;
+    - `Cada 5 ml contienen 250 mg (reconstituir con agua)` and `Reconstitute with water (5 ml contains 250 mg)`;
     - `Each teaspoonful contains 125 mg` and `كل ملعقة صغيرة تحتوي على ١٢٥ مجم`;
-    - a per-ml line of another product: `250 mg / 5 ml. 250 mg/ml drops also available` and `Each 5 ml contains 250 mg. 250 mg/ml drops also available`, read as 250 per ml;
+    - a per-ml line of another product, read as 250 per ml: `250 mg / 5 ml. 250 mg/ml drops also available`, `Each 5 ml contains 250 mg. 250 mg/ml drops also available` and `Each 5 ml contains Paracetamol B.P. 250 mg. Also as 250 mg/ml drops`;
+    - a dosing line on a syrup, read as 250 per dose: `120 mg/5 ml. Children 6-12 years: 250 mg per dose`;
     - `Each 5 ml contains 250 mg. Tablets also available`, read per tablet;
     - a container's total read per ml: `each 2 ml ampoule contains 40 mg`;
     - a reading per ml beside a dissolving line: `120 mg in 5 ml of water`.
   - **Kept, for example:**
-    - **printed per 1 ml or per dose:** `50 mg/ml, each 5 ml bottle`, `Lantus 100 U/ml, 3 ml pen` and `100 mcg per dose, 200 doses, 10 ml canister`;
+    - **printed per 1 ml or per dose:**
+      - `50 mg/ml, each 5 ml bottle`;
+      - `Lantus 100 U/ml, 3 ml pen` and `Lantus SoloStar 3 ml pen, 100 U/ml`;
+      - `Each 2 ml ampoule contains 40 mg (20 mg/ml)`, read as 20 per ml;
+      - `100 mcg per dose, 200 doses, 10 ml canister`;
     - **printed per tablet or capsule:** `Ibuprofen 100 mg tablets, 100 ml` and `أوميبرازول ٢٠ مجم كبسولة، الجرعة ١٠ مل`;
     - **water to dissolve in:**
       - `Dissolve 500 mg in 200 ml (a glass) of water`;
       - `200 ml of lukewarm drinking water`;
       - `يذاب في ٢٠٠ مل من الماء`;
-      - `Dissolve one tablet in a glass of water (200 ml)`;
+      - `Dissolve one tablet in a glass of water (200 ml)` and `… in a glass (200 ml) of water`;
     - **no volume:** `٨٧٥ ملجم/١٢٥ ملجم`.
   - **Coverage it gives up, on purpose:**
     - an amount printed only after its volume or unit word, beside a pack volume: `Each ml contains 50 mg. 15 ml bottle`, `Each tablet contains 5 mg. 5 ml spoon`;
-    - a line break between the amount and the tablet word: `Panadol 500 mg\n24 tablets, 100 ml bottle`;
-    - two products on two lines, when the amount follows the volume: `5 ml syrup\n500 mg capsules`;
+    - a line break, a comma or an abbreviation's `.` between the amount and the tablet word, beside a pack volume: `Panadol 500 mg\n24 tablets, 100 ml bottle`, `5 mg 30 F.C. Tablets`;
+    - **two products on one label:**
+      - when the reading is per tablet, capsule or dose and the other product's strength is printed per volume: `Brufen 400 mg tablets. Brufen syrup 100 mg/5 ml`;
+      - when the amount follows the volume: `5 ml syrup\n500 mg capsules`;
     - a pack that prints a dose volume and names no tablet or capsule, read per tablet: `Every 5 ml: shake well. Concor 5 mg`;
-    - a dissolving line after `per`: `1000 mg per 200 ml of water`.
+    - a dissolving line after `per`: `1000 mg per 200 ml of water`;
+    - a combination printed with one unit, beside a pack volume: `160/4.5 mcg per inhalation, 10 ml`, where 160 isn't printed per dose.
 - **Prompts.** Both prompts say "never convert units", because "half a gram" written as 500 mg would not be stated.
   - **Claim prompt** (batch 21): "Write every amount and count as digits, even when the patient said it in words ('five' is 5, 'خمسة' is 5, 'twice a day' is 2), with the unit the patient said, and never convert units."
   - **Label prompt** (batch 21): "Copy all of its printed text into label_text, including every amount you report. Write each amount as digits with the unit printed on the pack, and never convert units. Name each ingredient by its English INN (amoxicillin, not amoxicilline or amoxicillinum), even when the pack prints it in another language or script."
