@@ -41,10 +41,7 @@ evidence_part() {
 code_part() {
   if [[ $part == code ]]; then section "SPEC.md"; cat SPEC.md; fi
   section "contract tests (names)"; uv run pytest -q --collect-only tests/contract 2>/dev/null | grep '::' | sed 's/\[.*//' | sort -u
-  for f in anamnesis/core/reconcile.py anamnesis/core/catalogue.py anamnesis/core/overlap.py anamnesis/core/guardrails.py \
-           anamnesis/schema/findings.py anamnesis/schema/templates.py anamnesis/schema/report.py anamnesis/providers/base.py \
-           anamnesis/providers/spend.py anamnesis/providers/meta.py anamnesis/providers/claims.py anamnesis/providers/spark.py \
-           anamnesis/providers/numbers.py anamnesis/agent/*.py anamnesis/brief.py anamnesis/brief_html.py; do
+  for f in anamnesis/**/*.py(N); do   # every module: a fixed list missed review.py and openweight.py (28 Oct)
     section "$f"; cat "$f"
   done
 }
