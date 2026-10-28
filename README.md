@@ -107,6 +107,8 @@ Built with Muse Spark Open, in a zero-shot comparison and in a run of the full i
 
 In a pre-registered zero-shot comparison, SAM 3.1 found a pack in 20 of 39 public photos. On those 20 crops, as first scored, Spark 1.3 read 13 correctly with 3 harmful readings, and Muse Spark Open on Baseten read 13 with 2. A scorer fix made after the run raised both to 14, with 2 and 1 harmful. [4.13] Every reader read the same SAM 3.1 crops with the same system prompt, schema and parser, and no model was trained. Baseten also got the schema as text in its user message, and Fireworks used strict JSON mode. The photos are 30 Cairo University phone photos (CC BY 4.0) and 9 Wikimedia Commons photos. [4.13]
 
+<sub>Cairo photos: Abdelmaksoud E, Gadallah A, Asad A. Mobile-Captured Pharmaceutical Medication Packages. Mendeley Data, v1, 2022. [doi:10.17632/bjy2svvmn8.1](https://doi.org/10.17632/bjy2svvmn8.1), CC BY 4.0.</sub>
+
 A descriptive comparison from one pass, n = 20: 20 photos of 17 packs, since the Cairo photos come two per pack. Scored after the scorer fix below: [4.13]
 
 | Reader | Correct | Harmful | Missed | Abstained | Error | Cost per read | Median time |
@@ -204,5 +206,5 @@ By Ahmed Zayed, physician (MBBCh). [6.1]
 
 <!-- Draft from docs/CLAIMS.md (judge/claims-video, 28 Oct). To add once each row lands, never before:
 the hero's N of 10 (4.5) and its disagreement (4.10); Ahmed's real cases (4.6) and his voice (4.7, and 3.3's second
-wording); the pause, live (2.5); one medicine under another brand name in another country (1.18); the Cairo set's full citation (§8); a hosted sample brief, once it
+wording); the pause, live (2.5); one medicine under another brand name in another country (1.18); a hosted sample brief, once it
 has a row (§7). -->
