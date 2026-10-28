@@ -4,7 +4,7 @@
 
 The patient sends a voice note and photos of their medicine packs. The clinician gets a one-page brief. [1.1] Every finding links back to the audio turn and the image region it came from. [1.3]
 
-Built for the Meta Global AI Developer Hackathon. Tracks: Indie and Best Agentic Use-Case. [6.4]
+Built for the Meta Global AI Developer Hackathon. Track: Indie. Also entered for the Best Agentic Use-Case bonus prize. [6.4]
 
 Anamnesis is not a medical device and gives no medical advice. [1.15]
 
@@ -103,9 +103,9 @@ About 3 cents per intake (12 live intakes, 28 Oct). [4.2] One intake took 17 to 
 ## Comparison: an open-weight label reader, zero-shot
 Built with Muse Spark Open, for this comparison only. The product's label reader stays Muse Spark 1.3. [4.13]
 
-In a pre-registered zero-shot comparison, SAM 3.1 found a pack in 20 of 39 public photos. On those 20 crops, Spark 1.3 read 14 correctly with 2 harmful readings, and Muse Spark Open on Baseten read 14 with 1. [4.13] Every reader read the same SAM 3.1 crops with the same prompt, schema and parser, and no model was trained. The photos are 30 Cairo University phone photos (CC BY 4.0) and 9 Wikimedia Commons photos. [4.13]
+In a pre-registered zero-shot comparison, SAM 3.1 found a pack in 20 of 39 public photos. On those 20 crops, as first scored, Spark 1.3 read 13 correctly with 3 harmful readings, and Muse Spark Open on Baseten read 13 with 2. A scorer fix made after the run raised both to 14, with 2 and 1 harmful. [4.13] Every reader read the same SAM 3.1 crops with the same system prompt, schema and parser, and no model was trained. Baseten also got the schema as text in its user message, and Fireworks used strict JSON mode. The photos are 30 Cairo University phone photos (CC BY 4.0) and 9 Wikimedia Commons photos. [4.13]
 
-A descriptive comparison, n = 20, from one pass. Scored after the scorer fix below: [4.13]
+A descriptive comparison from one pass, n = 20: 20 photos of 17 packs, since the Cairo photos come two per pack. Scored after the scorer fix below: [4.13]
 
 | Reader | Correct | Harmful | Missed | Abstained | Error | Cost per read | Median time |
 |---|---|---|---|---|---|---|---|
@@ -130,10 +130,10 @@ A descriptive comparison, n = 20, from one pass. Scored after the scorer fix bel
 
 ## How it was built
 - Muse Code wrote the product code for the last ten batches. [5.1] All product code in `anamnesis/` from batch 16 on was written by Muse Code. [5.3] The brief, its timeline, the photo request, the cross-medicine check and the volume rule are code Muse Code wrote. [5.2]
-- Claude Code wrote the spec and the acceptance tests. Muse Code couldn't edit them, and an independent reviewer checked every Muse batch. [5.4]
-- Batches 1–12 were built with GPT-6 Sol and Luna through Codex, some with Claude Code fixes, and batch 6 by hand. Batches 13–15.5 were built by Claude Sonnet subagents. [5.3]
-- In batch 22, the independent reviewer caught a spec error: as briefed, "less than five milligrams" would have been read as exactly five and shown as a match. The contract now pins that case. [5.10]
-- Batch 23 took nine rounds: the independent reviewer sent it back seven times before approving it. Before each round, Claude Code checked its own contract on a throwaway reference build. At the end, all 44 deliberate single-rule breaks of that reference were caught by the contract. Its follow-up, batch 23.1, passed review in one round with nothing to change. [5.11]
+- Claude Code wrote the spec and the acceptance tests. Muse Code wasn't allowed to edit them, and the gate fails any batch that does. A separate Claude Opus reviewer checked every Muse batch. [5.4]
+- Batches 1–12 were built with GPT-6 Sol and Luna through Codex, some with Claude Code fixes, and batch 6 by Claude Code directly. Batches 13–15.5 were built by Claude Sonnet subagents. [5.3]
+- In batch 22, a separate Claude Opus reviewer caught a spec error: as briefed, "less than five milligrams" could have been read as exactly five, if a model wrote the amount as "<five". The contract now pins that case. [5.10]
+- Batch 23 took nine rounds: a separate Claude Opus reviewer sent it back seven times before approving it. Before each round, Claude Code checked its own contract on a throwaway reference build. At the end, all 44 deliberate single-rule breaks of that reference were caught by the contract. Its follow-up, batch 23.1, passed review in one round with nothing to change. [5.11]
 - Batches 1 to 20 were each specified, built, gated and reviewed in one day, 27 Oct. [5.8]
 - Muse Code's sessions cost about $26.87 of Meta credit so far, priced from its own billing records (28 Oct). [5.5] About $28.71 of the $150 credit in logged calls so far (28 Oct). Muse grill runs are billed separately. [5.6]
 - Each Muse batch's record is in `evidence/batches/<n>/`: `builder.md`, `gate.json`, `supervisor.md` and `review.md`. [5.1]
@@ -146,7 +146,7 @@ uv run pytest
 ```
 
 ## Limitations
-- No outside usability check was done: it was declined for this submission. [4.8]
+- No outside usability check was done: it was declined ("not now"). [4.8]
 - Tested on synthetic voices only, in English and Egyptian Arabic. [3.3, 4.12]
 - The same Arabic recording came back in three different spellings across runs. Curated Arabic brand names cover the ones seen so far. [4.3]
 - Turns, not words: click a turn and you hear the whole turn. [1.4]
@@ -177,4 +177,4 @@ By Ahmed Zayed, physician (MBBCh). [6.1]
 <!-- Draft from docs/CLAIMS.md (judge/claims-video, 28 Oct). To add once each row lands, never before:
 the hero's N of 10 (4.5) and its disagreement (4.10); Ahmed's real cases (4.6) and his voice (4.7, and 3.3's second
 wording); the pause, live (2.5); one medicine under another brand name in another country (1.18); the Cairo set's full citation (§8); a hosted sample brief, once it
-has a row (§7). An open-weight track only once decisions.md records Ahmed's call (6.4). -->
+has a row (§7). An open-weight bonus prize only once decisions.md records Ahmed's call (6.4). -->
