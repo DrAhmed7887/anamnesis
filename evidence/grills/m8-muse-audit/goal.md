@@ -1,0 +1,5 @@
+- **Goal:** pinned and closed complete
+- **Objective:** The audit is done ONLY when your reply has all six sections below, every finding cites a file and line you opened in this session, and no finding repeats one already recorded in an evidence/grills/*/effect.md.
+- **Status updates:** complete
+- **Main-agent model calls:** 32, of which 31 were attributed to the goal (the call that creates the goal comes before it)
+- **Goal reminder's last check:** Final reply contains all six required sections, each finding cites opened file:line, ends with AUDIT line, and goal was closed complete. No explicit deliverable missing.

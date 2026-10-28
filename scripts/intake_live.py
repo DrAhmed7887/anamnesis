@@ -8,7 +8,8 @@ With no --case it runs the two synthetic notes (media: scripts/make_synthetic_me
 one staged case (evidence/batches/21/manifest.md): that voice note and those photos, in order, --repeat times.
 --reader baseten makes Meta's open-weight Muse Spark Open on Baseten the label reader (key: BASETEN_API_KEY);
 everything else stays on Meta. It refuses any photo outside the public folders that docs/DATA_HANDLING.md lets
-go to Baseten, before the first call.
+go to Baseten, before the first call. Every voice note is re-written to its audio frames alone before any
+call, so no metadata chunk is sent or embedded in a brief.
 The key comes from MODEL_API_KEY in the environment or the macOS Keychain (service META_API_KEY), and is never
 printed or saved. Each intake runs inside a SessionGuard (per-intake $ and call caps) in front of
 evidence/spend/ledger.jsonl.
@@ -20,11 +21,13 @@ Output, per run:
 """
 
 import argparse
+import io
 import json
 import os
 import subprocess
 import sys
 import time
+import wave
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
@@ -134,6 +137,20 @@ def photo(path: str) -> tuple[bytes, str]:
     return file.read_bytes(), MIME[file.suffix.lower()]
 
 
+def voice(path: Path) -> bytes:
+    """The WAV's audio frames alone, re-written so no metadata chunk reaches a model or a brief (M8 #7)."""
+    try:
+        with wave.open(io.BytesIO(path.read_bytes())) as source:
+            params, frames = source.getparams(), source.readframes(source.getnframes())
+    except (wave.Error, EOFError) as exc:
+        sys.exit(f"{path}: not a PCM WAV ({exc}); convert it with ffmpeg -map_metadata -1 first")
+    out = io.BytesIO()
+    with wave.open(out, "wb") as clean:
+        clean.setparams(params)
+        clean.writeframes(frames)
+    return out.getvalue()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cap", default="5.00", help="total USD cap across all live runs (ledger)")
@@ -149,6 +166,8 @@ def main() -> None:
     args = parser.parse_args()
     if args.case and not (args.voice and args.photo):
         sys.exit("--case needs --voice and at least one --photo")
+    if args.top_k < 0:  # SAM's top_regions refuses it, but only mid-run, after spend (M8 #1)
+        sys.exit("--top-k must be 0 or more")
     if args.reader == "baseten":
         if not args.case:
             sys.exit("--reader baseten needs --case: the synthetic notes' pack image may not go to Baseten")
@@ -170,14 +189,14 @@ def main() -> None:
     run.briefs.mkdir(parents=True, exist_ok=True)
     start = run.ledger.total_usd
     if args.case:
-        audio, images = Path(args.voice).read_bytes(), [photo(p) for p in args.photo]
+        audio, images = voice(Path(args.voice)), [photo(p) for p in args.photo]
         for i in range(1, args.repeat + 1):
             name = args.case if args.repeat == 1 else f"{args.case}_r{i:02d}"
             intake(run, name, audio, images, args.lang)
     else:
         image = [((MEDIA / "packs.png").read_bytes(), "image/png")]
         for lang in ("en", "ar"):
-            intake(run, lang, (MEDIA / f"voice_{lang}.wav").read_bytes(), image, lang)
+            intake(run, lang, voice(MEDIA / f"voice_{lang}.wav"), image, lang)
     ledger = run.ledger
     spent = ledger.total_usd - start
     print(f"spend this run ${spent:.5f} · ledger total ${ledger.total_usd:.5f} of ${ledger.cap_usd} cap")

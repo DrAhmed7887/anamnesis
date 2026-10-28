@@ -21,7 +21,7 @@ If something slips in, the file is retaken, never edited afterwards.
 ## Where the files live
 - **Raw files** go to `evidence/raw/media/real/` on the Pro. That folder is git-ignored: no raw photo or recording is committed, synced to Drive or put in Notion.
 - **Photos.** Before any model sees a photo, the pipeline turns it upright and strips all its metadata, GPS included (SPEC §4 step 0). Turning off Location for the camera is still recommended. iPhone HEIC files are converted to JPEG locally with `sips`.
-- **Voice notes** are converted locally to 16 kHz mono WAV with their metadata removed (`ffmpeg -map_metadata -1`), the only format Voice Transcribe accepts.
+- **Voice notes** are converted locally to 16 kHz mono WAV with their metadata removed (`ffmpeg -map_metadata -1`), the only format Voice Transcribe accepts. From 28 Oct, `scripts/intake_live.py` also re-writes each WAV to its audio frames alone before any call, so a skipped conversion step can't send a metadata chunk.
 - **Deletion:** after judging, on Ahmed's word, the raw files move to the Trash.
 
 ## What leaves the machine

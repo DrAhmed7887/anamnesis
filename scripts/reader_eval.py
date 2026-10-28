@@ -7,7 +7,8 @@
 Each photo is prepared as the loop prepares it (SPEC §4 step 0). SAM 3.1 segments it once, with
 "medicine box" and then "label" as the loop does, keeping the 3 most confident regions, and the result
 is cached in evidence/raw/eval/. Every reader then reads the same crops (SPEC §4, "Open-weight label
-reader"). Before any call, the script refuses a photo outside media/public/ and media/real-public/:
+reader"). Before any call, the script refuses a photo outside media/public/commons/,
+media/public/gemini-commons/ and media/real-public/:
 Ahmed's own media never go to these providers (docs/DATA_HANDLING.md).
 Output: evidence/live/<date>/reader_eval.jsonl, one line per photo, reader and region, then a score
 table by the rules in evidence/batches/22/preregistration-notes.md.
