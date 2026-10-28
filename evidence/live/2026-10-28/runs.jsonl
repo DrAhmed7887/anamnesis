@@ -1,0 +1,12 @@
+{"run": "en", "at": "2026-10-28T08:01:27+00:00", "calls": 6, "spend_usd": "0.03385625", "wall_s": 29.4, "claim_request_ms": [13682], "findings": [["insufficient_information", "c1", "o1"], ["intake_differs_from_unit_strength", "c2", "o0"], ["missing_modality", "c3", null]]}
+{"run": "ar", "at": "2026-10-28T08:01:45+00:00", "calls": 6, "spend_usd": "0.02454075", "wall_s": 17.9, "claim_request_ms": [8392], "findings": [["insufficient_information", "c1", "o1"], ["insufficient_information", "c2", "o0"], ["missing_modality", "c3", null]]}
+{"run": "U1", "at": "2026-10-28T08:02:07+00:00", "calls": 4, "spend_usd": "0.02219925", "wall_s": 21.0, "claim_request_ms": [8970], "findings": [["insufficient_information", "c1", "o0"]]}
+{"run": "U2", "at": "2026-10-28T08:02:33+00:00", "calls": 4, "spend_usd": "0.02706425", "wall_s": 25.1, "claim_request_ms": [14600], "findings": [["missing_modality", null, "o0"], ["missing_modality", "c1", null]]}
+{"run": "U3", "at": "2026-10-28T08:02:53+00:00", "calls": 4, "spend_usd": "0.02216425", "wall_s": 19.5, "claim_request_ms": [9813], "findings": [["insufficient_information", "c1", "o0"]]}
+{"run": "U4", "at": "2026-10-28T08:03:18+00:00", "calls": 4, "spend_usd": "0.02648250", "wall_s": 23.8, "claim_request_ms": [13330], "findings": [["intake_differs_from_unit_strength", "c1", "o0"]]}
+{"run": "U5", "at": "2026-10-28T08:03:43+00:00", "calls": 5, "spend_usd": "0.03325275", "wall_s": 24.3, "claim_request_ms": [10185], "findings": [["missing_modality", null, "o1"], ["insufficient_information", "c1", "o0"]]}
+{"run": "U6", "at": "2026-10-28T08:04:07+00:00", "calls": 5, "spend_usd": "0.02273400", "wall_s": 23.5, "claim_request_ms": [8217], "findings": [["unresolved_name", null, "o0"], ["missing_modality", "c1", null]]}
+{"run": "U7", "at": "2026-10-28T08:04:45+00:00", "calls": 6, "spend_usd": "0.04044875", "wall_s": 36.0, "claim_request_ms": [12068], "findings": [["unreadable_source", null, "o1"], ["insufficient_information", "c1", "o0"]]}
+{"run": "U8", "at": "2026-10-28T08:05:13+00:00", "calls": 6, "spend_usd": "0.03674025", "wall_s": 28.2, "claim_request_ms": [13783], "findings": [["unreadable_source", null, "o0"], ["missing_modality", "c1", null]]}
+{"run": "U9", "at": "2026-10-28T08:05:31+00:00", "calls": 4, "spend_usd": "0.01899525", "wall_s": 17.1, "claim_request_ms": [12546], "findings": [["missing_modality", "c1", null]]}
+{"run": "U10", "at": "2026-10-28T08:05:46+00:00", "calls": 4, "spend_usd": "0.01585450", "wall_s": 14.4, "claim_request_ms": [9946], "findings": [["missing_modality", "c1", null]]}
