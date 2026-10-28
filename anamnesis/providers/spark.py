@@ -68,18 +68,23 @@ _WATER_BEFORE_BRACKET_RE = re.compile(rf"{_WATER_WORD}\s*\Z", re.IGNORECASE)
 
 _BRACKET_ANY = r"(?:\([^()]*\)|\[[^\[\]]*\])"
 _AFTER_AMOUNT_RE = re.compile(
-    rf"{_NUM}\s*(?:{_UNIT}\s*)?(?:{_BRACKET_ANY}\s*)?{_CONN}\s*\(?\s*\Z",
+    rf"{_NUM}\s*(?:{_UNIT}\s*)?(?:{_BRACKET_ANY}\s*)*{_CONN}\s*\(?\s*\Z",
     re.IGNORECASE,
 )
 _BEFORE_WORD = r"[^\s/∕／()]+"
 _EACH = rf"(?:\beach\b|\bevery\b|\bcada\b|\bchaque\b|{_NOT_AR}كل{_END_AR})"
 _CONN_WORD = rf"(?:\bper\b|\bpor\b|\bpar\b|\bin\b|{_NOT_AR}لكل{_END_AR}|{_NOT_AR}في{_END_AR})"
+_CONN_WORD_PER = rf"(?:\bper\b|\bpor\b|\bpar\b|{_NOT_AR}لكل{_END_AR})"
 _BEFORE_SLASH_RE = re.compile(
     rf"^\s*(?:{_BEFORE_WORD}\s*){{0,5}}(?:/|∕|／)\s*(?:{_EACH}\s*)?\(?\s*$",
     re.IGNORECASE,
 )
 _BEFORE_WORD_RE = re.compile(
     rf"^\s*(?:{_BEFORE_WORD}\s+){{0,5}}{_CONN_WORD}\s*(?:{_EACH}\s*)?\(?\s*$",
+    re.IGNORECASE,
+)
+_BEFORE_WORD_PER_RE = re.compile(
+    rf"^\s*(?:{_BEFORE_WORD}\s+){{0,5}}{_CONN_WORD_PER}\s*(?:{_EACH}\s*)?\(?\s*$",
     re.IGNORECASE,
 )
 _APPROX_RE = re.compile(
@@ -89,7 +94,7 @@ _APPROX_RE = re.compile(
 )
 _ONE = r"(?<!\d)1(?:\.0+)?(?!\d)"
 _ML = (
-    rf"(?:\bmillilitre\b|\bmilliliter\b|\bmililitro\b|\bml\b|{_NOT_AR}مل{_ML_END})"
+    rf"(?:\bmillilitres?\b|\bmilliliters?\b|\bmililitros?\b|\bml\b|{_NOT_AR}مل{_ML_END})"
 )
 _PER_1ML_RE = re.compile(
     rf"({_NUM})\s*(?:{_UNIT}\s*)?{_CONN_IN}\s*(?:{_ONE}\s*)?{_ML}", re.IGNORECASE
@@ -302,7 +307,12 @@ def _printed_before_volume(text: str, number_end: int, volume_start: int) -> boo
     if _gap_has_sentence_end(gap):
         return False
     if _TABLET_RE.search(gap) is not None:
-        return False
+        # A tablet word means dissolving only with `in` or `في`; after `/`,
+        # `per`, `por`, `par` or `لكل` it excuses nothing (batch 23.1).
+        return (
+            _BEFORE_SLASH_RE.match(gap) is not None
+            or _BEFORE_WORD_PER_RE.match(gap) is not None
+        )
     return _BEFORE_SLASH_RE.match(gap) is not None or _BEFORE_WORD_RE.match(gap) is not None
 
 

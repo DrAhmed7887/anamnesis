@@ -44,6 +44,8 @@ class SpendGuard:
         self._append(trace.call_id, trace.model_id, trace.cost_usd, estimated=False)
 
     def charge_estimate(self, model_id: str, amount: Decimal, reason: str) -> str:
+        if "-contributor" in model_id.strip().casefold():
+            raise ValueError("contributor models are not permitted")
         amount = Decimal(amount)
         if amount < 0:
             raise ValueError("estimate cannot be negative")
