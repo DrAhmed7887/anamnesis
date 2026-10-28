@@ -3,7 +3,7 @@
 **Setup.**
 - Code: `main` after the batch 21 merge (`ea5a705`).
 - Cases: the same cases, voice notes, photos and expected results as `live-before.md` and `manifest.md`, unchanged. Each ran once, named `<case>-b21` in `evidence/live/2026-10-28/`.
-- Cost: 12 intakes for **$0.36897**, plus 2 diagnostic calls for $0.02221. The ledger total is now $1.21236.
+- Cost: 12 intakes for **$0.36826** (corrected 28 Oct: first written as $0.36897; `runs.jsonl` and the ledger agree on $0.36826), plus 2 diagnostic calls for $0.02221. The ledger total is now $1.21236.
 
 **Latency.** Claim requests took 8.3–26.4 s. All were inside the 30 s timeout, but U10's 26.4 s is close. One intake took 17–49 s end to end.
 

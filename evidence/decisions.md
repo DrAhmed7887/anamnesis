@@ -134,3 +134,10 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
     - a handoff note;
     - submission by Wed 4 Nov 15:00 CET.
   - **Privacy, before going public:** a committed Muse export (M1) holds a personal skill catalog from work outside this project. Every Muse run also sends that catalog, because those skills load from `~/.agents/skills`, which `--no-foreign-personal-context` does not cover. So the skills get disabled in Muse before the next build, and the public repo is a filtered copy without that file.
+
+## 2026-10-28: the zero-shot open-weight comparison returns, as batch 22 (Ahmed's call)
+- **What changed:** the plan's revision had cut the open-weight benchmark and made batch 22 the "how it got here" timeline. Ahmed then said yes to a zero-shot comparison (the plan's addendum, 28 Oct). The timeline moves to batch 23 and is still the first thing cut.
+- **What it is:** `OpenWeightLabelReader` (batch 22, merged in 38dd1f4) reads a pack crop with Meta's open-weight Muse Spark Open on Fireworks or Baseten, using Spark 1.3's prompt, schema and parser. `scripts/reader_eval.py` segments each photo once with SAM 3.1, and every reader reads the same crops. No model is trained: the training research found no time for a fine-tune before the freeze.
+- **Photos:** only the 39 public ones: 30 Cairo University phone photos (CC BY 4.0) and 9 Wikimedia Commons photos. Their expected readings and scoring rules were committed before any call (c1b5b6e). Ahmed's own photos and voice never go to these providers (`docs/DATA_HANDLING.md`).
+- **How it is reported:** a descriptive comparison, n = 39, with every miss published per photo and reader. Never a "benchmark", and never "beats". Entering the open-weight prize track waits for Ahmed to read the guide's wording.
+- **Spend:** about $2 a pass on Meta's credit for SAM and Spark 1.3. The open-weight reads go on the Fireworks or Baseten credit, which the Meta total leaves out (a81c9d1).
