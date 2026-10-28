@@ -104,3 +104,11 @@
 - **Reference build** (the round 7 reference plus round 8): all **1358** contract tests pass, and all 204 of Muse's round 7 unit cases pass on it. Round 8 changes no answer on the 844 earlier differential checks.
 - **Mutants,** each applied alone to the reference and run against every contract test. All 41 were caught: the 38 from round 7, plus three words instead of five, the before-form crossing a sentence end, and no colloquial spoon.
   - "Before-form counts bracket text" first survived, because five words also fit the four-word bracketed salt. A six-word bracket now pins it.
+
+## Round 9 (28 Oct): the supervisor's round 8 APPROVE and its two minors, pinned in `tests/contract/test_b23_round9.py`
+- **The CEO's differential check after round 8:** Muse's round 8 and the round 8 reference gave the same answer on all 884 checks: 221 labels × 4 `per` values.
+- **On Muse's round 8:** 13 of the 24 new tests fail: the 7 tablet and capsule lines and the colloquial dual. The 11 that pass already drop or keep in round 8: the same lines read per ml, the bracketed tablet word, and the sentence-stop pin.
+- **Reference build** (the round 8 reference plus round 9): all **1382** contract tests pass. Against round 8, it changes 2 of the 884 differential answers. Both are "Euthyrox 50 µg tablets crush and suspend in 10 ml of liquid", now kept per tablet and per capsule.
+  - One Muse unit case flips on purpose: "500 mg capsules in 5 ml syrup" keeps again. The supervisor predicted this.
+- **Mutants,** each applied alone to the reference and run against every contract test. All 44 were caught: the 41 from round 8, plus the tablet word in the gap still refusing, a tablet word inside brackets excusing, and no colloquial dual.
+  - "Before-form crosses a sentence end" first survived. The Euthyrox `;` keep also passes through the tablet word, so a pin with no tablet word now holds it: "Cetirizine 5 mg/ml oral drops. Mix in 5 ml of juice".

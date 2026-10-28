@@ -258,3 +258,30 @@ Round 7 closes every round 6 input, with no regressions across about 330 probe l
 - **#1 and #2:** taken. The before-form takes up to five words, none of them across a sentence end, and the colloquial spoon spellings count as whole words.
 - **#3:** no change, as the supervisor advises.
 - **#4:** stays recorded as coverage given up.
+
+## Round 8 (28 Oct)
+
+SUPERVISOR: APPROVE
+
+No realistic label keeps a wrong strength. The one remaining item is a correct tablet strength that now drops (#1). SPEC records only part of it, so either record the rest or take the two-line fix before merge; neither is a safety change. Only `spark.py` changed since round 7; pytest gives 1851 passed.
+
+1. **minor (fails closed): a tablet line followed within five words by a dissolving or dispersing volume that names no water drops a correct per-tablet strength.** Kept in round 7, null in round 8:
+   - "Vitamin C 1000 mg effervescent tablet, dissolve in 200 ml", and its Arabic form;
+   - "Prednisolone 5 mg soluble tablets: dissolve in 10 ml", plain and "of juice";
+   - "Zithromax 500 mg dispersible tablets disperse in 30 ml liquid";
+   - "Euthyrox 50 µg tablets, crush and suspend in 10 ml";
+   - "Omeprazole 20 mg capsules: open and mix in 15 ml of apple juice".
+
+   Lines that name water still keep. **Fix, either:**
+   - **(a)** record "a dissolving or dispersing line that names no water" in SPEC;
+   - **(b)** have the before-form not refuse when the bracket-stripped gap holds a tablet or capsule word. Tried in a mutant: all the drops above keep, no harmful probe changes, and one constructed Muse unit case flips.
+2. **minor (fails open, very rare):** the colloquial dual «معلقتين» isn't a spoon, consistent with SPEC's whole-word rule. No fix needed unless wanted.
+
+**Checked and fine:**
+- all 6 round 7 fail-opens are now null;
+- about 360 probes from rounds 1–6 are unchanged, apart from #1;
+- more salt and gap edges are all null: a six-word salt, "equivalent to … 287 mg per 5 ml", `Ph. Eur.`, `;` or `!` in the gap;
+- `_gap_has_sentence_end` and the spoon pattern match SPEC;
+- the step sums; nothing outside `spark.py` changed.
+
+**The CEO's response, round 9:** (b) and #2 are taken. These are exactly the effervescent and soluble tablets a real medicine bag holds, and a syrup's salt phrase never contains a tablet word. Text in brackets is stripped first, so "250 mg (equivalent to half a tablet) per 5 ml" still refuses; a contract test pins it.
