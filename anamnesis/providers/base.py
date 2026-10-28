@@ -108,6 +108,10 @@ def with_one_retry[T](
 _PRICES = {
     "muse-spark-1.3": {"input_tokens": Decimal("1.25") / 1_000_000,
                        "output_tokens": Decimal("4.25") / 1_000_000},
+    "muse-spark-open@fireworks": {"input_tokens": Decimal("1.25") / 1_000_000,
+                                  "output_tokens": Decimal("4.25") / 1_000_000},
+    "muse-spark-open@baseten": {"input_tokens": Decimal("1.25") / 1_000_000,
+                                "output_tokens": Decimal("4.25") / 1_000_000},
     "sam-3.1": {"images": Decimal("2.50") / 1_000},
     "muse-voice-transcribe-1.0": {"audio_seconds": Decimal("0.18") / 3_600},
 }
