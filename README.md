@@ -110,6 +110,7 @@ A descriptive comparison, n = 20, from one pass. Scored after the scorer fix bel
 - **Baseten's 2 errors** were length stops at the 4,000-token limit: no reading, charged, and failed safe. [4.13]
 - **Diagnostics decided after the run, not scores:**
   - With JSON mode off, the same model on Fireworks read 5 of 5 crops that the other two readers had read correctly. [4.13]
+  - Read again with an 8,000-token cap, Baseten's two length stops both came back correct. Both replies ended under the old 4,000-token cap, so this was a second draw, not a fix, and the table keeps both as errors. [4.13]
   - In a diagnostic after the run, not pre-registered, the concept "package" found a pack in all 19 photos where the first two concepts found none. With it, Spark 1.3 would have read 22 of the 30 Cairo phone photos correctly, not 7. Batch 23 added it to the loop. [4.14]
 - The volume rule above was written for the two syrup readings, but the comparison wasn't rerun on it. [1.19, 4.13]
 - Every photo, reader and verdict: [`evidence/batches/22/comparison.md`](evidence/batches/22/comparison.md).
