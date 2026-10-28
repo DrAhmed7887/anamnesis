@@ -55,12 +55,28 @@ flowchart LR
 - If a label can't be read, the clinician can ask the patient for one new photo. Only that photo is processed, and the brief updates. The run pauses for a person, then resumes. [2.1]
 - The brief stays a draft until the clinician approves it. [2.2]
 - The code fixes the order. The clinician decides the pause. No model chooses an action. [2.3]
-- The pause is built and tested offline. [2.1, 2.5] There is no clinician app yet: the request is one function call, and in the demo the developer plays the clinician. [2.6]
+- The clinician's pause ran live once, on a real phone photo from a public dataset: the first photo read as partial, the clinician asked for one new photo, and with the second photo the brief showed a match. It was one run, with a synthetic voice note. [2.5] There is no clinician app yet: the request is one function call, and in the demo the developer plays the clinician. [2.6]
 
 ## Results, as measured
-Every run below predates batch 23 except the last, the full intake with Muse Spark Open: batches 23 and 23.1 made no live calls of their own. [5.6] The synthetic notes ran on 27 Oct's code, then on batches 1–20 and on batch 21; the public photos on batches 1–20 and on batch 21; and the comparison on batch 22's code. [4.1, 4.11, 4.12, 4.13] Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on those. The last run used batch 23.1's code, on eight of the public photos. [4.14, 1.19, 4.16]
+The hero below, the pause above and the intake with Muse Spark Open further down ran on batch 23.1's code on 28 Oct. Batches 23 and 23.1 made no live calls of their own. [4.5, 2.5, 4.16, 5.6] The synthetic notes ran on 27 Oct's code, then on batches 1–20 and on batch 21; the ten public photos on batches 1–20 and on batch 21; and the comparison on batch 22's code. [4.1, 4.11, 4.12, 4.13] Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on those. [4.14, 1.19]
 
 These are staged tests, not a validation. The expected results come first, and every run is reported as it came out, failures included. [4.15] No patient data: the pack photos are rendered test images or real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3]
+
+### The hero case, run 10 times
+We ran the hero case 10 times. No run showed a false match or a wrong strength. The brief flagged the Concor dose as different from the box in 7, and said it couldn't confirm in the other 3. [4.5]
+
+| Runs | Concor (10 mg said, 5 mg box) | Beloc-Zok (50 mg said, Bloxazoc 50 mg box) | Beta-blocker note |
+|---|---|---|---|
+| r02, r03, r04, r06, r07, r08 | `intake_differs_from_unit_strength` | `match` | yes |
+| r01, r05, r09 | `insufficient_information` | `insufficient_information` | yes |
+| r10 | `intake_differs_from_unit_strength` | `unresolved_name` ("BelocZokZok") | no |
+
+- **The case:** two public photos, a Concor 5 mg box and a Bloxazoc 50 mg box, and a synthetic note: "I take Concor ten milligrams every morning, and Beloc-Zok fifty milligrams twice a day." Pre-registered before the first call. [4.10, 4.5]
+- **The pre-registered key expected a different category.** For Concor it expected `strength_mismatch`, but the note states an intake, so the system reports `intake_differs_from_unit_strength`: 10 mg taken against a 5 mg tablet. The key was written wrong and stays as written, so the pre-registered score is 0 of 10. [4.5, 4.10]
+- **Read with the system's own categories, decided after the run:** Beloc-Zok matched the Bloxazoc box in 6 runs, the beta-blocker note appeared in 9, and all three came out together in 6 of 10. Beloc-Zok and Bloxazoc are both metoprolol. [4.5, 4.10]
+- **Every miss started on the speech side.** Voice Transcribe returned 7 different transcripts of the one file, with a word or number repeated in 7 runs ("ten ten", "BelocZokZok"). In 3 runs both claims came back without amounts, and in 1 "BelocZokZok" didn't resolve. [4.5]
+- About 4 cents and 32–40 s a run. [4.2, 4.9]
+- Every run and cause: [`evidence/batches/21/u11-u12.md`](evidence/batches/21/u11-u12.md).
 
 ### Ten public pack photos, before and after batch 21
 The expected results were committed before the first run (8b993ff). [4.4] On the same ten pre-registered public-photo cases, with the same expected results, the code got 1 right before batch 21 and 3 after it. Neither run showed a false match, or a wrong strength or ingredient as fact. [4.11]
@@ -162,7 +178,7 @@ With Muse Spark Open as its label reader, the full intake ran end to end on eigh
 - Before the freeze, a Gemini 4 grill claimed 11 breaks, and each was run against the code. Two were real: the comparison script's photo check was wider than the data rule and was fixed, though no photo outside the rule was ever sent, and a volume written in words stays a known limit. [5.12]
 - Before the freeze, Muse Code audited the repository read-only and found 7 minor gaps, each checked against the code and fixed. It pinned the audit as its goal with its own goal tool, kept to the seven-step plan it wrote, and closed the goal complete: 31 of its 32 model calls ran under that goal. [5.13]
 - Batches 1 to 20 were each specified, built, gated and reviewed in one day, 27 Oct. [5.8]
-- Muse Code's sessions cost about $28.06 of Meta credit so far, priced from its own billing records (28 Oct). [5.5] About $30.27 of the $150 credit in logged calls so far (28 Oct). Muse grill runs are billed separately. [5.6]
+- Muse Code's sessions cost about $28.06 of Meta credit so far, priced from its own billing records (28 Oct). [5.5] About $30.71 of the $150 credit in logged calls so far (28 Oct). Muse grill runs are billed separately. [5.6]
 - Each Muse batch's record is in `evidence/batches/<n>/`: `builder.md`, `gate.json`, `supervisor.md` and `review.md`. [5.1]
 
 ## Run the tests
@@ -184,7 +200,9 @@ uv run pytest
 - Salt names that aren't curated, such as rosuvastatin calcium, sitagliptin phosphate and candesartan cilexetil, stay as written, so a pack read with its salt doesn't pair with the patient's claim. [4.17]
 - Decomposed accents (Unicode NFD) in catalogue names aren't normalised, so such a name goes unpaired, which fails safe. [4.17]
 - Spoken numbers with a thousand after a hundred or another thousand are a known gap: "two hundred and one thousand" parses as 201,000, and «ألفين وألف» as 3,000. [4.17]
-- Every miss is in the tables above: the ten public photos, the two synthetic notes and the intake run with Muse Spark Open. [4.11, 4.12, 4.16]
+- The hero is one synthetic voice and one file. Voice Transcribe returned 7 different transcripts of it, and every miss started there. Human speech may transcribe differently. [4.5]
+- The pause ran live once, on public photos, with a synthetic voice note. [2.5]
+- Every miss is in the tables above: the hero's 10 runs, the ten public photos, the two synthetic notes and the intake run with Muse Spark Open. [4.5, 4.11, 4.12, 4.16]
 
 ## Data and privacy
 - No patient data. The pack photos are rendered test images or real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3] The rules for the developer's own photos and voice are in [`docs/DATA_HANDLING.md`](docs/DATA_HANDLING.md).
@@ -205,6 +223,5 @@ uv run pytest
 By Ahmed Zayed, physician (MBBCh). [6.1]
 
 <!-- Draft from docs/CLAIMS.md (judge/claims-video, 28 Oct). To add once each row lands, never before:
-the hero's N of 10 (4.5) and its disagreement (4.10); Ahmed's real cases (4.6) and his voice (4.7, and 3.3's second
-wording); the pause, live (2.5); one medicine under another brand name in another country (1.18); a hosted sample brief, once it
+Ahmed's real cases (4.6) and his voice (4.7, and 3.3's second wording), if he records them; one medicine under another brand name in another country (1.18); a hosted sample brief, once it
 has a row (§7). -->
