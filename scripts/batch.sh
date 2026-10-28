@@ -24,14 +24,19 @@ gate() {
   local base; base=$(contract_base)
   [[ -n $base ]] || { print -u2 "gate: no 'test(contract): batch $n' commit on this branch"; return 1; }
   local touched
-  touched=$( { git diff --name-only "$base" -- tests/contract; git ls-files --others --exclude-standard tests/contract; } | sort -u)
+  # Locked since the contract commit: the contract tests, every conftest.py, and pyproject.toml and uv.lock
+  # (their [tool.*] tables configure pytest and ruff). Plan grill #14, QM M5 #4.
+  touched=$( { git diff --name-only "$base" -- tests/contract pyproject.toml uv.lock ':(glob)**/conftest.py'
+              git ls-files --others --exclude-standard tests/contract ':(glob)**/conftest.py'; } | sort -u)
   local result=pass reason="" tests="0"
   if [[ -n $touched ]]; then
-    result=fail reason="contract tests were edited: ${touched//$'\n'/ }"
+    result=fail reason="locked files were edited: ${touched//$'\n'/ }"
   elif ! uv run ruff check . > "$ev/ruff.log" 2>&1; then
     result=fail reason="ruff failed (see ruff.log)"
-  elif ! uv run pytest -q > "$ev/pytest.log" 2>&1; then
+  elif ! uv run pytest -q -rsx > "$ev/pytest.log" 2>&1; then
     result=fail reason="pytest failed (see pytest.log)"
+  elif grep -qE '^(SKIPPED|XFAIL).*tests/contract' "$ev/pytest.log"; then
+    result=fail reason="a contract test was skipped or xfailed (see pytest.log)"
   fi
   [[ -f $ev/pytest.log ]] && tests=$(grep -Eo '[0-9]+ passed' "$ev/pytest.log" | grep -Eo '[0-9]+' || print 0)
   git add -N anamnesis tests 2>/dev/null || true   # count new build files in the diff stat
