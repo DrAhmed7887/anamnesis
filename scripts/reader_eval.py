@@ -42,7 +42,8 @@ CACHE = ROOT / "evidence/raw/eval/segments"
 TOP_K = 3
 TO_MG = {"mg": Decimal(1), "g": Decimal(1000), "mcg": Decimal("0.001")}
 PER_UNIT = {None, "tablet", "capsule", "dose"}
-COMBINED = re.compile(r"\s*(?:\+|/|&|\band\b|\bwith\b)\s*", re.IGNORECASE)  # "loratadine + pseudoephedrine"
+# "loratadine + pseudoephedrine". The comma was added after the 28 Oct run ("sitagliptin, metformin").
+COMBINED = re.compile(r"\s*(?:\+|/|,|&|\band\b|\bwith\b)\s*", re.IGNORECASE)
 # Scored without these words, so "rosuvastatin calcium" counts as rosuvastatin (preregistration notes).
 SALT_WORDS = {
     "hydrochloride", "hcl", "hydrobromide", "calcium", "sodium", "potassium", "magnesium", "phosphate",
