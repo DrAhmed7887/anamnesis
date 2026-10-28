@@ -70,6 +70,7 @@ inboxes=(${QM_SESSIONS_INBOX:-/nonexistent}(N/))
 inbox=${inboxes[1]:-/nonexistent}   # an inbox Antigravity must not write to (QM_SESSIONS_INBOX)
 before=$(ls "$inbox" 2>/dev/null | wc -l | tr -d ' ')
 if [[ ${QM_VIA:-agy} == vertex ]]; then
+  uv run python scripts/spend_check.py --next google=0.50 || { print -u2 "qm: spend gate (50% of a credit)"; exit 1; }
   # The same model on Vertex AI, billed to the gcloud project's billing account, when agy's quota is used up.
   uv run python scripts/vertex_ask.py "$pkg" --thinking medium > "$raw" 2> "$raw.usage" \
     || print "vertex exited non-zero" >> "$raw"

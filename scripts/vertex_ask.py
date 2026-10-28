@@ -15,9 +15,12 @@ import subprocess
 import sys
 import urllib.error
 import urllib.request
+from datetime import UTC, datetime
 from decimal import Decimal
+from pathlib import Path
 
 PRICE_PER_M = {"input": Decimal(2), "output": Decimal(10)}
+LEDGER = Path(__file__).resolve().parents[1] / "evidence/spend/google_ledger.jsonl"  # read by spend_check.py
 
 
 def gcloud(*args: str) -> str:
@@ -57,6 +60,11 @@ def main() -> None:
     cost = (prompt_tokens * PRICE_PER_M["input"] + output_tokens * PRICE_PER_M["output"]) / 1_000_000
     print(f"vertex {reply.get('modelVersion', args.model)}: {prompt_tokens} input, {output_tokens} output "
           f"(thinking {thinking_tokens}) -> ${cost:.5f} est.", file=sys.stderr)
+    line = {"model_id": reply.get("modelVersion", args.model), "input_tokens": prompt_tokens,
+            "output_tokens": output_tokens, "cost_usd": str(cost.quantize(Decimal("0.00001"))),
+            "estimated": True, "at": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")}
+    with LEDGER.open("a", encoding="utf-8") as ledger:
+        ledger.write(json.dumps(line) + "\n")
 
 
 if __name__ == "__main__":
