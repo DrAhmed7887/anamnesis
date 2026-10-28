@@ -3,7 +3,7 @@
 Two Gemini 4 Argon passes on Vertex, on `main` at c744fc7 (batches 1–23.1 and the 28 Oct scripts):
 - **The QM review** (`qm.md`) covered batches 21–23.1 and every module in `anamnesis/`: 267k tokens for $0.54616. **VERDICT: PASS**, with 2 major and 5 minor findings.
 - **The grill** (`grill.md`; prompt in `grill-prompt.md`) covered the code, `SPEC.md`, `docs/DATA_HANDLING.md`, the contract test names and the scripts that make live calls or guard data: 97k tokens for $0.24847. It claimed 11 breaks, 2 of them critical and 5 high.
-- **Every claimed break was run against the code before triage**, offline (`verify_grill.py`, output in `verify_grill.out`). **Neither critical one reproduces, and one high one is real.**
+- **Every claimed break was run against the code before triage**, offline (`verify_grill.py`, output in `verify_grill.out`). **Neither critical one reproduces. Two high ones are real:** #6, fixed here, and #3, which fails open on a wording packs don't print and stays a known limit. This line first said "one high one is real" (corrected 28 Oct, as the judge-facing session pointed out).
 
 ## The QM review
 | # | Severity | Decision | What changes |
