@@ -114,3 +114,33 @@ Round 3 fixes every round 2 input except an OCR'd "5 mI", and Muse's code follow
 **The CEO's response, round 4:**
 - **#6:** fixed directly in `intake_live.py` (447a85c).
 - **#1–#5 and #7:** handled by replacing the round 1–3 wording patterns with one clause rule (SPEC §2). It asks whether a clause that isn't about water prints a dose volume at all, so no list of starters, connectors, spoons or contains words is needed.
+
+## Round 4 (28 Oct)
+
+SUPERVISOR: CHANGES
+
+The clause rule is a real improvement: every syrup wording from rounds 1–3 is now dropped. Two of its exemptions still keep the fivefold error on common syrup labels: the water clause, on powder-for-suspension cartons, and a spoon dose printed without a volume. Both are SPEC §2 design gaps; Muse's code implements the SPEC as written. Only `anamnesis/providers/spark.py` changed since round 3, and pytest gives 1469 passed.
+
+1. **major: a water word anywhere in a clause exempts every volume in it, including the strength's own `/5 ml`.** Powders reconstituted with water are the commonest syrups in Egypt. All kept at 250 per ml:
+   - "Amoxicillin 250 mg/5 ml when reconstituted with water";
+   - "Powder for oral suspension 250 mg/5 ml (add 60 ml water)";
+   - "Reconstitute with 60 ml of water to give 250 mg/5 ml";
+   - «مسحوق لتحضير معلق ٢٥٠ مجم/٥ مل بعد إضافة ماء»;
+   - "Cada 5 ml contienen 250 mg (reconstituir con agua)";
+   - "Paracetamol 250 mg/5 ml in water" and "Water-free suspension 250 mg/5 ml".
+2. **major: a spoon or measure dose printed without a number in ml never counts as a volume.** All kept at 125 per ml or per dose: "Each teaspoonful contains paracetamol 125 mg", «كل ملعقة صغيرة تحتوي على ١٢٥ مجم», "Cada cucharadita contiene 125 mg", "125 mg per teaspoon" and "125 mg per measure".
+3. **minor: another product's or an excipient's per-ml line rescues a wrong strength**, because the per-1-ml print is searched by value across the whole text. Kept: "Paracetamol 250 mg / 5 ml. Paracetamol 250 mg/ml drops also available" (read as 250 per ml), "Paracetamol 120 mg/5 ml. Sorbitol 120 mg/ml" and "Ibuprofen 100 mg/5 ml, Ibuprofen 100 mg/ml? 40 mg/ml drops". The whole-text search itself is right: "50 mg/ml, each 5 ml bottle" needs it.
+4. **minor: a line break between the amount and its volume, plus a tablet word elsewhere, keeps a per-tablet reading of a syrup.** Kept: "Paracetamol 250 mg\nper 5 ml\nAlso available as 500 mg tablets" and "Paracetamol 250 mg\n/5 ml\nNot for tablets use".
+5. **minor (fails closed): Arabic forms with the article or a suffix are missed**, so Arabic effervescent and capsule packs lose correct strengths. Null: "بانادول ٥٠٠ مجم ٢٤ قرصاً. يذاب في ٢٠٠ مل من الماء", "فوار ١٠٠٠ مجم، يذاب القرص في ٢٠٠ مل من الماء" and "أوميبرازول ٢٠ مجم كبسولة، عبوة ١٤ كبسولة، الجرعة ١٠ مل".
+6. **minor (fails closed): correct per-ml and per-dose strengths are dropped.** Null: "Lantus 100 U/ml, 3 ml pen", "Insulina glargina 100 unidades/ml, pluma de 3 ml", "Salbutamol inhaler 100 mcg per dose, 200 doses, 10 ml canister", "Nasonex 50 mcg/dose nasal spray, 18 ml" and "Each ml contains 50 mg. 15 ml bottle".
+7. **minor (fails closed): the cut at the `.` of an abbreviation separates a volume from its water word.** Null: "Movicol: dissolve one sachet in 125 ml (approx. a quarter glass) of water. 13.8 g".
+
+**Checked and fine:** every round 1–3 drop and keep; decimals, `q.s.`, `e.g.`, `÷`, U+2028 and `。` still drop a 250 mg/5 ml syrup; a `per: null` strength; the step sums, including `add_photo`; the live guard `max_calls=2 * calls`.
+
+**The CEO's response, round 5:** every round has closed one list of wordings and opened the next, because each exemption was a place to hide a volume. Round 5 drops the clauses and turns the question around (SPEC §2). When a volume or spoon counts, the strength is kept only if each amount is printed in the reading's own unit: `250 mg/ml`, `100 mcg per dose`, or `5 mg tablets`. A missing wording now loses a strength; it can't keep a wrong one.
+- **#1:** water to dissolve in is now a property of one volume. The water word must follow it, with only `of`/`de`/`من` and a few adjectives between. It is never water for a reading per ml, or when the volume follows an amount through `/` or `per`.
+- **#2:** spoons and measures count as volumes.
+- **#3:** a rescue is refused when the same amount is also printed over a volume.
+- **#4 and #7:** with no clauses, nothing is cut. A tablet print must sit within three words of the amount, with no sentence or line break between them.
+- **#5 and #6:** `ال` and the Arabic suffixes, `U`, `unidades`, `unités`, `وحدة دولية`, and a per-dose print.
+- **Two earlier keeps move to the drops, on purpose (they fail closed):** "1000 mg per 200 ml of water" (round 4), and "Panadol 500 mg\n24 tablets, 100 ml bottle" (round 1), where a line break comes between the amount and the tablet word.

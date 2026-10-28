@@ -73,7 +73,7 @@ def test_a_containers_total_read_per_ml_is_dropped(text, part, per):
     ("Insulin 100 units/ml. Each 3 ml pen contains 300 units", [("insulin", "100", "iu")], "ml"),
     ("Dissolve 500 mg in 200 ml of lukewarm drinking water", [("paracetamol", "500", "mg")], "tablet"),
     ("Dissolve 500 mg in 200 ml (a glass) of water", [("paracetamol", "500", "mg")], "tablet"),
-    ("Vitamin C 1000 mg per 200 ml of water", [("ascorbic acid", "1000", "mg")], "tablet"),
+    # Round 5: "Vitamin C 1000 mg per 200 ml of water" moved to the drops (a volume after `per` always counts).
     ("Each 5 ml = 1 teaspoon. Concor 5 mg tablets", [("bisoprolol", "5", "mg")], "tablet"),
     ("Every 10 ml of water: dissolve one tablet. Panadol 500 mg", [("paracetamol", "500", "mg")], "tablet"),
     ("Amoxil 25 mg/ml oral drops, 20 ml bottle", [("amoxicillin", "25", "mg")], "ml"),

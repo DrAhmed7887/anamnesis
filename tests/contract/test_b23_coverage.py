@@ -90,7 +90,8 @@ def test_a_strength_printed_per_a_volume_other_than_1_ml_is_dropped(text, per):
     ("Panadol 500 mg film-coated tablets", "500", "tablet"),
     ("Paracetamol 50 mg/ml oral drops", "50", "ml"),
     ("Paracetamol 250 mg / 1 ml", "250", "ml"),
-    ("Panadol 500 mg\n24 tablets, 100 ml bottle", "500", "tablet"),
+    # Round 5: "Panadol 500 mg\n24 tablets, 100 ml bottle" moved to the drops (a line break between the amount and
+    # the tablet word blocks the per-tablet print, SPEC §2).
 ])
 def test_other_strengths_are_kept(text, amount, per):
     reading = parse_label_json(label(text, amount=amount, per=per), "r1")
