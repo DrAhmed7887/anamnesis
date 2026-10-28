@@ -57,3 +57,14 @@ The CEO reproduced #1 before the review, prompted by Muse's own note in round 2.
 **CEO triage:**
 - #1–4 go into round 3. The contract gets "round 3" cases (10 fail on round 2; all 1,016 tests pass on the supervisor's fix copy) and SPEC §2 lines.
 - #5 and #6 are logged as follow-ups for after the freeze. Neither is a regression, and both fail safe or are out of scope.
+
+## Round 3: APPROVE
+All four round 2 findings are fixed. No regression against base or round 1 turned up in any pass:
+- **Single numbers 1–2999** (English with and without "and", Egyptian Arabic): 0 missed. Round 2 missed 900; base and round 1 missed 100.
+- **11,705 texts compared with base:** no text loses a value it should state.
+- **Fuzz:** 60,000 random digit strings.
+- **Mutants:** reverting each round 3 change on its own is caught by 2 to 5 tests.
+
+Two minors remain, both follow-ups after the freeze:
+- A thousand word after a thousands part adds to it: «ألفين وألف» states 3000. This is the same class as deferred #6.
+- `_word_amounts` is 51 lines, one over the target.
