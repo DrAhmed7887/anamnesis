@@ -98,9 +98,10 @@ The one other comma entry, Fireworks' "not printed, Janumet brand name only", wa
 
 ## Cost
 - **The pass:** $0.85.
-  - Meta $0.40: SAM $0.22 and Spark 1.3 $0.19.
+  - Meta $0.36: SAM $0.17 (68 calls) and Spark 1.3 $0.19.
   - Fireworks $0.20.
-  - Baseten $0.25.
+  - Baseten $0.29, including $0.045 for the two length stops, which were charged.
+  - Corrected on 28 Oct evening from the ledger: this list first said SAM $0.22, Meta $0.40 and Baseten $0.25, which added up to the same total.
 - **Pilots and diagnostics:** another $0.40, $0.28 of it on Meta (SAM and Spark 1.3). The rest was Fireworks and Baseten, including diagnostic 4's $0.04 on Baseten.
 - **The Meta total** stays far under the 50% pause line (`scripts/spend_check.py`). The Fireworks and Baseten lines are billed by those providers, not Meta.
 
