@@ -1,0 +1,21 @@
+#1 '250 mg / 5 ملي' per ml: null
+#2 'Each 5 ml contains 250 mg per dose' per dose: 250 mg per dose
+#2 'Each 5 ml contains 250 mg/ml' per dose: 250 mg per dose
+#2 'Each 5 ml contains 250 mg. 250 mg tablets' per tablet: null
+#3 'Each five ml contains 250 mg' per ml: 250 mg per ml
+#4 claim 'amoxicillin clavulanic acid' 500 mg vs 'Amoxil 500 mg': unresolved_name
+#4 claim 'amoxicillin and clavulanic acid' 500 mg vs 'Amoxil 500 mg': unresolved_name
+#4 claim 'Augmentin' 500 mg vs 'Amoxil 500 mg': ingredient_mismatch
+#4 claim 'metoprolol' 100 mg vs 'Metoprolol succinate 95 mg': match
+#5 contributor price key: constructed; read raised KeyError; requests sent: 0; ledger lines: 0
+#6 reader_eval.public_photo('public/dailymed/panadol_extra_e5c2d88a_carton.jpg'): refused
+#6 reader_eval.public_photo('public/../real/x.jpg'): refused
+#6 reader_eval.public_photo('public/gemini-commons/augmentin_1g_gsk_box.jpg'): allowed
+#7 the extractor's check refuses advice in name_text: AdviceLeak
+#10 resolve('amoxicillin clavulanic acid'): None
+#10 resolve('co-amoxiclav'): None
+#10 resolve('أملوديبين 5 مجم'): None
+#10 resolve('Augmentin'): ('Augmentin', ['amoxicillin', 'clavulanic acid'])
+#11 parse_amount_text(1e-05): None
+#11 parse_amount_text('١,٥'): 1.5
+#11 parse_amount_text('1.000'): None

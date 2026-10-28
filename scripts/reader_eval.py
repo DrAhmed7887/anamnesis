@@ -36,7 +36,9 @@ from anamnesis.schema.medication import canonical_inn
 
 ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "evidence/raw/media"
-PUBLIC = (MEDIA / "public", MEDIA / "real-public")  # the only photos that may go to Fireworks or Baseten
+# The only photos that may go to Fireworks or Baseten: Wikimedia Commons and the Cairo CC BY set
+# (docs/DATA_HANDLING.md), as in scripts/intake_live.py. DailyMed's public/dailymed may not (grill m7 #6).
+PUBLIC = (MEDIA / "public/commons", MEDIA / "public/gemini-commons", MEDIA / "real-public")
 LEDGER = ROOT / "evidence/spend/ledger.jsonl"
 CACHE = ROOT / "evidence/raw/eval/segments"
 TOP_K = 3

@@ -62,8 +62,8 @@ A number a model writes is kept only if the source states it. The workshop rule 
     - the colloquial Egyptian spelling `معلقة`, `معلقه`, the dual `معلقتين` or `معلقتان`, or `معالق`, as a whole word, with or without `ال`. The stem `معلق` alone means a suspension and isn't a spoon;
     - `cuchara`, `cucharada`, `cucharadita`, `cuillère`, `cuillerée` and `cuillère-mesure`, with their plurals.
   - **Water to dissolve in doesn't count, but only for a reading per `tablet`, `capsule` or `dose`.** It is either of these:
-    - **a volume or spoon followed by a water word.** Text in brackets isn't counted, and a bracket that closes after the volume may come first (`a glass (200 ml) of water`). Only these may come between: an optional `of`, `de`, `d'`, `du` or `من`, then any of `warm`, `lukewarm`, `cold`, `cool`, `cooled`, `boiled`, `drinking`, `tap`, `fresh`, `clean` and `plain`;
-    - **a volume alone in brackets right after a water word,** optionally after `approx`, `aprox`, `about`, `ca`, `env`, `environ` or `حوالي` (`a glass of water (200 ml)`, `water (approx. 200 ml)`).
+    - **a volume or spoon followed by a water word.** Text in round brackets isn't counted, and a round bracket that closes after the volume may come first (`a glass (200 ml) of water`). Square brackets aren't skipped here, so they keep the volume counting. Only these may come between: an optional `of`, `de`, `d'`, `du` or `من`, then any of `warm`, `lukewarm`, `cold`, `cool`, `cooled`, `boiled`, `drinking`, `tap`, `fresh`, `clean` and `plain`;
+    - **a volume alone in round brackets right after a water word,** optionally after `approx`, `aprox`, `about`, `ca`, `env`, `environ` or `حوالي` (`a glass of water (200 ml)`, `water (approx. 200 ml)`).
   - **The water words** are `water`, `agua`, `eau`, and `ماء` with or without `ال`. They aren't water words when followed by:
     - a hyphen joined to a word (`water-based`; a dash with spaces around it doesn't count);
     - `for injection`;
