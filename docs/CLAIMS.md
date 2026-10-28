@@ -42,11 +42,12 @@ Checked on 28 Oct 2026 against `main` at 3b40d5a (batches 1–20). Line numbers 
 ## 2. The clinician's pause: one new photo
 | # | Claim | Evidence | Allowed wording |
 |---|---|---|---|
-| 2.1 | ✅ The clinician can ask for one new photo (tested offline) | SPEC.md:203–225; `anamnesis/review.py`:25, :42, :88; `tests/contract/test_b20_review.py`:236, :336 | "If a label can't be read, the clinician can ask the patient for one new photo. Only that photo is processed, and the brief updates." |
+| 2.1 | ✅ The clinician can ask for one new photo (tested offline) | SPEC.md:203–225; `anamnesis/review.py`:25, :42, :88; `tests/contract/test_b20_review.py`:236, :336 | "If a label can't be read, the clinician can ask the patient for one new photo. Only that photo is processed, and the brief updates." Also "the run pauses for a person, then resumes" (SPEC.md:203). |
 | 2.2 | ✅ Nothing is final until approved | SPEC.md:226, :229; `templates.py`:122–124; `review.py`:153; `test_b20_review.py`:465, :500 | "The brief stays a draft until the clinician approves it." |
 | 2.3 | ✅ Who decides | SPEC.md:114, :203; `evidence/grills/supervisor-2026-10-27/effect.md`:13 | "The code fixes the order. The clinician decides the pause. No model chooses an action." This is the framing for the agentic track: human in the loop. |
 | 2.4 | ✅ The message to the patient is fixed text | `templates.py`:128–130; `test_b20_review.py`:325 | Quote it as it is. |
 | 2.5 | ⏳ The pause, live, on a real photo | Batch 21: the unreadable shot, its re-photo, their saved reports and brief | Until it lands: "built and tested offline", never "shown live". |
+| 2.6 | ✅ In the demo, the developer plays the clinician | SPEC.md:213–226 (the review is a set of functions; there is no clinician app); the demo script for case R2 | Say it: "Today, that request is one function call, and I play the clinician." On screen while the review states show: "Staged demo: the developer plays the clinician. The request is one function call; there is no clinician app yet." |
 
 ## 3. Safety, privacy and spend
 | # | Claim | Evidence | Allowed wording |
@@ -69,14 +70,16 @@ Checked on 28 Oct 2026 against `main` at 3b40d5a (batches 1–20). Line numbers 
 | 4.6 | ⏳ The real-case table | Batch 21 reports | "Staged tests: real packaging, a fictional history, the developer's own voice; not a validation." Every miss stays in the table. |
 | 4.7 | ⏳ A real human voice | Batch 21 | Until then: "tested on synthetic voices only" (SPEC.md:3). |
 | 4.8 | ✅ No outside usability check | Not run: cut from the 28 Oct plan | "No outside usability check was done." |
+| 4.9 | ⏳ How long one intake takes | The wall-clock times of the hero's 10 runs | "One intake takes about N seconds", N as measured. |
+| 4.10 | ⏳ The hero's disagreement | Case R1b (V1b + P1) in the batch 21 manifest: Gelocatil said as 650 mg against a 1 g box, expected `strength_mismatch` | "The patient said six hundred and fifty milligrams. The pack says one gram." Only if V1b is recorded and R1b comes out as pre-registered. |
 
 ## 5. How it was built
 | # | Claim | Evidence | Allowed wording |
 |---|---|---|---|
-| 5.1 | ✅ Muse Code built the last six batches | `evidence/batch_log.jsonl`:20–25 (batches 16, 17, 18, 19, 19.1, 20); each `evidence/batches/<n>/` has `builder.md`, `gate.json`, `supervisor.md`, `review.md` | "Muse Code wrote the product code for the last six batches." |
+| 5.1 | ✅ Muse Code built the last six batches | `evidence/batch_log.jsonl`:20–25 (batches 16, 17, 18, 19, 19.1, 20); each `evidence/batches/<n>/` has `builder.md`, `gate.json`, `supervisor.md`, `review.md` | "Muse Code wrote the product code for the last six batches." Recount at the freeze: batch 21 and later add to N. |
 | 5.2 | ✅ What Muse Code wrote | `git blame` at 3b40d5a: every line of `anamnesis/brief.py`, `brief_html.py`, `review.py`, `schema/review.py`, `core/overlap.py` and `providers/stated.py` comes from a Muse batch commit | "The brief, the photo request and the cross-medicine check are code Muse Code wrote." |
 | 5.3 | ✅ Its share of the product code | `git blame` at 3b40d5a: 1,576 of 3,887 lines in `anamnesis/` (41%, `__init__.py` files left out) | README line 15: "All product code in `anamnesis/` from batch 16 on was written by Muse Code." Never "all code": the CEO wrote `scripts/` (for example bbccafe, d4eee84, 202ae89, b689014), and Codex and Claude built batches 1–15.5 (README.md:15; `evidence/decisions.md`:70–77). Re-check at the freeze: every commit to `anamnesis/` since batch 16 must be a Muse batch commit. |
-| 5.4 | ✅ Claude Code wrote the tests Muse had to pass | CLAUDE.md:6–7; `scripts/batch.sh`:27 (the gate fails a batch that touches `tests/contract/`) | "Claude Code wrote the spec and the acceptance tests. Muse Code couldn't edit them, and an independent reviewer checked every batch." |
+| 5.4 | ✅ Claude Code wrote the tests Muse had to pass | CLAUDE.md:6–7; `scripts/batch.sh`:27 (the gate fails a batch that touches `tests/contract/`); every Muse batch has its `evidence/batches/<n>/supervisor.md` (16, 17, 18, 19, 19.1, 20) | "Claude Code wrote the spec and the acceptance tests. Muse Code couldn't edit them, and an independent reviewer checked every batch." Here "every batch" means every Muse batch: batches 13 and 14 have no `supervisor.md`. |
 | 5.5 | ✅ Muse Code's usage (estimate) | `evidence/spend/muse_ledger.jsonl`: 12 sessions, 40.8M input and 0.48M output tokens, $11.07 est. | "Muse Code's sessions cost about $11 of Meta credit, priced from its own billing records." Meta's dashboard is the final word. |
 | 5.6 | ✅ Total Meta spend so far (refresh before the final cut) | `ledger.jsonl` $0.48 (105 calls) + `muse_ledger.jsonl` $11.07 est. | "About $11.55 of the $150 credit so far (28 Oct)." |
 | 5.7 | ✅ Tests (refresh at the freeze) | `evidence/batches/20/gate.json`: 893 passed, 658 of them contract tests | "893 tests run offline, with no keys." Use sparingly: test counts aren't progress (`supervisor-2026-10-27/effect.md`:27). |
