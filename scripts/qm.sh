@@ -30,8 +30,8 @@ evidence_part() {
   done
   for n in $(ls evidence/batches | sort -n); do
     (( n >= first && n <= last )) || continue
-    for f in briefs/$n.md evidence/batches/$n/round*-brief.md(N) evidence/batches/$n/review.md evidence/batches/$n/supervisor.md \
-             evidence/batches/$n/gate.json evidence/batches/$n/goal.md evidence/batches/$n/usage.json; do
+    # Every record in the batch folder, live results and pre-registrations included (QM M5 #1, 28 Oct).
+    for f in briefs/$n.md evidence/batches/$n/*.md(N) evidence/batches/$n/*.json(N); do
       [[ -f $f ]] && { section "$f"; cat "$f"; }
     done
   done
