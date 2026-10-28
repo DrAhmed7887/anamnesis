@@ -23,7 +23,7 @@ flowchart LR
     photo["Pack photos"] --> clean["Turned upright,<br/>metadata stripped"]
     clean --> sam["SAM 3.1:<br/>marks each pack it finds"]
     sam --> rd["Muse Spark 1.3:<br/>reads each crop"]
-    cx --> st["Kept only if stated:<br/>said or printed"]
+    cx --> st["A number is kept only if it is<br/>in the turns or the label text"]
     rd --> st
     st --> cmp["Plain code compares<br/>the two sides"]
     cmp --> brief["One-page brief:<br/>each finding linked to its turn and crop"]
@@ -35,15 +35,15 @@ flowchart LR
 
 - Muse Voice Transcribe turns the note into timed turns. SAM 3.1 marks each pack it finds. Muse Spark 1.3 picks the medicines out of the transcript and reads each label. [1.2]
 - Before any model sees a photo, Anamnesis turns it upright and strips its metadata, GPS included. [3.1]
-- The label reader only ever sees the cropped pack, so a reading can't come from another pack. [1.6]
-- A dose a model writes is kept only if the patient said it or the pack prints it. [1.13]
-- When a pack prints a strength per a volume, such as 250 mg per 5 ml, a reading keeps that strength only if the pack also prints it in the reading's own unit, such as per ml. Otherwise the strength is left empty. It fails closed: a wording the rule doesn't know loses a strength rather than keeping a wrong one. [1.19]
+- The label reader only ever sees the crop of its own box. [1.6]
+- A number a model writes is kept only if it appears in the patient's turns or in the label text the reader returned. [1.13]
+- When a pack prints a strength per a volume, such as 250 mg per 5 ml, a reading keeps that strength only if the pack also prints it in the reading's own unit, such as per ml. Otherwise the strength is left empty. It is built to lose a strength rather than keep a wrong one, and its known exceptions are under Limitations. [1.19]
 - Then plain code compares the two sides. No model decides a finding. [1.16]
-- When a label can't be read, Anamnesis doesn't guess. It says so. [1.17] If a photo shows no pack, the brief says so. [1.12]
-- Every model call is logged with its cost, and each intake has a call cap and a dollar cap. [3.5]
+- When the reader reports a label unreadable or partial, Anamnesis says so. [1.17] If a photo shows no pack, the brief says so. [1.12]
+- Every product model call is logged with its cost, and each live intake has a call cap and a dollar cap. [3.5]
 
 ## The brief
-- Disagreements come first, with the patient's words and the pack side by side. [1.7]
+- Disagreements come first, with what the patient said, as extracted, and the pack side by side. [1.7]
 - Click a turn and you hear that turn, from its start to its end. [1.4] Click the box and you see the crop the label reader saw. [1.5]
 - Every sentence Anamnesis adds is fixed text. It adds no advice of its own, and pack text is quoted as printed. [1.8]
 - Panadol and Gelocatil are two brand names for one medicine. Anamnesis notes that both contain paracetamol, and that concurrent use is unconfirmed. [1.9] It also notes two medicines from one class, beta-blockers. Concurrent use is unconfirmed. [1.10]
@@ -60,7 +60,7 @@ flowchart LR
 ## Results, as measured
 Every run below predates batch 23. The synthetic notes ran on the code of 27 Oct, of batch 20 and of batch 21, the public photos on batch 20's and batch 21's, and the comparison on batch 22's. Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on any of them. [4.1, 4.11, 4.13, 4.14, 1.19]
 
-These are staged tests, not a validation. The expected results come first, and every run is reported as it came out, failures included. [4.15] No patient data: the pack photos are real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3]
+These are staged tests, not a validation. The expected results come first, and every run is reported as it came out, failures included. [4.15] No patient data: the pack photos are rendered test images or real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3]
 
 ### Ten public pack photos, before and after batch 21
 The expected results were committed before the first run (8b993ff). [4.4] On the same ten pre-registered public-photo cases, with the same expected results, the code got 1 right before batch 21 and 3 after it. Neither run showed a false match, or a wrong strength or ingredient as fact. [4.11]
@@ -150,14 +150,14 @@ uv run pytest
 - Tested on synthetic voices only, in English and Egyptian Arabic. [3.3, 4.12]
 - The same Arabic recording came back in three different spellings across runs. Curated Arabic brand names cover the ones seen so far. [4.3]
 - Turns, not words: click a turn and you hear the whole turn. [1.4]
-- Spanish number words aren't read, so such a dose is dropped. [1.13]
+- The number check looks only at the number, not its unit, and doesn't check the regimen's counts. On the pack side it checks the label text the reader itself returned. Spanish number words aren't read, so such a dose is dropped. [1.13]
 - Only one class is curated, beta-blockers, and interactions aren't checked. [1.10]
 - SAM 3.1 doesn't always find the pack: in the comparison it found one in 20 of 39 public photos. [1.2, 4.13]
-- The volume rule gives up some coverage on purpose, prefilled syringes and pens read per dose the main one. It doesn't read every syrup wording. [1.19]
+- The volume rule gives up some coverage on purpose, listed in SPEC §2, prefilled syringes and pens read per dose the main one. It doesn't read every syrup wording, and at least one wording still keeps a per-tablet reading on purpose: "Paracetamol 250 mg = one tablet in each 5 ml". [1.19]
 - Every miss on the ten public photos and the two synthetic notes is in their two tables above. [4.11, 4.12]
 
 ## Data and privacy
-- No patient data. The pack photos are real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3] The rules for real media are in [`docs/DATA_HANDLING.md`](docs/DATA_HANDLING.md).
+- No patient data. The pack photos are rendered test images or real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3] The rules for real media are in [`docs/DATA_HANDLING.md`](docs/DATA_HANDLING.md).
 - Every product call used Meta's standard models. [3.4]
 
 ## Built with
