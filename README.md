@@ -58,7 +58,7 @@ flowchart LR
 - The pause is built and tested offline. [2.1, 2.5] There is no clinician app yet: the request is one function call, and in the demo the developer plays the clinician. [2.6]
 
 ## Results, as measured
-Every run below predates batch 23: batches 23 and 23.1 made no live calls. [5.6] The synthetic notes ran on 27 Oct's code, then on batches 1–20 and on batch 21; the public photos on batches 1–20 and on batch 21; and the comparison on batch 22's code. [4.1, 4.11, 4.12, 4.13] Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on any of them. [4.14, 1.19]
+Every run below predates batch 23 except the last, the full intake with Muse Spark Open: batches 23 and 23.1 made no live calls of their own. [5.6] The synthetic notes ran on 27 Oct's code, then on batches 1–20 and on batch 21; the public photos on batches 1–20 and on batch 21; and the comparison on batch 22's code. [4.1, 4.11, 4.12, 4.13] Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on those. The last run used batch 23.1's code, on eight of the public photos. [4.14, 1.19, 4.16]
 
 These are staged tests, not a validation. The expected results come first, and every run is reported as it came out, failures included. [4.15] No patient data: the pack photos are rendered test images or real public photos, the patients' histories are invented, and every voice so far is synthetic. [3.3]
 
@@ -100,8 +100,10 @@ The three misses on 28 Oct came from the batch 20 prompt. Spark copied each dose
 ### Cost and time
 About 3 cents per intake (12 live intakes, 28 Oct). [4.2] One intake took 17 to 49 seconds (12 live intakes, 28 Oct). [4.9]
 
-## Comparison: an open-weight label reader, zero-shot
-Built with Muse Spark Open, for this comparison only. The product's label reader stays Muse Spark 1.3. [4.13]
+## Muse Spark Open, Meta's open-weight model, as the label reader
+Built with Muse Spark Open, in a zero-shot comparison and in a run of the full intake as its label reader. The product's default label reader stays Muse Spark 1.3. [4.13, 4.16]
+
+### A zero-shot comparison on 39 public photos
 
 In a pre-registered zero-shot comparison, SAM 3.1 found a pack in 20 of 39 public photos. On those 20 crops, as first scored, Spark 1.3 read 13 correctly with 3 harmful readings, and Muse Spark Open on Baseten read 13 with 2. A scorer fix made after the run raised both to 14, with 2 and 1 harmful. [4.13] Every reader read the same SAM 3.1 crops with the same system prompt, schema and parser, and no model was trained. Baseten also got the schema as text in its user message, and Fireworks used strict JSON mode. The photos are 30 Cairo University phone photos (CC BY 4.0) and 9 Wikimedia Commons photos. [4.13]
 
@@ -128,6 +130,27 @@ A descriptive comparison from one pass, n = 20: 20 photos of 17 packs, since the
 - The volume rule above was written for the two syrup readings, but the comparison wasn't rerun on it. [1.19, 4.13]
 - Every photo, reader and verdict: [`evidence/batches/22/comparison.md`](evidence/batches/22/comparison.md).
 
+### The full intake, with Spark Open reading the labels
+With Muse Spark Open as its label reader, the full intake ran end to end on eight pre-registered public-photo cases, once each, with no harmful reading. It got the same correct-or-miss verdict as with Spark 1.3 on seven. [4.16] Both columns ran on 28 Oct evening on the same code, and everything but the label reader was the same: Voice Transcribe, Spark 1.3 for the claims, SAM 3.1 and the caps. The plan was committed before the first call (4f5e569). [4.16]
+
+| Case | Expected | Spark 1.3 reads | Spark Open reads |
+|---|---|---|---|
+| U1 Concor, Russia | `match` | `insufficient_information` | `match` ✓ |
+| U2 Augmentin, Belgium | `match` | `unreadable_source`: read as partial | `insufficient_information` |
+| U3 Panadol, Australia | `match` | ✓ | ✓ |
+| U4 Panadol, Finland, two tablets | `intake_differs_from_unit_strength` | ✓ | ✓ |
+| U5 Norvasc 5 mg and 10 mg, Israel | paired with the 5 mg box, `match` | ✓ | ✓ |
+| U6 Glucophage, China | `match` | `unresolved_name` | `unresolved_name` |
+| U7 Sortis 40 mg vs "Lipitor twenty milligrams" | `strength_mismatch` | `unreadable_source` | `unreadable_source` |
+| U8 Betaloc ZOK 100 | `match` | `unreadable_source` | `unreadable_source` |
+
+- **U1 is the one case where the verdicts differ, and the reader didn't cause it.** Both readers read the pack as bisoprolol 5 mg. The claim extraction, Spark 1.3 in both columns, dropped the spoken "five milligrams" in one run and kept it in the other. [4.16]
+- **U2 is the one case where the readers differ.** Spark Open read the pack fully, amoxicillin 875 mg + clavulanic acid 125 mg, and Spark 1.3 read it as partial. Both miss U2 on the claim side: the claim came back without its amounts. [4.16]
+- **U5** paired with the 5 mg box in both columns, on one run per reader, so it isn't counted as fixed. [4.16, 4.11]
+- n = 8, one run each, so a one-case difference can be chance. U9 and U10 were left out, because their DailyMed photos may not go to Baseten. [4.16]
+- $0.56 for the 16 intakes, Meta $0.37 and Baseten $0.19. An intake took 31.7–63.4 s with Spark Open reading, and 28.9–45.7 s with Spark 1.3. [4.16]
+- Every case and cause: [`evidence/batches/22/intake-openweight.md`](evidence/batches/22/intake-openweight.md).
+
 ## How it was built
 - Muse Code wrote the product code for the last ten batches. [5.1] All product code in `anamnesis/` from batch 16 on was written by Muse Code. [5.3] The brief, its timeline, the photo request, the cross-medicine check and the volume rule are code Muse Code wrote. [5.2]
 - Claude Code wrote the spec and the acceptance tests. Muse Code wasn't allowed to edit them, and the gate fails any batch that does. A separate Claude Opus reviewer checked every Muse batch. [5.4]
@@ -135,7 +158,7 @@ A descriptive comparison from one pass, n = 20: 20 photos of 17 packs, since the
 - In batch 22, a separate Claude Opus reviewer caught a spec error: as briefed, "less than five milligrams" could have been read as exactly five, if a model wrote the amount as "<five". The contract now pins that case. [5.10]
 - Batch 23 took nine rounds: a separate Claude Opus reviewer sent it back seven times before approving it. Before each round, Claude Code checked its own contract on a throwaway reference build. At the end, all 44 deliberate single-rule breaks of that reference were caught by the contract. Its follow-up, batch 23.1, passed review in one round with nothing to change. [5.11]
 - Batches 1 to 20 were each specified, built, gated and reviewed in one day, 27 Oct. [5.8]
-- Muse Code's sessions cost about $26.87 of Meta credit so far, priced from its own billing records (28 Oct). [5.5] About $28.71 of the $150 credit in logged calls so far (28 Oct). Muse grill runs are billed separately. [5.6]
+- Muse Code's sessions cost about $26.87 of Meta credit so far, priced from its own billing records (28 Oct). [5.5] About $29.08 of the $150 credit in logged calls so far (28 Oct). Muse grill runs are billed separately. [5.6]
 - Each Muse batch's record is in `evidence/batches/<n>/`: `builder.md`, `gate.json`, `supervisor.md` and `review.md`. [5.1]
 
 ## Run the tests
@@ -163,7 +186,7 @@ uv run pytest
 ## Built with
 - **Meta models in the product:** Muse Voice Transcribe, SAM 3.1 and Muse Spark 1.3. [1.2]
 - **Meta tooling in the build:** Muse Code. [5.1]
-- **For the comparison only:** Muse Spark Open, on Baseten and on Fireworks. Those providers bill its reads, outside the Meta credit. [4.13, 5.6]
+- **Open weights:** Muse Spark Open, Meta's open-weight model, in a zero-shot comparison (on Baseten and Fireworks) and in a run of the full intake as its label reader (on Baseten). The product's default label reader stays Muse Spark 1.3. Those providers bill Spark Open's reads, outside the Meta credit. [4.13, 4.16, 5.6]
 
 ## Where things are
 - [`SPEC.md`](SPEC.md): the contract.
