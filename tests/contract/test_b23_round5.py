@@ -69,6 +69,7 @@ A250, P250, P125, P120 = (("amoxicillin", "250", "mg"), ("paracetamol", "250", "
     ("Each 5 ml contains 250 mg. Tablets also available", P250),
     ("Each 5 ml contains 250 mg\nTablets also available", P250),
     ("Each 5 ml contains 250 mg; tablets 500 mg", P250),
+    ("Paracetamol syrup 250 mg. Tablets also available. Dose: 5 ml", P250),
     ("Panadol 500 mg\n24 tablets, 100 ml bottle", ("paracetamol", "500", "mg")),
 ])
 @pytest.mark.parametrize("per", ["ml", "dose", "tablet"])

@@ -44,15 +44,15 @@
 ## Round 5 (28 Oct): a strength printed in its own unit, pinned in `tests/contract/test_b23_round5.py`
 - **The design change:** rounds 1–4 asked where a volume doesn't count, and each answer was a place to hide one. Round 5 asks whether each amount is printed in the reading's own unit (`250 mg/ml`, `100 mcg per dose`, `5 mg tablets`) and not also beside a volume. A missing wording now loses a strength instead of keeping a wrong one. The clauses are gone.
 - **On Muse's round 4:** 75 of the 104 first-draft tests fail: every supervisor round 4 input, in both directions.
-- **Reference build** (round 4 plus the round 5 rule in `spark.py`): all **1217** contract tests pass.
+- **Reference build** (round 4 plus the round 5 rule in `spark.py`): all **1220** contract tests pass.
   - **Two earlier keeps now fail closed, on purpose,** and moved to the drops with a note: "Vitamin C 1000 mg per 200 ml of water" (round 4), and "Panadol 500 mg\n24 tablets, 100 ml bottle" (round 1).
   - **9 of Muse's round 3–4 unit cases fail.** They pin behaviour round 5 changes on purpose. Six are "Syrup 250 mg in 5 ml of water" read per ml, now dropped; three are tablet and capsule lines. The brief lists them.
-- **Mutants,** each applied alone to the reference and run against every contract test. All 17 were caught:
+- **Mutants,** each applied alone to the reference and run against every contract test. All 16 were caught:
   - the water exemption also for per ml;
   - no always-counts after `/` or `per`;
   - no spoons;
   - no refusal, the refusal only before the volume, the refusal across sentences;
-  - the tablet print across a line break, or across a sentence;
+  - the tablet print across a line break, or across a sentence. The sentence mutant first survived once the refusal also looked later in the sentence. One drop now pins it ("Paracetamol syrup 250 mg. Tablets also available. Dose: 5 ml"), added in a second lock while Muse was building. The brief already gave Muse the rule.
   - brackets not skipped;
   - no `ال` on water. This mutant first survived, because the Arabic keeps also printed «قرص». Two keeps without a tablet print were added.
   - no `U`, no `unidades`;
