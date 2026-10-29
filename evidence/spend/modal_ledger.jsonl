@@ -1,1 +1,10 @@
 {"model_id": "glimmer-image-builds@modal", "run": "setup", "gpu": null, "seconds": 300.0, "cost_usd": "0.05276", "estimated": true, "at": "2026-10-29T08:40:00+00:00", "note": "three app starts refused for want of a payment method; only CPU image builds ran"}
+{"model_id": "glimmer-download@modal", "run": "r1", "gpu": null, "seconds": 369.7, "cost_usd": "0.06501", "estimated": true, "at": "2026-10-29T08:52:37+00:00"}
+{"model_id": "glimmer-train-smoke@modal", "run": "smoke1", "gpu": "H100", "seconds": 75.9, "cost_usd": "0.09665", "estimated": true, "at": "2026-10-29T08:54:20+00:00"}
+{"model_id": "glimmer-eval-smoke@modal", "run": "smoke1", "gpu": "H100", "seconds": 223.5, "cost_usd": "0.28442", "estimated": true, "at": "2026-10-29T08:59:21+00:00"}
+{"model_id": "glimmer-eval-smoke@modal", "run": "smoke1", "gpu": "H100", "seconds": 540.7, "cost_usd": "0.68819", "estimated": true, "at": "2026-10-29T09:09:36+00:00"}
+{"model_id": "glimmer-train@modal", "run": "r1", "gpu": "H100", "seconds": 895.2, "cost_usd": "1.13951", "estimated": true, "at": "2026-10-29T09:10:13+00:00"}
+{"model_id": "glimmer-eval-smoke@modal", "run": "r1", "gpu": "H100", "seconds": 391.9, "cost_usd": "0.49886", "estimated": true, "at": "2026-10-29T09:18:32+00:00"}
+{"model_id": "glimmer-eval@modal", "run": "r1", "gpu": "H100", "seconds": 1042.4, "cost_usd": "1.32683", "estimated": true, "at": "2026-10-29T10:09:44+00:00"}
+{"model_id": "glimmer-eval@modal", "run": "r1", "gpu": "H100", "seconds": 1902.3, "cost_usd": "2.42132", "estimated": true, "at": "2026-10-29T11:03:37+00:00"}
+{"model_id": "glimmer-reconcile@modal", "run": "all", "gpu": null, "seconds": 0, "cost_usd": "0.42645", "estimated": false, "at": "2026-10-29T10:45:00+00:00", "note": "modal billing summary, Oct 2026: ephemeral apps $7.00 (all credits, $0.00 billed), less the $0.00784 seen before these runs; the lines above sum to $6.57355"}

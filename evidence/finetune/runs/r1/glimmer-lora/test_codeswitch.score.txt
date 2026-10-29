@@ -1,0 +1,19 @@
+split test_codeswitch: 50 examples, 50 replies, 95 answer claims
+valid JSON 50/50 (100.0%); dropped by the product's checks 0; invalid JSON 0; no reply 0
+per-claim field accuracy:
+  name_text        93/95 (97.9%)
+  inn              95/95 (100.0%)
+  intake           94/95 (98.9%)
+  strength         94/95 (98.9%)
+  units_per_intake 95/95 (100.0%)
+  intakes_per_day  95/95 (100.0%)
+  as_needed        95/95 (100.0%)
+  status           95/95 (100.0%)
+claims missing 0, extra 0
+transcripts all correct 47/50 (94.0%)
+harmful claims, raw reply, before the product's checks: 0 (unsupported amounts 0, unsupported INNs 0)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+examples with a miss or a harmful claim: 3
+  #10 [en-units-3+ar-strength-2+ar-stopped-2] c1 name_text: got arblibli, want arbli
+  #24 [en-units-1+en-units-3+en-strength-1] c3 intake: got 600 mg, want null | c3 strength: got null, want 600 mg
+  #41 [ar-stopped-1] c1 name_text: got البيلوك, want البيلوكزوك

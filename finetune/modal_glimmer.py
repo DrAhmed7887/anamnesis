@@ -5,10 +5,10 @@
     ~/.local/bin/modal run finetune/modal_glimmer.py --step eval --run r1 [--smoke]
 
 Every step first runs scripts/spend_check.py with the most it can cost (its timeout at Modal's list price),
-and afterwards appends what it cost (the local wall time at that price, an over-estimate) to
-evidence/spend/modal_ledger.jsonl. The weights come from the Hub at a pinned revision into a Modal volume.
-The adapter stays in a second volume. Only the generated fine-tune data and the 33 synthetic-voice
-transcripts go to Modal (docs/DATA_HANDLING.md).
+and afterwards appends what it cost (the local wall time at that price, an estimate checked against
+`modal billing summary`) to evidence/spend/modal_ledger.jsonl. The weights come from the Hub at a pinned
+revision into a Modal volume. The adapter stays in a second volume. Only the generated fine-tune data and
+the 33 synthetic-voice transcripts go to Modal (docs/DATA_HANDLING.md).
 
 Eval runs base and tuned Glimmer in one vLLM engine, in two passes per example. The first pass is free: the
 model reasons, until it opens its answer to the user. The second pass continues from there under the product's
@@ -52,8 +52,11 @@ train_image = (modal.Image.debian_slim(python_version="3.12")
                .pip_install("torch==2.15.0", "transformers==5.21.0", "peft==0.21.2", "accelerate==1.15.0",
                             "huggingface_hub==2.3.0")
                .add_local_file(HERE / "glimmer.py", "/root/glimmer.py"))
+# FlashInfer's sampler needs a CUDA compiler that the slim image lacks (29 Oct smoke run), so vLLM samples
+# with its PyTorch top-k/top-p path: the same settings, drawn by a different kernel.
 eval_image = (modal.Image.debian_slim(python_version="3.12")
               .pip_install("vllm==0.32.0")
+              .env({"VLLM_USE_FLASHINFER_SAMPLER": "0"})
               .add_local_file(HERE / "glimmer.py", "/root/glimmer.py"))
 app = modal.App("anamnesis-glimmer-lora")
 MACHINE = {"cpu": glimmer.CPU_CORES, "memory": glimmer.MEMORY_MIB, "volumes": VOLUMES}
@@ -85,8 +88,8 @@ def _validation_loss(model, examples: list, pad_id: int) -> float:
     model.eval()
     total, count = 0.0, 0
     with torch.no_grad():
-        for start in range(0, len(examples), 8):
-            chunk = examples[start:start + 8]
+        for start in range(0, len(examples), 4):
+            chunk = examples[start:start + 4]
             targets = sum(1 for _, labels in chunk for label in labels if label != glimmer.IGNORE)
             total += model(**_tensors(glimmer.pad_batch(chunk, pad_id))).loss.item() * targets
             count += targets
@@ -170,7 +173,7 @@ def train(run: str, train_rows: list, val_rows: list, max_steps: int | None = No
                "peak_gib": round(torch.cuda.max_memory_allocated() / 2**30, 1),
                "trainable": sum(param.numel() for param in params), "adapted_layers": len(adapted),
                "adapter_files": sorted(path.name for path in Path(adapter).iterdir()),
-               "versions": {"torch": torch.__version__, "transformers": transformers.__version__,
+               "versions": {"torch": str(torch.__version__), "transformers": transformers.__version__,
                             "peft": peft.__version__},
                "check": check, "val_losses": val_losses, "history": history}
     Path(f"/runs/{run}/train.json").write_text(json.dumps(metrics, indent=1, ensure_ascii=False))
@@ -200,10 +203,13 @@ def _two_passes(llm, tokenizer, conversations: list, lora, schema: dict, max_tok
                      "first_finish": first.finish_reason, "first_text": first.text})
         budget = max_tokens - len(first.token_ids)
         if opened and budget > 0:
+            # vLLM's default, as pre-registered: whitespace stays free. In the 29 Oct smoke runs base Glimmer
+            # sometimes filled it until the limit; vLLM 0.32 only removes it engine-wide and then drops the
+            # spaces in ", " and ": " too, the separators the tuned model was trained on.
+            constraint = StructuredOutputsParams(json=schema)
             follow.append((i, {"prompt_token_ids": [*prompt, *first.token_ids]},
                            SamplingParams(**glimmer.SAMPLING, seed=glimmer.EVAL_SEED + i, max_tokens=budget,
-                                          stop_token_ids=stops,
-                                          structured_outputs=StructuredOutputsParams(json=schema))))
+                                          stop_token_ids=stops, structured_outputs=constraint)))
     if follow:
         answers = llm.generate([prompt for _, prompt, _ in follow], [params for _, _, params in follow],
                                lora_request=lora)
@@ -215,24 +221,37 @@ def _two_passes(llm, tokenizer, conversations: list, lora, schema: dict, max_tok
 
 
 @app.function(image=eval_image, gpu=glimmer.GPU, timeout=glimmer.EVAL_TIMEOUT_S, **MACHINE)
-def evaluate(run: str, splits: dict, schema: dict, max_tokens: int) -> dict:
+def evaluate(run: str, splits: dict, schema: dict, max_tokens: int, out: str) -> dict:
+    """Each system and split is saved to the volume as it finishes, and a split already saved there is read
+    back instead of run again: on 29 Oct a dropped laptop connection cancelled a run 17 minutes in."""
     import vllm
-    from vllm import LLM
-    from vllm.lora.request import LoRARequest
 
     clock = time.monotonic()
     runs.reload()
-    llm = LLM(model=WEIGHTS, enable_lora=True, max_lora_rank=glimmer.LORA["r"], max_loras=1,
-              max_model_len=glimmer.MAX_MODEL_LEN, limit_mm_per_prompt={"image": 0, "video": 0},
-              seed=glimmer.EVAL_SEED)
-    tokenizer = llm.get_tokenizer()
-    loras = {"glimmer-base": None, "glimmer-lora": LoRARequest("glimmer-lora", 1, f"/runs/{run}/adapter")}
-    result = {"run": run, "vllm": vllm.__version__, "load_s": round(time.monotonic() - clock, 1),
-              "max_tokens": max_tokens, "systems": {}}
-    for system in SYSTEMS:
-        result["systems"][system] = {
-            split: _two_passes(llm, tokenizer, conversations, loras[system], schema, max_tokens)
-            for split, conversations in splits.items()}
+    saved = {(system, split): Path(f"/runs/{out}/eval/{system}/{split}.json")
+             for system in SYSTEMS for split in splits}
+    done = {key: json.loads(path.read_text(encoding="utf-8")) for key, path in saved.items() if path.exists()}
+    result = {"run": run, "vllm": vllm.__version__, "max_tokens": max_tokens, "resumed": len(done),
+              "load_s": 0.0}
+    todo = [key for key in saved if key not in done]
+    if todo:
+        from vllm import LLM
+        from vllm.lora.request import LoRARequest
+
+        llm = LLM(model=WEIGHTS, enable_lora=True, max_lora_rank=glimmer.LORA["r"], max_loras=1,
+                  max_model_len=glimmer.MAX_MODEL_LEN, limit_mm_per_prompt={"image": 0, "video": 0},
+                  seed=glimmer.EVAL_SEED)
+        tokenizer = llm.get_tokenizer()
+        loras = {"glimmer-base": None,
+                 "glimmer-lora": LoRARequest("glimmer-lora", 1, f"/runs/{run}/adapter")}
+        result["load_s"] = round(time.monotonic() - clock, 1)
+        for system, split in todo:
+            outcome = _two_passes(llm, tokenizer, splits[split], loras[system], schema, max_tokens)
+            saved[(system, split)].parent.mkdir(parents=True, exist_ok=True)
+            saved[(system, split)].write_text(json.dumps(outcome, ensure_ascii=False), encoding="utf-8")
+            runs.commit()
+            done[(system, split)] = outcome
+    result["systems"] = {system: {split: done[(system, split)] for split in splits} for system in SYSTEMS}
     return result
 
 
@@ -252,7 +271,7 @@ def _charge(step: str, run: str, seconds: float) -> None:
     line = glimmer.ledger_line(step, run, seconds, datetime.now(UTC))
     with LEDGER.open("a", encoding="utf-8") as ledger:
         ledger.write(json.dumps(line) + "\n")
-    print(f"charged {line['model_id']} {line['seconds']} s ${line['cost_usd']} (over-estimate)")
+    print(f"charged {line['model_id']} {line['seconds']} s ${line['cost_usd']} (estimate)")
 
 
 def _schema() -> dict:
@@ -281,11 +300,13 @@ def _eval(run: str, smoke: bool) -> None:
     limit = SMOKE["test_rows"] if smoke else None
     splits = {split: [glimmer.messages_of(row)[:2] for row in _read(DATA / f"{split}.jsonl")[:limit]]
               for split in glimmer.TEST_SPLITS}
-    result = evaluate.remote(run, splits, _schema(), SMOKE["max_tokens"] if smoke else glimmer.MAX_TOKENS)
-    summary = {key: result[key] for key in ("run", "vllm", "load_s", "max_tokens")}
+    out = f"smoke-{run}" if smoke else run  # smoke replies are never scored (plan.md)
+    max_tokens = SMOKE["max_tokens"] if smoke else glimmer.MAX_TOKENS
+    result = evaluate.remote(run, splits, _schema(), max_tokens, out)
+    summary = {key: result[key] for key in ("run", "vllm", "load_s", "max_tokens", "resumed")}
     for system, by_split in result["systems"].items():
         for split, outcome in by_split.items():
-            kept, raw = RUNS_DIR / run / system / f"{split}.jsonl", RAW_DIR / run / system / f"{split}.jsonl"
+            kept, raw = RUNS_DIR / out / system / f"{split}.jsonl", RAW_DIR / out / system / f"{split}.jsonl"
             for path in (kept, raw):
                 path.parent.mkdir(parents=True, exist_ok=True)
             rows = outcome["rows"]
@@ -295,7 +316,7 @@ def _eval(run: str, smoke: bool) -> None:
                                               ensure_ascii=False) + "\n" for row in rows), encoding="utf-8")
             summary[f"{system}/{split}"] = {"wall_s": outcome["wall_s"], "examples": len(rows),
                                             "opened_answer": sum(row["opened_answer"] for row in rows)}
-    (RUNS_DIR / run / "eval.json").write_text(json.dumps(summary, indent=1) + "\n", encoding="utf-8")
+    (RUNS_DIR / out / "eval.json").write_text(json.dumps(summary, indent=1) + "\n", encoding="utf-8")
     print(json.dumps(summary, indent=1))
 
 

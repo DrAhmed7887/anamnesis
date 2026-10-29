@@ -128,9 +128,9 @@ def cost_usd(seconds: float, gpu: bool = True) -> Decimal:
 
 
 def ledger_line(step: str, run: str, seconds: float, at: datetime) -> dict[str, Any]:
-    """One line of evidence/spend/modal_ledger.jsonl. The seconds are the local wall time around the call,
-    longer than what Modal bills, so the cost is an over-estimate until it is checked against Modal's usage
-    page."""
+    """One line of evidence/spend/modal_ledger.jsonl: the local wall time around the call at list price. It is
+    an estimate: Modal also bills each container's idle minute after its last input, so on 29 Oct these lines
+    came to 6% under Modal's billing summary, and the difference went in as its own line."""
     gpu = step != "download"
     return {"model_id": f"glimmer-{step}@modal", "run": run, "gpu": GPU if gpu else None,
             "seconds": round(seconds, 1), "cost_usd": str(cost_usd(seconds, gpu)), "estimated": True,
