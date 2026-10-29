@@ -1,0 +1,23 @@
+NOTICE
+
+Anamnesis uses data from three public sources. The repository's licence covers its code only, not these data.
+
+1. ATC codes (anamnesis/core/catalogue.yaml, evidence/data/drugs_v2.json)
+   © WHO Collaborating Centre for Drug Statistics Methodology, Oslo, Norway.
+   The codes are used with reference to the Centre, as its terms require, and are not changed. Under those terms,
+   copying and distribution for commercial purposes is not allowed, and changing or manipulating the material is
+   not allowed (https://atcddd.fhi.no/copyright_disclaimer/, read 29 Oct 2026). The codes were taken as AEMPS CIMA
+   lists them.
+
+2. RxNorm codes (RxCUI)
+   This product uses publicly available data from the U.S. National Library of Medicine (NLM), National Institutes
+   of Health, Department of Health and Human Services; NLM is not responsible for the product and does not endorse
+   or recommend this or any other product.
+   The codes come from RxNorm through the RxNav APIs (https://lhncbc.nlm.nih.gov/RxNav/TermsofService.html, read
+   29 Oct 2026).
+
+3. Spanish medicines data (evidence/data/drugs_v2.json, finetune/data_v2/)
+   Source: Agencia Española de Medicamentos y Productos Sanitarios (AEMPS), Centro de Información online de
+   Medicamentos (CIMA), https://cima.aemps.es. Read on 29 Oct 2026. AEMPS allows reproduction of its contents
+   with express citation of their origin and the date of their last update (https://www.aemps.gob.es/aviso-legal/).
+   drugs_v2.json also holds the SNOMED CT VTM ids that CIMA returns. The product doesn't use them.
