@@ -49,7 +49,7 @@ MEDIA = ROOT / "evidence/raw/media"
 # The only photos that may go to Baseten: Wikimedia Commons and the Cairo CC BY set (docs/DATA_HANDLING.md).
 OPEN_WEIGHT_PHOTOS = (MEDIA / "public/commons", MEDIA / "public/gemini-commons", MEDIA / "real-public")
 LEDGER = ROOT / "evidence/spend/ledger.jsonl"
-LANGUAGES = {"en": ["English"], "ar": ["Arabic", "English"]}
+LANGUAGES = {"en": ["English"], "ar": ["Arabic", "English"], "es": ["Spanish"], "de": ["German"]}
 MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg"}
 
 
@@ -158,17 +158,18 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cap", default="5.00", help="total USD cap across all live runs (ledger)")
     parser.add_argument("--session-usd", default="0.25", help="USD cap per intake")
-    parser.add_argument("--case", help="a staged case id from the batch 21 manifest")
+    parser.add_argument("--case", help="a staged case id from a batch manifest (21, 24)")
     parser.add_argument("--voice", help="the case's voice note (16 kHz mono WAV)")
-    parser.add_argument("--photo", action="append", default=[], help="a photo of the case, in order")
+    parser.add_argument("--photo", action="append", default=[],
+                        help="a photo of the case, in order; none for a voice-only case (batch 24)")
     parser.add_argument("--lang", choices=sorted(LANGUAGES), default="en")
     parser.add_argument("--repeat", type=int, default=1)
     parser.add_argument("--top-k", type=int, default=3, help="SAM regions kept per photo")
     parser.add_argument("--reader", choices=("spark", "baseten"), default="spark",
                         help="label reader: Spark 1.3, or Muse Spark Open on Baseten (public photos only)")
     args = parser.parse_args()
-    if args.case and not (args.voice and args.photo):
-        sys.exit("--case needs --voice and at least one --photo")
+    if args.case and not args.voice:
+        sys.exit("--case needs --voice")
     if args.top_k < 0:  # SAM's top_regions refuses it, but only mid-run, after spend (M8 #1)
         sys.exit("--top-k must be 0 or more")
     if args.reader == "baseten":
