@@ -3,6 +3,7 @@
 **Status:** written 29 Oct 2026, before any call on these cases. It is committed before the first live call, and the commit order is the proof. After that the expected results don't change, and a run that disagrees is reported as a miss.
 - **The plan:** `evidence/grills/plan-2026-10-29/plan.md` §3, as triaged in `effect.md` (#9 and #12), with Ahmed's go.
 - **One correction to the plan's table:** S1 is `unresolved_name`, not `missing_modality`, until batch 24b. Batch 24a drops an INN the patient didn't say, and Emconcor is outside the catalogue until 24b adds it.
+- **Amended once, 29 Oct about 16:00, before any call:** S1 and G3 also list what the rules give when the amount comes back as a strength. The CEO's reference build for batch 24 found this (`evidence/batches/24/reference.md`, "Found, not fixed here").
 
 **What the cases test:** the Spanish and German path, end to end, on the code after batch 24a merges.
 - Voice Transcribe on Spanish and German speech;
@@ -59,22 +60,27 @@ SPEC §3, with batch 24a. `expected_check.py` runs the reconciler on each case's
 - **Leftovers:** a claim whose name can't be resolved gives `unresolved_name`; any other leftover claim gives `missing_modality`.
 - **A pack read as `partial` can't pair.** It gives `unreadable_source`, and its claim is left as `missing_modality`.
 - **Half a tablet** of a product with unknown splittability gives `insufficient_information` (rule 8). Panadol's splittability is unknown in the catalogue.
+- **An unknown brand said with a strength becomes its own ingredient.** Batch 24a relabels the unsaid INN to the brand, and `_identity` reads an unknown label as an INN. So such a claim is a leftover `missing_modality`, never `unresolved_name`, and it can't pair with its own photographed pack. It fails safe.
 
 ## Cases
 | Case | Voice note | Photo: what it prints (source, licence) | The claim | Expected findings | Also correct | Earlier readings of the photo |
 |---|---|---|---|---|---|---|
-| S1 | "Tomo Emconcor cinco miligramos una vez al día." | none | Emconcor; 5 mg; once a day; active; no INN | `unresolved_name` | | |
+| S1 | "Tomo Emconcor cinco miligramos una vez al día." | none | Emconcor; 5 mg as an intake; once a day; active; no INN | `unresolved_name` | | |
 | S2 | "Tomo bisoprolol dos coma cinco miligramos por la mañana." | `bisoprolol_2_5mg_sandoz_es.jpg`: Bisoprolol Orion 2,5 mg, bisoprolol fumarate, in Finnish and Swedish (Commons, `File:Bisoprolol 2,5 mg.jpg`, CC BY-SA 4.0) | bisoprolol; 2.5 mg; active | `match` (bisoprolol 2.5 mg; the claim names no salt, so fumarate raises no conflict) | The pack `unreadable_source` and the claim `missing_modality`, if the reader judges the pack partial | Batch 22: Spark 1.3 read bisoprolol 2.5 mg |
 | S3 | "Tomo Gelocatil de un gramo cuando tengo dolor." | none | Gelocatil; 1 g; as needed | `missing_modality` ("Mentioned, not photographed") | | |
 | S4 | "Tomo medio comprimido de Panadol de quinientos." | `panadol_500mg_fi.jpg`: Panadol 500 mg, Finland; box and two tablets (Commons, CC BY-SA 4.0) | Panadol; strength 500 mg per tablet; half a tablet per intake; no intake amount | `insufficient_information` (half a tablet, splittability unknown) | `unreadable_source` and `missing_modality`, if partial | Batch 21, U4: 500 mg per tablet, both runs |
 | G1 | "Ich nehme Metoprolol fünfzig Milligramm zweimal täglich." | `metoprolol_50mg_ratiopharm_de.jpg`: Metoprolol-ratiopharm 50 mg, metoprolol tartrate, Baltic packaging, no release form printed (Commons, `File:Metoprolol-ratiopharm.JPG`, public domain) | Metoprolol; 50 mg; twice a day | `match` (metoprolol 50 mg; tartrate raises no conflict) | `unreadable_source` and `missing_modality`, if partial | Batch 22: all three readers judged it partial; Spark 1.3 and Spark Open on Baseten read 50 mg |
 | G2 | "Ich nehme morgens eine halbe Tablette Beloc-Zok hundert Milligramm." | none | Beloc-Zok; strength 100 mg per tablet; half a tablet per intake; no intake amount | `missing_modality` | | |
-| G3 | "Ich nehme Sortis vierzig Milligramm am Abend." | `sortis_40mg_cz.jpg`: Sortis 40 mg, atorvastatin, Czech Republic; box and blister (Commons, CC BY-SA 4.0) | Sortis; 40 mg; no INN | The claim `unresolved_name`; the pack `missing_modality` ("Photographed, not mentioned") | The pack `unreadable_source`, if partial | Batch 21, U7: read once, then judged partial. Batch 22's intakes: `unreadable_source` with Spark 1.3 and with Spark Open |
+| G3 | "Ich nehme Sortis vierzig Milligramm am Abend." | `sortis_40mg_cz.jpg`: Sortis 40 mg, atorvastatin, Czech Republic; box and blister (Commons, CC BY-SA 4.0) | Sortis; 40 mg as an intake; no INN | The claim `unresolved_name`; the pack `missing_modality` ("Photographed, not mentioned") | The pack `unreadable_source`, if partial | Batch 21, U7: read once, then judged partial. Batch 22's intakes: `unreadable_source` with Spark 1.3 and with Spark Open |
 | G4 | "Ibuprofen vierhundert habe ich abgesetzt." | none | Ibuprofen; 400 mg; discontinued | `missing_modality` ("Reported as stopped, not photographed") | | |
+
+**If S1's or G3's amount comes back as a strength:** the claim is a miss, and its findings are scored against what the rules give for the claim that came back.
+- **S1:** `missing_modality` ("Mentioned, not photographed").
+- **G3:** the claim `missing_modality` and the pack `missing_modality`, or `unreadable_source` if the pack is read as partial. The claim and its own pack don't pair.
 
 **After batch 24b, if it merges:**
 - **S1:** `missing_modality` ("Mentioned, not photographed").
-- **G3:** `match` (atorvastatin 40 mg). If the pack is read as partial: the pack `unreadable_source` and the claim `missing_modality`.
+- **G3:** `match` (atorvastatin 40 mg), whether the amount is an intake or a strength. If the pack is read as partial: the pack `unreadable_source` and the claim `missing_modality`.
 
 ## Watch for
 - **S1 and G3 test the grounding.** An INN the model adds ("bisoprolol", "atorvastatin") must be dropped. Before 24b, S1's `missing_modality` or a G3 claim `match` or `missing_modality` would mean an unsaid INN was kept (`expected_check.out`, the "pre-24a" rows).

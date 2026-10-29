@@ -55,6 +55,10 @@ CASES = {
     "G3, model's INN kept (pre-24a)": ([claim("Sortis", inn="atorvastatin", intake=mg("atorvastatin", 40))],
                                        [pack("Sortis 40 mg", mg("atorvastatin", 40))]),
     "G4": ([claim("Ibuprofen", inn="ibuprofen", intake=mg("ibuprofen", 400), status="discontinued")], []),
+    # Amended before any call: an unsaid INN on a strength is relabelled to the brand (batch 24a), reference.md
+    "S1, as a strength": ([claim("Emconcor", strength=mg("Emconcor", 5), per_day=1)], []),
+    "G3, as a strength": ([claim("Sortis", strength=mg("Sortis", 40))], [pack("Sortis 40 mg", mg("atorvastatin", 40))]),
+    "G3, as a strength, pack partial": ([claim("Sortis", strength=mg("Sortis", 40))], [pack("Sortis 40", None, "partial")]),
 }
 
 if __name__ == "__main__":
