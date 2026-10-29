@@ -85,3 +85,28 @@ Repro scripts (`p2.py`, `p5.py`, `p6.py`, `p8.py`) were kept in the CEO's scratc
 - **Outside the brief:** the prompts, contract tests, conftest, `pyproject.toml` and `uv.lock` are untouched. No dependency was added, and no existing test was changed. The only side edits are a harmless int-tuple check in `_hundred_cut` and a renamed loop variable (`cited_id`).
 
 **CEO's triage:** all eight accepted. Findings 1–3 come from the CEO's own SPEC design, not from Muse's build: the CEO's reference build had the same three. All eight are pinned in `tests/contract/test_b24_round2.py`, proved on a reference build (2,188 passed), with one mutant per fix, each caught.
+
+## Round 2 (Opus, independent context, 29 Oct). Builder: Muse Code (`muse-spark-1.3`)
+
+SUPERVISOR: CHANGES. All eight round 1 fixes hold; it reran the full suite (2198 passed) and changed nothing in the worktree. One way to a false `match` was still open.
+
+1. **Major: English "media" counted as a half, so an invented 0.5 could reach `match`.** `providers/stated.py` (`SPANISH_HALF`).
+   - **Input:** the turn "I take alprazolam at night, I read about it on social media.", with Spark writing an alprazolam intake of 0.5 mg. The pack is Alprazolam 0.5 mg.
+   - **Got:** `stated_amounts` gave {0.5}, so the amount was kept, and the result was `match`. Before the batch it was `insufficient_information`. "por medio de" and "medio ambiente" also stated 0.5.
+   - **Fix:** give `medio` and `media` the `mil` rule. They are a half only after `y`, after a Spanish number word or `un`/`una`, or before a Spanish unit or dose word.
+2. **Minor: the amount-only label check missed number words that need a neighbour.**
+   - **The words:** `mil` (after the round 2 fix), `ein` and `un` before a unit, `null` after `komma`, and `zero`/`cero`.
+   - **The effect:** "mil miligramos", "ein Gramm", "cero coma cinco", "zero point five" and "null Komma fünf" were kept as labels. That fails closed.
+   - **Fix:** count every word the number reader classifies, plus `null`.
+3. **Minor: `mil` before an English unit abbreviation multiplied.**
+   - **Inputs:** "five mil ml" stated 5000, "ten mil mg" 10000, and «خمسين» "mil mg" 50000.
+   - **Fuzz:** of 21,747 English and Arabic phrases compared with 843f64f, 21 differed, and every one was this pattern.
+   - **Fix:** after `mil`, only Spanish unit words count.
+
+**Round 1 findings, rechecked:**
+- **1–8 are fixed,** each with probes beyond the contract.
+- **On pack readings, only those whose own lines collapse to one ingredient change.** Example: [Panadol 1000, paracetamol 500] was a false `match` before batch 24 and is now `insufficient_information`.
+
+**English and Arabic against 843f64f:** 118 of 140 hand-picked inputs give identical results. Each of the other 22 has a Spanish or German homograph, or `mil` before a unit.
+
+**CEO's triage:** all three accepted and pinned in `tests/contract/test_b24_round3.py` (18 tests, 13 fail on round 2). They were proved on a reference build (2,206 passed), with one mutant per fix, each caught. Still recorded as limits: the rare English homographs `dos`, `uno` and `elf` (German 11). Each states only its own small number, and none was found in a real transcript.

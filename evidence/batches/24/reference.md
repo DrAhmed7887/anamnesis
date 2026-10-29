@@ -65,3 +65,15 @@ Each mutant was applied alone to the reference build, and the contract catches e
 | English unit words ground a label | 2 |
 
 Each layer of finding 1 is pinned on its own, so neither can be dropped.
+
+## Round 3, after the supervisor's review of round 2
+- **Contract:** `test_b24_round3.py`, 18 tests. On Muse's round 2 code, 13 fail and 5 pass.
+- **Reference build:** **2,206 passed**, ruff clean.
+
+**One mutant per fix** (failures in `tests/contract`):
+
+| Mutant | Failures |
+|---|---|
+| A half anywhere | 5 |
+| `mil` before any unit word | 3 |
+| Number words that need a neighbour ground a label | 5 |
