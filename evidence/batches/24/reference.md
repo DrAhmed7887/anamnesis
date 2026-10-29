@@ -146,3 +146,37 @@ The first clock-time check the reference had was redundant, so no test caught it
 | A Spanish or German word adds an English one after it | 4 |
 | The English-hundred cut states the Spanish part | 1 |
 | A decimal with Spanish or German digits counts anywhere | 2 |
+
+## Round 8: Spanish clock times, and no join across languages
+- **Contract:** `test_b24_round8.py`, 31 tests. On Muse's round 7 code, 21 fail and 10 pass. All 4 end-to-end false matches are among the 21. The 10 that pass guard against over-fixing: amounts that must still read, and English that must read as before.
+- **Reference build:** **2,333 passed**, ruff clean.
+- **Differential:**
+  - **English and Arabic:** exactly the results of 843f64f on all 21,747 fuzz phrases.
+  - **Spanish, German and mixed:** 107 of the 25,292 phrases differ from the round 7 reference.
+    - 12 state less: clock times and mixed joins.
+    - 95 state more. Every new value is one that 843f64f states for the same phrase: an English "hundred" or "half" read alone, once the Spanish or German number before it is closed.
+- **Two changes to the reference while building it:**
+  - **The German `um` rule was dropped.** It was redundant with round 6, and it would have mis-read decimals.
+  - **The close before an English point** stated 0.5 for "dos point cinco miligramos", so a mixed decimal now states nothing.
+
+**One mutant per rule** (failures in `tests/contract`):
+
+| Mutant | Failures |
+|---|---|
+| No close before an English or Arabic multiplier, half or point | 6 |
+| A mixed decimal still states | 2 |
+| No clock rule | 11 |
+| An hour before a dose word is still an hour | 1 |
+| Only `las`, not `la` | 1 |
+| No English hour | 1 |
+| No article hour (`la una`) | 1 |
+| No digit hour | 1 |
+| No minutes after `y` | 6 |
+| No minutes without `y` | 2 |
+| Minutes without `y` from 1, not 10 | 1, after a pin added for it ("a las dos tres mil miligramos" states 3000). It survived the first run |
+| Minutes without `y` up to 999, not 59 | 1 |
+| Minutes before a unit are still minutes | 1 |
+| No German `null` before `komma` | 1 |
+| `null` isn't a German word | 1 |
+| `coma` after an English number is a point | 1 |
+| `y` joins an English 1–9 | 1 |

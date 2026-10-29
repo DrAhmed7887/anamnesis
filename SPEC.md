@@ -101,6 +101,18 @@ A number a model writes is kept only if the source states it. The workshop rule 
         - **Any close:** a Spanish or German run closed by another number, a joiner, an English multiplier or the end of the part states nothing unless a unit or dose word follows it. So "elf cinco miligramos" states 5, never 11.
         - **No join to an English number after it:** "cinco five mg" states 5, never 10, and "diez thirty milligrams" 30, never 40. A patient correcting themselves across languages says exactly this.
         - **Decimals:** a decimal with an English point and Spanish or German digit words follows the same rule. "la point seis" states nothing, and "point sieben Milligramm" is 0.7.
+      - **Round 8: a Spanish clock time states no amount, and a Spanish or German number joins nothing English or Arabic after it.**
+        - **Why:** the supervisor's round 7 review found three false matches. "sechs hundred Milligramm" stated 600, "a las cinco mil miligramos" stated 5 and 5000, and "a las ocho y cuarenta y dos pastillas" stated 40 and 42.
+        - **A clock hour:** a number right after `la` or `las` is an hour and states nothing. The number can be a Spanish or English number word, `una`, or digits.
+        - **Its minutes:** a Spanish number after the hour and `y`, or a Spanish 10–59 right after the hour, are minutes and state nothing. So "a las ocho y cuarenta y dos pastillas" and "a las ocho cuarenta y dos pastillas" state 2, never 40 or 42. "a las cinco mil miligramos" states 1000, never 5 or 5000.
+        - **Before an amount they still count:** an hour or its minutes right before a unit or dose word state their number, as round 6 says. "tomo las dos pastillas" (the two pills) states 2, and "a las ocho veinte miligramos" 20.
+        - **German has no clock rule:** its numbers never combine (round 6), so a number after `um` can state an amount only right before a unit or dose word.
+        - **An English or Arabic hundred, thousand, half or point closes an open Spanish or German run,** which then follows round 7's rule. So "seis hundred milligrams" states 100, never 600, "zwei thousand Milligramm" 1000 and "cinco and a half mg" 0.5. The code before batch 24 states the same for these words.
+        - **A decimal begun in Spanish or German with an English point states nothing:** "siete point five milligrams" and "dos point cinco miligramos" state nothing. A decimal is said in one language.
+        - **`y`** joins a ten only to a Spanish number or an article after it: "treinta y five mg" states 5, never 35.
+        - **`coma` and `komma`** are the decimal point only after a Spanish or German number word. After an English number they end the run, so "GCS eight coma three" states 8 and 3, as before batch 24.
+        - **German `null` before `komma` is 0:** "null Komma fünf Milligramm" is 0.5.
+        - **Fails closed, kept:** "two point cinco" states nothing.
       - **Unicode:** `stated_amounts` reads its text in NFC, so decomposed accents read as composed ones (round 2, #6).
       - **The unit words:** `mg`, `g`, `mcg`, `µg`, `ml`, `miligramo(s)`, `gramo(s)`, `microgramo(s)`, `mililitro(s)`, `milligramm`, `gramm`, `mikrogramm` and `milliliter`.
       - **So** "quinientos" is 500, "veinticinco" 25, "treinta y cinco" 35 and "ochocientos setenta y cinco" 875. "dos coma cinco" is 2.5, "uno y medio" 1.5 and "un gramo" 1. "diez y cincuenta" states 10 and 50, never 60.

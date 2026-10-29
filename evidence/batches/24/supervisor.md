@@ -197,3 +197,25 @@ They found the gaps a review would have reported. So round 7 went straight to th
 4. **In the CEO's own reference only:** an English "hundred" after a Spanish number stated the Spanish part without an amount ("ochocientos hundred" stated 800). Muse's code didn't have this. It is pinned anyway.
 
 On the same corpus, English and Arabic gave exactly the results of 843f64f, in both Muse's code and the reference.
+
+## Round 7 review (covers rounds 6 and 7): SUPERVISOR: CHANGES
+1. **High: a Spanish or German number joined an English hundred, thousand, half or point after it.**
+   - "Ich nehme Ibuprofen und um sechs hundred Milligramm ASS." stated 600, and an invented 600 mg reached `match` against Ibuprofen 600 mg.
+   - "Tomo meloxicam a las siete point five milligrams." stated 7.5, "cinco and a half mg" 5.5, "zwei thousand Milligramm" 2000 and "treinta y five mg" 35.
+2. **High: Spanish `mil` joined a clock hour.** "a las cinco mil miligramos" stated 5 and 5000, and an invented 5 mg reached `match` against Concor 5 mg.
+3. **High: `y` joined clock minutes to a count.** "a las ocho y cuarenta y dos pastillas" stated 40 and 42, and an invented 40 mg reached `match` against Lipitor 40 mg.
+   - The supervisor's caveat: 2 and 3 could be read as numbers said before a unit or dose word, which was out of scope. Finding 1 alone justifies CHANGES.
+4. **Minor, fails closed:** English "coma" ("GCS eight coma three" stated nothing) and "two point cinco" (nothing).
+5. **Minor:** "null Komma fünf Milligramm" stated only 5.
+6. **Minor:** `_close` in `stated.py` is unused.
+
+**Held:** round 6's three rules, round 7's fixes 2 and 3, every earlier fix, and English and Arabic, unchanged on 10,328 inputs.
+
+**CEO's triage:**
+- **Findings 2 and 3 share one cause, the Spanish clock time.** So they get one rule, not two point fixes: an hour after `la` or `las` and its minutes state nothing unless a unit or dose word follows. The minutes are a Spanish number after `y`, or a Spanish 10–59 said straight after the hour.
+- **Finding 1:** an English or Arabic hundred, thousand, half or point closes an open Spanish or German run first.
+  - **A decimal begun in Spanish or German with an English point states nothing.** The close alone made "dos point cinco miligramos" state 0.5, a value 843f64f never stated.
+- **No German clock rule:** German numbers never combine (round 6), so the close covers "um sechs hundred". An `um` rule would also have made "um acht Komma fünf Milligramm" (raised by 8.5 mg) state only 5.
+- **Finding 4:** English "coma" reads as 843f64f did again. "two point cinco" stays: it fails closed.
+- **Finding 5:** fixed in round 8.
+- **Finding 6:** the round 8 brief asks for the cleanup.
