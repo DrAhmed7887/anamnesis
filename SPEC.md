@@ -103,7 +103,7 @@ A number a model writes is kept only if the source states it. The workshop rule 
         - **Decimals:** a decimal with an English point and Spanish or German digit words follows the same rule. "la point seis" states nothing, and "point sieben Milligramm" is 0.7.
       - **Round 8: a Spanish clock time states no amount, and a Spanish or German number joins nothing English or Arabic after it.**
         - **Why:** the supervisor's round 7 review found three false matches. "sechs hundred Milligramm" stated 600, "a las cinco mil miligramos" stated 5 and 5000, and "a las ocho y cuarenta y dos pastillas" stated 40 and 42.
-        - **A clock hour:** `la una`, or a number up to 24 right after `las`, is an hour and states nothing. After `las` the number can be a Spanish or English number word, or digits (round 9).
+        - **A clock hour:** `la una`, or a number up to 24 right after `las`, is an hour and states nothing. After `las` the number is a Spanish number word or digits (round 10: an English number word after `las` is no hour).
         - **Its minutes:** a Spanish number after the hour and `y` or `menos` (round 9), or a Spanish 10–59 right after the hour, are minutes and state nothing. So "a las ocho y cuarenta y dos pastillas" and "a las ocho cuarenta y dos pastillas" state 2, never 40 or 42. "a las cinco mil miligramos" states 1000, never 5 or 5000.
         - **Before an amount they still count:** an hour or its minutes right before a unit or dose word state their number, as round 6 says. "tomo las dos pastillas" (the two pills) states 2, and "a las ocho veinte miligramos" 20.
         - **German has no clock rule:** its numbers never combine (round 6), so a number after `um` can state an amount only right before a unit or dose word.
@@ -123,7 +123,7 @@ A number a model writes is kept only if the source states it. The workshop rule 
           - "two hundred cincuenta milligrams" states 200, never 250.
         - **The hour:**
           - Spanish says "la una" for one o'clock and "las" for every other hour, so `la` is an hour only before `una`.
-          - `las` is an hour only before a number up to 24, written as a word or as digits.
+          - `las` is an hour only before a number up to 24, written as a Spanish word or as digits (round 10).
           - So "Cardizem LA four hundred twenty milligrams" and "Adalat LA 30" read as before batch 24, and "tomo las cuarenta y dos pastillas" states 42.
         - **Digit hours:** digits up to 24 right after `las` state nothing, unless a unit or dose word follows them. "las 2 pastillas" states 2.
         - **Minutes:**
@@ -134,6 +134,15 @@ A number a model writes is kept only if the source states it. The workshop rule 
           - Word salad that still states a number nobody said: "um sieben mil quinientos pastillas" states 7500.
           - A Spanish decimal that ends in English digits: "ocho coma three milligrams" states 8.3, which is the number said.
           - A digit time with a colon ("a las 8:40") states its minutes in every language, as before batch 24.
+      - **Round 10: no English hour after `las`, and no article joins a number before it.**
+        - **Why:** the supervisor's round 9 review found English number words after `las` read as an hour, so the next English words added up to a new number.
+          - "Me tomo las two hundred fifty milligram tablets de Pregabalin" stated 150.
+          - The English plural "Cardizem LAs four hundred twenty milligrams" did the same in English-only text, because "LAs" becomes `las` once lowercased.
+        - **The hour after `las`:** a Spanish number word up to 24, or digits up to 24, and nothing else. An English number word after `las` reads as English. So both inputs state what the code before batch 24 states: 250 and 420, with their parts.
+        - **A digit hour fails closed in one English case:** digits up to 24 after the English plural "LAs", with no unit after them ("two Cardizem LAs 4 times a day"), state nothing.
+        - **An article joins no number before it, of any size:** round 6's rule now also covers numbers of 100 or more. Only Spanish `y` joins an article ("treinta y un miligramos" is 31).
+          - "zweihundert Ein-Gramm-Tabletten" states 1, never 201.
+          - "doscientos un miligramos" states 1, never 201. That fails closed: no medicine comes in 201 mg.
       - **Unicode:** `stated_amounts` reads its text in NFC, so decomposed accents read as composed ones (round 2, #6).
       - **The unit words:** `mg`, `g`, `mcg`, `µg`, `ml`, `miligramo(s)`, `gramo(s)`, `microgramo(s)`, `mililitro(s)`, `milligramm`, `gramm`, `mikrogramm` and `milliliter`.
       - **So** "quinientos" is 500, "veinticinco" 25, "treinta y cinco" 35 and "ochocientos setenta y cinco" 875. "dos coma cinco" is 2.5, "uno y medio" 1.5 and "un gramo" 1. "diez y cincuenta" states 10 and 50, never 60.

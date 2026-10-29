@@ -59,7 +59,7 @@ def test_a_decimal_begun_in_spanish_or_german_with_an_english_point_states_nothi
     ("a las cinco mil miligramos", "5000"), ("a las cinco mil miligramos", "5"),
     ("a las ocho y cuarenta y dos pastillas", "40"), ("a las ocho y cuarenta y dos pastillas", "42"),
     ("a las ocho cuarenta y dos pastillas", "42"), ("a la una y cuarenta y dos pastillas", "42"),
-    ("a las 8 y cuarenta y dos pastillas", "42"), ("a las eight y cuarenta y dos pastillas", "42"),
+    ("a las 8 y cuarenta y dos pastillas", "42"),  # round 10: an English word after las is no hour
 ])
 def test_a_clock_hour_and_its_minutes_state_no_amount(text, never):
     assert Decimal(never) not in stated_amounts(text)

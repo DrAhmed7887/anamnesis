@@ -211,3 +211,20 @@ The first clock-time check the reference had was redundant, so no test caught it
 | Compound minutes take any number | 1 |
 | Compound minutes before a dose word are still minutes | 2 |
 | `y` joins a German article | 1 |
+
+## Round 10: no English hour after `las`, and no article joins a number before it
+- **Contract:** `test_b24_round10.py`, 14 tests. On Muse's round 9 code, 12 fail and 2 pass. All 3 end-to-end false matches are among the 12. The 2 that pass guard against over-fixing.
+- **An earlier test removed:** `test_b24_round8.py` drops the CEO's own word-salad pin "a las eight y cuarenta y dos pastillas". With no English hour after `las`, that input states 42.
+- **Reference build:** **2,377 passed**, ruff clean.
+- **Differential:**
+  - **English and Arabic:** exactly the results of 843f64f on all 21,747 fuzz phrases.
+  - **Spanish, German and mixed:** 7 phrases differ from round 9's reference, and all 7 state less.
+- **The live scripts:** S1–G4 read exactly as under rounds 7–9.
+
+**One mutant per rule** (failures in `tests/contract`):
+
+| Mutant | Failures |
+|---|---|
+| An English word after `las` is an hour | 7 |
+| An article joins the number before it | 3 |
+| An article joins nothing, not even through `y` | 2 |

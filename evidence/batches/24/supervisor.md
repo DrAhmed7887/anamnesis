@@ -246,3 +246,21 @@ On the same corpus, English and Arabic gave exactly the results of 843f64f, in b
   - "ocho coma three" states the number said.
   - "null point fünf Milligramm" is 0.5, which is right.
 - **Also recorded:** a digit time with a colon ("a las 8:40") states its minutes in every language. The code before batch 24 does the same in English.
+
+## Round 9 review: SUPERVISOR: CHANGES
+1. **High, plausible: after `las`, an English number lost its first word to the hour rule, and the rest added up to a new number.**
+   - "Me tomo las two hundred fifty milligram tablets de Pregabalin." stated 150, and Pregabalin 150 mg reached `match`.
+   - "Tomo Cardizem LA, las four hundred twenty milligram capsules de diltiazem." stated 120.
+   - The English plural "LAs" lowercases to `las`, so "I take two Cardizem LAs four hundred twenty milligrams each of diltiazem." also stated 120, in English-only text.
+2. **Minor: an article joined a number of 100 or more before it.** "zweihundert Ein-Gramm-Tabletten" stated 201, "two hundred un miligramos" 201 and "one thousand un gramo" 1001. On these two the CEO's reference already closed the English run, and Muse's code didn't.
+
+**Backlog (843f64f does the same):** the catalogue route for amount labels keeps a salt that contradicts the one said.
+
+**Held:** no mixed runs for plain numbers, multipliers, halves and points (about 78,000 random mixed phrases); `la` and `las` for Spanish words and digits; digit hours; minutes; `y`; and every earlier fix. English and Arabic matched 843f64f on 100,000 phrases, apart from phrases with `las` (#1) or `un`/`una` (#2).
+
+**CEO's triage:**
+- **Finding 1 comes from the CEO's own round 8 SPEC,** which let English number words be an hour after `las` to catch "a las eight y cuarenta". Round 10 removes that.
+  - After `las`, only a Spanish number word or digits make an hour.
+  - The round 8 contract's word-salad pin "a las eight y cuarenta y dos pastillas" is removed.
+  - This was picked over the supervisor's lookahead, which would still have suppressed English words after "LAs", because it leaves English text untouched. The one exception is digits after "LAs" with no unit, which fail closed.
+- **Finding 2:** round 6's "an article joins no number" now covers numbers of every size. Only Spanish `y` joins an article.
