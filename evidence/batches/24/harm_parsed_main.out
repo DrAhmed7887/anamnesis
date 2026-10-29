@@ -1,0 +1,6 @@
+Spark 1.3          test_iid+test_shift+test_codes raw-string metric   1  on parsed claims   2  [('paracetamol', 1), ('string', 1)]
+Glimmer base       test_iid+test_shift+test_codes raw-string metric  54  on parsed claims  55  [('unknown', 7), ('mg', 7), ('null', 6), ('100', 4), ('500', 3), ('25', 3)]
+Glimmer + LoRA r1  test_iid+test_shift+test_codes raw-string metric   0  on parsed claims   2  [('paracetamol', 2)]
+Spark 1.3          test_spain                     raw-string metric   0  on parsed claims   0  []
+Glimmer base       test_spain                     raw-string metric   9  on parsed claims   9  [('unknown', 2), ('200', 1), ('1 milligram', 1), ('75', 1), ('4', 1), ('amount_digit_text', 1)]
+Glimmer + LoRA r2  test_spain                     raw-string metric   0  on parsed claims   0  []
