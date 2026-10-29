@@ -6,3 +6,5 @@
 {"run": "G2", "at": "2026-10-29T22:39:53+00:00", "reader": "spark", "calls": 2, "spend_usd": "0.01570750", "wall_s": 16.8, "claim_request_ms": [14583], "findings": [["missing_modality", "c1", null]]}
 {"run": "G3", "at": "2026-10-29T22:40:39+00:00", "reader": "spark", "calls": 6, "spend_usd": "0.04670650", "wall_s": 45.5, "claim_request_ms": [15362], "findings": [["unreadable_source", null, "o0"], ["unreadable_source", null, "o1"], ["unresolved_name", "c1", null]]}
 {"run": "G4", "at": "2026-10-29T22:40:46+00:00", "reader": "spark", "calls": 2, "spend_usd": "0.00545300", "wall_s": 6.8, "claim_request_ms": [3817], "findings": [["missing_modality", "c1", null]]}
+{"run": "S1_after_24_1", "at": "2026-10-29T23:08:51+00:00", "reader": "spark", "calls": 2, "spend_usd": "0.00659250", "wall_s": 9.0, "claim_request_ms": [5882], "findings": [["missing_modality", "c1", null]]}
+{"run": "G3_after_24_1", "at": "2026-10-29T23:09:33+00:00", "reader": "spark", "calls": 6, "spend_usd": "0.03878875", "wall_s": 40.9, "claim_request_ms": [7250], "findings": [["unreadable_source", null, "o0"], ["unreadable_source", null, "o1"], ["missing_modality", "c1", null]]}

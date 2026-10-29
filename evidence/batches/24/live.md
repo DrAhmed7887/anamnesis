@@ -36,3 +36,21 @@
 - **S4:** "medio comprimido" survives as half a tablet. The bare "quinientos" states nothing, so no strength is invented, and the finding is `insufficient_information`.
 - **G1:** "zweimal täglich" states no amount, and the reader judged the pack partial.
 - **S1 and G3:** no unsaid INN was kept in either case.
+
+## S1 and G3 again, after batch 24.1 merged (30 Oct, 00:12 CET)
+- **Main and cost:** main at aa88878, with Emconcor and Sortis in the catalogue. One run each, $0.05.
+- **Reports:** `report_S1_after_24_1.json` and `report_G3_after_24_1.json`.
+- **Pre-registered** for this point in `manifest.md`, "After batch 24b, if it merges".
+
+| Case | Expected | Live | Scored |
+|---|---|---|---|
+| S1 | `missing_modality` | `missing_modality` | as expected |
+| G3 | `match`, or the packs `unreadable_source` and the claim `missing_modality` if the pack is read as partial | box and blister read as partial: two `unreadable_source`; the claim `missing_modality` | as expected (the listed alternative) |
+
+**Misses in the claims, by kind:**
+- **S1: the transcriber again wrote "concor" for "Emconcor", and this time dropped the amount word.** The transcript was "concor miligramos una vez al día". The claim has no intake, and no amount was invented. Emconcor is now in the catalogue, yet the synthetic voice was still heard as the catalogued Concor.
+- **G3: the claim came back with no amount, though the transcript is exact ("Ich nehme Sortis vierzig Milligramm am Abend.").**
+  - The first run kept 40 mg.
+  - The raw model reply isn't saved, so the cause isn't proven.
+  - Offline, the merged parser keeps 40 mg from every plausible reply shape: an intake labelled Sortis, atorvastatin or empty; a strength alone; a strength with an intake; the amount written as a word. So the model most likely left it out.
+- **A tooling gap, recorded for after the freeze:** `scripts/intake_live.py` saves the claim call's ID and usage, but not its raw reply.
