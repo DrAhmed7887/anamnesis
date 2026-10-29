@@ -1,0 +1,29 @@
+split test_real: 33 examples, 33 replies, 50 answer claims
+valid JSON 33/33 (100.0%); dropped by the product's checks 0; invalid JSON 0; no reply 0
+per-claim field accuracy:
+  name_text        46/50 (92.0%)
+  inn              50/50 (100.0%)
+  intake           42/50 (84.0%)
+  strength         50/50 (100.0%)
+  units_per_intake 50/50 (100.0%)
+  intakes_per_day  49/50 (98.0%)
+  as_needed        49/50 (98.0%)
+  status           50/50 (100.0%)
+claims missing 0, extra 1
+transcripts all correct 20/33 (60.6%)
+harmful claims, raw reply, before the product's checks: 0 (unsupported amounts 0, unsupported INNs 0)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+examples with a miss or a harmful claim: 13
+  #1 [note:en] extra claim 'Adol'
+  #3 [note:U1] c1 as_needed: got False, want null
+  #7 [note:U12] c2 name_text: got beloczokbeloczok, want beloczok
+  #8 [note:U12] c1 name_text: got concorten, want concor
+  #9 [note:U12] c1 intake: got null, want 10 mg | c2 intake: got null, want 50 mg
+  #10 [note:U12] c1 intake: got null, want 10 mg | c2 intake: got null, want 50 mg
+  #11 [note:U12] c1 name_text: got concor10, want concor
+  #12 [note:U12] c2 name_text: got beloczokzok, want beloczok
+  #18 [note:U4] c1 intake: got null, want 500 mg
+  #19 [note:U4] c1 intake: got null, want 500 mg
+  #21 [note:U5] c1 intakes_per_day: got null, want 1
+  #22 [note:U5] c1 intake: got null, want 5 mg
+  #23 [note:U6] c1 intake: got null, want 500 mg

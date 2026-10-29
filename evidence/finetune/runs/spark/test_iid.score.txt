@@ -1,0 +1,54 @@
+split test_iid: 100 examples, 100 replies, 185 answer claims
+valid JSON 100/100 (100.0%); dropped by the product's checks 0; invalid JSON 0; no reply 0
+per-claim field accuracy:
+  name_text        176/185 (95.1%)
+  inn              185/185 (100.0%)
+  intake           164/185 (88.6%)
+  strength         182/185 (98.4%)
+  units_per_intake 185/185 (100.0%)
+  intakes_per_day  181/185 (97.8%)
+  as_needed        174/185 (94.1%)
+  status           174/185 (94.1%)
+claims missing 0, extra 0
+transcripts all correct 63/100 (63.0%)
+harmful claims, raw reply, before the product's checks: 1 (unsupported amounts 0, unsupported INNs 1)
+harmful claims, after them: 1 (unsupported amounts 0, unsupported INNs 1)
+examples with a miss or a harmful claim: 38
+  #1 [ar-strength-2+ar-range_units-2+ar-units-1] c2 status: got unknown, want active
+  #2 [ar-stopped-3] c1 intake: got null, want 100 mg
+  #3 [ar-plain-1+ar-intake-6+ar-plain-3] c3 intakes_per_day: got null, want 1
+  #8 [en-units-3] c1 intake: got null, want 40 mg
+  #10 [en-strength-4] c1 name_text: got gabapentintablets, want gabapentin
+  #11 [en-range_units-1+en-strength-1] c2 as_needed: got False, want null | c1 name_text: got zyrtec5, want zyrtec
+  #18 [ar-strength-1+ar-intake-3] c2 intake: got null, want 2.5 mg
+  #20 [en-intake-7+en-stopped-7] c1 status: got unknown, want active
+  #22 [en-stopped-3+en-prn-6] c1 name_text: got mondoxyne40, want mondoxyne | c1 intake: got null, want 40 mg
+  #23 [en-stopped-1+en-intake-7] c2 intake: got null, want 300 mg
+  #24 [en-strength-4+en-intake-6+en-prn-1] c1 strength: got null, want 0.075 mg | c2 intake: got null, want 40 mg | c2 strength: got 40 mg, want null | c3 intake: got null, want 2.5 mg
+  #29 [en-intake-13+en-intake-13+en-intake-7] c3 status: got unknown, want active
+  #32 [en-stopped-4+en-intake-16+en-intake-13] c2 intakes_per_day: got null, want 1
+  #36 [en-range_units-2+en-intake-14] c2 intake: got null, want 10 mg
+  #37 [en-stopped-3] c1 name_text: got lipitortor, want lipitor | c1 intake: got null, want 10 mg
+  #38 [ar-intake-7] c1 name_text: got بلوكزوك100مليجرام, want بلوكزوك | c1 intake: got null, want 100 mg | c1 status: got unknown, want active
+  #40 [ar-intake-7+ar-strength-2] c1 status: got unknown, want active
+  #42 [ar-unsure-1+ar-strength-1] c2 intakes_per_day: got null, want 1
+  #43 [ar-intake-1+ar-unsure-1+ar-prn-3] c1 as_needed: got False, want null
+  #46 [en-range_freq-3+en-range_freq-1] c1 name_text: got proquinuin, want proquin
+  #53 [ar-range_freq-1+ar-units-1] c1 intake: got null, want 300 mg | c2 intake: got null, want 500 mg
+  #55 [en-units-1+en-intake-4] c1 intake: got null, want 5 mg | c1 strength: got 5 mg, want null
+  #56 [en-range_units-2+en-range_units-4+en-range_freq-3] c1 as_needed: got False, want null | c3 intake: got null, want 90 mg | c3 as_needed: got False, want null
+  #58 [en-brand_inn-1+en-prn-6+en-strength-1] c1 as_needed: got False, want null | c3 as_needed: got False, want null
+  #61 [ar-range_units-1] c1 name_text: got neurontinneurontin, want neurontin
+  #66 [en-range_units-4] c1 name_text: got binostobinosto, want binosto
+  #72 [ar-intake-3+ar-brand_inn-1+ar-prn-2] c1 as_needed: got False, want null | c2 as_needed: got False, want null
+  #73 [ar-intake-6+ar-intake-5+ar-prn-1] c1 intake: got null, want 80 mg | c2 intake: got null, want 100 mg | c2 as_needed: got False, want null | c3 intake: got null, want 325 mg
+  #74 [en-range_units-2+en-intake-15+en-stopped-3] c1 status: got unknown, want active
+  #76 [ar-stopped-4+ar-units-1] c2 name_text: got atorvastatin80, want atorvastatin
+  #79 [en-intake-8+en-plain-2] harmful before the checks: INN 'string' not in the transcript
+  #81 [en-units-3+en-stopped-3+en-stopped-1] c1 intake: got null, want 10 mg
+  #84 [ar-intake-7] c1 status: got unknown, want active
+  #86 [ar-stopped-1+ar-intake-4] c2 intake: got null, want 50 mg | c2 as_needed: got False, want null
+  #88 [ar-intake-7+ar-prn-1] c1 status: got unknown, want active
+  #89 [ar-intake-5+ar-prn-1] c1 intakes_per_day: got null, want 1 | c1 as_needed: got False, want null
+  #97 [ar-intake-7+ar-intake-1] c1 intake: got null, want 15 mg | c1 status: got unknown, want active | c2 intake: got null, want 750 mg | c2 status: got unknown, want active
+  #98 [ar-stopped-3+ar-intake-3+ar-intake-6] c2 status: got unknown, want active
