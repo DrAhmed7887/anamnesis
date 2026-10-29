@@ -77,3 +77,22 @@ Each layer of finding 1 is pinned on its own, so neither can be dropped.
 | A half anywhere | 5 |
 | `mil` before any unit word | 3 |
 | Number words that need a neighbour ground a label | 5 |
+
+## Round 4, after the supervisor's review of round 3
+- **Contract:** `test_b24_round4.py`, 26 tests. On Muse's round 3 code, 18 fail and 8 pass.
+- **Reference build:** **2,232 passed**, ruff clean.
+- **A sweep of 66 everyday Spanish and German phrases** found one more of the same kind: the clock time "a las dos y media". It is pinned.
+
+**One mutant per rule** (failures in `tests/contract`):
+
+| Mutant | Failures |
+|---|---|
+| A half keeps its run open | 6 |
+| "por ciento" states 100 | 2 |
+| `un`/`una` count again before `medio` | 4 |
+| `sobre` is a dose word again | 3 |
+| Any `y` before `medio` | 1 |
+| No clock-time exception | 3 |
+| A one-letter word grounds as a prefix | 1 |
+
+The first clock-time check the reference had was redundant, so no test caught its mutant (0 failures). That copy was removed, and the remaining check is pinned.

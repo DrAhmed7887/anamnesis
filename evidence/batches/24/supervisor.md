@@ -110,3 +110,34 @@ SUPERVISOR: CHANGES. All eight round 1 fixes hold; it reran the full suite (2198
 **English and Arabic against 843f64f:** 118 of 140 hand-picked inputs give identical results. Each of the other 22 has a Spanish or German homograph, or `mil` before a unit.
 
 **CEO's triage:** all three accepted and pinned in `tests/contract/test_b24_round3.py` (18 tests, 13 fail on round 2). They were proved on a reference build (2,206 passed), with one mutant per fix, each caught. Still recorded as limits: the rare English homographs `dos`, `uno` and `elf` (German 11). Each states only its own small number, and none was found in a real transcript.
+
+## Round 3 (Opus, independent context, 29 Oct). Builder: Muse Code (`muse-spark-1.3`)
+
+SUPERVISOR: CHANGES. All three round 3 fixes held as written, and every earlier fix held. Three false `match`es were still open, each reproduced end to end, and each from batch 24's own Spanish and German code.
+
+1. **Major: a half absorbed the number after it.**
+   - "um halb zwei" (1:30) stated 2.5, so a 2.5 mg intake reached `match` against Concor 2.5 mg.
+   - Also: "halb zwölf" stated 12.5, "eine halbe Zehn-Milligramm-Tablette" 10.5, and "uno y medio diez miligramos" 11.5.
+   - **Fix:** a Spanish or German half ends its run.
+2. **Major: "por ciento" stated 100.** "me bajó la ansiedad un veinte por ciento" reached `match` against Sertralina 100 mg.
+   - **Fix:** `cien` and `ciento` right after `por` state nothing.
+3. **Major: round 3's own contexts still let non-number `medio`/`media` through.** Each of these stated 0.5:
+   - "en un medio sobre salud";
+   - "una media de dos al día";
+   - "es un medio para dormir";
+   - "trabajo y medio ambiente";
+   - "un nivel medio sobre el tema".
+
+   **Fix:** count `y` only after a number word, drop `un`/`una` as contexts, and drop `sobre` from the dose words.
+4. **Minor:** a one-letter word was grounded as a prefix ("vitamin d" by "de"). This is the same on 843f64f, which had no grounding at all.
+5. **Backlog, the same on 843f64f:**
+   - "at some point two years ago" states 0.2, and "at this point five" states 0.5;
+   - British "half two" states 2.5;
+   - a `name_text` "Panadol" cut from "Panadol Extra 500 mg" matches a Panadol 500 mg pack.
+
+**CEO's triage:**
+- **1–4 accepted and pinned** in `tests/contract/test_b24_round4.py` (26 tests, 18 fail on round 3).
+- **One more case of the same kind:** before writing round 4, the CEO swept 66 everyday Spanish and German phrases (times, dates, ages, percentages, idioms) on the reference. One more phrase stated a value nobody says: clock time, "a las dos y media" (2:30) stated 2.5. It is pinned too.
+- **What the sweep left:** every remaining stated value is a number someone says, as English already allows ("halb so schlimm" 0.5, "tausend Dank" 1000).
+- **Proof:** a reference build (2,232 passed), with one mutant per rule, each caught.
+- **Not in batch 24:** the backlog items (5) are older than this batch. They are recorded for after the freeze: the English "point" and "half two" forms, and a cut `name_text`.
