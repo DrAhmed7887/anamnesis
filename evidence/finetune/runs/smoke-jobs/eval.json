@@ -1,0 +1,27 @@
+{
+ "run": "jobs",
+ "vllm": "0.32.0",
+ "load_s": 323.0,
+ "max_tokens": 2000,
+ "resumed": 0,
+ "glimmer-base/test_spain": {
+  "wall_s": 15.4,
+  "examples": 2,
+  "opened_answer": 2
+ },
+ "glimmer-lora-r1/test_spain": {
+  "wall_s": 5.6,
+  "examples": 2,
+  "opened_answer": 2
+ },
+ "glimmer-lora-smoke2/test_spain": {
+  "wall_s": 14.0,
+  "examples": 2,
+  "opened_answer": 2
+ },
+ "glimmer-lora-smoke2/test_iid": {
+  "wall_s": 51.7,
+  "examples": 2,
+  "opened_answer": 2
+ }
+}

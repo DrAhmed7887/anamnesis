@@ -1,0 +1,32 @@
+# Grill of the Spanish and German plan, 29 Oct 2026: triage
+
+**The grill:** Gemini 4 Argon on Vertex grilled `plan.md`, using `grill-prompt.md`: the plan plus the code and SPEC excerpts it touches. Its output is `grill.md`: 15 findings, 4 of them critical and 7 high.
+- **Cost:** $0.096. A first try at high thinking cost $0.358 and spent its whole output budget thinking, so it returned no answer. Both are in `evidence/spend/google_ledger.jsonl`.
+- **The verdicts are the CEO's,** each checked against the code. The facts are reproduced by `probes.py`, whose output is in `probes.out`.
+
+**Checked before the verdicts (`probes.out`):**
+- English "point" already makes a decimal ("two point five" states 2.5).
+- English "and" already sums separate numbers: "ten and fifty" states 10, 50 and **60**. This is an existing looseness, and Spanish "y" would hit it far more often.
+- "I take one tablet once a day" states only 1. "Once" states nothing.
+- Regimen counts (`units_per_intake`, `intakes_per_day`) are parsed with `parse_amount_text` but not checked against the stated amounts (`claims.py` `_coerce_regimen`). So "una pastilla" needn't state 1 for its count to be kept.
+- `parse_amount_text` reads a single English or Arabic number word ("five", "خمسة") but not "quinientos" or "fünfzig".
+- No Spanish or German number word states anything today ("quinientos miligramos" gives nothing), while digits do ("575 mg").
+- SPEC §3 rule 8 (SPEC.md:174): half a tablet with unknown splittability gives `insufficient_information`.
+
+| # | Finding | Verdict | Change to the plan |
+|---|---|---|---|
+| 1 | No "coma" or "komma": "dos coma cinco" would state 2 and 5, never 2.5, so S2 fails | **Accepted.** English has "point"; the plan forgot the Spanish and German words for it | "coma" and "komma" become the point word, with the Spanish and German digit words after it |
+| 2 | "un", "una", "ein" and "eine" as 1 would make "una vez al día" or "eine Tablette" state 1, so a model's invented "1 g" survives | **Accepted,** rated high: it opens the check to the value 1 only. English counts "one" but never the article "a" | These four count as 1 only directly before a unit word (mg, g, miligramo(s), gramo(s), Milligramm, Gramm and the rest) or in "y medio" and "einhalb" forms. "uno" and "eins" always count |
+| 3 | Falling back to `name_text` for an ungrounded label breaks "Concor 5 mg" and combination names | **Accepted, reshaped,** rated medium: the outcome fails safe (`insufficient_information`), but today's match is lost | An empty or ungrounded label takes the claim's grounded `inn`; failing that, the single INN of the catalogue entry `name_text` resolves to; failing that, `name_text` |
+| 4 | Spanish "y" joins any two numbers ("diez y cincuenta" gives 60) | **Accepted** (verified: English "and" already does this) | Spanish "y" joins only a ten (treinta to noventa) to a unit (1 to 9), or a number to "medio" or "media". English stays as it is, a known limit added to SPEC §2 |
+| 5 | "cien" and "ciento" as a hundred multiplier would let a unit before them be taken ("…cinco cien" gives 500) | **Accepted** | "cien" and "ciento" are plain 100. Spanish says 200 to 900 as one word |
+| 6 | `parse_amount_text` misses Spanish and German words; the German helper could match inside "Achtung" or "Einheit"; "zweieinhalb" could also state 1 | **Accepted** (verified the first) | Spanish and German words go into `parse_amount_text` too. The German helper must consume the whole token. "zweieinhalb" to "neuneinhalb" are single values, n + 0.5, with no 1 from "ein" |
+| 7 | Grounding by substring would match inside other words, and plain token equality would miss "الباراسيتامول" | **Accepted** | Whole-word matching after `normalise`, with the Arabic clitics allowed: the same boundary rule as `_says_release` |
+| 8 | The empty-strength fix needs the drop rule's condition changed, and the strength's `release` would be lost | **Accepted** (`claims.py`:224–229) | An empty-ingredients strength counts as absent in the drop rule. Its release is then taken from the release words or the brand only, as today, and a contract pin covers it |
+| 9 | Live cases S4, G2 and G4 are underspecified | **Accepted** (S4 checked against SPEC.md:174) | **S4:** `insufficient_information`. **G2:** the claim is strength 100 mg per tablet, 0.5 units, no intake, then `missing_modality`; the case stays, because it tests a computed 50 mg intake being dropped. **G4:** `missing_modality` |
+| 10 | The new entries lack release, splittability and countries; enteric-coated words would raise false conflicts | **Accepted** | **Emconcor:** release immediate, splittable true, countries [ES], mirroring Concor. **Sortis:** immediate, splittable false, [DE], mirroring Lipitor. **Nolotil:** immediate, splittable false (a capsule), [ES]. "gastrorresistente" and "magensaftresistent" are dropped from batch 24 |
+| 11 | WHO ATC needs its reference; SNOMED CT in a public repo is a licence exposure; CIMA needs attribution | **Accepted** | The brief shows ATC and RxNorm with the WHO reference line. A NOTICE file credits WHO, NLM (RxNav) and AEMPS (CIMA). **SNOMED CT stays out of the product** and remains only in `evidence/data/drugs_v2.json`. Ahmed decides on Tue whether it stays in the public copy |
+| 12 | `docs/DATA_HANDLING.md` doesn't name Spanish and German synthetic voices | **Accepted** | One line: macOS `say` Spanish and German notes, for runs only, sent only to Meta's API, never in the film. The DE, ES and CZ photos are already in the public folders |
+| 13 | One batch of 8 parts is too much for Friday night | **Accepted** | **Batch 24a (Fri 16:00):** the two parser fixes, the release fix, the Spanish and German number words, and the release words. **Batch 24b (Sat morning, small):** the codes in the catalogue and the brief, the NOTICE file, and the 3 new entries. 24b is cut first |
+| 14 | Calling `test_spain` unseen for r2 might overclaim | **Already true.** `tests/unit/test_finetune_v2.py::test_the_committed_v2_data_holds_the_split` finds none of the 19 held-out brands in r2's training or validation data | `results.md` will say so in one line |
+| 15 | The Meta card, Muse retries and Modal detach | **Already in place.** The Modal eval has a 2 h timeout (`EVAL_TIMEOUT_S`) and a $0 spend limit. `spend_check.py` runs before every paid step, `batch.sh run` included | No change |
