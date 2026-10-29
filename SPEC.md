@@ -97,6 +97,10 @@ A number a model writes is kept only if the source states it. The workshop rule 
         - **German number words never combine:** each token is its own number, so "fünf hundert Milligramm" states 100, never 500, and "um sechs hundert Milligramm" never 600.
         - **An article joins no number:** "vier Ein-Gramm-Tabletten" states 1, never 5.
         - **English and Arabic are unchanged.** The earlier Spanish and German rules (`y`, hundreds, `mil`, halves, `coma`) still decide what a run is.
+      - **Round 7: the rule holds whatever closes the run.**
+        - **Any close:** a Spanish or German run closed by another number, a joiner, an English multiplier or the end of the part states nothing unless a unit or dose word follows it. So "elf cinco miligramos" states 5, never 11.
+        - **No join to an English number after it:** "cinco five mg" states 5, never 10, and "diez thirty milligrams" 30, never 40. A patient correcting themselves across languages says exactly this.
+        - **Decimals:** a decimal with an English point and Spanish or German digit words follows the same rule. "la point seis" states nothing, and "point sieben Milligramm" is 0.7.
       - **Unicode:** `stated_amounts` reads its text in NFC, so decomposed accents read as composed ones (round 2, #6).
       - **The unit words:** `mg`, `g`, `mcg`, `µg`, `ml`, `miligramo(s)`, `gramo(s)`, `microgramo(s)`, `mililitro(s)`, `milligramm`, `gramm`, `mikrogramm` and `milliliter`.
       - **So** "quinientos" is 500, "veinticinco" 25, "treinta y cinco" 35 and "ochocientos setenta y cinco" 875. "dos coma cinco" is 2.5, "uno y medio" 1.5 and "un gramo" 1. "diez y cincuenta" states 10 and 50, never 60.

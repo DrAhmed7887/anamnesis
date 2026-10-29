@@ -132,3 +132,17 @@ The first clock-time check the reference had was redundant, so no test caught it
 | German numbers combine | 1 |
 | An article joins the number before it | 4 |
 | `hundert` multiplies again | 3 |
+
+## Round 7: the amount rule, whatever closes the run
+- **Contract:** `test_b24_round7.py`, 13 tests. On Muse's round 6 code, 6 fail and 7 pass.
+- **Reference build:** **2,302 passed**, ruff clean.
+- **Differential:** English and Arabic give exactly the results of 843f64f on all 21,747 fuzz phrases.
+- **A fix to the reference itself:** an English "hundred" after a Spanish number stated the Spanish part without an amount. It is fixed and pinned.
+
+**One mutant per rule** (failures in `tests/contract`):
+
+| Mutant | Failures |
+|---|---|
+| A Spanish or German word adds an English one after it | 4 |
+| The English-hundred cut states the Spanish part | 1 |
+| A decimal with Spanish or German digits counts anywhere | 2 |

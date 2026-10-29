@@ -184,3 +184,16 @@ SUPERVISOR: CHANGES. Every earlier fix held. Three more paths to a false `match`
 - **New:** `tests/contract/test_b24_round6.py` (35 tests, 22 fail on round 5).
 - **Proof:** a reference build (2,289 passed), with one mutant per rule.
 - **English and Arabic:** they still give exactly what the code before batch 24 gave on all 21,747 fuzz phrases.
+
+## Round 6: no supervisor review, on purpose
+Round 6 passed its gate (2,299 tests). Before any review, the CEO ran two checks of his own:
+- the probe of the round 6 reference on the open surface (a number nobody said, right before a unit word);
+- the differential of Muse's round 6 against the CEO's reference, on 25,292 Spanish, German and mixed phrases.
+
+They found the gaps a review would have reported. So round 7 went straight to the builder, and the supervisor reviews round 7, covering rounds 6 and 7. The gaps:
+1. **A Spanish or German number added an English one after it.** "cinco five mg" stated 10, and an invented 10 mg reached `match` against Concor 10 mg. "diez thirty milligrams" stated 40.
+2. **An adjacency close skipped the amount rule.** "elf cinco miligramos" stated 11.
+3. **An English "point" with Spanish or German digit words made a decimal outside any amount.** "la point seis" stated 0.6.
+4. **In the CEO's own reference only:** an English "hundred" after a Spanish number stated the Spanish part without an amount ("ochocientos hundred" stated 800). Muse's code didn't have this. It is pinned anyway.
+
+On the same corpus, English and Arabic gave exactly the results of 843f64f, in both Muse's code and the reference.
