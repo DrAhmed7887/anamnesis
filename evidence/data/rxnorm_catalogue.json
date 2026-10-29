@@ -1,0 +1,566 @@
+{
+  "meta": {
+    "script": "scripts/rxnorm_ground.py",
+    "catalogue": "anamnesis/core/catalogue.yaml",
+    "api": "https://rxnav.nlm.nih.gov/REST",
+    "rxnorm_release": "05-Oct-2026",
+    "api_version": "3.1.356",
+    "retrieved": "2026-10-28",
+    "inn_us_name_table": {
+      "paracetamol": "acetaminophen"
+    },
+    "inn_us_name_used": {},
+    "counts": {
+      "entries": 9,
+      "inns_listed": 11,
+      "inns_distinct": 9,
+      "inns_mapped": 9,
+      "inns_unmapped": 0,
+      "brands_in_rxnorm": 6,
+      "brands_not_in_rxnorm": 3
+    }
+  },
+  "entries": [
+    {
+      "brand": "Concor",
+      "inns": [
+        "bisoprolol"
+      ],
+      "catalogue_release": "immediate",
+      "ingredients": [
+        {
+          "inn": "bisoprolol",
+          "status": "mapped",
+          "rxcui": "19484",
+          "tty": "IN",
+          "rxnorm_name": "bisoprolol",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": null,
+          "precise_ingredients": [
+            {
+              "rxcui": "142146",
+              "name": "bisoprolol fumarate"
+            }
+          ],
+          "reason": null
+        }
+      ],
+      "brand_rxnorm": {
+        "queried": "Concor",
+        "in_rxnorm": false,
+        "rxcui": null,
+        "tty": null,
+        "rxnorm_name": null,
+        "match": null,
+        "note": "not in RxNorm",
+        "rxnorm_ingredients": [],
+        "rxnorm_multi_ingredient": [],
+        "rxnorm_precise_ingredients": [],
+        "rxnorm_dose_forms": [],
+        "ingredient_check": null
+      }
+    },
+    {
+      "brand": "Beloc-Zok",
+      "inns": [
+        "metoprolol"
+      ],
+      "catalogue_release": "modified",
+      "ingredients": [
+        {
+          "inn": "metoprolol",
+          "status": "mapped",
+          "rxcui": "6918",
+          "tty": "IN",
+          "rxnorm_name": "metoprolol",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": null,
+          "precise_ingredients": [
+            {
+              "rxcui": "102313",
+              "name": "metoprolol fumarate"
+            },
+            {
+              "rxcui": "221124",
+              "name": "metoprolol succinate"
+            },
+            {
+              "rxcui": "203191",
+              "name": "metoprolol tartrate"
+            }
+          ],
+          "reason": null
+        }
+      ],
+      "brand_rxnorm": {
+        "queried": "Beloc-Zok",
+        "in_rxnorm": false,
+        "rxcui": null,
+        "tty": null,
+        "rxnorm_name": null,
+        "match": null,
+        "note": "not in RxNorm",
+        "rxnorm_ingredients": [],
+        "rxnorm_multi_ingredient": [],
+        "rxnorm_precise_ingredients": [],
+        "rxnorm_dose_forms": [],
+        "ingredient_check": null
+      }
+    },
+    {
+      "brand": "Norvasc",
+      "inns": [
+        "amlodipine"
+      ],
+      "catalogue_release": "immediate",
+      "ingredients": [
+        {
+          "inn": "amlodipine",
+          "status": "mapped",
+          "rxcui": "17767",
+          "tty": "IN",
+          "rxnorm_name": "amlodipine",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": null,
+          "precise_ingredients": [
+            {
+              "rxcui": "2184116",
+              "name": "amlodipine benzoate"
+            },
+            {
+              "rxcui": "104416",
+              "name": "amlodipine besylate"
+            }
+          ],
+          "reason": null
+        }
+      ],
+      "brand_rxnorm": {
+        "queried": "Norvasc",
+        "in_rxnorm": true,
+        "rxcui": "58927",
+        "tty": "BN",
+        "rxnorm_name": "Norvasc",
+        "match": "exact",
+        "note": null,
+        "rxnorm_ingredients": [
+          {
+            "rxcui": "17767",
+            "name": "amlodipine"
+          }
+        ],
+        "rxnorm_multi_ingredient": [],
+        "rxnorm_precise_ingredients": [
+          {
+            "rxcui": "104416",
+            "name": "amlodipine besylate"
+          }
+        ],
+        "rxnorm_dose_forms": [
+          "amlodipine Oral Tablet [Norvasc]"
+        ],
+        "ingredient_check": {
+          "status": "match",
+          "catalogue_only": [],
+          "rxnorm_only": []
+        }
+      }
+    },
+    {
+      "brand": "Glucophage",
+      "inns": [
+        "metformin"
+      ],
+      "catalogue_release": "immediate",
+      "ingredients": [
+        {
+          "inn": "metformin",
+          "status": "mapped",
+          "rxcui": "6809",
+          "tty": "IN",
+          "rxnorm_name": "metformin",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": null,
+          "precise_ingredients": [
+            {
+              "rxcui": "235743",
+              "name": "metformin hydrochloride"
+            }
+          ],
+          "reason": null
+        }
+      ],
+      "brand_rxnorm": {
+        "queried": "Glucophage",
+        "in_rxnorm": true,
+        "rxcui": "151827",
+        "tty": "BN",
+        "rxnorm_name": "Glucophage",
+        "match": "exact",
+        "note": null,
+        "rxnorm_ingredients": [
+          {
+            "rxcui": "6809",
+            "name": "metformin"
+          }
+        ],
+        "rxnorm_multi_ingredient": [],
+        "rxnorm_precise_ingredients": [
+          {
+            "rxcui": "235743",
+            "name": "metformin hydrochloride"
+          }
+        ],
+        "rxnorm_dose_forms": [
+          "metformin Extended Release Oral Tablet [Glucophage]",
+          "metformin Oral Tablet [Glucophage]"
+        ],
+        "ingredient_check": {
+          "status": "match",
+          "catalogue_only": [],
+          "rxnorm_only": []
+        }
+      }
+    },
+    {
+      "brand": "Panadol",
+      "inns": [
+        "paracetamol"
+      ],
+      "catalogue_release": "immediate",
+      "ingredients": [
+        {
+          "inn": "paracetamol",
+          "status": "mapped",
+          "rxcui": "161",
+          "tty": "IN",
+          "rxnorm_name": "acetaminophen",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": null,
+          "precise_ingredients": [],
+          "reason": null
+        }
+      ],
+      "brand_rxnorm": {
+        "queried": "Panadol",
+        "in_rxnorm": true,
+        "rxcui": "202432",
+        "tty": "BN",
+        "rxnorm_name": "Panadol",
+        "match": "exact",
+        "note": null,
+        "rxnorm_ingredients": [
+          {
+            "rxcui": "161",
+            "name": "acetaminophen"
+          }
+        ],
+        "rxnorm_multi_ingredient": [],
+        "rxnorm_precise_ingredients": [],
+        "rxnorm_dose_forms": [
+          "acetaminophen Oral Solution [Panadol]",
+          "acetaminophen Oral Tablet [Panadol]"
+        ],
+        "ingredient_check": {
+          "status": "match",
+          "catalogue_only": [],
+          "rxnorm_only": []
+        }
+      }
+    },
+    {
+      "brand": "Panadol Extra",
+      "inns": [
+        "paracetamol",
+        "caffeine"
+      ],
+      "catalogue_release": "immediate",
+      "ingredients": [
+        {
+          "inn": "paracetamol",
+          "status": "mapped",
+          "rxcui": "161",
+          "tty": "IN",
+          "rxnorm_name": "acetaminophen",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": null,
+          "precise_ingredients": [],
+          "reason": null
+        },
+        {
+          "inn": "caffeine",
+          "status": "mapped",
+          "rxcui": "1886",
+          "tty": "IN",
+          "rxnorm_name": "caffeine",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": null,
+          "precise_ingredients": [
+            {
+              "rxcui": "20033",
+              "name": "caffeine citrate"
+            },
+            {
+              "rxcui": "236112",
+              "name": "caffeine monohydrate"
+            }
+          ],
+          "reason": null
+        }
+      ],
+      "brand_rxnorm": {
+        "queried": "Panadol Extra",
+        "in_rxnorm": true,
+        "rxcui": "1872070",
+        "tty": "BN",
+        "rxnorm_name": "Panadol Extra",
+        "match": "exact",
+        "note": null,
+        "rxnorm_ingredients": [
+          {
+            "rxcui": "161",
+            "name": "acetaminophen"
+          },
+          {
+            "rxcui": "1886",
+            "name": "caffeine"
+          }
+        ],
+        "rxnorm_multi_ingredient": [
+          {
+            "rxcui": "108038",
+            "name": "acetaminophen / caffeine"
+          }
+        ],
+        "rxnorm_precise_ingredients": [],
+        "rxnorm_dose_forms": [
+          "acetaminophen / caffeine Oral Tablet [Panadol Extra]"
+        ],
+        "ingredient_check": {
+          "status": "match",
+          "catalogue_only": [],
+          "rxnorm_only": []
+        }
+      }
+    },
+    {
+      "brand": "Augmentin",
+      "inns": [
+        "amoxicillin",
+        "clavulanic acid"
+      ],
+      "catalogue_release": "immediate",
+      "ingredients": [
+        {
+          "inn": "amoxicillin",
+          "status": "mapped",
+          "rxcui": "723",
+          "tty": "IN",
+          "rxnorm_name": "amoxicillin",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": null,
+          "precise_ingredients": [
+            {
+              "rxcui": "1297882",
+              "name": "amoxicillin anhydrous"
+            },
+            {
+              "rxcui": "267360",
+              "name": "amoxicillin sodium"
+            },
+            {
+              "rxcui": "133008",
+              "name": "amoxicillin trihydrate"
+            }
+          ],
+          "reason": null
+        },
+        {
+          "inn": "clavulanic acid",
+          "status": "mapped",
+          "rxcui": "48203",
+          "tty": "IN",
+          "rxnorm_name": "clavulanate",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": {
+            "rxcui": "21216",
+            "name": "clavulanic acid",
+            "tty": "PIN"
+          },
+          "precise_ingredients": [
+            {
+              "rxcui": "831418",
+              "name": "clavulanate potassium"
+            },
+            {
+              "rxcui": "21216",
+              "name": "clavulanic acid"
+            }
+          ],
+          "reason": null
+        }
+      ],
+      "brand_rxnorm": {
+        "queried": "Augmentin",
+        "in_rxnorm": true,
+        "rxcui": "151392",
+        "tty": "BN",
+        "rxnorm_name": "Augmentin",
+        "match": "exact",
+        "note": null,
+        "rxnorm_ingredients": [
+          {
+            "rxcui": "723",
+            "name": "amoxicillin"
+          },
+          {
+            "rxcui": "48203",
+            "name": "clavulanate"
+          }
+        ],
+        "rxnorm_multi_ingredient": [
+          {
+            "rxcui": "19711",
+            "name": "amoxicillin / clavulanate"
+          }
+        ],
+        "rxnorm_precise_ingredients": [
+          {
+            "rxcui": "133008",
+            "name": "amoxicillin trihydrate"
+          },
+          {
+            "rxcui": "831418",
+            "name": "clavulanate potassium"
+          }
+        ],
+        "rxnorm_dose_forms": [
+          "amoxicillin / clavulanate Extended Release Oral Tablet [Augmentin]",
+          "amoxicillin / clavulanate Oral Suspension [Augmentin]",
+          "amoxicillin / clavulanate Oral Tablet [Augmentin]"
+        ],
+        "ingredient_check": {
+          "status": "match",
+          "catalogue_only": [],
+          "rxnorm_only": []
+        }
+      }
+    },
+    {
+      "brand": "Lipitor",
+      "inns": [
+        "atorvastatin"
+      ],
+      "catalogue_release": "immediate",
+      "ingredients": [
+        {
+          "inn": "atorvastatin",
+          "status": "mapped",
+          "rxcui": "83367",
+          "tty": "IN",
+          "rxnorm_name": "atorvastatin",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": null,
+          "precise_ingredients": [
+            {
+              "rxcui": "83366",
+              "name": "atorvastatin calcium"
+            },
+            {
+              "rxcui": "2569977",
+              "name": "atorvastatin calcium anhydrous"
+            },
+            {
+              "rxcui": "1483793",
+              "name": "atorvastatin calcium propylene glycol solvate"
+            },
+            {
+              "rxcui": "1297766",
+              "name": "atorvastatin calcium trihydrate"
+            }
+          ],
+          "reason": null
+        }
+      ],
+      "brand_rxnorm": {
+        "queried": "Lipitor",
+        "in_rxnorm": true,
+        "rxcui": "153165",
+        "tty": "BN",
+        "rxnorm_name": "Lipitor",
+        "match": "exact",
+        "note": null,
+        "rxnorm_ingredients": [
+          {
+            "rxcui": "83367",
+            "name": "atorvastatin"
+          }
+        ],
+        "rxnorm_multi_ingredient": [],
+        "rxnorm_precise_ingredients": [
+          {
+            "rxcui": "83366",
+            "name": "atorvastatin calcium"
+          },
+          {
+            "rxcui": "1297766",
+            "name": "atorvastatin calcium trihydrate"
+          }
+        ],
+        "rxnorm_dose_forms": [
+          "atorvastatin Oral Tablet [Lipitor]"
+        ],
+        "ingredient_check": {
+          "status": "match",
+          "catalogue_only": [],
+          "rxnorm_only": []
+        }
+      }
+    },
+    {
+      "brand": "Gelocatil",
+      "inns": [
+        "paracetamol"
+      ],
+      "catalogue_release": "immediate",
+      "ingredients": [
+        {
+          "inn": "paracetamol",
+          "status": "mapped",
+          "rxcui": "161",
+          "tty": "IN",
+          "rxnorm_name": "acetaminophen",
+          "match": "exact",
+          "us_name_used": null,
+          "pin": null,
+          "precise_ingredients": [],
+          "reason": null
+        }
+      ],
+      "brand_rxnorm": {
+        "queried": "Gelocatil",
+        "in_rxnorm": false,
+        "rxcui": null,
+        "tty": null,
+        "rxnorm_name": null,
+        "match": null,
+        "note": "not in RxNorm",
+        "rxnorm_ingredients": [],
+        "rxnorm_multi_ingredient": [],
+        "rxnorm_precise_ingredients": [],
+        "rxnorm_dose_forms": [],
+        "ingredient_check": null
+      }
+    }
+  ]
+}

@@ -9,7 +9,7 @@ This plan was committed before any training call. It follows Ahmed's call of 28 
 
 ## The data: generated, with every answer built in code
 `finetune/gen.py`, seeded and deterministic:
-- **Drugs:** the catalogue's brands and aliases, with their INNs. Ten drugs are held out of training entirely.
+- **Drugs:** the catalogue's 9 entries, with their brands, aliases and INNs. To these are added about 60 common medicines from RxNorm: the ingredient, its brand names and its marketed strengths, in `evidence/data/rxnorm_drugs.json`. Ten of those RxNorm medicines are held out of training entirely. Amended 29 Oct, before any data was generated: the RxNorm grounding showed that the catalogue has 9 entries, too few to hold out 10.
 - **Utterances,** from templates in English and Egyptian Arabic, including Arabic–English mixing. They cover:
   - a brand or an INN, and an amount in digits or in words, with units;
   - regimens ("twice a day", "two tablets", as needed);
