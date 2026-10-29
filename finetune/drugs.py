@@ -4,7 +4,7 @@ aliases and INNs, plus the 60 common medicines of evidence/data/rxnorm_drugs.jso
 import json
 import random
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from decimal import Decimal
 from typing import Any
 
@@ -13,7 +13,10 @@ from anamnesis.providers.numbers import parse_amount_text
 from finetune.common import ROOT
 
 RXNORM_FILE = ROOT / "evidence" / "data" / "rxnorm_drugs.json"
+# r2's Spanish vocabulary (plan.md, amended 29 Oct): scripts/drugs_v2.py's brands from AEMPS CIMA.
+DRUGS_V2_FILE = ROOT / "evidence" / "data" / "drugs_v2.json"
 HELD_OUT_COUNT = 10
+SPAIN_HELD_SHARE = 5  # one new Spanish brand in five is held out of r2's training, for test_spain
 # U11's real note names ibuprofen, so it stays a training drug: test_real then measures speech-to-text noise
 # on drugs the model has seen, and test_shift alone measures unseen drugs.
 REAL_SLICE_INNS = ("ibuprofen",)
@@ -128,6 +131,82 @@ def load_medicines() -> list[Medicine]:
             strengths=usable_strengths(record),
         ))
     return medicines
+
+
+def _v2_records() -> dict[str, dict[str, Any]]:
+    """The Spanish vocabulary of scripts/drugs_v2.py (AEMPS CIMA), by INN, mapped medicines only."""
+    data = json.loads(DRUGS_V2_FILE.read_text(encoding="utf-8"))
+    return {record["inn"]: record for record in data["drugs"] if record["status"] == "mapped"}
+
+
+def spanish_strengths(record: dict[str, Any]) -> tuple[Strength, ...]:
+    """The strengths CIMA's product names print, by the same number rule as usable_strengths."""
+    forms = tuple(form for form in ("tablet", "capsule") if form in record.get("forms", ()))
+    kept = []
+    for text in record["strengths_mg"]:
+        value = parse_amount_text(text)
+        if forms and value is not None and value == Decimal(text):
+            kept.append(Strength(Decimal(text), forms))
+    return tuple(kept)
+
+
+def _merged(us: tuple[Strength, ...], spain: tuple[Strength, ...]) -> tuple[Strength, ...]:
+    """Both markets' strengths, each amount once, its forms joined; US order first."""
+    forms: dict[Decimal, list[str]] = {}
+    for strength in (*us, *spain):
+        forms.setdefault(strength.mg, [])
+        forms[strength.mg] += [form for form in strength.forms if form not in forms[strength.mg]]
+    return tuple(Strength(mg, tuple(found)) for mg, found in forms.items())
+
+
+def spain_split(medicines: list[Medicine], held: tuple[str, ...], seed: int) -> tuple[dict, dict]:
+    """The Spanish brands of the training RxNorm medicines: (trained, held out for test_spain), by INN.
+    Only brands that are new names count (a global brand such as Diovan is already a US name). One in
+    SPAIN_HELD_SHARE of them is held out, drawn with the seed; no held name may name anything else."""
+    records = _v2_records()
+    known = {normalise(name) for medicine in medicines for name in all_names(medicine)}
+    new = sorted(
+        (medicine.inns[0], brand["name"])
+        for medicine in medicines
+        if medicine.source == "rxnorm" and medicine.key not in held and medicine.inns[0] in records
+        for brand in records[medicine.inns[0]]["brands"]
+        if normalise(brand["name"]) not in known
+    )
+    chosen = set(random.Random(seed).sample(new, len(new) // SPAIN_HELD_SHARE))
+    trained: dict[str, tuple[str, ...]] = {}
+    held_out: dict[str, tuple[str, ...]] = {}
+    for inn, brand in new:
+        target = held_out if (inn, brand) in chosen else trained
+        target[inn] = (*target.get(inn, ()), brand)
+    taken = {normalise(name) for names in trained.values() for name in names} | known
+    clashes = sorted(name for names in held_out.values() for name in names if normalise(name) in taken)
+    if clashes:
+        raise ValueError(f"held-out Spanish brands also name a training medicine: {clashes}")
+    return trained, held_out
+
+
+def load_medicines_v2(spanish: dict[str, tuple[str, ...]]) -> list[Medicine]:
+    """load_medicines() with each RxNorm medicine's trained Spanish brands and Spain's strengths added."""
+    records = _v2_records()
+    return [
+        replace(medicine, brands=(*medicine.brands, *spanish.get(medicine.inns[0], ())),
+                strengths=_merged(medicine.strengths, spanish_strengths(records[medicine.inns[0]])))
+        if medicine.source == "rxnorm" and medicine.inns[0] in records else medicine
+        for medicine in load_medicines()
+    ]
+
+
+def spain_medicines(held_out: dict[str, tuple[str, ...]], medicines: list[Medicine]) -> list[Medicine]:
+    """test_spain's pool: each INN with held-out Spanish brands, said by those brands only (no ingredient
+    names, so every mention says a name the model never saw), with Spain's strengths, else the US ones."""
+    records = _v2_records()
+    us = {medicine.inns[0]: medicine for medicine in medicines if medicine.source == "rxnorm"}
+    return [
+        Medicine(key=f"cima:{inn}", source="cima", inns=(inn,), rxcui=us[inn].rxcui, brands=brands,
+                 aliases=(), ingredient_names=(),
+                 strengths=spanish_strengths(records[inn]) or us[inn].strengths)
+        for inn, brands in sorted(held_out.items())
+    ]
 
 
 def dropped_brands() -> list[str]:

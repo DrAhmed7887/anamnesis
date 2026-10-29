@@ -1,8 +1,15 @@
 """Train and test the Glimmer LoRA on Modal (evidence/finetune/plan.md, "Amended 29 Oct: training on Modal").
 
     ~/.local/bin/modal run finetune/modal_glimmer.py --step download
-    ~/.local/bin/modal run finetune/modal_glimmer.py --step train --run r1 [--smoke]
+    ~/.local/bin/modal run finetune/modal_glimmer.py --step train --run r1 [--smoke] [--data data_v2]
     ~/.local/bin/modal run finetune/modal_glimmer.py --step eval --run r1 [--smoke]
+    ~/.local/bin/modal run --detach finetune/modal_glimmer.py --step eval --run r2 \
+        --jobs glimmer-lora-r1@data_v2/test_spain,glimmer-lora-r2@test_iid,...
+
+--data names the folder under finetune/ that training reads. --jobs lists system@split pairs for one engine:
+glimmer-base, glimmer-lora (the --run's adapter) or glimmer-lora-<run> (that run's adapter), on a split of
+finetune/data or of finetune/<folder>/ ("data_v2/test_spain"). Without --jobs, eval runs base and the --run's
+adapter on the four test splits, as r1's eval did.
 
 Every step first runs scripts/spend_check.py with the most it can cost (its timeout at Modal's list price),
 and afterwards appends what it cost (the local wall time at that price, an estimate checked against
@@ -33,7 +40,6 @@ if str(HERE) not in sys.path:
 import glimmer  # noqa: E402
 
 ROOT = HERE.parent
-DATA = ROOT / "finetune" / "data"
 RUNS_DIR = ROOT / "evidence" / "finetune" / "runs"
 RAW_DIR = ROOT / "evidence" / "raw" / "finetune"
 LEDGER = ROOT / "evidence" / "spend" / "modal_ledger.jsonl"
@@ -221,15 +227,16 @@ def _two_passes(llm, tokenizer, conversations: list, lora, schema: dict, max_tok
 
 
 @app.function(image=eval_image, gpu=glimmer.GPU, timeout=glimmer.EVAL_TIMEOUT_S, **MACHINE)
-def evaluate(run: str, splits: dict, schema: dict, max_tokens: int, out: str) -> dict:
-    """Each system and split is saved to the volume as it finishes, and a split already saved there is read
-    back instead of run again: on 29 Oct a dropped laptop connection cancelled a run 17 minutes in."""
+def evaluate(run: str, splits: dict, schema: dict, max_tokens: int, out: str, jobs: list,
+             adapters: dict) -> dict:
+    """Each job, a system and a split, is saved to the volume as it finishes, and a job already saved there is
+    read back instead of run again: on 29 Oct a dropped laptop connection cancelled a run 17 minutes in.
+    `adapters` maps each system to the run whose adapter it loads, or to None for base Glimmer."""
     import vllm
 
     clock = time.monotonic()
     runs.reload()
-    saved = {(system, split): Path(f"/runs/{out}/eval/{system}/{split}.json")
-             for system in SYSTEMS for split in splits}
+    saved = {(system, split): Path(f"/runs/{out}/eval/{system}/{split}.json") for system, split in jobs}
     done = {key: json.loads(path.read_text(encoding="utf-8")) for key, path in saved.items() if path.exists()}
     result = {"run": run, "vllm": vllm.__version__, "max_tokens": max_tokens, "resumed": len(done),
               "load_s": 0.0}
@@ -238,12 +245,14 @@ def evaluate(run: str, splits: dict, schema: dict, max_tokens: int, out: str) ->
         from vllm import LLM
         from vllm.lora.request import LoRARequest
 
-        llm = LLM(model=WEIGHTS, enable_lora=True, max_lora_rank=glimmer.LORA["r"], max_loras=1,
-                  max_model_len=glimmer.MAX_MODEL_LEN, limit_mm_per_prompt={"image": 0, "video": 0},
-                  seed=glimmer.EVAL_SEED)
+        names = sorted({adapters[system] for system, _ in jobs if adapters[system]})
+        llm = LLM(model=WEIGHTS, enable_lora=True, max_lora_rank=glimmer.LORA["r"],
+                  max_loras=max(1, len(names)), max_model_len=glimmer.MAX_MODEL_LEN,
+                  limit_mm_per_prompt={"image": 0, "video": 0}, seed=glimmer.EVAL_SEED)
         tokenizer = llm.get_tokenizer()
-        loras = {"glimmer-base": None,
-                 "glimmer-lora": LoRARequest("glimmer-lora", 1, f"/runs/{run}/adapter")}
+        requests = {name: LoRARequest(name, number, f"/runs/{name}/adapter")
+                    for number, name in enumerate(names, start=1)}
+        loras = {system: requests[name] if name else None for system, name in adapters.items()}
         result["load_s"] = round(time.monotonic() - clock, 1)
         for system, split in todo:
             outcome = _two_passes(llm, tokenizer, splits[split], loras[system], schema, max_tokens)
@@ -251,7 +260,9 @@ def evaluate(run: str, splits: dict, schema: dict, max_tokens: int, out: str) ->
             saved[(system, split)].write_text(json.dumps(outcome, ensure_ascii=False), encoding="utf-8")
             runs.commit()
             done[(system, split)] = outcome
-    result["systems"] = {system: {split: done[(system, split)] for split in splits} for system in SYSTEMS}
+    result["systems"] = {}
+    for system, split in jobs:
+        result["systems"].setdefault(system, {})[split] = done[(system, split)]
     return result
 
 
@@ -283,8 +294,25 @@ def _schema() -> dict:
     return json.loads(out.stdout)
 
 
-def _train(run: str, smoke: bool) -> None:
-    train_rows, val_rows = _read(DATA / "train.jsonl"), _read(DATA / "val.jsonl")
+def _split_path(spec: str) -> tuple[str, Path]:
+    """'test_iid' (finetune/data) or 'data_v2/test_spain' as (the split's name, its file)."""
+    folder, _, name = spec.rpartition("/")
+    return name, ROOT / "finetune" / (folder or "data") / f"{name}.jsonl"
+
+
+def _adapter_of(system: str, run: str) -> str | None:
+    if system == "glimmer-base":
+        return None
+    if system == "glimmer-lora":
+        return run
+    if system.startswith("glimmer-lora-") and system != "glimmer-lora-":
+        return system.removeprefix("glimmer-lora-")
+    raise SystemExit(f"a system is glimmer-base, glimmer-lora or glimmer-lora-<run>, not {system!r}")
+
+
+def _train(run: str, smoke: bool, data: str) -> None:
+    folder = ROOT / "finetune" / data
+    train_rows, val_rows = _read(folder / "train.jsonl"), _read(folder / "val.jsonl")
     if smoke:
         train_rows, val_rows = train_rows[:SMOKE["train_rows"]], val_rows[:SMOKE["val_rows"]]
     metrics = train.remote(run, train_rows, val_rows, SMOKE["max_steps"] if smoke else None)
@@ -296,13 +324,20 @@ def _train(run: str, smoke: bool) -> None:
     print(json.dumps({key: metrics[key] for key in keys}, ensure_ascii=False))
 
 
-def _eval(run: str, smoke: bool) -> None:
+def _eval(run: str, smoke: bool, jobs_spec: str) -> None:
     limit = SMOKE["test_rows"] if smoke else None
-    splits = {split: [glimmer.messages_of(row)[:2] for row in _read(DATA / f"{split}.jsonl")[:limit]]
-              for split in glimmer.TEST_SPLITS}
+    pairs = ([item.split("@", 1) for item in jobs_spec.split(",")] if jobs_spec
+             else [[system, split] for system in SYSTEMS for split in glimmer.TEST_SPLITS])
+    paths = {spec: _split_path(spec) for _, spec in pairs}
+    if len({name for name, _ in paths.values()}) != len({path for _, path in paths.values()}):
+        raise SystemExit("two splits share a name: give each job's split a distinct name")
+    splits = {name: [glimmer.messages_of(row)[:2] for row in _read(path)[:limit]]
+              for name, path in paths.values()}
+    jobs = [[system, paths[spec][0]] for system, spec in pairs]
+    adapters = {system: _adapter_of(system, run) for system, _ in jobs}
     out = f"smoke-{run}" if smoke else run  # smoke replies are never scored (plan.md)
     max_tokens = SMOKE["max_tokens"] if smoke else glimmer.MAX_TOKENS
-    result = evaluate.remote(run, splits, _schema(), max_tokens, out)
+    result = evaluate.remote(run, splits, _schema(), max_tokens, out, jobs, adapters)
     summary = {key: result[key] for key in ("run", "vllm", "load_s", "max_tokens", "resumed")}
     for system, by_split in result["systems"].items():
         for split, outcome in by_split.items():
@@ -321,7 +356,7 @@ def _eval(run: str, smoke: bool) -> None:
 
 
 @app.local_entrypoint()
-def main(step: str, run: str = "r1", smoke: bool = False) -> None:
+def main(step: str, run: str = "r1", smoke: bool = False, data: str = "data", jobs: str = "") -> None:
     """--step download, train or eval. --smoke: 2 training steps on 32 examples, or 2 examples per split."""
     timeouts = {"download": glimmer.DOWNLOAD_TIMEOUT_S, "train": glimmer.TRAIN_TIMEOUT_S,
                 "eval": glimmer.EVAL_TIMEOUT_S}
@@ -333,8 +368,8 @@ def main(step: str, run: str = "r1", smoke: bool = False) -> None:
         if step == "download":
             print(json.dumps(download.remote()))
         elif step == "train":
-            _train(run, smoke)
+            _train(run, smoke, data)
         else:
-            _eval(run, smoke)
+            _eval(run, smoke, jobs)
     finally:
         _charge(f"{step}-smoke" if smoke else step, run, time.monotonic() - clock)

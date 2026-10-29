@@ -2,7 +2,7 @@
 in code from the same random choices as its utterance, and checked by the product's own parser before it is
 written.
 
-    .venv/bin/python finetune/gen.py [--seed N] [--out DIR]
+    .venv/bin/python finetune/gen.py [--seed N] [--out DIR] [--vocab v1|v2]
 
 Writes, to finetune/data/ by default:
 - <split>.jsonl, Fireworks chat SFT lines holding only "messages" (system and user weight 0, the answer 1);
@@ -11,6 +11,11 @@ Writes, to finetune/data/ by default:
 - meta.json: the seed, the noise rate, the held-out drugs, the template split and the brand rule's results.
 Splits: train 1,200, val 150, test_iid 100 (train templates and drugs), test_shift 120 (test-only templates
 and the 10 held-out drugs only), test_codeswitch 50 (train templates and drugs, heavy Arabic-English mixing).
+
+--vocab v2 (r2, plan.md amended 29 Oct) writes to finetune/data_v2/ by default: train and val as above, with
+each training medicine's Spanish brands from evidence/data/drugs_v2.json (AEMPS CIMA) beside its US ones, and
+test_spain 60 (train templates, said only by the Spanish brands held out of training). The 10 held-out drugs
+are r1's, drawn the same way. v1 is untouched: the same seed writes the same files.
 """
 
 import argparse
@@ -39,7 +44,17 @@ from finetune.common import (  # noqa: E402
     number,
     write_jsonl,
 )
-from finetune.drugs import Medicine, Strength, dropped_brands, held_out_keys, load_medicines  # noqa: E402
+from finetune.drugs import (  # noqa: E402
+    DRUGS_V2_FILE,
+    Medicine,
+    Strength,
+    dropped_brands,
+    held_out_keys,
+    load_medicines,
+    load_medicines_v2,
+    spain_medicines,
+    spain_split,
+)
 from finetune.phrases import (  # noqa: E402
     AR_UNITS,
     CLOSERS,
@@ -67,6 +82,8 @@ from finetune.real_slice import distinct_transcripts  # noqa: E402
 SEED = 20261029
 NOISE_RATE = 0.25  # share of each split's notes given one speech-to-text slip of the kinds seen on 28 Oct
 SPLITS = (("train", 1200), ("val", 150), ("test_iid", 100), ("test_shift", 120), ("test_codeswitch", 50))
+SPLITS_V2 = (("train", 1200), ("val", 150), ("test_spain", 60))
+DATA_V2_DIR = DATA_DIR.parent / "data_v2"
 STANDARD_MIX = (("en", 45), ("ar", 40), ("light", 15))  # light: Arabic templates, Latin names, some English
 CODESWITCH_MIX = (("heavy", 1),)  # heavy: each template and each slot in either language
 MEDS_PER_NOTE = ((1, 40), (2, 35), (3, 25))
@@ -481,10 +498,16 @@ def _sidecar(split: str, index: int, note: Note, parsed: list) -> dict:
     }
 
 
-def generate(out: Path = DATA_DIR, seed: int = SEED) -> dict:
+def generate(out: Path = DATA_DIR, seed: int = SEED, vocab: str = "v1") -> dict:
     """Write every split and meta.json to `out`; return the meta."""
     medicines = load_medicines()
     held = held_out_keys(medicines, seed + 1)
+    splits, spain, spanish = SPLITS, [], None
+    if vocab == "v2":
+        trained, held_spanish = spain_split(medicines, held, seed + 2)
+        spain = spain_medicines(held_spanish, medicines)
+        medicines = load_medicines_v2(trained)
+        splits, spanish = SPLITS_V2, {"trained": trained, "held_out": held_spanish}
     training = [medicine for medicine in medicines if medicine.key not in held]
     shifted = [medicine for medicine in medicines if medicine.key in held]
     train_frames = [frame for frame in FRAMES if not frame.test_only]
@@ -494,12 +517,13 @@ def generate(out: Path = DATA_DIR, seed: int = SEED) -> dict:
         "test_iid": (training, train_frames, STANDARD_MIX),
         "test_shift": (shifted, test_frames, STANDARD_MIX),
         "test_codeswitch": (training, train_frames, CODESWITCH_MIX),
+        "test_spain": (spain, train_frames, STANDARD_MIX),
     }
     rng = random.Random(seed)
     # No generated note may repeat a transcript of the real slice word for word ("I take Concor five ...").
     seen = {tuple(turn.transcript for turn in entry["turns"]) for entry in distinct_transcripts()}
     stats: dict = {"refused_slips": 0, "duplicates_redrawn": 0, "splits": {}}
-    for split, size in SPLITS:
+    for split, size in splits:
         pool, frames, mix = plans[split]
         rows, sidecars = [], []
         noisy_slots = set(rng.sample(range(size), round(size * NOISE_RATE)))  # an exact share per split
@@ -538,6 +562,9 @@ def generate(out: Path = DATA_DIR, seed: int = SEED) -> dict:
         },
         "rxnorm_brands_dropped": dropped_brands(),
     }
+    if spanish is not None:
+        meta = {**meta, "vocab": "v2", "spanish_brands": spanish,
+                "drugs_v2_read": json.loads(DRUGS_V2_FILE.read_text(encoding="utf-8"))["meta"]["fetched"]}
     (out / "meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     return meta
 
@@ -545,9 +572,12 @@ def generate(out: Path = DATA_DIR, seed: int = SEED) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--seed", type=int, default=SEED)
-    parser.add_argument("--out", type=Path, default=DATA_DIR)
+    parser.add_argument("--out", type=Path, default=None, help="finetune/data, or finetune/data_v2 for v2")
+    parser.add_argument("--vocab", choices=("v1", "v2"), default="v1")
     args = parser.parse_args()
-    meta = generate(args.out, args.seed)
+    args.out = args.out or (DATA_V2_DIR if args.vocab == "v2" else DATA_DIR)
+    args.out.mkdir(parents=True, exist_ok=True)
+    meta = generate(args.out, args.seed, args.vocab)
     for split, row in meta["splits"].items():
         print(f"{split:16} {row['examples']:5} examples, {row['claims']:5} claims, noise in {row['noisy']} "
               f"({row['noise_share']:.1%})")

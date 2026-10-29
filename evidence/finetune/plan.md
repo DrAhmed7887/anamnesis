@@ -88,3 +88,40 @@ Fireworks no longer serves base Glimmer serverlessly, and it serves no LoRA serv
   - attention alternates three sliding-window layers with one global layer.
 - **Support in the libraries:** transformers ships `muse_glimmer` (5.21.0 is used here). vLLM 0.32.0 lists Glimmer with LoRA support, and its LoRA loader maps Hugging Face's layer names.
 - **Modal:** on this account, it asks for a payment method before it runs a GPU large enough for Glimmer. The H200, H100 and A100 80 GB were each refused on 29 Oct, before anything ran.
+
+## Amended 29 Oct (2): r2, the same recipe on a verified Spanish vocabulary (Ahmed's call, before any r2 call)
+**Why:** Ahmed asked for better, non-US data, from "WHO and USA or Europe, whatever makes it easy". r1 stands as run and scored (f07e273). r2 changes only the names the patient says.
+
+**The vocabulary:** `scripts/drugs_v2.py`, from AEMPS CIMA (Spain's medicines agency), read 29 Oct, written to `evidence/data/drugs_v2.{json,md}`.
+- 59 of r1's 60 INNs map to a Spanish name that CIMA's own SNOMED CT VTM confirms. Prednisolone has no marketed tablet or capsule in Spain.
+- There are 136 Spanish brands, each the first word of a marketed tablet or capsule product, up to 4 per INN. Each comes with its strengths as the product names print them, its WHO ATC code and its SNOMED CT VTM id.
+- A brand is dropped if it says its ingredient ("Acido", "Aspirina", "Vals").
+- Three products were spot-checked against CIMA's record: Emconcor (C07AB07, [SNOMED CT id removed]), Eutirox (H03AA01) and Adiro (B01AC06).
+
+**The data (`finetune/data_v2/`, `finetune/gen.py --vocab v2`, same seed):**
+- Of the Spanish brands of r1's training INNs, 99 are new names, meaning not already a US or catalogue name.
+- One in five, drawn with seed + 2, is held out: 19 brands over 17 INNs, such as Astudal, Thervan, Brotmin and Nolpaza. The other 80 are added to their medicines in training, with Spain's printed strengths joined to the US ones.
+- r1's 10 held-out INNs are the same, and none of their Spanish brands are used.
+- **train** (1,200) and **val** (150) follow r1's recipe, templates and 25% noise.
+- **test_spain** (60) uses the training templates. Its notes say only the 19 held-out brands and never an ingredient name, so every mention is a name neither r1 nor r2 has seen.
+- A unit test regenerates r1's data byte for byte, and another finds none of the 19 brands in train or val, by whole word.
+
+**Training r2:** exactly r1's settings (`finetune/glimmer.py`: rank 16, alpha 32, the same 364 layers, lr 1e-4, batch 16, 2 epochs, seed), on data_v2's train and val, with one H100 on Modal. A 2-step smoke run comes first, as for r1.
+
+**Evaluation:** r1's method unchanged: the two passes, the product's schema, the model card's sampling, 16,000 tokens and the same seeds. It runs in one vLLM engine with both adapters (`modal_glimmer.py --jobs`):
+- base Glimmer, r1 and r2 on test_spain;
+- r2 on r1's four test splits (test_iid, test_shift, test_codeswitch, test_real), to check for regressions;
+- Spark 1.3 on test_spain through the product's extractor (`spark_eval.py test_spain --data finetune/data_v2`).
+
+A 2-example smoke eval comes first.
+
+**The metrics** are those above, every miss listed, by `finetune/score.py` unchanged.
+- **Expected risk:** name_text on the unseen brands, as r1 cut the held-out "Inzirqo" three ways.
+- **The reading:** r2 against r1 on test_spain asks whether training on more European names helps with unseen ones. r2 against r1 on the old splits asks whether it cost anything. Both runs are single runs, so the results are descriptive.
+
+**Limits:**
+- one European market (Spain);
+- brand names inside English and Egyptian-Arabic speech, with no Spanish-language templates;
+- generated text, and one run each.
+
+**Cost:** Modal about $4 (training about $1.20, the eval about $2.50), Meta about $0.70. `spend_check.py` runs before each step, and Modal's spend limit is $0.

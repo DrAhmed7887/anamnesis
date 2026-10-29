@@ -1,7 +1,8 @@
 """Muse Spark 1.3's replies on the fine-tune's test splits, through the product's own claim extractor
 (evidence/finetune/plan.md, "The comparison").
 
-    PYTHONPATH=. .venv/bin/python finetune/spark_eval.py <split> [--limit N] [--cap 8.00] [--session-usd 2.00]
+    PYTHONPATH=. .venv/bin/python finetune/spark_eval.py <split> [--data DIR] [--limit N] [--cap 8.00]
+        [--session-usd 2.00]
 
 Each example's turns go to MetaClaimExtractor.extract exactly as the intake sends them: the product's prompt,
 schema, reasoning effort and max_tokens. Its first reply is the one scored, as each Glimmer gets one reply per
@@ -33,7 +34,6 @@ from anamnesis.providers.claims import MetaClaimExtractor  # noqa: E402
 from anamnesis.providers.meta import MetaClient  # noqa: E402
 from anamnesis.providers.spend import SessionGuard  # noqa: E402
 from finetune.common import DATA_DIR, read_jsonl, turns_from_records  # noqa: E402
-from finetune.glimmer import TEST_SPLITS  # noqa: E402
 
 OUT = ROOT / "evidence" / "finetune" / "runs" / "spark"
 
@@ -86,12 +86,17 @@ def run_split(extractor: MetaClaimExtractor, capture: Capturing, rows: list[dict
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("split", choices=TEST_SPLITS)
+    parser.add_argument("split", help="a split of --data: test_iid, test_shift, test_codeswitch, test_real "
+                                      "or, in finetune/data_v2, test_spain")
+    parser.add_argument("--data", type=Path, default=DATA_DIR)
     parser.add_argument("--limit", type=int, default=None, help="only the first N examples")
     parser.add_argument("--cap", default="8.00", help="total USD cap across all live runs (ledger)")
     parser.add_argument("--session-usd", default="2.00", help="USD cap for this split")
     args = parser.parse_args()
-    rows = read_jsonl(DATA_DIR / f"{args.split}.answers.jsonl")[: args.limit]
+    answers = args.data / f"{args.split}.answers.jsonl"
+    if not answers.exists():
+        sys.exit(f"no split {args.split} in {args.data}")
+    rows = read_jsonl(answers)[: args.limit]
     ledger = SpendGuard(il.LEDGER, cap_usd=Decimal(args.cap))
     capture = Capturing(MetaClient(api_key=os.environ.get("MODEL_API_KEY") or il.keychain("META_API_KEY")))
     guard = SessionGuard(ledger, max_usd=Decimal(args.session_usd), max_calls=2 * len(rows))

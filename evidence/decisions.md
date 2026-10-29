@@ -173,3 +173,14 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
 - **Data:** only the generated fine-tune data and the 33 synthetic-voice transcripts go to Modal. The weights come from the Hugging Face Hub. `docs/DATA_HANDLING.md` now says so.
 - **Blocker found:** Modal asks for a payment method before it runs any GPU large enough for Glimmer. The H200, the H100 and the A100 80 GB were each refused on 29 Oct, before anything ran. Only image builds ran, at an estimated $0.05. Adding a card is Ahmed's call; his credit would be spent first.
 - **Meanwhile:** the Spark 1.3 baseline runs on Meta's API, because either training route needs it.
+
+## 2026-10-29: r2 on a verified Spanish vocabulary, and the standards codes into the product (Ahmed's calls)
+- **r2:** Ahmed asked for better, non-US training data: "WHO and USA or Europe, whatever makes it easy to use better data". Egypt has no open drug registry, so the new names come from Spain's AEMPS CIMA. That's 136 brands over 59 INNs, each with its WHO ATC code and SNOMED CT VTM id. r2 repeats r1's recipe with those names added, and is scored on test_spain, which holds 19 Spanish brands never trained on. It's pre-registered in `evidence/finetune/plan.md` ("Amended 29 Oct (2)"). r1's results stand as run.
+- **Codes in the product (batch 24):** each catalogue entry gets its ATC code, RxCUI and SNOMED CT id from `evidence/data/drugs_v2.json`, and the brief shows them. The SNOMED ids come only from CIMA. Before the repo goes public, Ahmed decides whether SNOMED ids may sit in a public repo.
+- **Not before the freeze:**
+  - the FHIR export, still cut;
+  - UpToDate;
+  - a registry strength check;
+  - Spanish-language templates;
+  - the draft Egyptian brand table's unverified rows.
+- **Baseten:** no call until Ahmed sees the hackathon grant applied. Our $0.54 on 28 Oct matches the $1 trial dropping to $0.48.
