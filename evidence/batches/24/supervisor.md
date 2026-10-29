@@ -158,3 +158,29 @@ SUPERVISOR: CHANGES. Every earlier fix held, but four round 4 idioms still led t
 5. **Minor, fails closed:** "una y media" stated 1, never 1.5.
 
 **CEO's triage:** all five accepted and pinned in `tests/contract/test_b24_round5.py` (23 tests, 17 fail on round 4). They were proved on a reference build (2,255 passed), with one mutant per fix. Every mutant is caught: the NFC mutant counts only when it takes NFC off both the field and the turns, since the fix is the pair.
+
+## Round 5 (Opus, independent context, 29 Oct). Builder: Muse Code (`muse-spark-1.3`)
+
+SUPERVISOR: CHANGES. Every earlier fix held. Three more paths to a false `match` were open, each run end to end with an invented amount.
+1. **High: an article counted as 1 still added to the number before it.**
+   - "vier Ein-Gramm-Tabletten" stated 5, "a las cuatro un gramo" 5, and "um neun ein Gramm" 10.
+   - An English word after a Spanish one added too: "a las diez thirty" stated 40.
+2. **High: German `Acht` meaning "care" in finite forms stated 8.** For example "ich gebe Acht", "gib Acht" and "nimm dich in Acht"; candesartan 8 mg then reached `match`.
+3. **Medium, a SPEC decision:** "um sechs hundert Milligramm" stated 600 through the "fünf hundert is 500" rule.
+4. **Minor:** "seit zweitausendzehn fünf Milligramm" stated 2015.
+
+**CEO's triage: a structural rule instead of a sixth list of idioms.** Five rounds in a row found new idioms that stated a number nobody said, so round 6 changes how Spanish and German are read:
+- a Spanish or German run states its values only when a unit or dose word follows it;
+- German number words never combine;
+- `hundert` and `tausend` are plain numbers;
+- an article joins no number.
+
+**What this closes:** every finding of rounds 1–5, and the whole class (times, dates, ages, percentages, idioms) whatever the phrasing.
+
+**What it costs:** a bare Spanish or German amount ("Panadol de quinientos") states nothing. That fails closed.
+
+**The contract:**
+- **Earlier tests rewritten:** those that expected bare Spanish or German numbers to state a value now say them with a unit or dose word.
+- **New:** `tests/contract/test_b24_round6.py` (35 tests, 22 fail on round 5).
+- **Proof:** a reference build (2,289 passed), with one mutant per rule.
+- **English and Arabic:** they still give exactly what the code before batch 24 gave on all 21,747 fuzz phrases.

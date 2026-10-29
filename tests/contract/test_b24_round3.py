@@ -48,7 +48,7 @@ def test_these_state_no_half(text):
 
 
 @pytest.mark.parametrize(("text", "value"), [("medio comprimido", "0.5"), ("media pastilla", "0.5"),
-                                             ("uno y medio", "1.5"), ("dos y media", "2.5")])
+                                             ("uno y medio comprimidos", "1.5"), ("dos y media pastillas", "2.5")])
 def test_a_spanish_half_still_reads(text, value):
     assert Decimal(value) in stated_amounts(text)
 
@@ -69,9 +69,9 @@ def test_mil_before_a_spanish_unit_word_is_still_a_thousand():
 @pytest.mark.parametrize(("said", "label", "amount"), [
     ("Farxiga, mil miligramos", "mil miligramos", "1000"),
     ("Farxiga ein Gramm", "ein Gramm", "1"),
-    ("Farxiga cero coma cinco", "cero coma cinco", "0.5"),
+    ("Farxiga cero coma cinco miligramos", "cero coma cinco", "0.5"),
     ("Farxiga zero point five", "zero point five", "0.5"),
-    ("Farxiga null Komma fünf", "null Komma fünf", "5"),
+    ("Farxiga null Komma fünf Milligramm", "null Komma fünf", "5"),
 ])
 def test_a_number_word_label_takes_the_claims_name(said, label, amount):
     claim = parse(said, intake_amount=line(label, amount))

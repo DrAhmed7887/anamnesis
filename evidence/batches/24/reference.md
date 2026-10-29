@@ -110,3 +110,25 @@ The first clock-time check the reference had was redundant, so no test caught it
 | `Acht` is always eight | 3 |
 | No NFC on the field and the turns | 1 |
 | "una y media" is only 1 | 1 |
+
+## Round 6: one structural rule for Spanish and German
+- **The rules:**
+  - a Spanish or German run states its values only before a unit or dose word;
+  - German number words never combine, and `hundert` and `tausend` are plain numbers;
+  - an article joins no number.
+- **Contract:**
+  - `test_b24_round6.py`, 35 tests. On Muse's round 5 code, 22 fail and 13 pass.
+  - Earlier tests that said bare Spanish or German numbers now say them with a unit or dose word.
+  - "fünf hundert Milligramm" now states 100, never 500.
+- **Reference build:** **2,289 passed**, ruff clean.
+- **Differential:** English and Arabic give exactly the results of 843f64f on all 21,747 fuzz phrases.
+- **Fine-tune re-score:** unchanged.
+
+**One mutant per rule** (failures in `tests/contract`):
+
+| Mutant | Failures |
+|---|---|
+| A Spanish or German run counts anywhere | 16 |
+| German numbers combine | 1 |
+| An article joins the number before it | 4 |
+| `hundert` multiplies again | 3 |

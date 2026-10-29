@@ -77,7 +77,7 @@ A number a model writes is kept only if the source states it. The workshop rule 
           - **Anywhere else they aren't a number:** "social media", "por medio de" and "medio ambiente" state nothing. Before this, an invented 0.5 mg intake reached `match` on "I read about it on social media".
       - **German:**
         - one-word numbers up to 9,999, each read as a whole token: an optional `tausend`, then an optional `hundert`, each after an optional multiplier `ein`–`neun`, then a unit, a teen, a ten, or a unit plus `und` plus a ten (`einundzwanzig`);
-        - `hundert` and `tausend` on their own are a hundred and a thousand word, as in English, so "fünf hundert" is 500;
+        - `hundert` and `tausend` on their own are the plain numbers 100 and 1000 (round 6: German number words never combine);
         - like the Spanish ones, a one-word German number from 100 to 999 closes a run that already holds a number;
         - the units are `eins`/`ein`, `zwei`–`neun`, `zehn`, `elf` and `zwölf`; the teens `dreizehn`–`neunzehn` (`sechzehn`, `siebzehn`); the tens `zwanzig`, `dreissig`, `vierzig`–`neunzig` (`sechzig`, `siebzig`);
         - `einhalb` is a half (0.5); `eineinhalb` is 1.5 and `zweieinhalb`–`neuneinhalb` are n + 0.5, with no 1 from their `ein`;
@@ -88,6 +88,15 @@ A number a model writes is kept only if the source states it. The workshop rule 
         - **`Acht` meaning "care" states nothing:** after `ausser`, or before `geben`, `nehmen` or `lassen` (and their participles), as in "in Acht nehmen" and "außer Acht lassen" (round 5, #3).
         - **The halves `halb`–`halbes` and `einhalb` join no number before them, and end their run:** "zwei halbe Tabletten" states 2 and 0.5, never 2.5 (round 2, #4), and "um halb zwei" (1:30) states 0.5 and 2, never 2.5 (round 4, #1).
         - `zweimal`, `dreimal` and the like state nothing, as "twice" doesn't.
+      - **Round 6: a Spanish or German number states an amount only before a unit or dose word.**
+        - **Why:** five review rounds each found new idioms that stated a number nobody said (times, percentages, "in Acht nehmen", an article added to a number). So the rule is now structural, not a list of idioms.
+        - **The rule:** a run that holds a Spanish or German word states its values only when the token right after it is a unit or dose word. A Spanish or German word here means a number, an article, a half, `mil`, `coma`, `komma`, `hundert` or `tausend`.
+        - **The unit and dose words:** the unit words above; `milligram(s)`, `gram(s)`, `microgram(s)`, `millilitre(s)` and `milliliter(s)`; the Spanish dose words; and `Tablette(n)`, `Filmtablette(n)`, `Retardtablette(n)`, `Kapsel(n)`, `Retardkapsel(n)` and `Dragee(s)`.
+        - **Anywhere else the run states nothing:** "tengo cuarenta años", "a las dos", "ich gebe Acht" and "veinte por ciento" state nothing.
+        - **A bare amount fails closed:** "Panadol de quinientos" states nothing, so its 500 is dropped and the finding becomes `insufficient_information`. A decimal ("dos coma cinco miligramos") counts when the token after its last digit is a unit or dose word.
+        - **German number words never combine:** each token is its own number, so "fünf hundert Milligramm" states 100, never 500, and "um sechs hundert Milligramm" never 600.
+        - **An article joins no number:** "vier Ein-Gramm-Tabletten" states 1, never 5.
+        - **English and Arabic are unchanged.** The earlier Spanish and German rules (`y`, hundreds, `mil`, halves, `coma`) still decide what a run is.
       - **Unicode:** `stated_amounts` reads its text in NFC, so decomposed accents read as composed ones (round 2, #6).
       - **The unit words:** `mg`, `g`, `mcg`, `µg`, `ml`, `miligramo(s)`, `gramo(s)`, `microgramo(s)`, `mililitro(s)`, `milligramm`, `gramm`, `mikrogramm` and `milliliter`.
       - **So** "quinientos" is 500, "veinticinco" 25, "treinta y cinco" 35 and "ochocientos setenta y cinco" 875. "dos coma cinco" is 2.5, "uno y medio" 1.5 and "un gramo" 1. "diez y cincuenta" states 10 and 50, never 60.

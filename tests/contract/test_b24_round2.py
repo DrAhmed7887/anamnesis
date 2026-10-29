@@ -77,7 +77,7 @@ def test_english_mil_states_no_thousand(text):
     assert not {Decimal(1000), Decimal(5000), Decimal(10000)} & stated_amounts(text)
 
 
-@pytest.mark.parametrize(("text", "value"), [("dos mil miligramos", "2000"), ("mil doscientos", "1200"),
+@pytest.mark.parametrize(("text", "value"), [("dos mil miligramos", "2000"), ("mil doscientos miligramos", "1200"),
                                              ("mil miligramos", "1000")])
 def test_spanish_mil_is_still_a_thousand(text, value):
     assert Decimal(value) in stated_amounts(text)
@@ -112,7 +112,7 @@ def test_these_never_state_the_value(text, value):
 
 
 @pytest.mark.parametrize(("text", "value"), [
-    ("uno y medio", "1.5"), ("dos coma cinco miligramos", "2.5"), ("zwei Komma null fünf", "2.05"),
+    ("uno y medio comprimidos", "1.5"), ("dos coma cinco miligramos", "2.5"), ("zwei Komma null fünf Milligramm", "2.05"),
     (unicodedata.normalize("NFD", "veintitrés miligramos"), "23"),
     (unicodedata.normalize("NFD", "fünfhundert Milligramm"), "500"),
 ])

@@ -52,8 +52,9 @@ def test_these_never_state_the_value(text, value):
 
 
 @pytest.mark.parametrize(("text", "value"), [
-    ("uno y medio", "1.5"), ("dos y media", "2.5"), ("medio comprimido", "0.5"), ("media pastilla", "0.5"),
-    ("eine halbe Tablette", "0.5"), ("zweieinhalb Tabletten", "2.5"), ("veinte por ciento", "20"),
+    ("uno y medio comprimidos", "1.5"), ("dos y media pastillas", "2.5"), ("medio comprimido", "0.5"),
+    ("media pastilla", "0.5"), ("eine halbe Tablette", "0.5"), ("zweieinhalb Tabletten", "2.5"),
+    ("veinte miligramos", "20"),
 ])
 def test_real_halves_and_numbers_still_read(text, value):
     assert Decimal(value) in stated_amounts(text)

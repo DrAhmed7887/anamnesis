@@ -19,40 +19,39 @@ STATED = [
     ("ciento veinte miligramos", "120"),
     ("mil miligramos", "1000"),
     ("dos mil miligramos", "2000"),
-    ("doscientas cincuenta", "250"),
+    ("doscientas cincuenta miligramos", "250"),
     ("dos coma cinco miligramos", "2.5"),
     ("medio comprimido", "0.5"),
-    ("uno y medio", "1.5"),
-    ("dos y media", "2.5"),
+    ("uno y medio comprimidos", "1.5"),
+    ("dos y media pastillas", "2.5"),
     ("un gramo", "1"),
     ("veintitrés miligramos", "23"),
     ("veintitres miligramos", "23"),
-    ("dieciséis", "16"),
+    ("dieciséis miligramos", "16"),
     ("Quinientos miligramos", "500"),
-    ("dos veces al día", "2"),
     ("treinta y un miligramos", "31"),  # "un" before a unit word is 1, and "y" joins it to the ten
     # German
     ("fünfhundert Milligramm", "500"),
     ("fünfhundertfünfundsiebzig Milligramm", "575"),
     ("zweihundertfünfzig Milligramm", "250"),
     ("dreißig Milligramm", "30"),
-    ("einundzwanzig", "21"),
+    ("einundzwanzig Milligramm", "21"),
     ("hundert Milligramm", "100"),
     ("einhundert Milligramm", "100"),
     ("tausend Milligramm", "1000"),
-    ("zweitausend", "2000"),
+    ("zweitausend Milligramm", "2000"),
     ("zwei Komma fünf Milligramm", "2.5"),
     ("eine halbe Tablette", "0.5"),
     ("zweieinhalb Tabletten", "2.5"),
     ("eineinhalb Tabletten", "1.5"),
     ("einhalb Tablette", "0.5"),  # a half: only eineinhalb is 1.5 (CEO's reference build)
-    ("fünf hundert Milligramm", "500"),  # "hundert" on its own is a hundred word
+    ("fünf hundert Milligramm", "100"),  # German numbers never combine (round 6)
     ("ein Gramm", "1"),
-    ("zwölf", "12"),
-    ("sechzehn", "16"),
-    ("siebzehn", "17"),
-    ("sechzig", "60"),
-    ("siebzig", "70"),
+    ("zwölf Milligramm", "12"),
+    ("sechzehn Milligramm", "16"),
+    ("siebzehn Milligramm", "17"),
+    ("sechzig Milligramm", "60"),
+    ("siebzig Milligramm", "70"),
 ]
 
 
@@ -71,6 +70,7 @@ NEVER = [
     ("tomo once miligramos", "11"),  # Spanish "once" is left out: it is English "once"
     ("cinco cien", "105"),  # a hundreds word closes a run that holds a number
     ("cinco cien", "500"),
+    ("fünf hundert Milligramm", "500"),  # German numbers never combine (round 6)
 ]
 
 
@@ -85,15 +85,16 @@ def test_these_never_state_the_value(text, value):
     "zweimal täglich",  # as "twice" states nothing
     "Bitte Achtung",  # a token that isn't wholly a number (#6)
     "eine Einheit",
+    "dos veces al día",  # a Spanish or German number outside an amount (round 6)
 ])
 def test_these_state_nothing(text):
     assert stated_amounts(text) == frozenset()
 
 
 def test_the_separate_numbers_of_a_spanish_list_stay_separate():
-    found = stated_amounts("tomo comprimidos de diez y cincuenta miligramos")
+    found = stated_amounts("tomo comprimidos de diez miligramos y cincuenta miligramos")
     assert {Decimal(10), Decimal(50)} <= found
-    found = stated_amounts("ochocientos setenta y cinco cien")
+    found = stated_amounts("ochocientos setenta y cinco miligramos, cien miligramos")
     assert {Decimal(875), Decimal(100)} <= found
 
 

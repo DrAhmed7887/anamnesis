@@ -57,8 +57,8 @@ def test_these_never_state_the_value(text, value):
 
 
 @pytest.mark.parametrize(("text", "value"), [
-    ("ciento veinte", "120"), ("doscientos cincuenta", "250"), ("mil quinientos", "1500"), ("fünf hundert", "500"),
-    ("cuarenta y cinco", "45"), ("a las ocho cuarenta y cinco", "45"), ("una y media", "1.5"), ("in acht Tagen", "8"),
+    ("ciento veinte miligramos", "120"), ("doscientos cincuenta miligramos", "250"), ("mil quinientos miligramos", "1500"),
+    ("cuarenta y cinco miligramos", "45"), ("una y media pastillas", "1.5"), ("acht Tabletten", "8"),
 ])
 def test_these_still_read(text, value):
     assert Decimal(value) in stated_amounts(text)
