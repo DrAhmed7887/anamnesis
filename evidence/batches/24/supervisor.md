@@ -219,3 +219,30 @@ On the same corpus, English and Arabic gave exactly the results of 843f64f, in b
 - **Finding 4:** English "coma" reads as 843f64f did again. "two point cinco" stays: it fails closed.
 - **Finding 5:** fixed in round 8.
 - **Finding 6:** the round 8 brief asks for the cleanup.
+
+## Round 8 review: SUPERVISOR: CHANGES
+1. **High, plausible: a Spanish or German number of 100 or more joined an English number after it.**
+   - "Ich nehme Pregabalin zweihundertfünfzig two hundred fifty Milligramm." stated 150, and Pregabalin 150 mg reached `match`.
+   - So did "vierhundertzwanzig four hundred twenty" (120), "dos mil quinientos two thousand five hundred" (1500), "quinientos fifty milligrams" (550) and "fünfhundert fifty Milligramm" (550).
+   - Round 7's pair check needed both numbers under 100.
+2. **High, plausible: the clock rule read the English "LA" of long-acting brands as an hour, so English no longer read as before batch 24.**
+   - "I take Cardizem LA four hundred twenty milligrams of diltiazem." stated 120, and Cardizem LA 120 mg reached `match`. "Inderal LA two hundred fifty mg" stated 150.
+   - "Adalat LA 30 ملغ" lost its 30.
+3. **Minor (word salad, or amounts no tablet has):**
+   - `menos` minutes;
+   - compound minutes joining `mil` ("hasta la una y treinta y cinco mil doscientos miligramos" stated 5200);
+   - German before Spanish `mil` ("um sieben mil quinientos pastillas" stated 7500);
+   - English before Spanish ("two hundred cincuenta milligrams" stated 250);
+   - "null point fünf Milligramm" stated 0.5, "ocho coma three milligrams" 8.3, and "treinta y ein mg" 31.
+
+**Held:** the Spanish clock rule (hours, minutes, `y media`, `y cuarto`, digit hours), no German clock rule, the closes before English and Arabic multipliers, halves and points, the mixed decimal, `y`, `coma`/`komma`, German `null`, and every earlier fix except round 7's no-join for numbers of 100 or more.
+
+**CEO's triage:**
+- **Finding 1 becomes one rule:** a run never mixes languages, in either direction. It replaces round 7's pair check and round 8's close.
+- **Finding 2:** `la` is an hour only before `una`, and `las` only before a number up to 24. Spanish says "la" only for one o'clock, so no English "LA" can trigger it.
+- **From item 3, fixed:** `menos` minutes, compound minutes, English before Spanish (covered by the no-mixing rule), and `y` with German `ein`. All four are in the clock and join rules that round 9 touches anyway.
+- **From item 3, recorded and not fixed:**
+  - German before Spanish `mil` is word salad.
+  - "ocho coma three" states the number said.
+  - "null point fünf Milligramm" is 0.5, which is right.
+- **Also recorded:** a digit time with a colon ("a las 8:40") states its minutes in every language. The code before batch 24 does the same in English.

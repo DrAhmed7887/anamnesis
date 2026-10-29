@@ -180,3 +180,34 @@ The first clock-time check the reference had was redundant, so no test caught it
 | `null` isn't a German word | 1 |
 | `coma` after an English number is a point | 1 |
 | `y` joins an English 1–9 | 1 |
+
+## Round 9: no mixed runs, and `la` is an hour only in `la una`
+- **Contract:** `test_b24_round9.py`, 31 tests. On Muse's round 8 code, 26 fail and 5 pass. All 4 end-to-end false matches are among the 26.
+- **Reference build:** **2,364 passed**, ruff clean.
+- **Differential:**
+  - **English and Arabic:** exactly the results of 843f64f on all 21,747 fuzz phrases.
+  - **Spanish, German and mixed:** 88 of the 25,292 phrases differ from round 8's reference.
+    - 5 state less.
+    - 83 state more. Every new value but one is a value 843f64f states for the same phrase.
+    - The one exception: "la - doscientos - tres comprimido" states 203. That is a Spanish number before a dose word (round 6), which round 8 had wrongly taken for an hour.
+- **Two simplifications while building it:**
+  - Compound minutes don't require a ten before the `y`.
+  - `las` takes no German hour, which is word salad.
+
+**One mutant per rule** (failures in `tests/contract`):
+
+| Mutant | Failures |
+|---|---|
+| Only round 8's close (multipliers, halves, points) | 7 |
+| A Spanish word joins an English run | 1 |
+| `la` before any number | 8 |
+| `las` with any number word | 1 |
+| `las` with any digits, in the word pass | 1, after a pin added for it: "tomo las 300 y cuarenta y dos pastillas" states 42. It survived the first run |
+| No digit hour | 1 |
+| A digit hour of any size | 1 |
+| A digit hour before a dose word is still an hour | 1 |
+| No minutes after `menos` | 4 |
+| No compound minutes | 4 |
+| Compound minutes take any number | 1 |
+| Compound minutes before a dose word are still minutes | 2 |
+| `y` joins a German article | 1 |
