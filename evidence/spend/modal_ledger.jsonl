@@ -11,3 +11,4 @@
 {"model_id": "glimmer-train-smoke@modal", "run": "smoke2", "gpu": "H100", "seconds": 123.7, "cost_usd": "0.15749", "estimated": true, "at": "2026-10-29T12:36:44+00:00"}
 {"model_id": "glimmer-eval-smoke@modal", "run": "jobs", "gpu": "H100", "seconds": 431.6, "cost_usd": "0.54937", "estimated": true, "at": "2026-10-29T12:44:28+00:00"}
 {"model_id": "glimmer-train@modal", "run": "r2", "gpu": "H100", "seconds": 893.8, "cost_usd": "1.13767", "estimated": true, "at": "2026-10-29T12:52:10+00:00"}
+{"model_id": "glimmer-eval@modal", "run": "r2", "gpu": "H100", "seconds": 672.6, "cost_usd": "0.85617", "estimated": true, "at": "2026-10-29T13:23:22+00:00"}

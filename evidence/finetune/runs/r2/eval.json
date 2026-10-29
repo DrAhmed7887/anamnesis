@@ -1,0 +1,42 @@
+{
+ "run": "r2",
+ "vllm": "0.32.0",
+ "load_s": 202.2,
+ "max_tokens": 16000,
+ "resumed": 0,
+ "glimmer-base/test_spain": {
+  "wall_s": 388.8,
+  "examples": 60,
+  "opened_answer": 60
+ },
+ "glimmer-lora-r1/test_spain": {
+  "wall_s": 9.1,
+  "examples": 60,
+  "opened_answer": 60
+ },
+ "glimmer-lora-r2/test_spain": {
+  "wall_s": 10.5,
+  "examples": 60,
+  "opened_answer": 60
+ },
+ "glimmer-lora-r2/test_iid": {
+  "wall_s": 8.9,
+  "examples": 100,
+  "opened_answer": 100
+ },
+ "glimmer-lora-r2/test_shift": {
+  "wall_s": 9.5,
+  "examples": 120,
+  "opened_answer": 120
+ },
+ "glimmer-lora-r2/test_codeswitch": {
+  "wall_s": 8.4,
+  "examples": 50,
+  "opened_answer": 50
+ },
+ "glimmer-lora-r2/test_real": {
+  "wall_s": 6.5,
+  "examples": 33,
+  "opened_answer": 33
+ }
+}

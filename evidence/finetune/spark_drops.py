@@ -2,7 +2,9 @@
 """Post-hoc diagnostic, not pre-registered (29 Oct): how many of Spark 1.3's misses on the fine-tune's test splits
 are amounts Spark did send that the product's parser then dropped. From the repo root:
 
-    PYTHONPATH=. .venv/bin/python evidence/finetune/spark_drops.py
+    PYTHONPATH=. .venv/bin/python evidence/finetune/spark_drops.py [--spain]
+
+--spain reads test_spain (finetune/data_v2) instead of r1's four test splits (added 29 Oct, after r2's eval).
 
 parse_claims_json drops both of a claim's amounts when one of them is dropped (SPEC §2). Some shapes of Spark's
 reply set that rule off with no unverified amount in them. Each reply is scored as sent, then again with only
@@ -14,10 +16,12 @@ these shapes rewritten, by the same finetune/score.py:
 
 import json
 import re
+import sys
 from pathlib import Path
 
 from anamnesis.core.catalogue import normalise
 from finetune.common import DATA_DIR, read_jsonl
+from finetune.gen import DATA_V2_DIR
 from finetune.score import FIELDS, score_example
 
 RUNS = Path(__file__).resolve().parent / "runs" / "spark"
@@ -56,11 +60,12 @@ def fully_right(result: dict) -> bool:
 
 
 def main() -> None:
+    data, splits = (DATA_V2_DIR, ("test_spain",)) if "--spain" in sys.argv[1:] else (DATA_DIR, SPLITS)
     for variant in VARIANTS:
         tally = {"examples": 0, "all_correct_as_sent": 0, "all_correct_rewritten": 0, "harmful_after_as_sent": 0,
                  "harmful_after_rewritten": 0, "gained": {}, "lost": {}, "shapes": {}, "lost_at": []}
-        for split in SPLITS:
-            answers = read_jsonl(DATA_DIR / f"{split}.answers.jsonl")
+        for split in splits:
+            answers = read_jsonl(data / f"{split}.answers.jsonl")
             rows = [json.loads(line) for line in (RUNS / f"{split}.jsonl").read_text(encoding="utf-8").splitlines()]
             replies = {row["index"]: row["reply"] for row in rows}
             for answer in answers:
