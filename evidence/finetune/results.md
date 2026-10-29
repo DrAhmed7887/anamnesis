@@ -216,3 +216,21 @@ Pre-registered in `plan.md`, amendment 2 (25a9274), before any r2 call. The tabl
 - **The bar on generated speech:** Spark 1.3 gets 193 of 303 transcripts fully right, with 1 harmful claim.
 - **Learning the key's conventions:** a model trained on this key learns them. That covers the clean name instead of the copied slip (21 of Spark's misses) and null instead of false for an unsaid as-needed (25). It also covers null instead of an empty strength object, which avoids the parser's drops (23). Any gain on those is reported as the product's format learned, which a parser change would give Spark too, not as better listening.
 - **For batch 24, to be pre-registered there:** an empty strength object counts as no strength, and an intake label that is empty or ungrounded becomes the claim's name. On these replies, that keeps 23 intakes, clears the one harmful label and changes nothing else.
+
+## Re-scored after batch 24 (29 Oct, 23:45 CET)
+- **What changed:**
+  - **Batch 24** (bcfa3bc, merged in 6360325) grounds the ingredient fields and counts an empty strength as no strength.
+  - **The scorer** (`finetune/score.py`) now counts harm "after the checks" on the product's parsed output. An INN said under an alias counts as said.
+- **Every number matches the prediction committed before the build** (`evidence/batches/24/rescore-prediction.md`, 7007699). The CEO's reference build made that prediction:
+
+  | System | r1's four splits (303 notes) | test_spain (60 notes) |
+  |---|---|---|
+  | Spark 1.3 | 193 → **203** | 38 → **40** |
+  | Glimmer base | 50 → 51 | 11 → 11 |
+  | Glimmer + LoRA r1 | 290 → 290 | 55 → 55 |
+  | Glimmer + LoRA r2 | 295 → 295 | 56 → 56 |
+
+- **Harmful claims after the checks,** counted on the product's output: 0 for every system on every split. Before batch 24, Spark 1.3 had 1 (the "string" label, test_iid #79), and base Glimmer had 54 on r1's splits and 9 on test_spain (`evidence/batches/24/harm_parsed_merged.out`).
+- **Reading it:**
+  - Spark's 10 extra notes and 23 more intakes come from parser fixes alone. That is the product's format, not better listening.
+  - The headline stays r1: 290 of 303 fully right, with 0 harmful claims.

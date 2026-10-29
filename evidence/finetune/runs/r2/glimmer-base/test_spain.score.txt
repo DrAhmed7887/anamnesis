@@ -3,7 +3,7 @@ valid JSON 52/60 (86.7%); dropped by the product's checks 7; invalid JSON 8; no 
 per-claim field accuracy:
   name_text        72/108 (66.7%)
   inn              77/108 (71.3%)
-  intake           56/108 (51.9%)
+  intake           59/108 (54.6%)
   strength         62/108 (57.4%)
   units_per_intake 64/108 (59.3%)
   intakes_per_day  61/108 (56.5%)
@@ -12,10 +12,10 @@ per-claim field accuracy:
 claims missing 31, extra 0
 transcripts all correct 11/60 (18.3%)
 harmful claims, raw reply, before the product's checks: 23 (unsupported amounts 2, unsupported INNs 22)
-harmful claims, after them: 9 (unsupported amounts 0, unsupported INNs 9)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
 examples with a miss or a harmful claim: 53
-  #0 [en-units-1] c1 name_text: got astudal5, want astudal | c1 intake: got null, want 5 mg | harmful before the checks: INN 'unknown' not in the transcript
-  #1 [ar-strength-2+ar-intake-1] c1 strength: got null, want 32 mg | c2 intake: got null, want 40 mg | c2 units_per_intake: got 1, want null
+  #0 [en-units-1] c1 name_text: got astudal5, want astudal | c1 intake: got 2 mg, want 5 mg | harmful before the checks: INN 'unknown' not in the transcript
+  #1 [ar-strength-2+ar-intake-1] c1 intake: got 1 mg, want null | c1 strength: got null, want 32 mg | c2 units_per_intake: got 1, want null
   #2 [ar-intake-5] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns
   #3 [ar-strength-2] invalid JSON
   #4 [ar-units-1+ar-strength-1+ar-strength-1] c1 intake: got null, want 4 mg | c1 units_per_intake: got null, want 1 | c2 strength: got null, want 50 mg | c2 units_per_intake: got null, want 1 | c2 intakes_per_day: got null, want 1 | c3 strength: got null, want 850 mg | c3 units_per_intake: got null, want 2 | c3 intakes_per_day: got null, want 1
@@ -25,16 +25,16 @@ examples with a miss or a harmful claim: 53
   #8 [ar-intake-2+ar-prn-2+ar-stopped-2] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns
   #9 [ar-stopped-1+ar-intake-3+ar-range_units-1] c2 intakes_per_day: got null, want 1 | c2 as_needed: got False, want null | harmful before the checks: INN '200' not in the transcript | harmful before the checks: INN '40' not in the transcript
   #11 [ar-prn-1+ar-strength-1+ar-plain-2] c1 intake: got null, want 1000 mg | c2 strength: got null, want 20 mg | c2 units_per_intake: got null, want 2 | c2 intakes_per_day: got null, want 2 | c2 as_needed: got False, want null | c3 intakes_per_day: got null, want 1 | c3 as_needed: got False, want null | harmful before the checks: INN 'unknown' not in the transcript | harmful before the checks: amount 2 not stated; INN 'unknown' not in the transcript
-  #12 [ar-strength-1] c1 strength: got null, want 300 mg | c1 as_needed: got False, want null | harmful before the checks: INN 'tablet' not in the transcript
-  #13 [en-intake-6+en-strength-2] c2 strength: got null, want 850 mg | c2 units_per_intake: got null, want 2 | c2 intakes_per_day: got null, want 1 | harmful before the checks: INN '2' not in the transcript
+  #12 [ar-strength-1] c1 intake: got 0.5 g, want null | c1 strength: got null, want 300 mg | c1 as_needed: got False, want null | harmful before the checks: INN 'tablet' not in the transcript
+  #13 [en-intake-6+en-strength-2] c2 intake: got 2 mg, want null | c2 strength: got null, want 850 mg | c2 units_per_intake: got null, want 2 | c2 intakes_per_day: got null, want 1 | harmful before the checks: INN '2' not in the transcript
   #14 [en-intake-13] harmful before the checks: INN '1 milligram' not in the transcript
   #15 [ar-strength-2] c1 strength: got null, want 5 mg | c1 units_per_intake: got null, want 1 | c1 as_needed: got False, want null | harmful before the checks: INN '1' not in the transcript
-  #16 [en-stopped-8+en-intake-14+en-plain-1] c1 intake: got null, want 30 mg | c2 intake: got null, want 5 mg | c2 as_needed: got False, want null
+  #16 [en-stopped-8+en-intake-14+en-plain-1] c2 as_needed: got False, want null
   #17 [ar-stopped-2+ar-strength-2+ar-strength-1] c1 as_needed: got False, want null | c2 strength: got null, want 1000 mg | c2 units_per_intake: got null, want 2 | c2 intakes_per_day: got null, want 2 | c2 as_needed: got False, want null | c3 strength: got null, want 50 mg | c3 units_per_intake: got null, want 2 | c3 intakes_per_day: got null, want 1 | c3 as_needed: got False, want null
   #18 [ar-units-1] c1 intake: got null, want 75 mg | c1 units_per_intake: got null, want 0.5
-  #19 [en-strength-1+en-range_units-2] c1 strength: got null, want 10 mg | c1 as_needed: got False, want null | c2 as_needed: got False, want null | harmful before the checks: INN '0.5' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript
-  #20 [ar-strength-1+ar-intake-2] c1 strength: got null, want 5 mg | c1 units_per_intake: got null, want 2 | c1 intakes_per_day: got null, want 2 | c1 as_needed: got False, want null | c2 intake: got null, want 40 mg | c2 intakes_per_day: got null, want 2 | c2 as_needed: got False, want null | harmful before the checks: amount 2 not stated
-  #21 [en-intake-15+en-stopped-3] c1 intake: got null, want 750 mg | c2 name_text: got nolpazaaza, want nolpaza | c2 intake: got null, want 20 mg | harmful before the checks: INN '20' not in the transcript
+  #19 [en-strength-1+en-range_units-2] c1 intake: got 0.5 mg, want null | c1 strength: got null, want 10 mg | c1 as_needed: got False, want null | c2 as_needed: got False, want null | harmful before the checks: INN '0.5' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript
+  #20 [ar-strength-1+ar-intake-2] c1 strength: got null, want 5 mg | c1 units_per_intake: got null, want 2 | c1 intakes_per_day: got null, want 2 | c1 as_needed: got False, want null | c2 intakes_per_day: got null, want 2 | c2 as_needed: got False, want null | harmful before the checks: amount 2 not stated
+  #21 [en-intake-15+en-stopped-3] c2 name_text: got nolpazaaza, want nolpaza | harmful before the checks: INN '20' not in the transcript
   #22 [en-prn-3+en-intake-16] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns
   #23 [en-intake-5+en-intake-7] invalid JSON
   #24 [ar-intake-2+ar-intake-5+ar-strength-1] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns
@@ -49,7 +49,7 @@ examples with a miss or a harmful claim: 53
   #37 [ar-intake-6] c1 name_text: got cipralexlex, want cipralex | c1 intake: got null, want 15 mg | c1 status: got unknown, want active
   #38 [ar-intake-5+ar-intake-4] harmful before the checks: INN 'unknown' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript
   #39 [en-prn-2+en-prn-3+en-units-1] c3 intake: got null, want 40 mg | c3 units_per_intake: got null, want 1 | c3 as_needed: got False, want null
-  #40 [ar-units-1] c1 intake: got null, want 5 mg | harmful before the checks: INN 'tablet' not in the transcript
+  #40 [ar-units-1] c1 intake: got 0.5 mg, want 5 mg | harmful before the checks: INN 'tablet' not in the transcript
   #41 [en-intake-1+en-units-1] c2 intake: got null, want 5 mg
   #42 [en-prn-5] c1 name_text: got tioner150, want tioner | c1 as_needed: got null, want True
   #43 [ar-strength-1+ar-intake-6] c1 strength: got null, want 40 mg | c2 intake: got null, want 50 mg
@@ -57,7 +57,7 @@ examples with a miss or a harmful claim: 53
   #46 [ar-stopped-2+ar-range_freq-1+ar-intake-3] c2 as_needed: got False, want null | c3 strength: got 20 mg, want null | c3 as_needed: got False, want null | harmful before the checks: INN '4' not in the transcript
   #47 [ar-intake-4] harmful before the checks: INN 'amount_digit_text' not in the transcript
   #48 [ar-intake-3+ar-units-1] harmful before the checks: INN '10 mg' not in the transcript | harmful before the checks: INN '25 mg' not in the transcript
-  #49 [en-intake-14] c1 intake: got null, want 10 mg | c1 as_needed: got False, want null
+  #49 [en-intake-14] c1 as_needed: got False, want null
   #50 [ar-stopped-4+ar-intake-5] invalid JSON
   #51 [en-strength-4+en-intake-3] c1 strength: got null, want 40 mg | c1 intakes_per_day: got null, want 1 | c1 as_needed: got False, want null | missing claim 'Thervan'
   #52 [ar-strength-1+ar-stopped-3] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns | harmful before the checks: INN '15 ملليجرام' not in the transcript

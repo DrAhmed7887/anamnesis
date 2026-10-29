@@ -31,6 +31,7 @@ from anamnesis.providers.base import ProviderError  # noqa: E402
 from anamnesis.providers.claims import parse_claims_json  # noqa: E402
 from anamnesis.providers.numbers import parse_amount_text  # noqa: E402
 from anamnesis.providers.stated import stated_amounts  # noqa: E402
+from anamnesis.schema import PatientClaim, canonical_inn  # noqa: E402
 from finetune.common import DATA_DIR, read_jsonl, turns_from_records  # noqa: E402
 
 FIELDS = (
@@ -122,6 +123,42 @@ def _unsupported(raw: dict, turns: list, keep: tuple[bool, bool] | None) -> list
     return found
 
 
+def _as_said(kept: str | None, written: Any) -> str | None:
+    """The string the product kept, spelled as the model wrote it when the product only canonicalised it."""
+    if kept is not None and isinstance(written, str) and canonical_inn(written) == canonical_inn(kept):
+        return written
+    return kept
+
+
+def _unsupported_kept(claim: PatientClaim, raw: dict, turns: list) -> list[str]:
+    """Amounts and INN strings of one claim as the product kept it that the transcript doesn't support.
+
+    Counted on the product's own output (batch 24): an INN it nulled or a label it replaced no longer counts,
+    and an INN said under an alias ("acetaminophen", kept as "paracetamol") counts as said. Before batch 24
+    the product kept the model's strings as written, so this gives the same counts as the raw reply with the
+    kept fields.
+    """
+    said: set[Decimal] = set()
+    for turn in turns:
+        said |= stated_amounts(turn.transcript)
+    texts = [normalise(turn.transcript) for turn in turns]
+    intake, strength = _dict(raw.get("intake_amount")), _dict(raw.get("strength"))
+    raw_parts = [part for part in strength.get("ingredients") or [] if isinstance(part, dict)]
+    amounts, inns = [], [_as_said(claim.inn, raw.get("inn"))]
+    if claim.intake_amount is not None:
+        amounts.append(claim.intake_amount.amount)
+        inns.append(_as_said(claim.intake_amount.inn, intake.get("inn")))
+    if claim.strength is not None:
+        for index, part in enumerate(claim.strength.ingredients):
+            amounts.append(part.amount)
+            written = raw_parts[index].get("inn") if index < len(raw_parts) else None
+            inns.append(_as_said(part.inn, written))
+    found = [f"amount {amount} not stated" for amount in amounts if amount not in said]
+    found += [f"INN {inn!r} not in the transcript" for inn in inns if isinstance(inn, str) and normalise(inn)
+              and not any(normalise(inn) in text for text in texts)]
+    return found
+
+
 def score_example(answer: dict, reply: Any) -> dict:
     """The outcome of one reply against one answer line."""
     turns = turns_from_records(answer["turns"])
@@ -146,9 +183,8 @@ def score_example(answer: dict, reply: Any) -> dict:
         result.update(outcome="dropped", problems=[f"dropped by the product's checks: {exc}"],
                       missing=len(wanted))
         return result
-    keeps = [(claim.intake_amount is not None, claim.strength is not None) for claim in parsed]
-    result["harm_after"] = [harm for claim, keep in zip(raw_claims, keeps, strict=True)
-                            if (harm := _unsupported(claim, turns, keep))]
+    result["harm_after"] = [harm for claim, raw_claim in zip(parsed, raw_claims, strict=True)
+                            if (harm := _unsupported_kept(claim, raw_claim, turns))]
     got = [fields_of(claim.model_dump(mode="json")) for claim in parsed]
     pairs, missing, extra = align(wanted, got)
     result.update(missing=len(missing), extra=len(extra))

@@ -2,18 +2,18 @@ split test_iid: 100 examples, 100 replies, 185 answer claims
 valid JSON 87/100 (87.0%); dropped by the product's checks 4; invalid JSON 13; no reply 0
 per-claim field accuracy:
   name_text        141/185 (76.2%)
-  inn              110/185 (59.5%)
-  intake           102/185 (55.1%)
+  inn              111/185 (60.0%)
+  intake           103/185 (55.7%)
   strength         137/185 (74.1%)
   units_per_intake 138/185 (74.6%)
   intakes_per_day  129/185 (69.7%)
   as_needed        94/185 (50.8%)
   status           138/185 (74.6%)
 claims missing 39, extra 1
-transcripts all correct 20/100 (20.0%)
+transcripts all correct 21/100 (21.0%)
 harmful claims, raw reply, before the product's checks: 40 (unsupported amounts 3, unsupported INNs 43)
-harmful claims, after them: 22 (unsupported amounts 0, unsupported INNs 26)
-examples with a miss or a harmful claim: 84
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+examples with a miss or a harmful claim: 83
   #0 [ar-intake-1+ar-intake-3] c1 intake: got 80 ml, want 80 mg | c2 intake: got 2.5 ml, want 2.5 mg
   #1 [ar-strength-2+ar-range_units-2+ar-units-1] c1 intake: got 2 g, want null | c1 as_needed: got False, want null | c2 intakes_per_day: got null, want 1 | c2 as_needed: got False, want null | c3 intake: got 2 g, want 2.5 mg | c3 strength: got 2.5 mg, want null | c3 as_needed: got False, want null | harmful before the checks: INN 'unknown' not in the transcript; INN 'unknown' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript; INN 'unknown' not in the transcript
   #3 [ar-plain-1+ar-intake-6+ar-plain-3] c1 inn: got null, want sitagliptin | c3 inn: got null, want indapamide | c3 intakes_per_day: got null, want 1 | c3 as_needed: got False, want null
@@ -25,16 +25,16 @@ examples with a miss or a harmful claim: 84
   #10 [en-strength-4] c1 intake: got 1 mg, want null | c1 as_needed: got False, want null
   #11 [en-range_units-1+en-strength-1] c2 intake: got 2 mg, want null | c2 as_needed: got False, want null
   #12 [en-stopped-1] c1 inn: got null, want glimepiride
-  #14 [ar-stopped-3+ar-range_freq-1] c1 intake: got null, want 850 mg | c1 as_needed: got False, want null | c2 intake: got null, want 650 mg | c2 as_needed: got False, want null | harmful before the checks: INN 'unknown' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript
+  #14 [ar-stopped-3+ar-range_freq-1] c1 intake: got null, want 850 mg | c1 as_needed: got False, want null | c2 as_needed: got False, want null | harmful before the checks: INN 'unknown' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript
   #15 [ar-intake-2+ar-intake-3] invalid JSON
   #17 [ar-intake-5] c1 inn: got null, want indapamide | c1 intake: got 1.25 mcg, want 1.25 mg
-  #18 [ar-strength-1+ar-intake-3] c1 inn: got null, want ramipril | c1 strength: got null, want 2.5 mg | c1 as_needed: got False, want null | c2 intake: got null, want 2.5 mg | c2 units_per_intake: got 1, want null | c2 as_needed: got False, want null
+  #18 [ar-strength-1+ar-intake-3] c1 inn: got null, want ramipril | c1 intake: got 3 mg, want null | c1 strength: got null, want 2.5 mg | c1 as_needed: got False, want null | c2 units_per_intake: got 1, want null | c2 as_needed: got False, want null
   #19 [en-prn-1] c1 inn: got null, want acetaminophen
   #20 [en-intake-7+en-stopped-7] c1 intake: got null, want 10 mg
   #21 [ar-intake-7+ar-intake-8+ar-intake-2] invalid JSON
   #22 [en-stopped-3+en-prn-6] c1 name_text: got mondoxyne40, want mondoxyne | harmful before the checks: INN 'unknown' not in the transcript
   #23 [en-stopped-1+en-intake-7] c2 intake: got null, want 300 mg | c2 status: got unknown, want active
-  #24 [en-strength-4+en-intake-6+en-prn-1] c1 strength: got null, want 0.075 mg | c1 as_needed: got False, want null | missing claim 'atorvastatin' | missing claim 'apixaban' | harmful before the checks: INN 'unknown' not in the transcript
+  #24 [en-strength-4+en-intake-6+en-prn-1] c1 intake: got 2 mg, want null | c1 strength: got null, want 0.075 mg | c1 as_needed: got False, want null | missing claim 'atorvastatin' | missing claim 'apixaban' | harmful before the checks: INN 'unknown' not in the transcript
   #25 [en-intake-8+en-unsure-1] c1 as_needed: got False, want null
   #26 [en-stopped-7+en-brand_inn-3+en-intake-8] invalid JSON
   #27 [ar-range_units-2] c1 inn: got null, want gliclazide | c1 intakes_per_day: got null, want 2 | c1 as_needed: got False, want null
@@ -62,7 +62,6 @@ examples with a miss or a harmful claim: 84
   #51 [en-intake-4] invalid JSON
   #52 [ar-plain-3+ar-plain-3] c1 intakes_per_day: got null, want 2 | c1 as_needed: got False, want null | c2 intakes_per_day: got null, want 1 | c2 as_needed: got False, want null
   #53 [ar-range_freq-1+ar-units-1] c2 intake: got null, want 500 mg | c2 strength: got 500 ml, want null
-  #54 [ar-prn-3] c1 intake: got null, want 50 mg
   #55 [en-units-1+en-intake-4] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns
   #56 [en-range_units-2+en-range_units-4+en-range_freq-3] c1 intakes_per_day: got null, want 1 | c1 as_needed: got False, want null | c3 units_per_intake: got 1, want null | c3 as_needed: got False, want null | harmful before the checks: INN '2-3 tablets' not in the transcript | harmful before the checks: INN '2-3 tablets' not in the transcript | harmful before the checks: INN '90 mg' not in the transcript
   #57 [en-plain-7+en-prn-3+en-range_freq-1] c3 as_needed: got False, want null | harmful before the checks: INN 'value_digits' not in the transcript
@@ -78,7 +77,7 @@ examples with a miss or a harmful claim: 84
   #67 [ar-intake-1+ar-range_units-2+ar-range_freq-1] c2 inn: got null, want warfarin | c3 inn: got null, want metformin | c1 name_text: got januviajanuvia, want januvia | harmful before the checks: INN 'value_text 25' not in the transcript | harmful before the checks: INN 'value_text 1 or 2 pills' not in the transcript | harmful before the checks: INN 'value_text 850' not in the transcript
   #68 [ar-units-1] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns
   #70 [ar-range_freq-1+ar-intake-8] c1 inn: got null, want amitriptyline | c1 as_needed: got False, want null | c2 inn: got null, want simvastatin | c2 as_needed: got False, want null
-  #72 [ar-intake-3+ar-brand_inn-1+ar-prn-2] c1 inn: got null, want null | c1 strength: got 2.5 mg, want null | c1 units_per_intake: got 1, want null | c1 as_needed: got False, want null | c2 strength: got 10 mg, want null | c2 units_per_intake: got 1, want null | c2 as_needed: got False, want null | c3 inn: got null, want terbinafine | harmful before the checks: INN 'null' not in the transcript; INN 'null' not in the transcript; INN 'null' not in the transcript | harmful before the checks: INN 'null' not in the transcript
+  #72 [ar-intake-3+ar-brand_inn-1+ar-prn-2] c1 strength: got 2.5 mg, want null | c1 units_per_intake: got 1, want null | c1 as_needed: got False, want null | c2 strength: got 10 mg, want null | c2 units_per_intake: got 1, want null | c2 as_needed: got False, want null | c3 inn: got null, want terbinafine | harmful before the checks: INN 'null' not in the transcript; INN 'null' not in the transcript; INN 'null' not in the transcript | harmful before the checks: INN 'null' not in the transcript
   #73 [ar-intake-6+ar-intake-5+ar-prn-1] c1 intake: got null, want 80 mg | c2 inn: got null, want spironolactone | c2 intake: got null, want 100 mg | c2 intakes_per_day: got null, want 1 | c3 inn: got null, want acetaminophen | c3 intake: got null, want 325 mg | c3 as_needed: got null, want True
   #74 [en-range_units-2+en-intake-15+en-stopped-3] c1 inn: got null, want alendronicacid | c1 intakes_per_day: got null, want 2 | c1 as_needed: got False, want null | c2 as_needed: got False, want null | c3 inn: got null, want warfarin | c3 as_needed: got False, want null | harmful before the checks: INN '5 mg' not in the transcript
   #75 [ar-intake-2+ar-brand_inn-1+ar-unsure-1] invalid JSON
@@ -91,10 +90,10 @@ examples with a miss or a harmful claim: 84
   #85 [en-range_freq-3+en-intake-13] harmful before the checks: INN '300' not in the transcript | harmful before the checks: INN '0.4' not in the transcript
   #86 [ar-stopped-1+ar-intake-4] c1 inn: got null, want gliclazide | c2 intake: got 50 ml, want 50 mg | c2 units_per_intake: got 50, want null | harmful before the checks: INN '50 مللي جرام' not in the transcript
   #87 [en-intake-8+en-intake-6+en-stopped-7] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns
-  #88 [ar-intake-7+ar-prn-1] c1 intake: got null, want 70 mg | c1 status: got unknown, want active | c2 intake: got null, want 40 mg | c2 status: got unknown, want active | harmful before the checks: INN 'unknown' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript
+  #88 [ar-intake-7+ar-prn-1] c1 intake: got 70 ml, want 70 mg | c1 status: got unknown, want active | c2 intake: got 40 ml, want 40 mg | c2 status: got unknown, want active | harmful before the checks: INN 'unknown' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript
   #89 [ar-intake-5+ar-prn-1] c1 intakes_per_day: got null, want 1 | c1 as_needed: got False, want null | harmful before the checks: INN '50' not in the transcript | harmful before the checks: INN '500' not in the transcript
   #91 [ar-intake-5] c1 intake: got null, want 20 mg | c1 intakes_per_day: got null, want 1
   #94 [ar-stopped-3] harmful before the checks: INN '25' not in the transcript
   #96 [en-range_units-2+en-range_units-4] c2 inn: got null, want amlodipine
-  #97 [ar-intake-7+ar-intake-1] c1 intake: got null, want 15 mg | c1 status: got unknown, want active | c2 intake: got null, want 750 mg | c2 as_needed: got False, want null | harmful before the checks: INN 'unknown' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript
+  #97 [ar-intake-7+ar-intake-1] c1 intake: got 15 ml, want 15 mg | c1 status: got unknown, want active | c2 intake: got 750 ml, want 750 mg | c2 as_needed: got False, want null | harmful before the checks: INN 'unknown' not in the transcript | harmful before the checks: INN 'unknown' not in the transcript
   #98 [ar-stopped-3+ar-intake-3+ar-intake-6] c1 intake: got null, want 5 mg | c2 as_needed: got False, want null

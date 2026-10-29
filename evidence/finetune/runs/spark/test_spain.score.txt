@@ -3,17 +3,17 @@ valid JSON 60/60 (100.0%); dropped by the product's checks 0; invalid JSON 0; no
 per-claim field accuracy:
   name_text        99/108 (91.7%)
   inn              107/108 (99.1%)
-  intake           93/108 (86.1%)
+  intake           96/108 (88.9%)
   strength         105/108 (97.2%)
   units_per_intake 107/108 (99.1%)
   intakes_per_day  105/108 (97.2%)
   as_needed        103/108 (95.4%)
   status           104/108 (96.3%)
 claims missing 1, extra 0
-transcripts all correct 38/60 (63.3%)
+transcripts all correct 40/60 (66.7%)
 harmful claims, raw reply, before the product's checks: 1 (unsupported amounts 0, unsupported INNs 1)
 harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
-examples with a miss or a harmful claim: 23
+examples with a miss or a harmful claim: 21
   #0 [en-units-1] c1 name_text: got astudal5, want astudal | c1 intake: got null, want 5 mg
   #6 [en-plain-7+en-plain-3] c1 name_text: got aldocumarplusthervan, want aldocumar | c1 intakes_per_day: got 4, want null | missing claim 'Thervan'
   #7 [en-intake-14] c1 as_needed: got False, want null
@@ -24,14 +24,12 @@ examples with a miss or a harmful claim: 23
   #26 [ar-plain-3+ar-range_units-1] harmful before the checks: INN 'null' not in the transcript
   #28 [ar-intake-1+ar-stopped-1] c1 name_text: got tionerner, want tioner
   #29 [ar-range_units-2+ar-range_units-1] c1 as_needed: got False, want null
-  #32 [en-stopped-8+en-intake-1] c1 intake: got null, want 10 mg | c2 intake: got null, want 50 mg
   #36 [ar-intake-7] c1 name_text: got thervanthervan, want thervan | c1 intake: got null, want 80 mg | c1 status: got unknown, want active
   #37 [ar-intake-6] c1 name_text: got cipralexlex, want cipralex | c1 intake: got null, want 15 mg
   #39 [en-prn-2+en-prn-3+en-units-1] c2 intake: got null, want 30 mg | c3 intake: got null, want 40 mg
   #40 [ar-units-1] c1 intake: got null, want 5 mg
   #41 [en-intake-1+en-units-1] c2 intake: got null, want 5 mg | c2 strength: got 5 mg, want null
   #42 [en-prn-5] c1 name_text: got tioner150, want tioner
-  #43 [ar-strength-1+ar-intake-6] c2 intake: got null, want 50 mg
   #45 [ar-strength-2] c1 intake: got 10 mg, want null | c1 as_needed: got False, want null
   #52 [ar-strength-1+ar-stopped-3] c1 name_text: got cipralexlex, want cipralex | c1 intake: got 15 mg, want null
   #54 [en-units-1] c1 intake: got null, want 300 mg

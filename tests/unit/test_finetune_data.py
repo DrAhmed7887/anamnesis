@@ -205,7 +205,8 @@ def test_the_scorer_counts_drops_invalid_json_and_harm(data):
     }
     results = {name: scorer.score_example(lines[index], text) for name, text in cases.items()}
     assert results["right"]["problems"] == [] and results["right"]["harm_before"] == []
-    assert results["inferred"]["harm_before"] and results["inferred"]["harm_after"]  # the inn is kept
+    # batch 24 nulls the unsaid inn, so it is no longer kept
+    assert results["inferred"]["harm_before"] and not results["inferred"]["harm_after"]
     assert results["unstated"]["harm_before"] and not results["unstated"]["harm_after"]  # the amount isn't
     assert results["unstated"]["problems"] == ["c1 intake: got null, want 5 mg"]
     assert results["ungrounded"]["outcome"] == "dropped"
