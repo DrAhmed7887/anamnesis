@@ -264,3 +264,15 @@ On the same corpus, English and Arabic gave exactly the results of 843f64f, in b
   - The round 8 contract's word-salad pin "a las eight y cuarenta y dos pastillas" is removed.
   - This was picked over the supervisor's lookahead, which would still have suppressed English words after "LAs", because it leaves English text untouched. The one exception is digits after "LAs" with no unit, which fail closed.
 - **Finding 2:** round 6's "an article joins no number" now covers numbers of every size. Only Spanish `y` joins an article.
+
+## Round 10 review: SUPERVISOR: APPROVE
+Three minors, none on a plausible input. All are recorded in `review.md` for after the freeze.
+1. **An English decimal with Spanish digits:** an English number, an English `point` and Spanish digit words read as one decimal. "Tomo indapamida, at one point cinco miligramos." states 1.5.
+2. **German and Spanish in one number:** "hundert veinticinco microgramos" states 125, and "acht y medio comprimido" 8.5. This is the family of the recorded "um sieben mil quinientos".
+3. **An English hour inside Spanish clock syntax:** "a las eight y cinco mil miligramos". It follows from round 10's design, and the same sentence with a Spanish or digit hour states only 1000.
+
+**Held:**
+- Both round 10 rules, on 20,000 generated LA/LAs/las phrases.
+- English and Arabic, unchanged from 843f64f on 40,000 random inputs.
+- Every earlier fix.
+- A 90,000-input concatenation fuzz found no new family.
