@@ -1,5 +1,7 @@
 # Plan to the freeze: Spanish and German, 29 Oct 2026, 15:30 CET (grilled before Ahmed decides)
 
+**Correction, 29 Oct 14:31 CET:** the clock times in this file and in `grill-prompt.md` are wrong ("15:30 CET", and the credits read "at 14:45"). Both files were written before 14:11 CET, when they were committed (843f64f). `grill-prompt.md` stays as it was sent.
+
 ## Where things stand
 - **`main` at 25a9274:** 2,075 tests pass. The feature freeze is Sat 31 Oct 23:59 CET; submission is Wed 4 Nov by 15:00.
 - **The fine-tune:**
