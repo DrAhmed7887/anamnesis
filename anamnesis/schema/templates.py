@@ -134,6 +134,16 @@ TIMELINE_COLUMNS = ("#", "Step", "Target", "Outcome", "Model", "Tokens in", "Tok
 TIMELINE_NONE = "—"
 TIMELINE_TOTAL = "Total: {calls} calls, ${usd}"
 
+CATALOGUE_CODES_LINE = "Catalogue codes: {codes}"
+CATALOGUE_CODES_ATC = "ATC {code}"
+CATALOGUE_CODES_RXNORM = "RxNorm {codes}"
+CATALOGUE_CODES_SEPARATOR = " · "
+CATALOGUE_CODES_RX_SEPARATOR = ", "
+CATALOGUE_CODES_REFERENCE = (
+    "ATC codes: WHO Collaborating Centre for Drug Statistics Methodology, "
+    "as listed by AEMPS CIMA on 29 Oct 2026. RxNorm codes: RxNav. Sources and terms: NOTICE."
+)
+
 QUESTION_FOR: dict[D, str | None] = {
     D.MATCH: None,
     D.STRENGTH_MISMATCH: "strength",

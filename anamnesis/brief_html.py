@@ -9,6 +9,11 @@ from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.review import RequestKind, RequestStatus, ReviewStatus
 from anamnesis.schema.templates import (
     BRIEF_TITLE,
+    CATALOGUE_CODES_ATC,
+    CATALOGUE_CODES_LINE,
+    CATALOGUE_CODES_RX_SEPARATOR,
+    CATALOGUE_CODES_RXNORM,
+    CATALOGUE_CODES_SEPARATOR,
     FIELD_COUNTRY,
     FIELD_INN,
     FIELD_INTAKE,
@@ -202,7 +207,37 @@ def _request_html(finding, review) -> str:
     return "".join(f'<p data-request="{_esc(rid)}">{REVIEW_REQUESTED}</p>' for rid in lines)
 
 
-def _finding_html(finding, claims, observations, turns, review=None) -> str:
+def _codes_entry(finding, claims, observations, catalogue):
+    if catalogue is None:
+        return None
+    if finding.claim_id is not None:
+        claim = claims.get(finding.claim_id)
+        if claim is None:
+            return None
+        entry = catalogue.resolve(claim.name_text)
+    else:
+        pack = observations.get(finding.observation_id) if finding.observation_id else None
+        if pack is None or not pack.label_text:
+            return None
+        entry = catalogue.resolve(pack.label_text)
+    if entry is None:
+        return None
+    if entry.atc is None and not entry.rxcui:
+        return None
+    return entry
+
+
+def _codes_html(entry) -> str:
+    parts = []
+    if entry.atc is not None:
+        parts.append(CATALOGUE_CODES_ATC.format(code=_esc(entry.atc)))
+    if entry.rxcui:
+        joined = CATALOGUE_CODES_RX_SEPARATOR.join(_esc(code) for code in entry.rxcui)
+        parts.append(CATALOGUE_CODES_RXNORM.format(codes=joined))
+    return f"<p>{CATALOGUE_CODES_LINE.format(codes=CATALOGUE_CODES_SEPARATOR.join(parts))}</p>"
+
+
+def _finding_html(finding, claims, observations, turns, review=None, catalogue=None) -> str:
     claim = claims.get(finding.claim_id) if finding.claim_id else None
     pack = observations.get(finding.observation_id) if finding.observation_id else None
     question = QUESTION_FOR[finding.type]
@@ -228,6 +263,8 @@ def _finding_html(finding, claims, observations, turns, review=None) -> str:
         parts.append(f"{HEARD_IN}: {', '.join(heard)}")
     if seen:
         parts.append(f"{SEEN_IN}: {', '.join(seen)}")
+    entry = _codes_entry(finding, claims, observations, catalogue)
+    codes = _codes_html(entry) if entry is not None else ""
     return (
         f'<article id="finding:{_esc(finding.finding_id)}" '
         f'data-type="{finding.type.value}"><h3 dir="auto">{_heading(finding, claims, observations)}</h3>'
@@ -236,6 +273,7 @@ def _finding_html(finding, claims, observations, turns, review=None) -> str:
         f'<div data-side="patient"><h4>{PATIENT_SIDE_HEADING}</h4>{_patient_html(claim)}</div>'
         f'<div data-side="pack"><h4>{PACK_SIDE_HEADING}</h4>{_pack_html(pack)}</div>'
         "</div>"
+        f"{codes}"
         f"<p>{'; '.join(parts)}</p></article>"
     )
 

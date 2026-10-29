@@ -97,12 +97,18 @@ def _ingredient_names(record: dict[str, Any]) -> tuple[str, ...]:
     return (inn,) if rxnorm_name == inn else (inn, rxnorm_name)
 
 
+# The catalogue entries the fine-tune was built on (29 Oct). An entry added later (batch 24.1: Emconcor,
+# Sortis, Nolotil) stays out, so r1's and r2's data still regenerate byte for byte.
+FINETUNE_BRANDS = ("Concor", "Beloc-Zok", "Norvasc", "Glucophage", "Panadol", "Panadol Extra", "Augmentin",
+                   "Lipitor", "Gelocatil")
+
+
 def load_medicines() -> list[Medicine]:
     """Catalogue entries first (catalogue order), then RxNorm's 60 (file order)."""
     records = _rxnorm_records()
     by_inn = {record["inn"]: record for record in records}
     medicines = []
-    for entry in load_catalogue().entries:
+    for entry in (entry for entry in load_catalogue().entries if entry.brand in FINETUNE_BRANDS):
         inns = tuple(sorted(entry.inns))
         record = by_inn.get(inns[0]) if len(inns) == 1 else None
         medicines.append(Medicine(

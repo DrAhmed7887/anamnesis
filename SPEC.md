@@ -304,6 +304,21 @@ The first rule that applies wins.
 - The country is a preference, never a filter: candidate entries sort country-match first (case-insensitive), then by brand, so the result is deterministic.
 - Entries carry `release` and `splittable` (`true`, `false` or `null`). All entries are synthetic.
 - **Glucophage and Augmentin imply no release (batch 24).** RxNorm records extended-release products under both brands (`evidence/data/rxnorm_catalogue.md`, "Release forms to check by hand"), so both entries carry `release: unknown`. "Glucophage 500 mg" against a Glucophage XR pack is `insufficient_information` (rule 10), not `formulation_mismatch`.
+- **Codes (batch 24.1).** An entry may carry two kinds of code:
+  - `atc`: one WHO ATC code, as AEMPS CIMA lists it;
+  - `rxcui`: the RxNorm ingredient ids of its INNs, from NLM's RxNav.
+
+  Both were read on 29 Oct (`evidence/data/drugs_v2.json`).
+  - **Emconcor and Sortis** carry their ingredient's codes.
+  - **Nolotil** carries CIMA's N02BB02 (registration 47633) and RxCUI 3523, RxNorm's ingredient "dipyrone", the US name for metamizole. That id was read in the browser on 29 Oct (`rxcui.json?name=metamizole&search=2` and `rxcui/3523/properties.json`), because the engine's shell sandbox can't reach RxNav.
+  - **No SNOMED CT id is in the product.**
+  - `NOTICE` gives each source's terms.
+- **Three entries (batch 24.1):**
+  - Emconcor: bisoprolol; release immediate; splittable; [ES];
+  - Sortis: atorvastatin; immediate; not splittable; [DE];
+  - Nolotil: metamizole; immediate; a capsule, so not splittable; [ES].
+
+  With them, live cases S1 and G3 resolve (`evidence/batches/24/manifest.md`).
 
 ## 4. Agent loop (`anamnesis/agent/`, batches 14 and 15.5)
 `run_intake(audio, images, ...)` runs a **fixed order**; no model chooses actions, nothing a model wrote is surfaced except source data (transcripts, label text), and there are no outer retries (adapters retry once themselves).
@@ -369,6 +384,10 @@ Billing-uncertain failures are recorded at the pre-call estimate. Rejected 4xx a
 - its heading, an `<h3>`: the first non-blank line of the claim's `name_text`, otherwise of the label text, otherwise "Unnamed pack";
 - `TEMPLATES[type]`, and the patient question when there is one;
 - the two sides **side by side**: `data-side="patient"` (name, the scalar `inn` when there is one, strength and intake amount with each ingredient's salt, regimen and status, verbatim) and `data-side="pack"` (label text, the scalar `inn` when there is one, strength with each ingredient's salt, readability, country). A salt-only `formulation_mismatch` must show both salts, wherever rule 6 found them, including a salt named only in `name_text` or the label text (QM M4 code #5 and round 2 #1; supervisor 19.1 #3). The Name, Ingredient and Label text rows are HTML-escaped and marked `dir="auto"` (supervisor 19.1 round 2; batch 21). On both sides, each amount and its unit is wrapped in `<bdi dir="ltr">`, so an Arabic row reads "50 mg", never "mg 50" (judge-facing session, 28 Oct; batch 21). Amounts print as plain decimals with their unit and never with a trailing zero ("100 mg", never "100.0 mg"; "0.5", never ".5"), the safe-notation rule for doses. A missing side says "Not mentioned." or "Not photographed.";
+- **Catalogue codes (batch 24.1).**
+  - **Which box shows them:** a finding box whose claim's `name_text` resolves to a catalogue entry with codes, or, when there is no claim, whose pack's `label_text` does.
+  - **What it shows:** one line under the two sides, `Catalogue codes: ATC … · RxNorm …`, with only the codes the entry has. Codes are escaped, and there's no link.
+  - **The reference line:** once per page, when any code is shown. It names the WHO Collaborating Centre for Drug Statistics Methodology and points to `NOTICE`. It never names NLM, whose terms ask apps not to use its name.
 - A3 wording: a `missing_modality` finding is labelled "Mentioned, not photographed" or "Photographed, not mentioned", and one in `stopped` "Reported as stopped, not photographed";
 - a link to every piece of its evidence: `href="#turn:<turn_id>"` for each audio turn, `href="#region:<region_id>"` for each region.
 
