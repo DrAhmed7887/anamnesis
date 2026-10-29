@@ -69,6 +69,24 @@ def test_an_arabic_inn_with_an_attached_clitic_is_kept():
     assert claim.intake_amount.amount == Decimal(500)
 
 
+def test_a_label_naming_the_brands_own_ingredient_is_kept():  # the catalogue route (reference build)
+    claim = parse("Concor 5 mg every morning", name_text="Concor", intake_amount=amount("bisoprolol", "5"))
+    assert normalise(claim.intake_amount.inn) == "bisoprolol"
+
+
+def test_a_wrong_ingredient_label_takes_the_name():
+    claim = parse("Concor 5 mg every morning", name_text="Concor", intake_amount=amount("metoprolol", "5"))
+    assert normalise(claim.intake_amount.inn) == "concor"
+
+
+def test_a_combination_said_by_its_brand_keeps_both_ingredients():
+    strength = {"ingredients": [amount("amoxicillin", "875"), amount("clavulanic acid", "125")], "per": "tablet",
+                "release": "unknown"}
+    claim = parse("Augmentin 875 mg and 125 mg twice a day", name_text="Augmentin", strength=strength)
+    assert claim.strength is not None
+    assert [normalise(part.inn) for part in claim.strength.ingredients] == ["amoxicillin", "clavulanic acid"]
+
+
 def test_a_strength_label_is_grounded_too():
     strength = {"ingredients": [amount("unknown", "5")], "per": "tablet", "release": "unknown"}
     claim = parse("Concor 5 mg tablets", name_text="Concor", strength=strength)

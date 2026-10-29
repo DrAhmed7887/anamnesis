@@ -29,9 +29,10 @@ Every string a model writes is checked at the parser, before it can reach a repo
   - **A field is grounded** when, after `catalogue.normalise`, either:
     - it is a run of whole words in a turn the claim cites (an Arabic word may carry one of the attached clitics `catalogue.ARABIC_CLITICS`, the release words' rule);
     - or each of its words, with one final vowel removed when it has 6 letters or more, begins a word of such a turn. So "metformin" is grounded by "metformina" and "amlodipine" by "amlodipino", as patients name ingredients in Spanish.
+    - **or, for an amount label only,** its `canonical_inn` is an ingredient of the catalogue entry the claim's `name_text` resolves to. A combination is said by its brand ("Augmentin, eight hundred seventy-five and one hundred twenty-five milligrams"), so its labels name the catalogue's ingredients, and a curated salt such as "Bisoprolol fumarate" for Concor is kept. The claim's own `inn` is grounded by the turns only. (CEO's reference build, 29 Oct: without this, the combination and salt pins of batches 8 and 21 fail.)
   - **A field made only of digits, unit words or number words** ("50", "mg", "5 mg", "cinco") is never grounded.
   - **An ungrounded claim `inn` becomes null.**
-  - **An empty or ungrounded amount label** is relabelled before validation, to the claim's grounded `inn` or, if there is none, its `name_text`.
+  - **An empty or ungrounded amount label** is relabelled before validation, to the claim's grounded `inn` or, if there is none, its `name_text`. `parse_claims_json` takes an optional `catalogue`; without one it uses the bundled catalogue.
   - **Relabelling never drops an amount.** The resolver then reads a longer label as it reads any name: "Concor 5 mg" resolves to bisoprolol.
 - **An empty strength is no strength (batch 24).** A `strength` whose `ingredients` is an empty list becomes null without counting as a dropped amount, so the `intake_amount` stays.
   - **Its `release` isn't kept.** The claim's release then comes from the release words or the brand, as for any claim without a strength.
@@ -52,17 +53,21 @@ A number a model writes is kept only if the source states it. The workshop rule 
     - So "five" is 5, "twenty-five" 25, "two hundred and fifty" 250, "two and a half" 2.5, "two point five" 2.5, "خمسة" 5, "خمسين" 50, "خمسه وعشرين" 25, "ميتين وخمسين" 250, "اتنين ونص" 2.5, "تلات ميه" 300 and "خمسمية" 500. "once" and "twice" state nothing.
     - **Spanish and German (batch 24)** are matched the same way, on `catalogue.normalise` tokens. Accents and umlauts are kept as it keeps them, and ß is ss. Each Spanish word is also matched without its accents.
       - **Spanish:**
-        - `cero`–`quince`, `dieciséis`–`diecinueve`, `veinte`, `veintiuno`–`veintinueve` (and `veintiún`), and `treinta`–`noventa` by tens;
+        - `cero`–`diez` and `doce`–`quince`, `dieciséis`–`diecinueve`, `veinte`, `veintiuno`–`veintinueve` (and `veintiún`), and `treinta`–`noventa` by tens;
         - `cien` and `ciento` are a plain 100 and never a multiplier;
         - `doscientos`–`novecientos`, with their `-as` forms, and `mil`;
+        - `cien`, `ciento` and `doscientos`–`novecientos` close a run that already holds a number, so "cinco cien" states 5 and 100, never 105 or 500;
+        - not `once` (11): it is the English "once", which states nothing;
         - `uno` is 1; `medio` and `media` are a half;
         - `un` and `una` are 1 only directly before a unit word or before `y medio`/`y media`.
         - **`y`** joins only a ten (`treinta`–`noventa`) to a 1–9 right after it, or a number to a `medio`/`media` right after it. Any other `y` ends the run.
         - **`coma`** is the decimal point, as `point` is.
       - **German:**
-        - one-word numbers up to 9,999, each read as a whole token: an optional `[unit]tausend`, an optional `[unit]hundert`, then a unit, a teen, a ten, or a unit plus `und` plus a ten (`einundzwanzig`);
+        - one-word numbers up to 9,999, each read as a whole token: an optional `tausend`, then an optional `hundert`, each after an optional multiplier `ein`–`neun`, then a unit, a teen, a ten, or a unit plus `und` plus a ten (`einundzwanzig`);
+        - `hundert` and `tausend` on their own are a hundred and a thousand word, as in English, so "fünf hundert" is 500;
+        - like the Spanish ones, a one-word German number from 100 to 999 closes a run that already holds a number;
         - the units are `eins`/`ein`, `zwei`–`neun`, `zehn`, `elf` and `zwölf`; the teens `dreizehn`–`neunzehn` (`sechzehn`, `siebzehn`); the tens `zwanzig`, `dreissig`, `vierzig`–`neunzig` (`sechzig`, `siebzig`);
-        - `einhalb` and `eineinhalb` are 1.5, and `zweieinhalb`–`neuneinhalb` are n + 0.5, with no 1 from their `ein`;
+        - `einhalb` is a half (0.5); `eineinhalb` is 1.5 and `zweieinhalb`–`neuneinhalb` are n + 0.5, with no 1 from their `ein`;
         - `halb`, `halbe`, `halben`, `halber` and `halbes` are a half;
         - `ein`, `eine`, `einen`, `einem` and `einer` on their own are 1 only directly before a unit word.
         - A token that isn't wholly a number states nothing ("Achtung", "Einheit").
@@ -159,7 +164,7 @@ A number a model writes is kept only if the source states it. The workshop rule 
   - **Label prompt** (batch 21): "Copy all of its printed text into label_text, including every amount you report. Write each amount as digits with the unit printed on the pack, and never convert units. Name each ingredient by its English INN (amoxicillin, not amoxicilline or amoxicillinum), even when the pack prints it in another language or script."
   - **Both prompts keep their advice sentences word for word** (supervisor 21 #4): "Give no medical advice. Only report what the patient said." and "Give no advice. Use unreadable or partial rather than guessing."
   - **Why** (live, 28 Oct): batch 20's wording, "with the number … the patient said", made Spark copy number words (`"amount": "five"`, `"intakes_per_day": "once a day"`). Those never parse, so every dose spoken in words was dropped. Another reader transcribed only "Panadol TABLETS", so the label rule above dropped the 500 mg it reported. The stated-amount checks are unchanged: they still confirm that each digit amount was said or printed. `evidence/batches/21/live-before.md` has the runs.
-- **Known limits.** Only the value is checked, not its unit or the word next to it: "one tablet, 50 mg" also states 1. English `and` joins any two numbers, so "ten and fifty" states 10, 50 and 60. The 29 Oct plan grill found this, and it is unchanged; Spanish `y` doesn't do it (batch 24). `regimen` numbers are not checked; `units_per_intake` can never produce `match` (rule 8). A single number word there parses like its digit (batch 22) and isn't checked either, so an unstated "two" can still produce `intake_differs_from_unit_strength`, never `match` (pinned in batch 23, QM M5 #5). A check would drop intakes said with an Arabic dual such as «حبايتين» (two pills), which names no number. Spanish number words, digit-group speech ("eight seventy-five") and mixed forms ("2 and a half") state only their parts, so such an amount is dropped and the finding becomes `insufficient_information`. The rule fails closed.
+- **Known limits.** Only the value is checked, not its unit or the word next to it: "one tablet, 50 mg" also states 1. English `and` joins any two numbers, so "ten and fifty" states 10, 50 and 60. The 29 Oct plan grill found this, and it is unchanged; Spanish `y` doesn't do it (batch 24). `regimen` numbers are not checked; `units_per_intake` can never produce `match` (rule 8). A single number word there parses like its digit (batch 22) and isn't checked either, so an unstated "two" can still produce `intake_differs_from_unit_strength`, never `match` (pinned in batch 23, QM M5 #5). A check would drop intakes said with an Arabic dual such as «حبايتين» (two pills), which names no number. Digit-group speech ("eight seventy-five") and mixed forms ("2 and a half") state only their parts, so such an amount is dropped and the finding becomes `insufficient_information`. The rule fails closed.
 
 ## 3. Findings (closed enum, lowercase)
 | `DiscrepancyType` | Needs both sides | Meaning |

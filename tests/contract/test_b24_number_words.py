@@ -1,5 +1,6 @@
 """Batch 24: Spanish and German number words (SPEC §2, "Spanish and German (batch 24)"), with the 29 Oct plan
-grill's traps (evidence/grills/plan-2026-10-29/effect.md #1, #2, #4-#6)."""
+grill's traps (evidence/grills/plan-2026-10-29/effect.md #1, #2, #4-#6) and the CEO's reference build
+(evidence/batches/24/reference.md)."""
 
 from decimal import Decimal
 
@@ -29,6 +30,7 @@ STATED = [
     ("dieciséis", "16"),
     ("Quinientos miligramos", "500"),
     ("dos veces al día", "2"),
+    ("treinta y un miligramos", "31"),  # "un" before a unit word is 1, and "y" joins it to the ten
     # German
     ("fünfhundert Milligramm", "500"),
     ("fünfhundertfünfundsiebzig Milligramm", "575"),
@@ -43,6 +45,8 @@ STATED = [
     ("eine halbe Tablette", "0.5"),
     ("zweieinhalb Tabletten", "2.5"),
     ("eineinhalb Tabletten", "1.5"),
+    ("einhalb Tablette", "0.5"),  # a half: only eineinhalb is 1.5 (CEO's reference build)
+    ("fünf hundert Milligramm", "500"),  # "hundert" on its own is a hundred word
     ("ein Gramm", "1"),
     ("zwölf", "12"),
     ("sechzehn", "16"),
@@ -63,6 +67,10 @@ NEVER = [
     ("ochocientos setenta y cinco cien", "500"),
     ("zweieinhalb Tabletten", "1"),  # no 1 from the "ein" inside (#6)
     ("eineinhalb Tabletten", "1"),
+    ("einhalb Tablette", "1.5"),
+    ("tomo once miligramos", "11"),  # Spanish "once" is left out: it is English "once"
+    ("cinco cien", "105"),  # a hundreds word closes a run that holds a number
+    ("cinco cien", "500"),
 ]
 
 
