@@ -38,14 +38,32 @@ def parse_amount_text(value: object) -> Decimal | None:
         if not _WORD_RE.fullmatch(value.strip()):
             return None
         from anamnesis.core import catalogue
-        from anamnesis.providers.stated import ARABIC_NUMBERS, ENGLISH_NUMBERS, _combined_hundreds
+        from anamnesis.providers.stated import (
+            ARABIC_NUMBERS,
+            ENGLISH_NUMBERS,
+            GERMAN_ARTICLES,
+            SPANISH_ARTICLES,
+            SPANISH_NUMBERS,
+            _combined_hundreds,
+            _german_number,
+        )
 
         word = catalogue.normalise(value.strip())
+        if word in SPANISH_ARTICLES or word in GERMAN_ARTICLES:
+            return None
         number = ENGLISH_NUMBERS.get(word)
         if number is None:
             number = ARABIC_NUMBERS.get(word)
         if number is None:
+            number = SPANISH_NUMBERS.get(word)
+        if number is None:
             number = _combined_hundreds(word)
+        if number is None:
+            german = _german_number(word)
+            if german is not None:
+                if isinstance(german, Decimal):
+                    return german if german > 0 else None
+                number = german
         if number is None or number <= 0:
             return None
         return Decimal(number)

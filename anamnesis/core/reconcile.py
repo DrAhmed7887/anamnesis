@@ -29,7 +29,11 @@ def _identity(
     name_inns = entry.inns if entry else None
     if strength:
         inns = frozenset(_resolve_inn(part.inn, catalogue) for part in strength.ingredients)
-        conflict = ambiguous or (name_inns is not None and inns != name_inns)
+        conflict = (
+            ambiguous
+            or (name_inns is not None and inns != name_inns)
+            or len(inns) < len(strength.ingredients)
+        )
         if inn and _resolve_inn(inn, catalogue) not in inns:
             conflict = True
         return inns, conflict
@@ -275,7 +279,8 @@ def _release(
 _RELEASE_WORDS = frozenset({
     "retard", "depot", "xr", "xl", "sr", "er", "cr", "mr", "prolonged", "extended",
     "modified", "sustained", "controlled", "slow", "immediate", "ممتد", "بطيء",
-    "ممتده", "بطيئه",
+    "ممتده", "بطيئه", "prolongada", "modificada", "retardtablette",
+    "retardtabletten", "retardkapsel", "retardkapseln",
 })
 
 _ARABIC_RELEASE_WORDS = frozenset({"ممتد", "بطيء", "ممتده", "بطيئه"})

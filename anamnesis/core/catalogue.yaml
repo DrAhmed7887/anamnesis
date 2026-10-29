@@ -21,7 +21,7 @@
   synthetic: true
 - brand: Glucophage
   aliases: [جلوكوفاج]
-  release: immediate
+  release: unknown
   splittable: null
   inns: [metformin]
   countries: [DE, ES, GB]
@@ -42,7 +42,7 @@
   synthetic: true
 - brand: Augmentin
   aliases: [اوجمنتين]
-  release: immediate
+  release: unknown
   splittable: false
   inns: [amoxicillin, clavulanic acid]
   countries: [DE, ES, GB]
