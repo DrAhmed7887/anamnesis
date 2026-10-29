@@ -1,4 +1,4 @@
-# The clean-checkout run at `demo-freeze` (30 Oct, 00:40 CET)
+# The clean-checkout run at `demo-freeze` (30 Oct, 00:14 CET)
 
 - **The clone:** `git clone --depth 1 --branch demo-freeze` from the private GitHub remote. The tag points at 4b32c02.
   - The tree was clean.

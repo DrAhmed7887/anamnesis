@@ -37,7 +37,7 @@
 - **G1:** "zweimal täglich" states no amount, and the reader judged the pack partial.
 - **S1 and G3:** no unsaid INN was kept in either case.
 
-## S1 and G3 again, after batch 24.1 merged (30 Oct, 00:12 CET)
+## S1 and G3 again, after batch 24.1 merged (30 Oct, 00:08–00:09 CET)
 - **Main and cost:** main at aa88878, with Emconcor and Sortis in the catalogue. One run each, $0.05.
 - **Reports:** `report_S1_after_24_1.json` and `report_G3_after_24_1.json`.
 - **Pre-registered** for this point in `manifest.md`, "After batch 24b, if it merges".
