@@ -5,6 +5,8 @@
   inns: [bisoprolol]
   countries: [DE, ES, GB]
   synthetic: true
+  atc: C07AB07
+  rxcui: ["19484"]
 - brand: Beloc-Zok
   aliases: [بيلوك زوك, بلوك زوك]
   release: modified
@@ -12,6 +14,8 @@
   inns: [metoprolol]
   countries: [DE, ES, GB]
   synthetic: true
+  atc: C07AB02
+  rxcui: ["6918"]
 - brand: Norvasc
   aliases: [نورفاسك]
   release: immediate
@@ -19,6 +23,8 @@
   inns: [amlodipine]
   countries: [DE, ES, GB]
   synthetic: true
+  atc: C08CA01
+  rxcui: ["17767"]
 - brand: Glucophage
   aliases: [جلوكوفاج]
   release: unknown
@@ -26,6 +32,8 @@
   inns: [metformin]
   countries: [DE, ES, GB]
   synthetic: true
+  atc: A10BA02
+  rxcui: ["6809"]
 - brand: Panadol
   aliases: [بنادول, بانادول]
   release: immediate
@@ -33,6 +41,8 @@
   inns: [paracetamol]
   countries: [DE, ES, GB]
   synthetic: true
+  atc: N02BE01
+  rxcui: ["161"]
 - brand: Panadol Extra
   aliases: [بنادول اكسترا, بانادول اكسترا]
   release: immediate
@@ -40,6 +50,8 @@
   inns: [paracetamol, caffeine]
   countries: [DE, ES, GB]
   synthetic: true
+  atc: N02BE51
+  rxcui: ["161", "1886"]
 - brand: Augmentin
   aliases: [اوجمنتين]
   release: unknown
@@ -47,6 +59,8 @@
   inns: [amoxicillin, clavulanic acid]
   countries: [DE, ES, GB]
   synthetic: true
+  atc: J01CR02
+  rxcui: ["723", "48203"]
 - brand: Lipitor
   aliases: [ليبيتور]
   release: immediate
@@ -54,6 +68,8 @@
   inns: [atorvastatin]
   countries: [DE, ES, GB]
   synthetic: true
+  atc: C10AA05
+  rxcui: ["83367"]
 - brand: Gelocatil
   aliases: [جيلوكاتيل, جلوكاتيل]
   release: immediate
@@ -61,3 +77,29 @@
   inns: [paracetamol]
   countries: [ES]
   synthetic: true
+  atc: N02BE01
+  rxcui: ["161"]
+- brand: Emconcor
+  release: immediate
+  splittable: true
+  inns: [bisoprolol]
+  countries: [ES]
+  synthetic: true
+  atc: C07AB07
+  rxcui: ["19484"]
+- brand: Sortis
+  release: immediate
+  splittable: false
+  inns: [atorvastatin]
+  countries: [DE]
+  synthetic: true
+  atc: C10AA05
+  rxcui: ["83367"]
+- brand: Nolotil
+  release: immediate
+  splittable: false
+  inns: [metamizole]
+  countries: [ES]
+  synthetic: true
+  atc: N02BB02
+  rxcui: ["3523"]

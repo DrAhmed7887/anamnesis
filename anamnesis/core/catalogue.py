@@ -33,6 +33,8 @@ class CatalogueEntry:
     release: Release
     splittable: bool | None
     aliases: tuple[str, ...] = ()
+    atc: str | None = None
+    rxcui: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -156,6 +158,8 @@ def load_catalogue(path: str | Path | None = None) -> Catalogue:
                 release=Release(record["release"]),
                 splittable=record["splittable"],
                 aliases=tuple(record.get("aliases", ())),
+                atc=record.get("atc"),
+                rxcui=tuple(str(code) for code in record.get("rxcui") or ()),
             )
             for record in records
         )
