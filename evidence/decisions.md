@@ -184,3 +184,11 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
   - Spanish-language templates;
   - the draft Egyptian brand table's unverified rows.
 - **Baseten:** no call until Ahmed sees the hackathon grant applied. Our $0.54 on 28 Oct matches the $1 trial dropping to $0.48.
+
+## 2026-10-29: the builder never sees expected results (Ahmed's yes, relayed by the workshop session)
+- **Why:** in Meta's legal-agent workshop, `ground_truth/` sits outside the folder the agent runs from. `scripts/batch.sh` runs Muse from the repo root, so Muse could open pre-registered expected results such as `evidence/batches/24/manifest.md`.
+- **The guard:**
+  - `briefs/_worker_preamble.md` now says: don't open anything under `evidence/` or the fine-tune data; write no code for one particular test case; never open `.env` or print a key.
+  - `scripts/goal_check.py` lists in `goal.md` every file a run read under those folders. It flags and never fails the gate, because a read the brief asked for is fine.
+- **What the 26 Muse exports up to batch 23.1 show:** 16 runs read something under `evidence/`, but none opened a manifest, a pre-registration or a fine-tune answer key. Most reads were supervisor reviews and grill triage files that the round briefs named; the others were live reports and the spend ledger. From now on, round briefs carry their findings inline instead of naming a file under `evidence/`.
+- **Batch 24:** the same commit was cherry-picked onto `batch/24-es-de` before its first Muse run. Main's `evidence/batches/24/manifest.md` was never merged into that branch, so the batch worktree doesn't hold the 8 live cases' expected results.
