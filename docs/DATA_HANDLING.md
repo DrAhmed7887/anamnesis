@@ -30,6 +30,7 @@ If something slips in, the file is retaken, never edited afterwards.
   - the WAV, to Muse Voice Transcribe.
 - **Standard models only**, never a `*-contributor` id. Meta's pricing page says contributor mode lets Meta train on prompts, files and responses. Our notes (`docs/muse/`) don't record what Meta keeps in standard mode, so anything sent counts as having left our control.
 - **Public test photos only, for the open-weight comparison (batch 22) and the intake with Spark Open as its label reader (28 Oct, Ahmed's yes):** the Wikimedia Commons and Cairo University CC BY photos may also go to Fireworks or Baseten, to be read by Meta's open-weight Muse Spark Open. `scripts/intake_live.py --reader baseten` refuses any other photo before the first call. **Ahmed's own photos and voice never go there.**
+- **The Glimmer fine-tune (29 Oct, Ahmed's call):** the generated fine-tune data (`finetune/data/`), with the 33 synthetic-voice transcripts of its real slice, may go to Modal, where Meta's open-weight Muse Glimmer is trained and run. Its weights come from the Hugging Face Hub, and nothing goes to the Hub. No photo, no audio and nothing of Ahmed's goes to Modal.
 - **The reviewers never see the media.** The batch supervisor (Claude) and the quality manager (Gemini) get code and text evidence only.
 
 ## What is committed or published

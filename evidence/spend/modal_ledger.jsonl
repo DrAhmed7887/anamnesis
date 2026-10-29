@@ -1,0 +1,1 @@
+{"model_id": "glimmer-image-builds@modal", "run": "setup", "gpu": null, "seconds": 300.0, "cost_usd": "0.05276", "estimated": true, "at": "2026-10-29T08:40:00+00:00", "note": "three app starts refused for want of a payment method; only CPU image builds ran"}

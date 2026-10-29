@@ -167,3 +167,9 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
 - **Who:** the engine owns all four, with the same gate, ledgers and pre-registration. Antigravity, which proposed the fine-tune and partner work, may review results but doesn't write to the repo.
 - **What it replaces:** the 27 Oct note that no fine-tune fits before the freeze (above). Batch 24's low items (`evidence/grills/m7-pre-freeze/effect.md`) are cut first if time runs short.
 - **Limits that stay:** synthetic voice notes are used only for runs, never in the film (the macOS licence). The fine-tune trains and tests on generated text, so it measures the task on generated speech, not real speech. Ahmed's own photos and voice still go only to Meta.
+
+## 2026-10-29: train the Glimmer LoRA on Modal (Ahmed's call)
+- **What:** Fireworks refused the fine-tune's dataset upload: "HTTP 403: dataset uploads are temporarily disabled, please contact Fireworks AI to get access". Ahmed chose to train on Modal now, on his $100 Modal credit, rather than wait for Fireworks support. The method was pre-registered before any training call, in `evidence/finetune/plan.md` ("Amended 29 Oct").
+- **Data:** only the generated fine-tune data and the 33 synthetic-voice transcripts go to Modal. The weights come from the Hugging Face Hub. `docs/DATA_HANDLING.md` now says so.
+- **Blocker found:** Modal asks for a payment method before it runs any GPU large enough for Glimmer. The H200, the H100 and the A100 80 GB were each refused on 29 Oct, before anything ran. Only image builds ran, at an estimated $0.05. Adding a card is Ahmed's call; his credit would be spent first.
+- **Meanwhile:** the Spark 1.3 baseline runs on Meta's API, because either training route needs it.

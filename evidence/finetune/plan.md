@@ -57,3 +57,34 @@ Fireworks no longer serves base Glimmer serverlessly, and it serves no LoRA serv
 - **Quotas:** 32 H200, B200 and B300 training GPUs each; 8 job submissions; 8 serverless training runs at once; 0 serverless LoRA adapters.
 - **The docs:** LoRA SFT on Glimmer is free for jobs before 1 Dec 2026, takes a JSONL `messages` format with per-message weights, and defaults to rank 8 (firectl). An omitted rank through REST or the SDK means full-parameter training.
 - **Serving:** base Glimmer left Fireworks serverless on 25–26 Sep 2026, and a tuned LoRA is served on-demand only. Reasoning tokens count against `max_tokens`.
+
+## Amended 29 Oct: training on Modal (Ahmed's call, before any training call)
+- **Why:** Fireworks refused both dataset uploads on 29 Oct with "HTTP 403: dataset uploads are temporarily disabled, please contact Fireworks AI to get access", and the two datasets stay in UPLOADING. Ahmed chose to train on Modal now, on his $100 Modal credit, rather than wait for Fireworks support. Where this section disagrees with "Training (Fireworks)" and the Fireworks serving lines above, this section wins. The task, the data, the metrics and the limits stay as written.
+- **Weights:** `meta-models/Muse-Glimmer-30B` from the Hugging Face Hub (Apache-2.0, not gated), pinned at revision `cec94fcfd6512f2cfe708138c32533b346ea4f69`, in bf16 (59.6 GB). They go into a Modal volume. Nothing is uploaded to the Hub.
+- **Hardware:** one 80 GB H100 on Modal, at $0.001097 per second plus 8 cores and 32 GiB (list prices, 29 Oct). An H200 was the first choice.
+- **Training** (`finetune/glimmer.py` holds every setting; `finetune/modal_glimmer.py` runs it):
+  - A bf16 LoRA, not QLoRA: the base stays frozen in bf16. Rank 16, alpha 32, dropout 0.05.
+  - The adapter sits on every linear layer of the 52 language-model blocks except the attention's output gate: q, k, v and o, and the MLP's gate, up and down, 364 layers in all. The vision tower is frozen and untouched.
+  - **Targets, answers only:** Glimmer's chat template renders the system, user and answer messages. The loss covers only the assistant's turn after `<|start|>assistant`: its channel header ` to=user<|message|>`, the JSON and `<|eot|>`. No reasoning text is trained, because gen.py's answers have none.
+  - AdamW at a learning rate of 1e-4, since Fireworks' default doesn't exist off Fireworks. 8 warm-up steps, then a cosine decay to 0. No weight decay, gradients clipped at 1.0. An effective batch of 16 (micro-batch 2 × 8 accumulated), 2 epochs, so 150 steps. Seed 20261029, with gradient checkpointing.
+  - The validation loss on the 150 val examples is logged after each epoch. One run with no tuning: the adapter at the end of epoch 2 is the one evaluated, whatever the validation loss says.
+- **Inference for base and tuned Glimmer** (vLLM 0.32.0 on the same kind of H100):
+  - The messages are the training ones: the product's system prompt with "Reasoning strength: low", and the user message as `MetaClaimExtractor` formats it.
+  - **Two passes per example.** The first is free: the model reasons until it opens its answer to the user (`to=user<|message|>`). The second continues from there under the product's `CLAIMS_SCHEMA`, through vLLM's structured outputs, just as Meta's API constrains Spark 1.3's reply after its reasoning. Together the two passes get at most the product's 16,000 tokens.
+  - A reply that never opens an answer counts as no reply. vLLM's Glimmer reasoning parser isn't used: it never ends the reasoning phase for a `to=user` answer, so the schema would never apply.
+  - Sampling follows the model card's recommendation: temperature 1.0, top-p 0.95, top-k 64, one reply per example, with a fixed seed per example.
+- **Spark 1.3:** `finetune/spark_eval.py` sends each test example's turns through the product's own `MetaClaimExtractor`: its prompt, its schema, reasoning effort low and 16,000 max tokens. Its first reply is scored. When the parser rejects a reply the product asks once more, and that retry is counted but not scored, so every system is scored on one reply per example. Expected cost: about $1 for the 303 test examples.
+- **Scoring:** `finetune/score.py`, unchanged, on every system and split.
+- **Smoke runs first, never scored:** 2 training steps on 32 examples, then 2 examples per test split. They check the template's masking, the adapter's 364 layers, vLLM's LoRA loading and the two passes. Their outputs stay under `evidence/finetune/runs/smoke*`.
+- **Cost:** each Modal step first runs `scripts/spend_check.py` with its timeout at list price. Train and eval are capped at 2 h each, so at most $9.17 each. Each step's wall time at list price, an over-estimate, goes to `evidence/spend/modal_ledger.jsonl`. Expected: about 1 h of training and 1 h for both evals, so about $10 of the $100 credit. The stop line is 50%, as everywhere.
+- **Limits added:**
+  - The learning rate and the target layers are this plan's choice, not Fireworks' defaults.
+  - Glimmer runs in bf16 on vLLM, not on Fireworks' serving stack, so its numbers describe this setup.
+
+### Facts checked on 29 Oct
+- **Glimmer's config:**
+  - a dense model of 29.6B parameters, including a 1.8B vision encoder;
+  - 52 layers, a width of 6,656, 32 query heads and 2 KV heads, and a vocabulary of 202,048;
+  - attention alternates three sliding-window layers with one global layer.
+- **Support in the libraries:** transformers ships `muse_glimmer` (5.21.0 is used here). vLLM 0.32.0 lists Glimmer with LoRA support, and its LoRA loader maps Hugging Face's layer names.
+- **Modal:** on this account, it asks for a payment method before it runs a GPU large enough for Glimmer. The H200, H100 and A100 80 GB were each refused on 29 Oct, before anything ran.
