@@ -1,0 +1,462 @@
+{
+ "seed": 20261029,
+ "noise_rate": 0.25,
+ "refused_slips": 1,
+ "duplicates_redrawn": 1,
+ "splits": {
+  "train": {
+   "examples": 1200,
+   "claims": 2212,
+   "noisy": 300,
+   "noise_share": 0.25
+  },
+  "val": {
+   "examples": 150,
+   "claims": 288,
+   "noisy": 38,
+   "noise_share": 0.253
+  },
+  "test_iid": {
+   "examples": 100,
+   "claims": 185,
+   "noisy": 25,
+   "noise_share": 0.25
+  },
+  "test_shift": {
+   "examples": 120,
+   "claims": 217,
+   "noisy": 30,
+   "noise_share": 0.25
+  },
+  "test_codeswitch": {
+   "examples": 50,
+   "claims": 95,
+   "noisy": 12,
+   "noise_share": 0.24
+  }
+ },
+ "held_out": [
+  {
+   "key": "rxnorm:hydrochlorothiazide",
+   "inn": "hydrochlorothiazide",
+   "rxcui": "5487",
+   "brands": [
+    "Inzirqo"
+   ]
+  },
+  {
+   "key": "rxnorm:empagliflozin",
+   "inn": "empagliflozin",
+   "rxcui": "1545653",
+   "brands": [
+    "Jardiance"
+   ]
+  },
+  {
+   "key": "rxnorm:omeprazole",
+   "inn": "omeprazole",
+   "rxcui": "7646",
+   "brands": [
+    "Prilosec"
+   ]
+  },
+  {
+   "key": "rxnorm:rivaroxaban",
+   "inn": "rivaroxaban",
+   "rxcui": "1114195",
+   "brands": [
+    "Xarelto"
+   ]
+  },
+  {
+   "key": "rxnorm:diclofenac",
+   "inn": "diclofenac",
+   "rxcui": "3355",
+   "brands": [
+    "Zorvolex",
+    "Cataflam",
+    "Zipsor"
+   ]
+  },
+  {
+   "key": "rxnorm:naproxen",
+   "inn": "naproxen",
+   "rxcui": "7258",
+   "brands": [
+    "Naprosyn",
+    "Naprelan",
+    "Aleve"
+   ]
+  },
+  {
+   "key": "rxnorm:montelukast",
+   "inn": "montelukast",
+   "rxcui": "88249",
+   "brands": [
+    "Singulair"
+   ]
+  },
+  {
+   "key": "rxnorm:prednisolone",
+   "inn": "prednisolone",
+   "rxcui": "8638",
+   "brands": [
+    "Orapred",
+    "Pediapred",
+    "Millipred"
+   ]
+  },
+  {
+   "key": "rxnorm:allopurinol",
+   "inn": "allopurinol",
+   "rxcui": "519",
+   "brands": [
+    "Zyloprim"
+   ]
+  },
+  {
+   "key": "rxnorm:famotidine",
+   "inn": "famotidine",
+   "rxcui": "4278",
+   "brands": [
+    "Pepcid"
+   ]
+  }
+ ],
+ "templates": {
+  "train": [
+   "en-intake-1",
+   "en-intake-2",
+   "en-intake-3",
+   "en-intake-4",
+   "en-intake-5",
+   "en-intake-6",
+   "en-intake-7",
+   "en-intake-8",
+   "en-strength-1",
+   "en-strength-2",
+   "en-units-1",
+   "en-prn-1",
+   "en-prn-2",
+   "en-prn-3",
+   "en-plain-1",
+   "en-plain-2",
+   "en-plain-3",
+   "en-stopped-1",
+   "en-stopped-2",
+   "en-stopped-3",
+   "en-stopped-4",
+   "en-unsure-1",
+   "en-range_units-1",
+   "en-range_units-2",
+   "en-range_freq-1",
+   "en-brand_inn-1",
+   "en-intake-13",
+   "en-intake-14",
+   "en-intake-15",
+   "en-intake-16",
+   "en-strength-4",
+   "en-units-3",
+   "en-prn-5",
+   "en-prn-6",
+   "en-plain-6",
+   "en-plain-7",
+   "en-stopped-7",
+   "en-stopped-8",
+   "en-unsure-3",
+   "en-range_units-4",
+   "en-range_freq-3",
+   "en-brand_inn-3",
+   "ar-intake-1",
+   "ar-intake-2",
+   "ar-intake-3",
+   "ar-intake-4",
+   "ar-intake-5",
+   "ar-intake-6",
+   "ar-intake-7",
+   "ar-intake-8",
+   "ar-strength-1",
+   "ar-strength-2",
+   "ar-units-1",
+   "ar-prn-1",
+   "ar-prn-2",
+   "ar-prn-3",
+   "ar-plain-1",
+   "ar-plain-2",
+   "ar-plain-3",
+   "ar-stopped-1",
+   "ar-stopped-2",
+   "ar-stopped-3",
+   "ar-stopped-4",
+   "ar-unsure-1",
+   "ar-range_units-1",
+   "ar-range_units-2",
+   "ar-range_freq-1",
+   "ar-brand_inn-1"
+  ],
+  "test_only": [
+   "en-intake-9",
+   "en-intake-10",
+   "en-intake-11",
+   "en-intake-12",
+   "en-strength-3",
+   "en-units-2",
+   "en-prn-4",
+   "en-plain-4",
+   "en-plain-5",
+   "en-stopped-5",
+   "en-stopped-6",
+   "en-unsure-2",
+   "en-range_units-3",
+   "en-range_freq-2",
+   "en-brand_inn-2",
+   "en-intake-17",
+   "en-intake-18",
+   "en-strength-5",
+   "en-units-4",
+   "en-prn-7",
+   "en-plain-8",
+   "en-stopped-9",
+   "en-unsure-4",
+   "en-range_units-5",
+   "en-range_freq-4",
+   "en-brand_inn-4",
+   "ar-intake-9",
+   "ar-intake-10",
+   "ar-intake-11",
+   "ar-intake-12",
+   "ar-strength-3",
+   "ar-units-2",
+   "ar-prn-4",
+   "ar-plain-4",
+   "ar-plain-5",
+   "ar-stopped-5",
+   "ar-stopped-6",
+   "ar-unsure-2",
+   "ar-range_units-3",
+   "ar-range_freq-2",
+   "ar-brand_inn-2"
+  ]
+ },
+ "rxnorm_brands_kept": {
+  "amlodipine": [
+   "Norvasc",
+   "Sdamlo",
+   "Katerzia"
+  ],
+  "bisoprolol": [],
+  "metoprolol": [
+   "Lopressor",
+   "Toprol",
+   "Kapspargo"
+  ],
+  "atenolol": [
+   "Tenormin"
+  ],
+  "carvedilol": [
+   "Coreg"
+  ],
+  "lisinopril": [
+   "Zestril",
+   "Prinivil",
+   "Qbrelis"
+  ],
+  "enalapril": [
+   "Vasotec",
+   "Epaned"
+  ],
+  "ramipril": [
+   "Altace",
+   "Vostally"
+  ],
+  "losartan": [
+   "Cozaar",
+   "Arbli"
+  ],
+  "valsartan": [
+   "Diovan"
+  ],
+  "candesartan": [
+   "Atacand"
+  ],
+  "hydrochlorothiazide": [
+   "Inzirqo"
+  ],
+  "furosemide": [
+   "Lasix"
+  ],
+  "spironolactone": [
+   "Aldactone",
+   "Carospir"
+  ],
+  "indapamide": [],
+  "atorvastatin": [
+   "Lipitor",
+   "Atorvaliq"
+  ],
+  "rosuvastatin": [
+   "Crestor",
+   "Ezallor"
+  ],
+  "simvastatin": [
+   "Zocor",
+   "Flolipid"
+  ],
+  "ezetimibe": [
+   "Zetia"
+  ],
+  "metformin": [
+   "Glucophage",
+   "Glumetza",
+   "Riomet"
+  ],
+  "gliclazide": [],
+  "glimepiride": [],
+  "sitagliptin": [
+   "Januvia",
+   "Zituvio",
+   "Brynovin"
+  ],
+  "empagliflozin": [
+   "Jardiance"
+  ],
+  "dapagliflozin": [
+   "Farxiga"
+  ],
+  "levothyroxine": [
+   "Tirosint",
+   "Synthroid"
+  ],
+  "omeprazole": [
+   "Prilosec"
+  ],
+  "pantoprazole": [
+   "Protonix"
+  ],
+  "esomeprazole": [
+   "Nexium"
+  ],
+  "acetylsalicylic acid": [
+   "Ecotrin",
+   "Bufferin"
+  ],
+  "clopidogrel": [
+   "Plavix"
+  ],
+  "warfarin": [
+   "Jantoven"
+  ],
+  "apixaban": [
+   "Eliquis"
+  ],
+  "rivaroxaban": [
+   "Xarelto"
+  ],
+  "paracetamol": [
+   "Tylenol",
+   "Panadol"
+  ],
+  "ibuprofen": [
+   "Advil",
+   "Motrin",
+   "Ibu"
+  ],
+  "diclofenac": [
+   "Zorvolex",
+   "Cataflam",
+   "Zipsor"
+  ],
+  "naproxen": [
+   "Naprosyn",
+   "Naprelan",
+   "Aleve"
+  ],
+  "amoxicillin": [
+   "Moxatag"
+  ],
+  "azithromycin": [
+   "Zithromax"
+  ],
+  "ciprofloxacin": [
+   "Cipro",
+   "Proquin"
+  ],
+  "metronidazole": [
+   "Flagyl",
+   "Likmez"
+  ],
+  "doxycycline": [
+   "Doryx",
+   "Acticlate",
+   "Mondoxyne"
+  ],
+  "cetirizine": [
+   "Zyrtec"
+  ],
+  "loratadine": [
+   "Claritin",
+   "Alavert"
+  ],
+  "montelukast": [
+   "Singulair"
+  ],
+  "prednisolone": [
+   "Orapred",
+   "Pediapred",
+   "Millipred"
+  ],
+  "allopurinol": [
+   "Zyloprim"
+  ],
+  "colchicine": [
+   "Colcrys",
+   "Mitigare",
+   "Gloperba"
+  ],
+  "tamsulosin": [
+   "Flomax"
+  ],
+  "sertraline": [
+   "Zoloft"
+  ],
+  "escitalopram": [
+   "Lexapro"
+  ],
+  "fluoxetine": [
+   "Prozac"
+  ],
+  "amitriptyline": [
+   "Elavil"
+  ],
+  "gabapentin": [
+   "Neurontin",
+   "Gralise",
+   "Relgaabi"
+  ],
+  "pregabalin": [
+   "Lyrica"
+  ],
+  "tramadol": [
+   "ConZip",
+   "Ultram",
+   "Qdolo"
+  ],
+  "alendronic acid": [
+   "Fosamax",
+   "Binosto"
+  ],
+  "terbinafine": [],
+  "famotidine": [
+   "Pepcid"
+  ]
+ },
+ "rxnorm_brands_dropped": [
+  "Levo-T",
+  "Bayer Aspirin",
+  "Mapap",
+  "Wal-Zyr",
+  "Aller-Tec",
+  "Wal-itin",
+  "Zantac Reformulated Aug 2022"
+ ]
+}
