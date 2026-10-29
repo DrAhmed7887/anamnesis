@@ -96,3 +96,17 @@ Each layer of finding 1 is pinned on its own, so neither can be dropped.
 | A one-letter word grounds as a prefix | 1 |
 
 The first clock-time check the reference had was redundant, so no test caught its mutant (0 failures). That copy was removed, and the remaining check is pinned.
+
+## Round 5, after the supervisor's review of round 4
+- **Contract:** `test_b24_round5.py`, 23 tests. On Muse's round 4 code, 17 fail and 6 pass.
+- **Reference build:** **2,255 passed**, ruff clean.
+
+**One mutant per fix** (failures in `tests/contract`):
+
+| Mutant | Failures |
+|---|---|
+| Adjacent number words add up | 9 |
+| The `y` joins a half after a clock hour | 3 |
+| `Acht` is always eight | 3 |
+| No NFC on the field and the turns | 1 |
+| "una y media" is only 1 | 1 |

@@ -141,3 +141,20 @@ SUPERVISOR: CHANGES. All three round 3 fixes held as written, and every earlier 
 - **What the sweep left:** every remaining stated value is a number someone says, as English already allows ("halb so schlimm" 0.5, "tausend Dank" 1000).
 - **Proof:** a reference build (2,232 passed), with one mutant per rule, each caught.
 - **Not in batch 24:** the backlog items (5) are older than this batch. They are recorded for after the freeze: the English "point" and "half two" forms, and a cut `name_text`.
+
+## Round 4 (Opus, independent context, 29 Oct). Builder: Muse Code (`muse-spark-1.3`)
+
+SUPERVISOR: CHANGES. Every earlier fix held, but four round 4 idioms still led to a false `match`, each run end to end with an invented amount.
+
+1. **High: two adjacent Spanish or German number words added up.**
+   - "a las diez treinta" (10:30) stated 40, and 40 mg reached `match` against Lipitor 40 mg; "um zehn dreißig" did the same.
+   - "dos tres pastillas" and "zwei drei Tabletten" stated 5, and "zweieinhalb Fünf-Milligramm-Tabletten" stated 7.5.
+   - "dos cincuenta" stated 52.
+   - **Fix:** a word under 100 after a word under 100 closes the run unless `y` joins them.
+2. **High: a half before a dose word joined the clock hour.** "a las dos y medio comprimido" stated 2.5.
+   - **The CEO's error:** the reference had a check for this inside `_y_joins`, which round 4 removed as redundant after its mutant survived. The surviving mutant pointed to a missing test, not to dead code.
+3. **Medium: German `Acht` meaning "care".** "in Acht nehmen" and "außer Acht lassen" stated 8, and candesartan 8 mg reached `match`.
+4. **Minor, fails closed:** a decomposed (NFD) label and turn skipped the amount-only check.
+5. **Minor, fails closed:** "una y media" stated 1, never 1.5.
+
+**CEO's triage:** all five accepted and pinned in `tests/contract/test_b24_round5.py` (23 tests, 17 fail on round 4). They were proved on a reference build (2,255 passed), with one mutant per fix. Every mutant is caught: the NFC mutant counts only when it takes NFC off both the field and the turns, since the fix is the pair.
