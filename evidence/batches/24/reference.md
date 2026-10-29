@@ -45,3 +45,23 @@ Each mutant was applied alone to the reference build, and the contract catches e
 - **What follows:** such a claim is reported as `missing_modality`, not `unresolved_name`, and it can't pair with its photographed pack. This already happens today when the model labels an amount with the brand. Batch 24 makes it more frequent, because an unsaid INN is no longer kept.
 - **It fails safe:** no false `match`.
 - **The live cases S1 and G3** are amended for it in `manifest.md`.
+
+## Round 2, after the supervisor's review of round 1
+- **Contract:** `test_b24_round2.py`, 26 tests. On Muse's round 1 code, 17 fail and 9 pass.
+- **Reference build:** the CEO's round 1 reference had the same three serious holes (findings 1–3), because they came from the SPEC. With round 2's fixes it passes **2,188**, ruff clean.
+
+**One mutant per fix** (failures in `tests/contract`):
+
+| Mutant | Failures |
+|---|---|
+| The parser keeps two lines for one ingredient | 1 |
+| The reconciler accepts two lines for one ingredient | 1 |
+| `mil` is always a thousand | 4 |
+| No salt-pair grounding | 1 |
+| Halves join any number | 2 |
+| `coma` is a decimal point anywhere | 1 |
+| `null` is no digit | 1 |
+| No NFC | 2 |
+| English unit words ground a label | 2 |
+
+Each layer of finding 1 is pinned on its own, so neither can be dropped.

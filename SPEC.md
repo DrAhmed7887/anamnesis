@@ -29,11 +29,16 @@ Every string a model writes is checked at the parser, before it can reach a repo
   - **A field is grounded** when, after `catalogue.normalise`, either:
     - it is a run of whole words in a turn the claim cites (an Arabic word may carry one of the attached clitics `catalogue.ARABIC_CLITICS`, the release words' rule);
     - or each of its words, with one final vowel removed when it has 6 letters or more, begins a word of such a turn. So "metformin" is grounded by "metformina" and "amlodipine" by "amlodipino", as patients name ingredients in Spanish.
+    - **or its `canonical_inn` and `salt_of` pair equals that of a word or a run of up to three words in such a turn** (round 2, supervisor #3). So a salt said inside a German compound grounds it: "Metoprololtartrat" grounds "metoprolol tartrate".
     - **or, for an amount label only,** its `canonical_inn` is an ingredient of the catalogue entry the claim's `name_text` resolves to. A combination is said by its brand ("Augmentin, eight hundred seventy-five and one hundred twenty-five milligrams"), so its labels name the catalogue's ingredients, and a curated salt such as "Bisoprolol fumarate" for Concor is kept. The claim's own `inn` is grounded by the turns only. (CEO's reference build, 29 Oct: without this, the combination and salt pins of batches 8 and 21 fail.)
-  - **A field made only of digits, unit words or number words** ("50", "mg", "5 mg", "cinco") is never grounded.
+  - **A field made only of digits, unit words or number words** ("50", "mg", "5 mg", "cinco") is never grounded. For this check, the English unit words (`milligram(s)`, `gram(s)`, `microgram(s)`, `millilitre(s)`, `milliliter(s)`, `unit(s)`, `iu`) and the joiners `and`, `y`, `und`, `a`, `point`, `coma` and `komma` count as amount words too (round 2, #7).
   - **An ungrounded claim `inn` becomes null.**
   - **An empty or ungrounded amount label** is relabelled before validation, to the claim's grounded `inn` or, if there is none, its `name_text`. `parse_claims_json` takes an optional `catalogue`; without one it uses the bundled catalogue.
   - **Relabelling never drops an amount.** The resolver then reads a longer label as it reads any name: "Concor 5 mg" resolves to bisoprolol.
+  - **Two lines for one ingredient (round 2, supervisor #1).**
+    - **The rule:** after relabelling, a strength whose lines resolve, as the reconciler resolves them, to fewer ingredients than it has lines is dropped, and the drop takes the intake with it.
+    - **The second layer:** the reconciler's `_identity` also reports a conflict for such a strength, which gives `insufficient_information`.
+    - **The case it closes:** an unsaid "caffeine" relabelled "Panadol" next to "paracetamol" 500 mg reached `match` against a Panadol 500 mg pack.
 - **An empty strength is no strength (batch 24).** A `strength` whose `ingredients` is an empty list becomes null without counting as a dropped amount, so the `intake_amount` stays.
   - **Its `release` isn't kept.** The claim's release then comes from the release words or the brand, as for any claim without a strength.
   - **Why:** post-hoc on 29 Oct, 19 of Spark's stated intakes were lost to the drop rule this way (`evidence/finetune/spark_drops.py`).
@@ -61,7 +66,9 @@ A number a model writes is kept only if the source states it. The workshop rule 
         - `uno` is 1; `medio` and `media` are a half;
         - `un` and `una` are 1 only directly before a unit word or before `y medio`/`y media`.
         - **`y`** joins only a ten (`treinta`–`noventa`) to a 1–9 right after it, or a number to a `medio`/`media` right after it. Any other `y` ends the run.
-        - **`coma`** is the decimal point, as `point` is.
+        - **`coma`** is the decimal point, as `point` is, but only right after a number word. Otherwise it ends the run, so "she was in a coma two years ago" states 2, never 0.2 (round 2, #4).
+        - **`mil` is a thousand word only next to Spanish:** after a Spanish number word ("dos mil"), or before a Spanish number word or a unit word ("mil doscientos", "mil miligramos"). Otherwise it ends the run, because English says "five mil" for millilitres (round 2, #2).
+        - **`medio` and `media` join a number before them only through `y`** ("uno y medio"). Otherwise they start their own run (round 2, #4).
       - **German:**
         - one-word numbers up to 9,999, each read as a whole token: an optional `tausend`, then an optional `hundert`, each after an optional multiplier `ein`–`neun`, then a unit, a teen, a ten, or a unit plus `und` plus a ten (`einundzwanzig`);
         - `hundert` and `tausend` on their own are a hundred and a thousand word, as in English, so "fünf hundert" is 500;
@@ -71,8 +78,10 @@ A number a model writes is kept only if the source states it. The workshop rule 
         - `halb`, `halbe`, `halben`, `halber` and `halbes` are a half;
         - `ein`, `eine`, `einen`, `einem` and `einer` on their own are 1 only directly before a unit word.
         - A token that isn't wholly a number states nothing ("Achtung", "Einheit").
-        - **`komma`** is the decimal point.
+        - **`komma`** is the decimal point, only right after a number word, and `null` is a digit after it: "zwei Komma null fünf" is 2.05 (round 2, #5).
+        - **The halves `halb`–`halbes` and `einhalb` join no number before them:** "zwei halbe Tabletten" states 2 and 0.5, never 2.5 (round 2, #4).
         - `zweimal`, `dreimal` and the like state nothing, as "twice" doesn't.
+      - **Unicode:** `stated_amounts` reads its text in NFC, so decomposed accents read as composed ones (round 2, #6).
       - **The unit words:** `mg`, `g`, `mcg`, `µg`, `ml`, `miligramo(s)`, `gramo(s)`, `microgramo(s)`, `mililitro(s)`, `milligramm`, `gramm`, `mikrogramm` and `milliliter`.
       - **So** "quinientos" is 500, "veinticinco" 25, "treinta y cinco" 35 and "ochocientos setenta y cinco" 875. "dos coma cinco" is 2.5, "uno y medio" 1.5 and "un gramo" 1. "diez y cincuenta" states 10 and 50, never 60.
       - **And** "fünfhundertfünfundsiebzig" is 575, "zweihundertfünfzig" 250, "zwei Komma fünf" 2.5, "zweieinhalb" 2.5 and "eine halbe Tablette" 0.5. "una vez al día", "eine Tablette" and "zweimal täglich" state nothing.
