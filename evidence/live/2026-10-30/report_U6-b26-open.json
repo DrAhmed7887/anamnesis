@@ -1,0 +1,154 @@
+{
+  "intake_id": "eea27c7797dba545a1ff32ba8e2a3e79441ac4fea1f7b0db89f66cf111d1c783",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 2940,
+      "transcript": "I take Glucophage 500 milligrams twice a day",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Glucophage",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "glucophage",
+        "salt": null,
+        "amount": "500",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "2",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "bb5dc51834e9-0",
+      "image_sha256": "bb5dc51834e915ca8a10dcf507ee8b09469d0be99230a047af5bec52bbc3cea9",
+      "object_id": 0,
+      "x1": 235,
+      "y1": 1846,
+      "x2": 1560,
+      "y2": 2670,
+      "frame_w": 3156,
+      "frame_h": 3241,
+      "confidence": 0.5775577425956726
+    }
+  ],
+  "observations": [],
+  "findings": [
+    {
+      "finding_id": "c1:-",
+      "type": "missing_modality",
+      "claim_id": "c1",
+      "observation_id": null,
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [],
+      "needs_clinician_review": true,
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "7ecfbc40-d6f3-42d0-bef5-bc31f5bf1b11"
+      ],
+      "model_id": "muse-voice-transcribe-1.0",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 3661,
+      "cost_usd": "0.00020"
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "767ced84f289402f94fe8a6ba03044a1"
+      ],
+      "model_id": "muse-glimmer-30b+lora-r1@modal",
+      "input_tokens": 240,
+      "output_tokens": 94,
+      "latency_ms": 4728,
+      "cost_usd": "0.00636420"
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "bb5dc51834e9:medicine box",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae4fe6f13587da4eeda4330"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 5666,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 3,
+      "action": "segment",
+      "target": "bb5dc51834e9:label",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae4fe746ec8c463aecf4aa9"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 5332,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 4,
+      "action": "read",
+      "target": "bb5dc51834e9-0",
+      "outcome": "error: fireworks ProviderError",
+      "call_ids": [
+        "estimated-42e61d9d-4da1-4ca5-a415-83351b487875",
+        "estimated-23544152-afe5-4dc3-9b30-02980bda25ca"
+      ],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0.04834000"
+    },
+    {
+      "n": 5,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "1 findings",
+      "call_ids": [],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0"
+    }
+  ],
+  "calls": 5,
+  "spend_usd": "0.05990420",
+  "superseded": []
+}

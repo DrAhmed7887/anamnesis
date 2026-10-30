@@ -25,3 +25,41 @@ GLIMMER_URL=<the deployed server> uv run python scripts/intake_live.py --cap 11.
     [--extractor glimmer] [--reader fireworks]
 ```
 The server is warmed through `GET /health` first.
+
+## Results, 30 Oct evening
+- **Code:** `main` at dfc72e3, with batch 26 merged. The Glimmer server was deployed from that commit.
+- **Files:** 24 intakes, each case once in each column. The reports are `report_<case>-<column>.json` in `evidence/live/2026-10-30/`, and each intake has a line in `runs.jsonl`.
+- **Scoring:** `evidence/batches/22/intake_score.py`, unchanged. Every column ran with `--session-usd 0.50`, because the supervisor found the $0.25 default below two Glimmer estimates.
+
+| Case | Expected | Spark 1.3 does both | Glimmer extracts, Spark 1.3 reads | Glimmer extracts, Spark Open on Fireworks reads |
+|---|---|---|---|---|
+| U1 Concor, Russia | `match` | ✓ | ✓ | no reading (Fireworks timed out) |
+| U2 Augmentin, Belgium | `match` | the pack read as partial | the pack read as partial | no reading |
+| U3 Panadol, Australia | `match` | ✓ | the pack read as partial | no reading |
+| U4 Panadol, Finland, two tablets | `intake_differs_from_unit_strength` | ✓ | ✓ | no reading |
+| U5 Norvasc 5 mg and 10 mg, Israel | claim ↔ the 5 mg box: `match` | ✓ | ✓ | ✓ |
+| U6 Glucophage, China | `match` | `unresolved_name` | `unresolved_name` | no reading |
+| U7 Sortis 40 mg vs "Lipitor twenty milligrams" | `strength_mismatch` | both regions read as partial | both regions read as partial | no reading |
+| U8 Betaloc ZOK 100 | `match` | `insufficient_information` | the pack read as partial | no reading |
+| **Correct** | | **4 of 8** | **3 of 8** | **1 of 8** |
+
+- **Harm check:** no column has a false `match`, or a wrong strength or ingredient shown as fact.
+- **The claim step.** The tuned Glimmer extracted the same claims as Spark 1.3 on seven of the eight cases: the same name, amount and unit.
+  - On U2 it kept "Augmentin 875 mg", where Spark dropped the amount. That is the risk written down before the run: it reads "875 and 125" as one 875 mg intake, as on test_real #13–15. The pack was read as partial in that column, so no finding came from the pair.
+  - Its claim requests took 4.3–7.0 s, against Spark 1.3's 10.2–22.4 s, on the same notes.
+- **The second column's two extra misses are on the reading side.** Spark 1.3 read the labels in both of the first two columns. On U3 and U8 this draw read the pack as partial; in the first column it read U3 fully and U8 without a strength. That is run-to-run variation in the reader, not the extractor.
+- **The third column failed on Fireworks' latency.** Spark Open on Fireworks timed out at the reader's 60 s limit on 7 of the 8 intakes, as 16 estimated ledger lines with the reason "timeout" show. Each of those intakes failed safe: no reading, so the claim stood alone (`missing_modality`), with nothing shown as fact.
+- **Post-hoc diagnostic, not pre-registered:** one read of U1's first region on Fireworks with a 180 s limit, the same evening.
+  - The successful attempt took 52 s, and the whole read 114 s.
+  - It came back correct: bisoprolol 5 mg, readable.
+  - In batch 22, reads on Fireworks took 16–52 s.
+
+  So tonight's failures are latency at the product's limit, not wrong readings. The table keeps them as misses.
+- **So:** inside the full intake, the tuned Glimmer gave the same claims as Spark 1.3 on seven of eight cases, in about a third of the time, with no harmful finding. Spark Open on Fireworks couldn't be judged tonight, because the host answered too slowly. n = 8 with one run each, so this is never "better", and never "4 vs 3 vs 1" without the causes above.
+
+**Cost:**
+- **Meta:** about $0.40 across the three columns, for Voice Transcribe, SAM 3.1 and Spark 1.3.
+- **Fireworks:** $0.40, estimated from the ledger, and mostly charged timeouts.
+- **Modal:** the per-call estimates came to $0.11. The container's time is reconciled in `evidence/spend/modal_ledger.jsonl` from Modal's billing summary.
+
+The live ledger went from $8.04 to $9.01.

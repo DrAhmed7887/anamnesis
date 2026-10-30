@@ -1,6 +1,6 @@
 deploy 20:49:57
 ✓ App deployed in 6.779s! 🎉
-https://modal.com/apps/<account>/main/deployed/anamnesis-glimmer-serve
+(the deployment's dashboard link, redacted: it names the account)
 warm start 20:50:07
 20:51:09 try 1: HTTP 000
 20:52:17 try 2: HTTP 000

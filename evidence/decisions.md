@@ -236,3 +236,38 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
     - it misdescribes batch 24.2;
     - it calls WHO ATC "CC-BY-NC";
     - it makes MDR Rule 11 and § 203 StGB claims.
+
+## 2026-10-30: batch 26, the open weights inside the product (Ahmed's go)
+- **What:** Ahmed asked what to improve in the engine with Modal and Fireworks. He said yes to the answer through a pasted AI note, with Baseten kept off.
+  - Batch 26 makes the tuned Muse Glimmer 30B (LoRA r1) an optional claim extractor, served on Modal by the eval's own engine and decoding (`--extractor glimmer`).
+  - It makes Muse Spark Open on Fireworks an optional label reader, with JSON mode off (`--reader fireworks`).
+  - The default path stays Spark 1.3 for both steps, so the demo path is unchanged.
+- **How it was built:**
+  - Muse planned first, read-only, because Ahmed asked: "dont you think muse should plan and double check?" (`evidence/grills/b26-muse-plan/`).
+  - The CEO wrote the contract, and Muse built the batch in 3 rounds.
+  - The Opus supervisor and a fresh Muse audit reviewed it (`evidence/grills/b26-muse-audit/`).
+  - Merged in 12093c9 (feat 916454b).
+- **Live on Modal:** three servers, the CEO's reference and the batch's own after rounds 1 and 2, each returned 5 of 5 test notes fully right and byte-identical to the eval's replies.
+- **U1–U8, three columns,** pre-registered in 9d84f59 (`evidence/batches/26/intake-plan.md`):
+  - **Spark 1.3 does both:** 4 of 8.
+  - **Glimmer extracts, Spark 1.3 reads:** 3 of 8.
+  - **Glimmer extracts, Spark Open on Fireworks reads:** 1 of 8.
+  - **0 harmful in every column.**
+  - **The causes:**
+    - Glimmer's claims equal Spark's on 7 of 8, and on U2 it keeps "875 mg" where Spark dropped the amount, as pre-registered;
+    - its claim requests took 4.3–7.0 s, against 10.2–22.4 s;
+    - the second column's extra misses are the reader's run-to-run variation;
+    - Fireworks timed out at the reader's 60 s limit on 7 of 8. A labelled diagnostic read came back correct, its successful attempt taking 52 s.
+- **What the README and the film may say:**
+  - The product can run its claim extraction on the tuned Glimmer, served on Modal by the code that scored it.
+  - Never "better", "beats" or "matches".
+  - Spark Open on Fireworks couldn't be judged live on 30 Oct, because the host answered too slowly.
+- **Spend:**
+  - Muse $3.39: the three rounds $2.82, plus the read-only plan and audit $0.57, which are in neither ledger.
+  - Modal $6.76 for serving, all credits and $0.00 billed (reconciled in `modal_ledger.jsonl`).
+  - Fireworks about $0.45, and Meta about $0.40 for the live runs.
+- **Open:**
+  - **Fireworks' timeout:** the reader's 60 s client timeout against tonight's Fireworks latency. A batch 26.1 raising it would be Ahmed's call.
+  - **Tuesday's history scrub:** the Modal account name appears in 916454b's `batch_smoke_r2/run.txt`, now redacted in the tree.
+  - **The digital twin idea** stays after the hackathon.
+- **Kept out of the repo,** from the pasted notes: "lock the $10K", "zero-risk", "25,000+ tests", the 2,417 count, and the MDR class lines.
