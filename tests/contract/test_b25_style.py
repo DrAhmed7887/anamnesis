@@ -101,10 +101,12 @@ def test_the_style_adds_no_words():
 
 
 def test_the_style_hides_nothing():
+    """Whole declarations only: font-size:0.875rem and background-color:transparent hide nothing (batch 25 builder)."""
     style = flat(style_of(page("showcase")))
-    for trick in ("display:none", "visibility:hidden", "visibility:collapse", "opacity", "font-size:0",
-                  "color:transparent"):
+    for trick in ("display:none", "visibility:hidden", "visibility:collapse", "opacity"):
         assert trick not in style, trick
+    assert not re.search(r"font-size:0(?![.\d])", style), "font-size:0"
+    assert not re.search(r"(?<![\w-])color:transparent", style), "color:transparent"
 
 
 def test_a_photo_box_stays_clickable_across_its_whole_area():
