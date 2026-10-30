@@ -60,7 +60,8 @@ def main() -> None:
     print("| Case | Pattern | The careful listener's findings | Model | Its claims | Its findings "
           "| Wrong as fact? |")
     print("|---|---|---|---|---|---|---|")
-    for case in CASES:
+    only = set(sys.argv[1:])  # case ids to run, or all
+    for case in [c for c in CASES if not only or c["id"] in only]:
         right, _ = outcome(case, case["right"])
         for name, extractor in extractors.items():
             try:
@@ -75,7 +76,8 @@ def main() -> None:
             print(f"| {case['id']} | {case['pattern']} | {right} | {name} | {shown}"
                   f" | {got} | {'yes' if wrong else 'no'} |")
     out = json.dumps(rows, ensure_ascii=False, indent=2) + "\n"
-    (HERE / "probe_live.json").write_text(out, encoding="utf-8")
+    name = "probe_live.json" if not only else f"probe_live_{''.join(sorted(only))}.json"
+    (HERE / name).write_text(out, encoding="utf-8")
 
 
 if __name__ == "__main__":

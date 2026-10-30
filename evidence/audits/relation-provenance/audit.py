@@ -22,10 +22,11 @@ FACT = {"match", "strength_mismatch", "intake_differs_from_unit_strength", "ingr
         "ratio_mismatch", "formulation_mismatch", "discontinued_but_present"}
 
 
-def claim(name, *, intake_amount=None, units=None, status="active", turns=("turn-0",), strength=None):
+def claim(name, *, intake_amount=None, units=None, status="active", turns=("turn-0",), strength=None,
+          per_day=None):
     return {"name_text": name, "inn": None, "strength": strength,
             "intake_amount": intake_amount,
-            "regimen": {"units_per_intake": units, "intakes_per_day": None, "as_needed": None},
+            "regimen": {"units_per_intake": units, "intakes_per_day": per_day, "as_needed": None},
             "status": status, "turn_ids": list(turns)}
 
 
@@ -77,6 +78,16 @@ CASES = [
      "turns": ["باخد كونكور عشرة مجم الصبح، مش خمسة."], "pack": CONCOR_5,
      "right": claim("كونكور", intake_amount=amount("bisoprolol", 10)),
      "wrong": claim("كونكور", intake_amount=amount("bisoprolol", 5))},
+    # Added after Muse's double-check (31 Oct, 00:10): two traps it named.
+    {"id": "I", "pattern": "micrograms said, milligrams written",
+     "turns": ["I take Concor five micrograms every morning."], "pack": CONCOR_5,
+     "right": claim("Concor", intake_amount=amount("bisoprolol", 5, "mcg")),
+     "wrong": claim("Concor", intake_amount=amount("bisoprolol", 5))},
+    {"id": "J", "pattern": "a daily total read as one intake",
+     "turns": ["I take Concor ten milligrams a day, five in the morning and five at night."],
+     "pack": CONCOR_5,
+     "right": claim("Concor", intake_amount=amount("bisoprolol", 5), per_day="2"),
+     "wrong": claim("Concor", intake_amount=amount("bisoprolol", 10))},
 ]
 
 
