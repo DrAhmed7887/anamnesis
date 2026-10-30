@@ -1,0 +1,16 @@
+split test_iid (first 5, served): 5 examples, 5 replies, 10 answer claims
+valid JSON 5/5 (100.0%); dropped by the product's checks 0; invalid JSON 0; no reply 0
+per-claim field accuracy:
+  name_text        10/10 (100.0%)
+  inn              10/10 (100.0%)
+  intake           10/10 (100.0%)
+  strength         10/10 (100.0%)
+  units_per_intake 10/10 (100.0%)
+  intakes_per_day  10/10 (100.0%)
+  as_needed        10/10 (100.0%)
+  status           10/10 (100.0%)
+claims missing 0, extra 0
+transcripts all correct 5/5 (100.0%)
+harmful claims, raw reply, before the product's checks: 0 (unsupported amounts 0, unsupported INNs 0)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+examples with a miss or a harmful claim: 0

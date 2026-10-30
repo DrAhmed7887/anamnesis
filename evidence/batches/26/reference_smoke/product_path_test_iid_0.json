@@ -1,0 +1,56 @@
+{
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "جلوكاتيل",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "جلوكاتيل",
+        "salt": null,
+        "amount": "80",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "1",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    },
+    {
+      "claim_id": "c2",
+      "name_text": "Jantoven",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "jantoven",
+        "salt": null,
+        "amount": "2.5",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "2",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "trace": {
+    "call_id": "f2454d64d62a48b598873aaac3528afc",
+    "model_id": "muse-glimmer-30b+lora-r1@modal",
+    "latency_ms": 6569,
+    "input_tokens": 275,
+    "output_tokens": 185,
+    "cost_usd": "0.00890988",
+    "prior_call_ids": [],
+    "prior_cost_usd": "0"
+  }
+}
