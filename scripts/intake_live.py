@@ -7,7 +7,8 @@
 With no --case it runs the two synthetic notes (media: scripts/make_synthetic_media.sh). With --case it runs
 one staged case (evidence/batches/21/manifest.md): that voice note and those photos, in order, --repeat times.
 --reader baseten or --reader fireworks makes Meta's open-weight Muse Spark Open on Baseten or Fireworks the
-label reader (keys: BASETEN_API_KEY, FIREWORKS_API_KEY); everything else stays on Meta. It refuses any photo
+label reader (keys: BASETEN_API_KEY, FIREWORKS_API_KEY); everything else stays on Meta. On Fireworks it asks
+for low reasoning effort, as Spark 1.3's reader does. It refuses any photo
 outside the public folders that docs/DATA_HANDLING.md lets go to Baseten or Fireworks, before the first call.
 --extractor glimmer makes the tuned Glimmer on Modal the claim extractor (token: MODAL_PROXY_TOKEN, URL from
 --glimmer-url or GLIMMER_URL); it refuses any voice note but the synthetic ones under
@@ -129,7 +130,8 @@ def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]],
     else:
         provider = run.open_client.provider
         reader = OpenWeightLabelReader(run.open_client, guard, model=PRESETS[provider]["model"],
-                                       price_key=f"muse-spark-open@{provider}", json_mode=False)
+                                       price_key=f"muse-spark-open@{provider}", json_mode=False,
+                                       reasoning_effort="low" if provider == "fireworks" else None)
     start = time.monotonic()
     report = run_intake(
         audio, images,
