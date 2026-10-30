@@ -249,7 +249,7 @@ def test_round2_page_marks():
     assert "<figcaption>" in html and "Photo 1" in html and region.region_id in html
     assert 'dir="auto"' in html
     assert "img{max-width:100%;height:auto}" in html
-    assert "#disagree{border-left:" in html
+    assert "#disagree article{border-inline-start:4px solid #d9480f}" in html
 
 
 def test_across_links_use_claim_names():
