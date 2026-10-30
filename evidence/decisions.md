@@ -211,3 +211,5 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 4. **No catalogue codes beside a side that contradicts its own name.** This is batch 24.2, a provenance fix, which the freeze allows.
    - **Why:** the research found no published guidance on codes beside a conflict. Medication-reconciliation sources favour the patient's own words, checking against a second source, and flagging conflicts. A code the patient's own words dispute is worse than no code.
    - **For after the hackathon:** labelling codes "from the name" next to a flagged conflict, as the research suggests.
+   - **Merged as batch 24.2** (ec714ab, merged in c639af4). The supervisor approved it, and `demo-freeze` moved to f29092e.
+   - **The supervisor's follow-up, for a later batch:** the check doesn't read the intake amount's own ingredient. "Concor" with an atorvastatin intake and `inn` left empty still shows bisoprolol's codes, but only when the model ignores its prompt.
