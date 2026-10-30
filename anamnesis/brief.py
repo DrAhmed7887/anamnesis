@@ -118,7 +118,9 @@ def render_brief(
     sections["voice"].append(_voice_html(report, audio))
     parts = [
         "<!DOCTYPE html>", '<html lang="en">',
-        f"<head><meta charset=\"utf-8\"><title>{BRIEF_TITLE}</title><style>{_STYLE}</style></head>",
+        '<head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        f"<title>{BRIEF_TITLE}</title><style>{_STYLE}</style></head>",
         "<body>", _scope_html(review),
     ]
     for name in SECTION_ORDER:
