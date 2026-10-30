@@ -67,3 +67,7 @@
 - **For the judge session:**
   - the open-weight rows can cite the fourth column (`evidence/batches/26/intake-plan.md`, "The fourth column's results"), which ran both model steps on Meta open weights: 5 of 8, 0 harmful;
   - the Astra grill's wording advice is in `evidence/grills/win-grill-astra/effect.md`.
+
+## The tag moved after the relation audit (31 Oct, 00:15 CET)
+- **No code changed.** The tag adds the audit (`evidence/audits/relation-provenance/`, with Muse's double-check) and its decision entry.
+- **For the judge session:** the README's limits section should carry the audit's sentence and numbers ("Decision", 31 Oct, in `evidence/decisions.md`).

@@ -281,3 +281,12 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **The win grill:** Ahmed asked for a grill of the entry on GPT-6 Astra through his Azure OpenAI resource, Azure for Students (`evidence/grills/win-grill-astra/`). It cost about $0.22 of Azure credit.
   - Its main advice: report full-intake results beside the fine-tune's; audit relation-level provenance patterns; test real voices on invented scripts; show the agent's real state transitions; and build the hero on the clinician's re-photo pause.
   - The film's hero and any recording are Ahmed's calls.
+
+## 2026-10-31: the relation-level provenance audit (Ahmed's yes)
+- **What:** the hour's audit that GPT-6 Astra's win grill suggested: ten invented traps, run offline through the product's checks and reconciler, then live on Spark 1.3 and the tuned Glimmer (`evidence/audits/relation-provenance/`). Muse double-checked it read-only and added two traps (`evidence/grills/relation-audit-muse/`).
+- **Found:** the checks test values, not relations. Seven of the ten traps would pass if a model got them wrong, and three of those would be false matches: a negated amount in English and in Egyptian Arabic, and micrograms written as milligrams.
+- **Live, 20 calls:** no false match. Spark 1.3 got all ten right or failed safe. The tuned Glimmer misread one daily total ("ten milligrams a day, five in the morning and five at night") as a 10 mg intake, which showed a false disagreement.
+- **Decision:** no code change before the freeze. A false agreement is the release-gate category, and none was seen. The cheapest guard would be a new multilingual heuristic.
+  - After the hackathon, the ten traps become contract tests first.
+  - The README states the limit: "each amount value is checked as said in a cited turn; which medicine, tense, negation or unit it belonged to is not checked", with this audit's numbers.
+- **Spend:** Meta about $0.10 for 10 Spark calls, plus the Muse grill (about $0.2, in neither ledger). Modal: the per-call estimates, plus one more cold start to reconcile from Modal's billing.
