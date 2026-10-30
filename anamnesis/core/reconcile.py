@@ -65,6 +65,16 @@ def _pack_identity(pack: PackObservation, catalogue: Catalogue) -> tuple[frozens
     return _identity(pack.strength, pack.inn, pack.label_text or "", catalogue, pack.country)
 
 
+def claim_identity_conflict(claim: PatientClaim, catalogue: Catalogue) -> bool:
+    """Whether a claim's stated INN or strength contradicts its own name (SPEC §7, batch 24.2)."""
+    return _claim_identity(claim, catalogue)[1]
+
+
+def pack_identity_conflict(pack: PackObservation, catalogue: Catalogue) -> bool:
+    """Whether a pack's reading contradicts its own label (SPEC §7, batch 24.2)."""
+    return _pack_identity(pack, catalogue)[1]
+
+
 def _amount(ingredient: IngredientAmount) -> tuple[Decimal, str]:
     amount = ingredient.amount
     unit = ingredient.unit.value
