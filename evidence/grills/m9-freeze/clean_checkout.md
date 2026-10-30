@@ -59,3 +59,11 @@
 - **For the judge session:**
   - no row of `docs/CLAIMS.md` or the README draft cites a line of the changed files, so the rows re-cited after batch 25 stand;
   - new rows for the open-weight path should cite `evidence/batches/26/intake-plan.md` ("Results, 30 Oct evening") and the 30 Oct batch 26 entry in `evidence/decisions.md`, with their wording limits: never "better", "beats" or "matches", and Fireworks "couldn't be judged live".
+
+## The tag moved after batch 26.1 (30 Oct, 23:53 CET)
+- **The tag:** `demo-freeze` now points at c657db5: batch 26.1 merged in 0af0e33, plus the fourth live column and the Astra grill.
+- **A fresh clone** of the tag passes all 2,519 tests.
+- **What batch 26.1 changed:** `anamnesis/providers/openweight.py` (an optional `reasoning_effort` on the reader) and `scripts/intake_live.py`, where Fireworks asks for `low`. Neither file is cited by line in `docs/CLAIMS.md`.
+- **For the judge session:**
+  - the open-weight rows can cite the fourth column (`evidence/batches/26/intake-plan.md`, "The fourth column's results"), which ran both model steps on Meta open weights: 5 of 8, 0 harmful;
+  - the Astra grill's wording advice is in `evidence/grills/win-grill-astra/effect.md`.
