@@ -8,7 +8,7 @@ dir="evidence/grills/${1:?milestone dir}"
 mkdir -p evidence/raw
 
 # Standard mode only: *-contributor ids let Meta train on what we send (docs/muse/gotchas.md).
-muse exec --model muse-spark-1.3 --no-foreign-personal-context -w --max-model-steps 12 \
+muse exec --model muse-spark-1.3 --contributor-mode off --no-foreign-personal-context -w --max-model-steps 12 \
   "$(cat "$dir/brief.md")" </dev/null > "evidence/raw/${1}-muse.out" 2>&1
 sed "s#$PWD/.muse/worktrees/[0-9-]*/##g" "evidence/raw/${1}-muse.out" > "$dir/muse.md"
 muse export --last --redacted --out "$dir/muse_session.json" </dev/null
