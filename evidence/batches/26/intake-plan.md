@@ -63,3 +63,17 @@ The server is warmed through `GET /health` first.
 - **Modal:** the per-call estimates came to $0.11. The container's time is reconciled in `evidence/spend/modal_ledger.jsonl` from Modal's billing summary.
 
 The live ledger went from $8.04 to $9.01.
+
+## A fourth column after batch 26.1: plan, committed before its first call (30 Oct, 23:40 CET)
+- **Why:** the third column lost 7 of its 8 readings to Fireworks timeouts. The cause was the reasoning effort: the open-weight reader sent none, so Spark Open reasoned at its default, `xhigh`. Batch 26.1 makes `--reader fireworks` ask for `low`, as Spark 1.3's reader does (SPEC §4). Three diagnostic reads at `low` took 16–24 s, and all three were correct.
+- **The column:** `<case>-b261-open`. The tuned Glimmer extracts and Spark Open on Fireworks reads, at low effort.
+  - It runs on `main` after batch 26.1 merges, on the same eight cases, voice notes and photos, with the same expected results (8b993ff), the same scorer and the same caps (`--session-usd 0.50`).
+  - The Glimmer server stays as deployed from dfc72e3, because batch 26.1 doesn't change it.
+- **How it's reported:** as a second draw of the open column, after a fix. The third column stays in the table as run, 1 of 8.
+  - The first two columns ran on dfc72e3. Batch 26.1 changes nothing on their paths, so they stay the controls, and this is noted beside them.
+  - n = 8, one run each; never "better" or "beats".
+- **Known risks, written before the run:**
+  - **U2:** the claim may again come out as one 875 mg intake.
+  - **U6:** every column so far gave `unresolved_name`. The Chinese pack never prints "Glucophage" in Latin script.
+  - **A slow host:** Fireworks may still be slow at low effort on some crops. A timeout stays a miss.
+- **Spend:** about $0.10 of Meta, $0.25 of Fireworks and about $2 of Modal (a cold start, the column and 10 idle minutes). `scripts/spend_check.py` runs first.
