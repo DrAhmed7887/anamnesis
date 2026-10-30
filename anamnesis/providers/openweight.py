@@ -58,14 +58,18 @@ class OpenWeightClient(MetaClient):
 
 class OpenWeightLabelReader:
     def __init__(self, client: OpenWeightClient, guard: SpendGuard, *, model: str,
-                 price_key: str, json_mode: bool) -> None:
+                 price_key: str, json_mode: bool,
+                 reasoning_effort: str | None = None) -> None:
         if "-contributor" in model.strip().casefold():
             raise ValueError("contributor models are not permitted")
+        if reasoning_effort is not None and reasoning_effort not in ("low", "medium", "high", "xhigh"):
+            raise ValueError("reasoning_effort must be None or one of low, medium, high, xhigh")
         self.client = client
         self.guard = guard
         self.model = model
         self.price_key = price_key
         self.json_mode = json_mode
+        self.reasoning_effort = reasoning_effort
 
     def read(self, image: bytes, region: ImageRegion, *, mime: str,
              cropped: bool = False) -> tuple[LabelReading, ProviderTrace]:
@@ -95,6 +99,8 @@ class OpenWeightLabelReader:
             body["response_format"] = {"type": "json_schema", "json_schema": {
                 "name": "label_reading", "strict": True, "schema": LABEL_SCHEMA,
             }}
+        if self.reasoning_effort is not None:
+            body["reasoning_effort"] = self.reasoning_effort
 
         estimate = spark_call_estimate({**body, "model": self.price_key})
 
