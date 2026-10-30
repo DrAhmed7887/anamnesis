@@ -388,6 +388,7 @@ Billing-uncertain failures are recorded at the pre-call estimate. Rejected 4xx a
   - **Which box shows them:** a finding box whose claim's `name_text` resolves to a catalogue entry with codes, or, when there is no claim, whose pack's `label_text` does.
   - **What it shows:** one line under the two sides, `Catalogue codes: ATC … · RxNorm …`, with only the codes the entry has. Codes are escaped, and there's no link.
   - **The reference line:** once per page, when any code is shown. It names the WHO Collaborating Centre for Drug Statistics Methodology and points to `NOTICE`. It never names NLM, whose terms ask apps not to use its name.
+  - **No codes beside a contradiction (batch 24.2):** a box shows no codes line when its side contradicts its own name. That uses the reconciler's own identity check: the claim's name against its stated INN and strength, or the pack's label against its strength, with the pack's country. A code says which medicine a name is, so when the patient's own words or the pack's own reading dispute the name, the brief shows no code rather than a disputed one. The batch 24.1 supervisor found the case: "Concor" said with "atorvastatin" showed bisoprolol's codes.
 - A3 wording: a `missing_modality` finding is labelled "Mentioned, not photographed" or "Photographed, not mentioned", and one in `stopped` "Reported as stopped, not photographed";
 - a link to every piece of its evidence: `href="#turn:<turn_id>"` for each audio turn, `href="#region:<region_id>"` for each region.
 
