@@ -213,3 +213,26 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
    - **For after the hackathon:** labelling codes "from the name" next to a flagged conflict, as the research suggests.
    - **Merged as batch 24.2** (ec714ab, merged in c639af4). The supervisor approved it, and `demo-freeze` moved to f29092e.
    - **The supervisor's follow-up, for a later batch:** the check doesn't read the intake amount's own ingredient. "Concor" with an atorvastatin intake and `inn` left empty still shows bisoprolol's codes, but only when the model ignores its prompt.
+
+## 2026-10-30: batch 25, the brief's look (Ahmed's go)
+- **The decision:** Ahmed asked what the CEO thought of a pasted plan to restyle the brief. The CEO recommended a narrow batch, CSS only and built by Muse, and Ahmed answered "Run batch 25".
+- **One change from that recommendation:** one HTML tag joined the batch, the viewport tag. Without it a phone lays the brief out 980 px wide, so no style could make it fit. The contract pins the tag.
+- **What the pasted plan proposed and the batch didn't do:**
+  - new words on a clinical page ("DISCREPANCY DETECTED", "Reviewed & Approved");
+  - web fonts;
+  - glassmorphism;
+  - red.
+
+  The batch adds no words, loads nothing and keeps the amber accent.
+- **Merged as batch 25** (df1f251, merged in 63b9312):
+  - two Muse rounds, $1.28, and supervisor APPROVE in both;
+  - `demo-freeze` moved to 0d8424c, and a fresh clone passed 2,428 tests.
+- **Recorded, not done:**
+  - crops from real phone photos still take a row each, because a width cap would shrink the zoom view;
+  - an opened timeline could clip about 10 px when printed on A5;
+  - the goal check's export-wide read scan flags text quoted in tool results, a tooling fix for after the hackathon.
+- **The rest of the paste (30 Oct):** its assessment text from another model stays out of the repo, the README and the film.
+  - **What it gets wrong:**
+    - it misdescribes batch 24.2;
+    - it calls WHO ATC "CC-BY-NC";
+    - it makes MDR Rule 11 and § 203 StGB claims.

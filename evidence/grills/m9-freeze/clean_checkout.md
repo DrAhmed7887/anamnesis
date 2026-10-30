@@ -30,3 +30,19 @@
   - ruff passed, and pytest gave **2,417 passed**;
   - `LICENSE` and `NOTICE` were present, and `drugs_v2.json` held no SNOMED ids.
 - **No live run:** batch 24.2 changes only which boxes show a codes line. U12's sides agree with their names, and the supervisor found 83 existing briefs byte-identical apart from codes lines.
+
+## The tag moved after batch 25 (30 Oct, 15:21 CET)
+- **Why it moved:** `demo-freeze` went from f29092e to 0d8424c, batch 25's log commit after its merge (63b9312). Batch 25 is the brief's look and a viewport tag for phones, on Ahmed's go of 30 Oct. The official freeze is Sat 31 Oct 23:59.
+- **What sits between the two tags:**
+  - 63002d3, the record of the previous move;
+  - batch 25's commits: its contract (a42676b, fixed in 4a7ae6e), the Muse ledger (98bf622), the build (df1f251), the merge (63b9312) and its log line (0d8424c).
+- **A fresh clone of main at 0d8424c from the private remote:**
+  - the tree was clean;
+  - `uv sync --frozen` ran;
+  - ruff passed, and pytest gave **2,428 passed**;
+  - the page head carries the viewport tag.
+- **No live run:** batch 25 changes only the page's style and one tag in its head. Outside them, the briefs are byte-identical: 49 distinct pages from the test suite (supervisor, round 2) and six the CEO rendered.
+- **For the judge session:**
+  - `anamnesis/brief_html.py` lines from 71 on moved down by 45 (`_SCRIPT` now starts at 134, not 89);
+  - `anamnesis/brief.py` lines from 122 on moved down by 2;
+  - `docs/CLAIMS.md` rows 1.3 and 1.4 cite `brief_html.py` lines, so they need re-citing at the tag, as planned.
