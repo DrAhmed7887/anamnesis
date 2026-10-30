@@ -347,6 +347,34 @@ On 28 Oct Ahmed added a zero-shot comparison with Meta's open-weight **Muse Spar
 - **The comparison is zero-shot.** No model is trained. SAM 3.1 segments each photo once, and every reader reads the same crops. The 39 public photos were pre-registered before any run: 30 Egyptian phone photos (CC BY 4.0) and 9 Wikimedia Commons photos. **Ahmed's own photos never go to these providers**: they go only to Meta's API (`docs/DATA_HANDLING.md`).
 - **Licence.** Muse Spark Open is used under the Muse Model License, and the README carries "Built with Muse Spark Open".
 
+### Open-weight claim extractor and the Fireworks reader (`anamnesis/providers/glimmer.py`, batch 26)
+On 30 Oct Ahmed said yes to putting both open-weight models inside the product, each behind a flag of `scripts/intake_live.py`. **Without a flag, nothing changes:** Spark 1.3 extracts the claims and reads the labels.
+- **The extractor.** `GlimmerClaimExtractor(client, guard)` has `MetaClaimExtractor`'s interface. `extract(turns)` returns `([], None)` for no turns and makes no call; otherwise it returns the claims and one trace.
+  - **What it sends is what the tuned model was trained on:** the system message `_SYSTEM_PROMPT` plus `"\nReasoning strength: low"`, and the user message built exactly as `MetaClaimExtractor` builds it (`SYSTEM_CONTENT` and `format_turns` in `finetune/common.py`).
+  - **The request** is `POST extract` with `{"messages": [system, user], "schema": CLAIMS_SCHEMA, "max_tokens": 16000}`.
+  - **The reply** is `{"id", "reply", "opened_answer", "first_finish", "answer_finish", "prompt_tokens", "completion_tokens"}`. A missing or mistyped field is a malformed reply.
+- **The same checks.** The reply goes through `parse_claims_json` unchanged, so every grounding, amount and advice check applies to the tuned model's answers as to Spark's.
+- **Failing safe.**
+  - A reply that stopped at the length limit (`first_finish` or `answer_finish` is `"length"`) raises a non-retryable error with its trace, so no claim comes from it.
+  - A reply with no answer (`reply` is null) raises a retryable error with its trace, as a malformed Spark reply does.
+  - HTTP errors follow `MetaClient`: a 401 never retries and isn't charged; a 5xx or a timeout retries once and is charged as an estimate.
+  - Every error names the provider `modal`, and the token is redacted from every message.
+- **The model and its cost.** The trace's model is `muse-glimmer-30b+lora-r1@modal`. Modal bills machine time, not tokens:
+  - a call's cost is its seconds, rounded up, at Modal's list price for the eval's machine, one H100 with 8 cores and 32 GiB: $0.00127284 a second (29 Oct, `usd_per_s` in `finetune/glimmer.py`);
+  - before the request, the guard checks the client's whole timeout, `GLIMMER_TIMEOUT_S` (120 s), at that price;
+  - the container's load and idle time are billed by Modal outside the product. They go into `evidence/spend/modal_ledger.jsonl` from Modal's billing summary.
+- **The server** (`finetune/modal_serve.py`) is one deployed Modal class:
+  - one H100 with the r1 adapter, the pre-registered headline;
+  - the eval's image, engine settings and sampling, and `_two_passes` unchanged;
+  - one conversation per request, so every call is seeded with `EVAL_SEED`;
+  - at most one container, scaled to zero after 10 idle minutes;
+  - two routes, `GET health` and `POST extract`, both behind Modal proxy auth.
+- **The Fireworks reader.** `--reader fireworks` reads labels with Muse Spark Open at `PRESETS["fireworks"]`'s URL and model, with JSON mode off and price key `muse-spark-open@fireworks`. With JSON mode on, Fireworks returned no strength on any of batch 22's 20 crops; with it off, it read 5 of 5 right (batch 22, diagnostic 1). `PRESETS` stays as the comparison ran.
+- **What may go where** (`docs/DATA_HANDLING.md`):
+  - `--extractor glimmer` sends transcript text only, and only for a staged case whose voice note is one of the synthetic notes in `evidence/raw/media/public/voice/`. Its URL must be `https://` on a `.modal.run` host.
+  - `--reader fireworks` sends only the public photos that `--reader baseten` allows.
+  - Both refuse anything else before the first call. The Modal token comes only from the Keychain (`MODAL_PROXY_TOKEN`) or the environment.
+
 ## 5. Every model call logs
 - **Ledger** (`evidence/spend/ledger.jsonl`): `call_id`, `model_id`, `cost_usd`, `time_utc`, `estimated` (+ `reason`). Lines from before batch 12 have no `estimated` field; all of them are real charges.
 - **Trace** (saved with each live result in `evidence/live/<date>/*.json`): latency and tokens as listed below.
