@@ -46,3 +46,16 @@
   - `anamnesis/brief_html.py` lines from 71 on moved down by 45 (`_SCRIPT` now starts at 134, not 89);
   - `anamnesis/brief.py` lines from 122 on moved down by 2;
   - `docs/CLAIMS.md` rows 1.3 and 1.4 cite `brief_html.py` lines, so they need re-citing at the tag, as planned.
+
+## The tag moved after batch 26 (30 Oct, 23:10 CET)
+- **The tag:** `demo-freeze` now points at 4dbacff: batch 26 merged in 12093c9, plus the live U1–U8 results and the Modal reconcile.
+- **A fresh clone** of the tag from the private remote passes all 2,490 tests offline.
+- **What batch 26 changed:**
+  - `anamnesis/providers/base.py`: the Modal price and `gpu_ms`;
+  - `scripts/intake_live.py`: the `--extractor glimmer`, `--reader fireworks` and `--glimmer-url` options and their guards;
+  - two new files, `anamnesis/providers/glimmer.py` and `finetune/modal_serve.py`.
+
+  `anamnesis/brief_html.py` is untouched since batch 25.
+- **For the judge session:**
+  - no row of `docs/CLAIMS.md` or the README draft cites a line of the changed files, so the rows re-cited after batch 25 stand;
+  - new rows for the open-weight path should cite `evidence/batches/26/intake-plan.md` ("Results, 30 Oct evening") and the 30 Oct batch 26 entry in `evidence/decisions.md`, with their wording limits: never "better", "beats" or "matches", and Fireworks "couldn't be judged live".
