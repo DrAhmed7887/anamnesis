@@ -375,6 +375,16 @@ On 30 Oct Ahmed said yes to putting both open-weight models inside the product, 
   - `--reader fireworks` sends only the public photos that `--reader baseten` allows.
   - Both refuse anything else before the first call. The Modal token comes only from the Keychain (`MODAL_PROXY_TOKEN`) or the environment.
 
+### Reasoning effort for the open-weight reader (batch 26.1)
+- **The option.** `OpenWeightLabelReader(..., reasoning_effort=None)`.
+  - **None, the default,** sends the request exactly as batch 22's comparison ran: no `reasoning_effort` field.
+  - **A value** adds `"reasoning_effort": <value>` to the request and changes nothing else, including the pre-call estimate. The values Meta documents for Spark Open are `low`, `medium`, `high` and `xhigh`. Anything else raises `ValueError` when the reader is built, before any call.
+- **`--reader fireworks` asks for `low`,** the effort `MetaLabelReader` asks of Spark 1.3. `--reader baseten` stays at None.
+- **Why:** Spark Open reasons at `xhigh` by default (`docs/muse/muse-spark-open.md`).
+  - On 30 Oct, Fireworks took 52 s or more per read at that effort. 16 of 18 reads in the live column timed out at the client's 60 s, and with a 180 s limit Fireworks itself dropped the connection at about 62 s.
+  - At `low`, three reads took 16–24 s, and all three were correct.
+- **What stays:** the client timeout (60 s), `PRESETS`, the length-stop and retry rules, and `scripts/reader_eval.py`, which stays at None.
+
 ## 5. Every model call logs
 - **Ledger** (`evidence/spend/ledger.jsonl`): `call_id`, `model_id`, `cost_usd`, `time_utc`, `estimated` (+ `reason`). Lines from before batch 12 have no `estimated` field; all of them are real charges.
 - **Trace** (saved with each live result in `evidence/live/<date>/*.json`): latency and tokens as listed below.
