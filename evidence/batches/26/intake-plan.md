@@ -77,3 +77,24 @@ The live ledger went from $8.04 to $9.01.
   - **U6:** every column so far gave `unresolved_name`. The Chinese pack never prints "Glucophage" in Latin script.
   - **A slow host:** Fireworks may still be slow at low effort on some crops. A timeout stays a miss.
 - **Spend:** about $0.10 of Meta, $0.25 of Fireworks and about $2 of Modal (a cold start, the column and 10 idle minutes). `scripts/spend_check.py` runs first.
+
+## The fourth column's results (30 Oct, 23:41–23:49 CET)
+- **Code:** `main` at c016ccc, with batch 26.1 merged. The Glimmer server is as deployed from dfc72e3, because batch 26.1 doesn't change it.
+
+| Case | Expected | Glimmer extracts, Spark Open on Fireworks reads at low effort |
+|---|---|---|
+| U1 | `match` | ✓ |
+| U2 | `match` | `insufficient_information`: the pack read as amoxicillin 875 mg + clavulanic acid 125 mg, and the claim kept only 875 mg (the risk written down before the run) |
+| U3 | `match` | ✓ |
+| U4 | `intake_differs_from_unit_strength` | ✓ |
+| U5 | claim ↔ the 5 mg box: `match` | ✓ |
+| U6 | `match` | `unresolved_name`, as in every column |
+| U7 | `strength_mismatch` | ✓, the first column to get it. Spark Open read the box as atorvastatin 40 mg, where Spark 1.3 read both regions as partial |
+| U8 | `match` | the pack read as partial |
+| **Correct** | | **5 of 8** |
+
+- **Harm check:** no false `match`, and no wrong strength or ingredient shown as fact.
+- **Timing:** every Fireworks read finished inside the 60 s limit, and the intakes took 31–94 s.
+- **So:** with both model steps on Meta open weights (the tuned Glimmer on Modal and Spark Open on Fireworks), the full intake ran end to end on all eight cases and got five right. That's the most of the four columns, with no harmful finding.
+  - It is one run per case, after a fix, and the first two columns ran on dfc72e3 with unchanged paths. So it is never "better" or "beats", and the third column stays in the record as run.
+- **Cost:** about $0.18 on the live ledger, for Meta, Fireworks and Modal's per-call estimates. The container's time is reconciled from Modal's billing.

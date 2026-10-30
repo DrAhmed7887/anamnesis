@@ -1,0 +1,164 @@
+{
+  "intake_id": "7c6574d967c8f8b9b01f4c549334dc0020edff4af8a2287417fe1fffe2ac824f",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 2780,
+      "transcript": "I take Panadol 500 milligrams when I need it",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Panadol",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "panadol",
+        "salt": null,
+        "amount": "500",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": null,
+        "as_needed": true
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "a70f5ff194fa-0",
+      "image_sha256": "a70f5ff194fa10e319695c092bb7b49ac3ad41c347c473de728b39ebb6b00ed9",
+      "object_id": 0,
+      "x1": 145,
+      "y1": 36,
+      "x2": 1663,
+      "y2": 811,
+      "frame_w": 2148,
+      "frame_h": 1736,
+      "confidence": 0.8827838897705078
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "Panadol\n100 TABLETS\nPHARMACY MEDICINE\nKEEP OUT OF REACH OF CHILDREN\nPanadol\nTABLETS\nORIGINAL FILM COATED NO BITTER AFTERTASTE\n100\nEffective on pain • gentle on stomachs\nEach tablet contains PARACETAMOL 500mg AUST R 13591",
+      "inn": "paracetamol",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "paracetamol",
+            "salt": null,
+            "amount": "500",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "readable",
+      "country": null,
+      "visual_evidence": [
+        "a70f5ff194fa-0"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "c1:o0",
+      "type": "match",
+      "claim_id": "c1",
+      "observation_id": "o0",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "a70f5ff194fa-0"
+      ],
+      "needs_clinician_review": false,
+      "clinician_note": "The compared identity and strength details agree.",
+      "patient_question_id": null
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "2cc8dd98-519e-4359-a64f-d21f0fde9687"
+      ],
+      "model_id": "muse-voice-transcribe-1.0",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 2680,
+      "cost_usd": "0.00020"
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "9a285b641a9443419284d97b338eaf5b"
+      ],
+      "model_id": "muse-glimmer-30b+lora-r1@modal",
+      "input_tokens": 240,
+      "output_tokens": 91,
+      "latency_ms": 4548,
+      "cost_usd": "0.00636420"
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "a70f5ff194fa:medicine box",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae51d66404b70084aa84256"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 3929,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 3,
+      "action": "read",
+      "target": "a70f5ff194fa-0",
+      "outcome": "readable",
+      "call_ids": [
+        "chatcmpl-c42589750ac44de2b562e1cb65939dbb"
+      ],
+      "model_id": "muse-spark-open@fireworks",
+      "input_tokens": 2306,
+      "output_tokens": 382,
+      "latency_ms": 22324,
+      "cost_usd": "0.00450600"
+    },
+    {
+      "n": 4,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "1 findings",
+      "call_ids": [],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0"
+    }
+  ],
+  "calls": 4,
+  "spend_usd": "0.01357020",
+  "superseded": []
+}

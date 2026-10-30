@@ -1,0 +1,228 @@
+{
+  "intake_id": "1d88729f0d07c10a08cba5d19d854205ed2464fc1ab9e80973a2b0cf0e2de207",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 2140,
+      "transcript": "I take Lipitor 20 milligrams at night",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Lipitor",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "lipitor",
+        "salt": null,
+        "amount": "20",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "1",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "7a26c60cafa5-0",
+      "image_sha256": "7a26c60cafa5c9f62db9df30d8d74b668e5e10e6eb762f9590e3537b910c961e",
+      "object_id": 0,
+      "x1": 3170,
+      "y1": 923,
+      "x2": 4175,
+      "y2": 2163,
+      "frame_w": 4176,
+      "frame_h": 3012,
+      "confidence": 0.6878048777580261
+    },
+    {
+      "region_id": "7a26c60cafa5-1",
+      "image_sha256": "7a26c60cafa5c9f62db9df30d8d74b668e5e10e6eb762f9590e3537b910c961e",
+      "object_id": 1,
+      "x1": 99,
+      "y1": 79,
+      "x2": 4042,
+      "y2": 2203,
+      "frame_w": 4176,
+      "frame_h": 3012,
+      "confidence": 0.8439024686813354
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "Pfizer\nSORTIS\n40 mg potahované tablety\nATORVASTATINUM\nVýdej léčivého přípravku vázán na lékařský předpis.\nNepoužitelné léčivo vraťte do lékárny.\n30 tablet\nJedna potahovaná tableta obsahuje atorvastatinum 40 mg (ve formě atorvastatinum calcium...)\nPřípravek obsahuje monohydrát laktosy. Perorální podání. Před použitím si přečtěte příbalovou informaci.\nUchovávejte mimo dohled a dosah dětí.\nTento léčivý přípravek nevyžaduje žádné zvláštní podmínky uchovávání.",
+      "inn": "atorvastatin",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "atorvastatin",
+            "salt": null,
+            "amount": "40",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "unknown"
+      },
+      "readability": "readable",
+      "country": null,
+      "visual_evidence": [
+        "7a26c60cafa5-1"
+      ]
+    },
+    {
+      "observation_id": "o1",
+      "label_text": "SORTIS®",
+      "inn": null,
+      "strength": null,
+      "readability": "partial",
+      "country": null,
+      "visual_evidence": [
+        "7a26c60cafa5-0"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "-:o1",
+      "type": "unreadable_source",
+      "claim_id": null,
+      "observation_id": "o1",
+      "audio_evidence": [],
+      "visual_evidence": [
+        "7a26c60cafa5-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "The pack label is not fully readable.",
+      "patient_question_id": "unreadable"
+    },
+    {
+      "finding_id": "c1:o0",
+      "type": "strength_mismatch",
+      "claim_id": "c1",
+      "observation_id": "o0",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "7a26c60cafa5-1"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "Patient-reported strength differs from the pack label.",
+      "patient_question_id": "strength"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "03930a57-f820-42e1-ad98-370747351926"
+      ],
+      "model_id": "muse-voice-transcribe-1.0",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 1527,
+      "cost_usd": "0.00015"
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "d0e314d6165d43d2af9519c3239f07a3"
+      ],
+      "model_id": "muse-glimmer-30b+lora-r1@modal",
+      "input_tokens": 238,
+      "output_tokens": 92,
+      "latency_ms": 2838,
+      "cost_usd": "0.00381852"
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "7a26c60cafa5:medicine box",
+      "outcome": "2 regions",
+      "call_ids": [
+        "resp_6ae51e3fcce0983ae5844fb8"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 7206,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 3,
+      "action": "read",
+      "target": "7a26c60cafa5-1",
+      "outcome": "readable",
+      "call_ids": [
+        "chatcmpl-40d3c0099ca0446cbff7ffaf2bf80e1d"
+      ],
+      "model_id": "muse-spark-open@fireworks",
+      "input_tokens": 4578,
+      "output_tokens": 1028,
+      "latency_ms": 34878,
+      "cost_usd": "0.01009150"
+    },
+    {
+      "n": 4,
+      "action": "read",
+      "target": "7a26c60cafa5-0",
+      "outcome": "unreadable",
+      "call_ids": [
+        "chatcmpl-c0269477f8244fcca8cd756e54ab57b4"
+      ],
+      "model_id": "muse-spark-open@fireworks",
+      "input_tokens": 2398,
+      "output_tokens": 368,
+      "latency_ms": 10303,
+      "cost_usd": "0.00456150"
+    },
+    {
+      "n": 5,
+      "action": "zoom_read",
+      "target": "7a26c60cafa5-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-e3c6a3fe4c574e059f1893a6912b5127"
+      ],
+      "model_id": "muse-spark-open@fireworks",
+      "input_tokens": 4568,
+      "output_tokens": 550,
+      "latency_ms": 16130,
+      "cost_usd": "0.00804750"
+    },
+    {
+      "n": 6,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "2 findings",
+      "call_ids": [],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0"
+    }
+  ],
+  "calls": 6,
+  "spend_usd": "0.02916902",
+  "superseded": []
+}

@@ -271,3 +271,13 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - **Tuesday's history scrub:** the Modal account name appears in 916454b's `batch_smoke_r2/run.txt`, now redacted in the tree.
   - **The digital twin idea** stays after the hackathon.
 - **Kept out of the repo,** from the pasted notes: "lock the $10K", "zero-risk", "25,000+ tests", the 2,417 count, and the MDR class lines.
+
+## 2026-10-30 (late): batch 26.1, and a win grill by GPT-6 Astra on Azure (Ahmed's calls)
+- **Batch 26.1:** Ahmed said yes to fixing the Fireworks column.
+  - **The diagnosis changed the fix.** The cause wasn't the timeout: with a 180 s limit, Fireworks itself dropped a request at about 62 s. It was the reasoning effort: the open-weight reader sent none, so Spark Open reasoned at its default, `xhigh`.
+  - **The fix:** `--reader fireworks` now asks for `low`, as Spark 1.3's reader does. Batch 22's comparison path is unchanged.
+  - **How it was built:** Muse planned it, built it in one round and audited it. The Opus supervisor approved. Merged in 0af0e33.
+  - **The pre-registered fourth column:** 5 of 8, with 0 harmful.
+- **The win grill:** Ahmed asked for a grill of the entry on GPT-6 Astra through his Azure OpenAI resource, Azure for Students (`evidence/grills/win-grill-astra/`). It cost about $0.22 of Azure credit.
+  - Its main advice: report full-intake results beside the fine-tune's; audit relation-level provenance patterns; test real voices on invented scripts; show the agent's real state transitions; and build the hero on the clinician's re-photo pause.
+  - The film's hero and any recording are Ahmed's calls.

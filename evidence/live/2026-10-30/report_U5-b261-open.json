@@ -1,0 +1,226 @@
+{
+  "intake_id": "e3a61ed3b437ede7dc849a8aeb8fa89f03c26efb9b4f7fd23bf57fa0abc1eff9",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 2300,
+      "transcript": "I take Norvasc five milligrams in the evening.",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Norvasc",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "norvasc",
+        "salt": null,
+        "amount": "5",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "1",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "77ff79688144-0",
+      "image_sha256": "77ff79688144121171dbb9af637a3f6c734d1e1d5f6b00335684e674c7af61bc",
+      "object_id": 0,
+      "x1": 52,
+      "y1": 57,
+      "x2": 2141,
+      "y2": 1070,
+      "frame_w": 3033,
+      "frame_h": 2153,
+      "confidence": 0.5241636037826538
+    },
+    {
+      "region_id": "77ff79688144-1",
+      "image_sha256": "77ff79688144121171dbb9af637a3f6c734d1e1d5f6b00335684e674c7af61bc",
+      "object_id": 1,
+      "x1": 751,
+      "y1": 1072,
+      "x2": 2901,
+      "y2": 2084,
+      "frame_w": 3033,
+      "frame_h": 2153,
+      "confidence": 0.518796980381012
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "Pfizer\nNorvasc™ 10 mg\nTablets\nEach tablet contains:\nAmlodipine (as besylate) 10 mg\nAlso contains sodium.\nНорваск 10 мг таблетки\n20 Tablets",
+      "inn": "amlodipine",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "amlodipine",
+            "salt": null,
+            "amount": "10",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "readable",
+      "country": null,
+      "visual_evidence": [
+        "77ff79688144-0"
+      ]
+    },
+    {
+      "observation_id": "o1",
+      "label_text": "Pfizer\nNorvasc™ 5 mg\nTablets\nEach tablet contains:\nAmlodipine (as besylate) 5 mg\nAlso contains sodium.\nНорваск 5 мг таблетки\n20 Tablets",
+      "inn": "amlodipine",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "amlodipine",
+            "salt": null,
+            "amount": "5",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "readable",
+      "country": null,
+      "visual_evidence": [
+        "77ff79688144-1"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "-:o0",
+      "type": "missing_modality",
+      "claim_id": null,
+      "observation_id": "o0",
+      "audio_evidence": [],
+      "visual_evidence": [
+        "77ff79688144-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
+    },
+    {
+      "finding_id": "c1:o1",
+      "type": "match",
+      "claim_id": "c1",
+      "observation_id": "o1",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "77ff79688144-1"
+      ],
+      "needs_clinician_review": false,
+      "clinician_note": "The compared identity and strength details agree.",
+      "patient_question_id": null
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "51b8c585-bce1-442f-8ebd-6ae0b5998250"
+      ],
+      "model_id": "muse-voice-transcribe-1.0",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 2706,
+      "cost_usd": "0.00015"
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "ffa35a3b94364f8ab858ccd350eb435f"
+      ],
+      "model_id": "muse-glimmer-30b+lora-r1@modal",
+      "input_tokens": 240,
+      "output_tokens": 94,
+      "latency_ms": 4189,
+      "cost_usd": "0.00636420"
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "77ff79688144:medicine box",
+      "outcome": "2 regions",
+      "call_ids": [
+        "resp_6ae51dad154c6621c0b6442b"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 5579,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 3,
+      "action": "read",
+      "target": "77ff79688144-0",
+      "outcome": "readable",
+      "call_ids": [
+        "chatcmpl-63b87c22f0aa4124b715128a334b587e"
+      ],
+      "model_id": "muse-spark-open@fireworks",
+      "input_tokens": 3776,
+      "output_tokens": 273,
+      "latency_ms": 10732,
+      "cost_usd": "0.00588025"
+    },
+    {
+      "n": 4,
+      "action": "read",
+      "target": "77ff79688144-1",
+      "outcome": "readable",
+      "call_ids": [
+        "chatcmpl-6f6f366b9eb24df99bf58eda7f5ac495",
+        "estimated-92496c8c-a4c2-4c51-8f7e-75818b586b71"
+      ],
+      "model_id": "muse-spark-open@fireworks",
+      "input_tokens": 3936,
+      "output_tokens": 306,
+      "latency_ms": 10389,
+      "cost_usd": "0.03039050"
+    },
+    {
+      "n": 5,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "2 findings",
+      "call_ids": [],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0"
+    }
+  ],
+  "calls": 5,
+  "spend_usd": "0.04528495",
+  "superseded": []
+}

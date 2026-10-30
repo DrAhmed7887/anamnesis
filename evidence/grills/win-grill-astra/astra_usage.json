@@ -1,0 +1,13 @@
+{
+  "model": "gpt-6-astra-2026-09-03",
+  "route": "v1",
+  "id": "chatcmpl-Eepi2br98SsKk1hk2jMZyruxs48Ml",
+  "finish_reason": "stop",
+  "seconds": 105.2,
+  "prompt_tokens": 1716,
+  "cached_tokens": 0,
+  "completion_tokens": 4083,
+  "reasoning_tokens": 2355,
+  "cost_usd_estimate": "0.22131",
+  "price_basis": "gpt-6-astra on Azure: $10 / 1M input, $1 / 1M cached input, $50 / 1M output (third-party listings, 30 Oct 2026)"
+}
