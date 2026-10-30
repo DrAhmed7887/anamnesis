@@ -5,6 +5,7 @@ import html
 
 from anamnesis.agent.crop import crop_region
 from anamnesis.core.overlap import cross_medication
+from anamnesis.core.reconcile import claim_identity_conflict, pack_identity_conflict
 from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.review import RequestKind, RequestStatus, ReviewStatus
 from anamnesis.schema.templates import (
@@ -214,10 +215,14 @@ def _codes_entry(finding, claims, observations, catalogue):
         claim = claims.get(finding.claim_id)
         if claim is None:
             return None
+        if claim_identity_conflict(claim, catalogue):
+            return None
         entry = catalogue.resolve(claim.name_text)
     else:
         pack = observations.get(finding.observation_id) if finding.observation_id else None
         if pack is None or not pack.label_text:
+            return None
+        if pack_identity_conflict(pack, catalogue):
             return None
         entry = catalogue.resolve(pack.label_text)
     if entry is None:
