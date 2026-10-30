@@ -301,19 +301,18 @@ def catalogue_codes(cima: Cima, drugs: list[dict]) -> list[dict]:
 def markdown(data: dict) -> str:
     lines = ["# Spanish (EU) drug vocabulary for r2, from AEMPS CIMA", "",
              f"Read {', '.join(data['meta']['fetched'])} from {BASE}. {ATTRIBUTION}", "",
-             "| INN | Spanish name | Brands in Spain (products) | Strengths, mg | ATC | SNOMED CT VTM |",
-             "|---|---|---|---|---|---|"]
+             "| INN | Spanish name | Brands in Spain (products) | Strengths, mg | ATC |",
+             "|---|---|---|---|---|"]
     for drug in data["drugs"]:
         brands = ", ".join(f"{b['name']} ({b['products']})" for b in drug["brands"]) or "none"
         atc = (drug["atc"] or {}).get("code") or ("disagree" if drug.get("atc_disagreement") else "—")
-        vtm_id = (drug["vtm"] or {}).get("id") or "—"
         lines.append(f"| {drug['inn']} | {drug['spanish_name'] or drug['status']} | {brands} | "
-                     f"{', '.join(drug['strengths_mg']) or '—'} | {atc} | {vtm_id} |")
-    lines += ["", "## The catalogue's codes", "", "| Entry | INNs | ATC | SNOMED CT VTM | RxCUI |",
-              "|---|---|---|---|---|"]
+                     f"{', '.join(drug['strengths_mg']) or '—'} | {atc} |")
+    lines += ["", "## The catalogue's codes", "", "| Entry | INNs | ATC | RxCUI |",
+              "|---|---|---|---|"]
     for row in data["catalogue"]:
-        atc, vtm_id = (row["atc"] or {}).get("code", "—"), (row["vtm"] or {}).get("id", "—")
-        lines.append(f"| {row['brand']} | {' + '.join(row['inns'])} | {atc} | {vtm_id} | "
+        atc = (row["atc"] or {}).get("code", "—")
+        lines.append(f"| {row['brand']} | {' + '.join(row['inns'])} | {atc} | "
                      f"{', '.join(row['rxcui'] or []) or '—'} |")
     return "\n".join(lines) + "\n"
 
@@ -330,6 +329,8 @@ def main() -> None:
                      "fetched": sorted(cima.dates)},
             "drugs": drugs, "catalogue": catalogue_codes(cima, drugs)}
     data["meta"]["fetched"] = sorted(cima.dates)
+    for record in data["drugs"] + data["catalogue"]:
+        record.pop("vtm", None)  # SNOMED CT ids map CIMA's records but are licensed content: never written
     text = json.dumps(data, indent=1, ensure_ascii=False) + "\n"
     (OUT / "drugs_v2.json").write_text(text, encoding="utf-8")
     (OUT / "drugs_v2.md").write_text(markdown(data), encoding="utf-8")

@@ -20,7 +20,7 @@ Claude Code is the **CEO** (orchestrator and reviewer) in this repo, and **Muse 
 - **Evidence for judges:** every batch has a brief, the builder's report, a gate result and a review. Every milestone has its grills and an `effect.md` table (finding → verdict → commit). Decisions go in `evidence/decisions.md`.
 
 ## Privacy and data
-- Synthetic data only. No patient data ever goes to any model.
+- Patient data is synthetic only: no real patient's history, identifiers or prescriptions, in any file or model call. Real media are public pack photos (Wikimedia Commons, Cairo University CC BY, DailyMed) and Ahmed's own recordings of fictional scripts, under `docs/DATA_HANDLING.md`. His recordings go only to Meta's Model API.
 - `muse exec` always runs with `--model muse-spark-1.3 --contributor-mode off --no-foreign-personal-context`. **Never use a `*-contributor` model**, because Meta may train on what we send.
 - Raw tool logs go to `evidence/raw/`, which is git-ignored. Commit only summaries, and check exports for personal content first. The repo goes public at submission.
 

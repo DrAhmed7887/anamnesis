@@ -1,6 +1,11 @@
 NOTICE
 
-Anamnesis uses data from three public sources. The repository's licence covers its code only, not these data.
+Anamnesis
+Copyright 2026 Ahmed Zayed
+
+The code is licensed under the Apache License, Version 2.0 (LICENSE). That licence covers the code only.
+Anamnesis also uses data from three public sources, listed below. Those data are not covered by the Apache
+License: each stays under its own terms.
 
 1. ATC codes (anamnesis/core/catalogue.yaml, evidence/data/drugs_v2.json)
    © WHO Collaborating Centre for Drug Statistics Methodology, Oslo, Norway.
@@ -20,4 +25,5 @@ Anamnesis uses data from three public sources. The repository's licence covers i
    Source: Agencia Española de Medicamentos y Productos Sanitarios (AEMPS), Centro de Información online de
    Medicamentos (CIMA), https://cima.aemps.es. Read on 29 Oct 2026. AEMPS allows reproduction of its contents
    with express citation of their origin and the date of their last update (https://www.aemps.gob.es/aviso-legal/).
-   drugs_v2.json also holds the SNOMED CT VTM ids that CIMA returns. The product doesn't use them.
+   CIMA also returns SNOMED CT ids. Those are SNOMED International's licensed content, the product doesn't use
+   them, and this repository doesn't redistribute them (decision of 30 Oct 2026).

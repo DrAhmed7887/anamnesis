@@ -192,3 +192,22 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
   - `scripts/goal_check.py` lists in `goal.md` every file a run read under those folders. It flags and never fails the gate, because a read the brief asked for is fine.
 - **What the 26 Muse exports up to batch 23.1 show:** 16 runs read something under `evidence/`, but none opened a manifest, a pre-registration or a fine-tune answer key. Most reads were supervisor reviews and grill triage files that the round briefs named; the others were live reports and the spend ledger. From now on, round briefs carry their findings inline instead of naming a file under `evidence/`.
 - **Batch 24:** the same commit was cherry-picked onto `batch/24-es-de` before its first Muse run. Main's `evidence/batches/24/manifest.md` was never merged into that branch, so the batch worktree doesn't hold the 8 live cases' expected results.
+
+## 2026-10-30: the four Tuesday decisions, delegated to the CEO by Ahmed
+Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini research agent (`agy`, Gemini 3.8 Flash, with web search) checked the licensing facts. Its citations were re-fetched, and five dead ones were dropped.
+
+1. **SNOMED CT leaves the repository, not only the public copy.**
+   - **Why:** SNOMED International's affiliate licence and guidance don't say whether bare ids may be published worldwide. The free Global Patient Set is CC BY-ND 4.0, not CC BY, and SNOMED's IPS guide tells member-region users not to use the IPS free set. The product and the fine-tune never read the ids, so keeping them is risk with no benefit.
+   - **Done:**
+     - `evidence/data/drugs_v2.json` and `.md` no longer carry the 59 VTM ids.
+     - `scripts/drugs_v2.py` still reads CIMA's VTM to map products but never writes it.
+     - `tests/unit/test_finetune_v2.py` now asserts that the field is absent.
+   - **Tue 3 Nov:** the public copy's history filter replaces the 59 ids in older commits. They are listed by `git show 2c1bffe:evidence/data/drugs_v2.json`. The one-id mentions in plan and grill notes and in the 24.1 contract go with them.
+2. **Apache-2.0, for the code only.**
+   - **Why:** Apache-2.0 §4(d) makes redistributors carry `NOTICE` forward, which keeps the WHOCC's required ATC reference attached. It also gives an explicit patent grant.
+   - **The scope:** an open licence can't carry the WHOCC's terms (no commercial distribution, no changes), so the data stay under their own terms. `NOTICE` and a header comment in `anamnesis/core/catalogue.yaml` say so.
+   - **Done:** `LICENSE`, verbatim from GitHub's licence API. The README's licence section says the same on Tue.
+3. **`CLAUDE.md`:** "Synthetic data only" becomes "Patient data is synthetic only". The line names the public pack photos and Ahmed's own fictional-script recordings, which `docs/DATA_HANDLING.md` governs. QM M9 #3.
+4. **No catalogue codes beside a side that contradicts its own name.** This is batch 24.2, a provenance fix, which the freeze allows.
+   - **Why:** the research found no published guidance on codes beside a conflict. Medication-reconciliation sources favour the patient's own words, checking against a second source, and flagging conflicts. A code the patient's own words dispute is worse than no code.
+   - **For after the hackathon:** labelling codes "from the name" next to a flagged conflict, as the research suggests.

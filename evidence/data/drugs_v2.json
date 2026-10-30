@@ -16,10 +16,6 @@
    ],
    "spanish_name": "amlodipino",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "amlodipino"
-   },
    "atc": {
     "code": "C08CA01",
     "name": "Amlodipino"
@@ -69,10 +65,6 @@
    ],
    "spanish_name": "bisoprolol",
    "status": "mapped",
-   "vtm": {
-    "id": "[SNOMED CT id removed]",
-    "name": "bisoprolol"
-   },
    "atc": {
     "code": "C07AB07",
     "name": "Bisoprolol"
@@ -110,10 +102,6 @@
    ],
    "spanish_name": "metoprolol",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "metoprolol"
-   },
    "atc": {
     "code": "C07AB02",
     "name": "Metoprolol"
@@ -146,10 +134,6 @@
    ],
    "spanish_name": "atenolol",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "atenolol"
-   },
    "atc": {
     "code": "C07AB03",
     "name": "Atenolol"
@@ -191,10 +175,6 @@
    ],
    "spanish_name": "carvedilol",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "carvedilol"
-   },
    "atc": {
     "code": "C07AG02",
     "name": "Carvedilol"
@@ -234,10 +214,6 @@
    ],
    "spanish_name": "lisinopril",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "lisinopril"
-   },
    "atc": {
     "code": "C09AA03",
     "name": "Lisinopril"
@@ -286,10 +262,6 @@
    ],
    "spanish_name": "enalapril",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "enalapril"
-   },
    "atc": {
     "code": "C09AA02",
     "name": "Enalapril"
@@ -347,10 +319,6 @@
    ],
    "spanish_name": "ramipril",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "ramipril"
-   },
    "atc": {
     "code": "C09AA05",
     "name": "Ramipril"
@@ -393,10 +361,6 @@
    ],
    "spanish_name": "losartán",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "losartán"
-   },
    "atc": {
     "code": "C09CA01",
     "name": "Losartan"
@@ -433,10 +397,6 @@
    ],
    "spanish_name": "valsartán",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "valsartán"
-   },
    "atc": {
     "code": "C09CA03",
     "name": "Valsartan"
@@ -501,10 +461,6 @@
    ],
    "spanish_name": "candesartán",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "candesartán"
-   },
    "atc": {
     "code": "C09CA06",
     "name": "Candesartan"
@@ -572,10 +528,6 @@
    ],
    "spanish_name": "hidroclorotiazida",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "hidroclorotiazida"
-   },
    "atc": {
     "code": "C03AA03",
     "name": "Hidroclorotiazida"
@@ -618,10 +570,6 @@
    ],
    "spanish_name": "furosemida",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "furosemida"
-   },
    "atc": {
     "code": "C03CA01",
     "name": "Furosemida"
@@ -654,10 +602,6 @@
    ],
    "spanish_name": "espironolactona",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "espironolactona"
-   },
    "atc": {
     "code": "C03DA01",
     "name": "Espironolactona"
@@ -692,10 +636,6 @@
    ],
    "spanish_name": "indapamida",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "indapamida"
-   },
    "atc": {
     "code": "C03BA11",
     "name": "Indapamida"
@@ -729,10 +669,6 @@
    ],
    "spanish_name": "atorvastatina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "atorvastatina"
-   },
    "atc": {
     "code": "C10AA05",
     "name": "Atorvastatina"
@@ -844,10 +780,6 @@
    ],
    "spanish_name": "rosuvastatina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "rosuvastatina"
-   },
    "atc": {
     "code": "C10AA07",
     "name": "Rosuvastatina"
@@ -931,10 +863,6 @@
    ],
    "spanish_name": "simvastatina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "simvastatina"
-   },
    "atc": {
     "code": "C10AA01",
     "name": "Simvastatina"
@@ -988,10 +916,6 @@
    ],
    "spanish_name": "ezetimiba",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "ezetimiba"
-   },
    "atc": {
     "code": "C10AX09",
     "name": "Ezetimiba"
@@ -1053,10 +977,6 @@
    ],
    "spanish_name": "metformina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "metformina"
-   },
    "atc": {
     "code": "A10BA02",
     "name": "Metformina"
@@ -1099,10 +1019,6 @@
    ],
    "spanish_name": "gliclazida",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "gliclazida"
-   },
    "atc": {
     "code": "A10BB09",
     "name": "Gliclazida"
@@ -1137,10 +1053,6 @@
    ],
    "spanish_name": "glimepirida",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "glimepirida"
-   },
    "atc": {
     "code": "A10BB12",
     "name": "Glimepirida"
@@ -1182,10 +1094,6 @@
    ],
    "spanish_name": "sitagliptina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "sitagliptina"
-   },
    "atc": {
     "code": "A10BH01",
     "name": "Sitagliptina"
@@ -1260,10 +1168,6 @@
    ],
    "spanish_name": "empagliflozina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "empagliflozina"
-   },
    "atc": {
     "code": "A10BK03",
     "name": "Empagliflozina"
@@ -1297,10 +1201,6 @@
    ],
    "spanish_name": "dapagliflozina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "dapagliflozina"
-   },
    "atc": {
     "code": "A10BK01",
     "name": "Dapagliflozina"
@@ -1339,10 +1239,6 @@
    ],
    "spanish_name": "levotiroxina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "levotiroxina"
-   },
    "atc": {
     "code": "H03AA01",
     "name": "Levotiroxina sodica"
@@ -1399,10 +1295,6 @@
    ],
    "spanish_name": "omeprazol",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "omeprazol"
-   },
    "atc": {
     "code": "A02BC01",
     "name": "Omeprazol"
@@ -1464,10 +1356,6 @@
    ],
    "spanish_name": "pantoprazol",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "pantoprazol"
-   },
    "atc": {
     "code": "A02BC02",
     "name": "Pantoprazol"
@@ -1557,10 +1445,6 @@
    ],
    "spanish_name": "esomeprazol",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "esomeprazol"
-   },
    "atc": {
     "code": "A02BC05",
     "name": "Esomeprazol"
@@ -1638,10 +1522,6 @@
    ],
    "spanish_name": "ácido acetilsalicílico",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "ácido acetilsalicílico"
-   },
    "atc": {
     "code": "B01AC06",
     "name": "Acido acetilsalicilico"
@@ -1687,10 +1567,6 @@
    ],
    "spanish_name": "clopidogrel",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "clopidogrel"
-   },
    "atc": {
     "code": "B01AC04",
     "name": "Clopidogrel"
@@ -1751,10 +1627,6 @@
    ],
    "spanish_name": "warfarina",
    "status": "mapped",
-   "vtm": {
-    "id": "[SNOMED CT id removed]",
-    "name": "warfarina"
-   },
    "atc": {
     "code": "B01AA03",
     "name": "Warfarina"
@@ -1790,10 +1662,6 @@
    ],
    "spanish_name": "apixabán",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "apixabán"
-   },
    "atc": {
     "code": "B01AF02",
     "name": "Apixaban"
@@ -1830,10 +1698,6 @@
    ],
    "spanish_name": "rivaroxabán",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "rivaroxabán"
-   },
    "atc": {
     "code": "B01AF01",
     "name": "B01AF01- Rivaroxaban"
@@ -1904,10 +1768,6 @@
    ],
    "spanish_name": "paracetamol",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "paracetamol"
-   },
    "atc": {
     "code": "N02BE01",
     "name": "Paracetamol"
@@ -1975,10 +1835,6 @@
    ],
    "spanish_name": "ibuprofeno",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "ibuprofeno"
-   },
    "atc": {
     "code": "M01AE01",
     "name": "Ibuprofeno"
@@ -2042,10 +1898,6 @@
    ],
    "spanish_name": "diclofenaco",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "diclofenaco"
-   },
    "atc": {
     "code": "M01AB05",
     "name": "Diclofenaco"
@@ -2091,10 +1943,6 @@
    ],
    "spanish_name": "naproxeno",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "naproxeno"
-   },
    "atc": {
     "code": "M01AE02",
     "name": "Naproxeno"
@@ -2135,10 +1983,6 @@
    ],
    "spanish_name": "amoxicilina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "amoxicilina"
-   },
    "atc": {
     "code": "J01CA04",
     "name": "Amoxicilina"
@@ -2183,10 +2027,6 @@
    ],
    "spanish_name": "azitromicina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "azitromicina"
-   },
    "atc": {
     "code": "J01FA10",
     "name": "Azitromicina"
@@ -2228,10 +2068,6 @@
    ],
    "spanish_name": "ciprofloxacino",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "ciprofloxacino"
-   },
    "atc": {
     "code": "J01MA02",
     "name": "Ciprofloxacino"
@@ -2268,10 +2104,6 @@
    ],
    "spanish_name": "metronidazol",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "metronidazol"
-   },
    "atc": {
     "code": "J01XD01",
     "name": "Metronidazol"
@@ -2304,10 +2136,6 @@
    ],
    "spanish_name": "doxiciclina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "doxiciclina"
-   },
    "atc": {
     "code": "J01AA02",
     "name": "Doxiciclina"
@@ -2367,10 +2195,6 @@
    ],
    "spanish_name": "cetirizina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "cetirizina"
-   },
    "atc": {
     "code": "R06AE07",
     "name": "Cetirizina"
@@ -2421,10 +2245,6 @@
    ],
    "spanish_name": "loratadina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "loratadina"
-   },
    "atc": {
     "code": "R06AX13",
     "name": "Loratadina"
@@ -2457,10 +2277,6 @@
    ],
    "spanish_name": "montelukast",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "montelukast"
-   },
    "atc": {
     "code": "R03DC03",
     "name": "Montelukast"
@@ -2535,7 +2351,6 @@
    ],
    "spanish_name": "prednisolona",
    "status": "no_products",
-   "vtm": null,
    "atc": null,
    "brands": [],
    "strengths_mg": [],
@@ -2553,10 +2368,6 @@
    ],
    "spanish_name": "alopurinol",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "alopurinol"
-   },
    "atc": {
     "code": "M04AA01",
     "name": "Alopurinol"
@@ -2589,10 +2400,6 @@
    ],
    "spanish_name": "colchicina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "colchicina"
-   },
    "atc": {
     "code": "M04AC01",
     "name": "Colchicina"
@@ -2617,10 +2424,6 @@
    ],
    "spanish_name": "tamsulosina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "tamsulosina"
-   },
    "atc": {
     "code": "G04CA02",
     "name": "Tamsulosina"
@@ -2685,10 +2488,6 @@
    ],
    "spanish_name": "sertralina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "sertralina"
-   },
    "atc": {
     "code": "N06AB06",
     "name": "Sertralina"
@@ -2748,10 +2547,6 @@
    ],
    "spanish_name": "escitalopram",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "escitalopram"
-   },
    "atc": {
     "code": "N06AB10",
     "name": "Escitalopram"
@@ -2807,10 +2602,6 @@
    ],
    "spanish_name": "fluoxetina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "fluoxetina"
-   },
    "atc": {
     "code": "N06AB03",
     "name": "Fluoxetina"
@@ -2843,10 +2634,6 @@
    ],
    "spanish_name": "amitriptilina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "amitriptilina"
-   },
    "atc": {
     "code": "N06AA09",
     "name": "Amitriptilina"
@@ -2892,10 +2679,6 @@
    ],
    "spanish_name": "gabapentina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "gabapentina"
-   },
    "atc": {
     "code": "N02BF01",
     "name": "Gabapentina"
@@ -2933,10 +2716,6 @@
    ],
    "spanish_name": "pregabalina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "pregabalina"
-   },
    "atc": {
     "code": "N02BF02",
     "name": "Pregabalina"
@@ -3040,10 +2819,6 @@
    ],
    "spanish_name": "tramadol",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "tramadol"
-   },
    "atc": {
     "code": "N02AX02",
     "name": "Tramadol"
@@ -3118,10 +2893,6 @@
    ],
    "spanish_name": "ácido alendrónico",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "ácido alendrónico"
-   },
    "atc": {
     "code": "M05BA04",
     "name": "Acido alendronico"
@@ -3162,10 +2933,6 @@
    ],
    "spanish_name": "terbinafina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "terbinafina"
-   },
    "atc": {
     "code": "D01BA02",
     "name": "Terbinafina"
@@ -3190,10 +2957,6 @@
    ],
    "spanish_name": "famotidina",
    "status": "mapped",
-   "vtm": {
-    "id": "[removed]",
-    "name": "famotidina"
-   },
    "atc": {
     "code": "A02BA03",
     "name": "Famotidina"
@@ -3228,10 +2991,6 @@
    "rxcui": [
     "19484"
    ],
-   "vtm": {
-    "id": "[SNOMED CT id removed]",
-    "name": "bisoprolol"
-   },
    "atc": {
     "code": "C07AB07",
     "name": "Bisoprolol"
@@ -3245,10 +3004,6 @@
    "rxcui": [
     "6918"
    ],
-   "vtm": {
-    "id": "[removed]",
-    "name": "metoprolol"
-   },
    "atc": {
     "code": "C07AB02",
     "name": "Metoprolol"
@@ -3262,10 +3017,6 @@
    "rxcui": [
     "17767"
    ],
-   "vtm": {
-    "id": "[removed]",
-    "name": "amlodipino"
-   },
    "atc": {
     "code": "C08CA01",
     "name": "Amlodipino"
@@ -3279,10 +3030,6 @@
    "rxcui": [
     "6809"
    ],
-   "vtm": {
-    "id": "[removed]",
-    "name": "metformina"
-   },
    "atc": {
     "code": "A10BA02",
     "name": "Metformina"
@@ -3296,10 +3043,6 @@
    "rxcui": [
     "161"
    ],
-   "vtm": {
-    "id": "[removed]",
-    "name": "paracetamol"
-   },
    "atc": {
     "code": "N02BE01",
     "name": "Paracetamol"
@@ -3315,10 +3058,6 @@
     "161",
     "1886"
    ],
-   "vtm": {
-    "id": "[removed]",
-    "name": "paracetamol + cafeína"
-   },
    "atc": {
     "code": "N02BE51",
     "name": "Paracetamol, combinaciones excluyendo psicolepticos"
@@ -3334,10 +3073,6 @@
     "723",
     "48203"
    ],
-   "vtm": {
-    "id": "[removed]",
-    "name": "amoxicilina + ácido clavulánico"
-   },
    "atc": {
     "code": "J01CR02",
     "name": "Amoxicilina e inhibidores de la betalactamasa"
@@ -3351,10 +3086,6 @@
    "rxcui": [
     "83367"
    ],
-   "vtm": {
-    "id": "[removed]",
-    "name": "atorvastatina"
-   },
    "atc": {
     "code": "C10AA05",
     "name": "Atorvastatina"
@@ -3368,10 +3099,6 @@
    "rxcui": [
     "161"
    ],
-   "vtm": {
-    "id": "[removed]",
-    "name": "paracetamol"
-   },
    "atc": {
     "code": "N02BE01",
     "name": "Paracetamol"

@@ -47,7 +47,7 @@ def test_every_mapped_medicine_carries_its_sources_and_codes():
     mapped = [drug for drug in VOCAB["drugs"] if drug["status"] == "mapped"]
     assert len(mapped) >= 55
     for drug in mapped:
-        assert drug["spanish_name"] and drug["vtm"] and drug["vtm"]["id"].isdigit()
+        assert drug["spanish_name"] and "vtm" not in drug  # SNOMED CT ids are never written (30 Oct)
         assert drug["atc"] is None or re.fullmatch(r"[A-Z]\d\d[A-Z][A-Z]\d\d", drug["atc"]["code"])
         for brand in drug["brands"]:
             assert brand["nregistro"] and brand["products"] == len(brand["nregistro"])
@@ -66,9 +66,9 @@ def test_no_brand_says_its_own_ingredient():
 
 def test_the_catalogue_entries_all_have_codes():
     rows = {row["brand"]: row for row in VOCAB["catalogue"]}
-    assert rows["Concor"]["atc"]["code"] == "C07AB07" and rows["Concor"]["vtm"]["id"] == "[SNOMED CT id removed]"
+    assert rows["Concor"]["atc"]["code"] == "C07AB07" and "vtm" not in rows["Concor"]
     assert rows["Panadol Extra"]["atc"]["code"] == "N02BE51"
-    assert all(row["atc"] and row["vtm"] and row["rxcui"] for row in rows.values())
+    assert all(row["atc"] and row["rxcui"] and "vtm" not in row for row in rows.values())
 
 
 @pytest.fixture(scope="module")
