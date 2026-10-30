@@ -1,0 +1,24 @@
+deploy 20:49:57
+✓ App deployed in 6.779s! 🎉
+https://modal.com/apps/<account>/main/deployed/anamnesis-glimmer-serve
+warm start 20:50:07
+20:51:09 try 1: HTTP 000
+20:52:17 try 2: HTTP 000
+20:53:23 try 3: HTTP 000
+20:54:29 try 4: HTTP 000
+20:54:56 try 5: HTTP 200
+note 0: 9.77 s, finish stop/stop, tokens 275+185, same text as the eval's reply: True
+note 1: 7.78 s, finish stop/stop, tokens 294+269, same text as the eval's reply: True
+note 2: 2.71 s, finish stop/stop, tokens 257+74, same text as the eval's reply: True
+note 3: 5.93 s, finish stop/stop, tokens 271+198, same text as the eval's reply: True
+note 4: 2.35 s, finish stop/stop, tokens 245+60, same text as the eval's reply: True
+transcripts all correct 5/5 (100.0%)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+product path: 2 claims, model muse-glimmer-30b+lora-r1@modal, 6678 ms, $0.00890988 (estimate), tokens 275+185
+product path claims: [('جلوكاتيل', '80'), ('Jantoven', '2.5')]
+not JSON: HTTP 400 {"error":"bad extract body"}
+wrong roles: HTTP 400 {"error":"bad extract body"}
+prompt too long: HTTP 400 {"error":"bad extract body"}
+end 20:55:35
+
+[exited with code 0]

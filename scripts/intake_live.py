@@ -2,21 +2,25 @@
 
     PYTHONPATH=. uv run python scripts/intake_live.py [--cap 5.00] [--session-usd 0.25]
     PYTHONPATH=. uv run python scripts/intake_live.py --case R1 --voice v1.wav --photo p1.jpg --lang ar \
-        [--repeat 10] [--top-k 3] [--reader baseten]
+        [--repeat 10] [--top-k 3] [--reader baseten|fireworks] [--extractor glimmer --glimmer-url URL]
 
 With no --case it runs the two synthetic notes (media: scripts/make_synthetic_media.sh). With --case it runs
 one staged case (evidence/batches/21/manifest.md): that voice note and those photos, in order, --repeat times.
---reader baseten makes Meta's open-weight Muse Spark Open on Baseten the label reader (key: BASETEN_API_KEY);
-everything else stays on Meta. It refuses any photo outside the public folders that docs/DATA_HANDLING.md lets
-go to Baseten, before the first call. Every voice note is re-written to its audio frames alone before any
-call, so no metadata chunk is sent or embedded in a brief.
+--reader baseten or --reader fireworks makes Meta's open-weight Muse Spark Open on Baseten or Fireworks the
+label reader (keys: BASETEN_API_KEY, FIREWORKS_API_KEY); everything else stays on Meta. It refuses any photo
+outside the public folders that docs/DATA_HANDLING.md lets go to Baseten or Fireworks, before the first call.
+--extractor glimmer makes the tuned Glimmer on Modal the claim extractor (token: MODAL_PROXY_TOKEN, URL from
+--glimmer-url or GLIMMER_URL); it refuses any voice note but the synthetic ones under
+evidence/raw/media/public/voice/ and any URL off .modal.run, before the first call. Every voice note is
+re-written to its audio frames alone before any call, so no metadata chunk is sent or embedded in a brief.
 The key comes from MODEL_API_KEY in the environment or the macOS Keychain (service META_API_KEY), and is never
 printed or saved. Each intake runs inside a SessionGuard (per-intake $ and call caps) in front of
 evidence/spend/ledger.jsonl.
 Output, per run:
 - evidence/live/<date>/report_<name>.json, the ReconciliationReport (<name>: the language, or case and run);
-- one summary line in evidence/live/<date>/runs.jsonl: findings, calls, spend, wall-clock time, and the
-  latency of each claim-extraction request against the client's 30 s timeout;
+- one summary line in evidence/live/<date>/runs.jsonl: findings, calls, spend, wall-clock time, the reader
+  (spark, baseten or fireworks) and the extractor (spark or glimmer), and the latency of each
+  claim-extraction request against the extractor client's timeout;
 - the brief, evidence/raw/briefs/<date>/<name>.html (git-ignored: it embeds the photos and the voice note).
 """
 
@@ -32,6 +36,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
 from pathlib import Path
+from urllib.parse import urlparse
 
 from anamnesis.agent import run_intake
 from anamnesis.agent.loop import SAM_CONCEPTS
@@ -39,6 +44,7 @@ from anamnesis.brief import render_brief
 from anamnesis.core.catalogue import load_catalogue
 from anamnesis.providers import SpendGuard
 from anamnesis.providers.claims import MetaClaimExtractor
+from anamnesis.providers.glimmer import GLIMMER_TIMEOUT_S, GlimmerClaimExtractor
 from anamnesis.providers.meta import MetaClient, MetaLabelReader, MetaSegmenter, MetaTranscriber
 from anamnesis.providers.openweight import PRESETS, OpenWeightClient, OpenWeightLabelReader
 from anamnesis.providers.spend import SessionGuard
@@ -78,6 +84,18 @@ class TimedClient:
         return getattr(self.client, name)
 
 
+def _timeout_ms(timed: TimedClient) -> int:
+    """The wrapped client's own timeout in ms, for the printed claim-request line."""
+    timeout = getattr(getattr(timed.client, "_http", None), "timeout", None)
+    if isinstance(timeout, (int, float)):
+        return int(timeout * 1000)
+    for attr in ("read", "connect", "write", "pool"):
+        value = getattr(timeout, attr, None)
+        if isinstance(value, (int, float)):
+            return int(value * 1000)
+    return 30000
+
+
 @dataclass
 class Run:
     ledger: SpendGuard
@@ -87,7 +105,8 @@ class Run:
     top_k: int
     reports: Path
     briefs: Path
-    open_client: OpenWeightClient | None = None  # set: Muse Spark Open on Baseten reads the labels
+    open_client: OpenWeightClient | None = None  # set: Muse Spark Open reads the labels
+    glimmer_client: OpenWeightClient | None = None  # set: the tuned Glimmer on Modal extracts the claims
 
 
 def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]],
@@ -99,17 +118,22 @@ def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]],
     # budget keeps --session-usd the real bound (supervisor 23 round 3 #6).
     guard = SessionGuard(run.ledger, max_usd=run.session_usd, max_calls=2 * calls)
     timed = TimedClient(run.client)
+    if run.glimmer_client is None:
+        extractor, claim_timed = MetaClaimExtractor(timed, guard), timed
+    else:
+        claim_timed = TimedClient(run.glimmer_client)
+        extractor = GlimmerClaimExtractor(claim_timed, guard)
     keywords = [n for entry in run.catalogue.entries for n in (entry.brand, *entry.aliases)]
     if run.open_client is None:
         reader = MetaLabelReader(run.client, guard)
     else:
-        reader = OpenWeightLabelReader(run.open_client, guard, model=PRESETS["baseten"]["model"],
-                                       price_key="muse-spark-open@baseten",
-                                       json_mode=PRESETS["baseten"]["json_mode"])
+        provider = run.open_client.provider
+        reader = OpenWeightLabelReader(run.open_client, guard, model=PRESETS[provider]["model"],
+                                       price_key=f"muse-spark-open@{provider}", json_mode=False)
     start = time.monotonic()
     report = run_intake(
         audio, images,
-        transcriber=MetaTranscriber(run.client, guard), extractor=MetaClaimExtractor(timed, guard),
+        transcriber=MetaTranscriber(run.client, guard), extractor=extractor,
         segmenter=MetaSegmenter(run.client, guard), reader=reader,
         catalogue=run.catalogue, language_bias=LANGUAGES[lang], keywords=keywords, lang_hint=lang,
         max_provider_calls=calls, top_k=run.top_k,
@@ -119,13 +143,16 @@ def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]],
     brief = render_brief(report, images, (audio, "audio/wav"), run.catalogue)
     (run.briefs / f"{name}.html").write_text(brief, encoding="utf-8")
     line = {"run": name, "at": datetime.now(UTC).isoformat(timespec="seconds"),
-            "reader": "spark" if run.open_client is None else "baseten", "calls": report.calls,
-            "spend_usd": str(report.spend_usd), "wall_s": wall_s, "claim_request_ms": timed.latencies_ms,
+            "reader": "spark" if run.open_client is None else run.open_client.provider,
+            "extractor": "spark" if run.glimmer_client is None else "glimmer",
+            "calls": report.calls,
+            "spend_usd": str(report.spend_usd), "wall_s": wall_s,
+            "claim_request_ms": claim_timed.latencies_ms,
             "findings": [[f.type.value, f.claim_id, f.observation_id] for f in report.findings]}
     with (run.reports / "runs.jsonl").open("a", encoding="utf-8") as out:
         out.write(json.dumps(line) + "\n")
     print(f"intake {name}: {report.calls} calls, ${report.spend_usd:.5f}, {wall_s} s, "
-          f"claim requests {timed.latencies_ms} ms (timeout 30000)")
+          f"claim requests {claim_timed.latencies_ms} ms (timeout {_timeout_ms(claim_timed)})")
     for step in report.steps:
         print(f"      {step.n:2} {step.action.value:16} {step.target[:28]:28} {step.outcome}")
     for f in report.findings:
@@ -165,21 +192,55 @@ def main() -> None:
     parser.add_argument("--lang", choices=sorted(LANGUAGES), default="en")
     parser.add_argument("--repeat", type=int, default=1)
     parser.add_argument("--top-k", type=int, default=3, help="SAM regions kept per photo")
-    parser.add_argument("--reader", choices=("spark", "baseten"), default="spark",
-                        help="label reader: Spark 1.3, or Muse Spark Open on Baseten (public photos only)")
+    parser.add_argument("--reader", choices=("spark", "baseten", "fireworks"), default="spark",
+                        help="label reader: Spark 1.3, or Muse Spark Open on Baseten or Fireworks "
+                             "(public photos only)")
+    parser.add_argument("--extractor", choices=("spark", "glimmer"), default="spark",
+                        help="claim extractor: Spark 1.3, or the tuned Glimmer on Modal "
+                             "(synthetic voice only)")
+    parser.add_argument("--glimmer-url", default=os.environ.get("GLIMMER_URL"),
+                        help="the tuned Glimmer server's base URL (/extract is added to it) "
+                             "(default: GLIMMER_URL)")
     args = parser.parse_args()
     if args.case and not args.voice:
         sys.exit("--case needs --voice")
     if args.top_k < 0:  # SAM's top_regions refuses it, but only mid-run, after spend (M8 #1)
         sys.exit("--top-k must be 0 or more")
-    if args.reader == "baseten":
+    if args.reader in ("baseten", "fireworks"):
         if not args.case:
-            sys.exit("--reader baseten needs --case: the synthetic notes' pack image may not go to Baseten")
+            if args.reader == "baseten":
+                sys.exit("--reader baseten needs --case: "
+                         "the synthetic notes' pack image may not go to Baseten")
+            sys.exit("--reader fireworks needs --case: "
+                     "only a staged case's public photos may go to Fireworks")
         for path in args.photo:  # checked before any call
             resolved = Path(path).resolve()
             if not any(resolved.is_relative_to(folder.resolve()) for folder in OPEN_WEIGHT_PHOTOS):
-                sys.exit(f"{path} is not a public photo that may go to Baseten (docs/DATA_HANDLING.md). "
-                         "Ahmed's own media never go there.")
+                if args.reader == "baseten":
+                    sys.exit(f"{path} is not a public photo that may go to Baseten "
+                             "(docs/DATA_HANDLING.md). Ahmed's own media never go there.")
+                sys.exit(f"{path} is not a public photo that may go to Fireworks "
+                         "(docs/DATA_HANDLING.md). Ahmed's own media never go there.")
+    if args.extractor == "glimmer":
+        if not args.case:
+            sys.exit("--extractor glimmer needs --case: "
+                     "only a staged case's synthetic voice note may go to Modal")
+        if not args.voice or not Path(args.voice).resolve().is_relative_to(
+                (MEDIA / "public/voice").resolve()):
+            sys.exit(f"{args.voice} is not a synthetic voice note that may go to Modal "
+                     "(docs/DATA_HANDLING.md). Ahmed's own voice never goes there.")
+        parsed = urlparse(args.glimmer_url) if args.glimmer_url else None
+        host = parsed.hostname if parsed else None
+        try:
+            port = parsed.port if parsed else None
+        except ValueError:
+            port = -1
+        if (not args.glimmer_url or not args.glimmer_url.startswith("https://")
+                or not (host and host.endswith(".modal.run"))
+                or (parsed is not None and (parsed.username is not None
+                                            or parsed.password is not None))
+                or (port is not None and port != 443)):
+            sys.exit(f"{host or 'missing URL'} is not an https:// URL on a .modal.run host.")
     day = datetime.now(UTC).strftime("%Y-%m-%d")
     run = Run(SpendGuard(LEDGER, cap_usd=Decimal(args.cap)),
               MetaClient(api_key=os.environ.get("MODEL_API_KEY") or keychain("META_API_KEY")),
@@ -189,6 +250,14 @@ def main() -> None:
         run.open_client = OpenWeightClient(
             api_key=os.environ.get("BASETEN_API_KEY") or keychain("BASETEN_API_KEY"),
             base_url=PRESETS["baseten"]["base_url"], provider="baseten")
+    elif args.reader == "fireworks":
+        run.open_client = OpenWeightClient(
+            api_key=os.environ.get("FIREWORKS_API_KEY") or keychain("FIREWORKS_API_KEY"),
+            base_url=PRESETS["fireworks"]["base_url"], provider="fireworks")
+    if args.extractor == "glimmer":
+        run.glimmer_client = OpenWeightClient(
+            api_key=os.environ.get("MODAL_PROXY_TOKEN") or keychain("MODAL_PROXY_TOKEN"),
+            base_url=args.glimmer_url, provider="modal", timeout=GLIMMER_TIMEOUT_S)
     run.reports.mkdir(parents=True, exist_ok=True)
     run.briefs.mkdir(parents=True, exist_ok=True)
     start = run.ledger.total_usd
