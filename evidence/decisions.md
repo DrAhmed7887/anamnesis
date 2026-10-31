@@ -290,3 +290,11 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - After the hackathon, the ten traps become contract tests first.
   - The README states the limit: "each amount value is checked as said in a cited turn; which medicine, tense, negation or unit it belonged to is not checked", with this audit's numbers.
 - **Spend:** Meta about $0.10 for 10 Spark calls, plus the Muse grill (about $0.2, in neither ledger). Modal: the per-call estimates, plus one more cold start to reconcile from Modal's billing.
+
+## 2026-10-31, 10:45: the freeze moves, and batch 27 builds the relation checks (Ahmed's call)
+- **Ahmed:** "why freezing I still have time you did the same mistake last hackathon and we lost". It was 10:45 on Saturday: 13 hours before our own freeze and three and a half days before submission.
+- **The audit's "no code change before the freeze" is reversed.** A gap a judge can name ("the checks prove words occurred, not that the finding follows") gets closed while there is time, through the usual gate.
+- **Batch 27:** six word rules on claim amounts (negation, unit, count, another medicine's, past, a split daily total), from the audit's ten traps (SPEC §2, "Relation checks (batch 27)").
+  - **Measured before the contract was written,** on a CEO prototype outside the product: all ten traps fail safe; no claim changes in 97 saved live reports; no fully-right reply lost among the committed replies of Spark 1.3, base Glimmer, r1 and r2 on every test split. The word lists were corrected twice on those replies, so that isn't a held-out result.
+  - **Muse planned it read-only first** (`evidence/grills/b27-muse-plan/`); five of its points tightened the SPEC.
+- **The freeze, proposed:** engine changes until **Tue 3 Nov 12:00 CET**, each through the gate, the supervisor and a fresh clone. The film is captured Mon from the tag of that moment; a later change to what the demo shows means re-capturing that shot Tue morning. After Tue 12:00, only the release-gate fixes. Ahmed confirms or moves it.
