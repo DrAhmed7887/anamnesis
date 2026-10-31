@@ -355,3 +355,25 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - `CLAUDE.md`:10, which names the build's accounts.
 - **Then re-grep** for all of them and the email address before anything is public.
 - **Ahmed decides** what the public copy says about the build's accounts (already on his list for Tuesday).
+
+## 2026-10-31, 22:05: the public repo is clean, and it keeps Muse (Ahmed: "the public repo has to clean and has muse since this is meta hackathon")
+- **How:** `scripts/public/make_public.sh` builds the public copy from a fresh clone of `main` with `git filter-repo`, keeping every commit, because the history shows Muse's batch pipeline (75 contract commits, 39 Muse batch builds).
+- **Muse is kept, cleaned, never dropped:**
+  - every grill session stays at its path;
+  - all 56 build sessions (194 MB raw, 18 MB cleaned and gzipped) go into `evidence/muse-sessions/`, with an index of tokens and cost per session;
+  - the cleaner removes only Muse's encrypted reasoning and the session owner's personal context (Ahmed's own skill list).
+- **What the filter removes:**
+  - home and scratch paths;
+  - the Modal account name;
+  - other personal details;
+  - SNOMED CT ids: one is still quoted in `tests/contract/test_b24_1_codes.py` and three planning docs on `main`, and the public copy replaces it;
+  - the author email, which becomes GitHub noreply.
+
+  The rules stay outside git, in `evidence/raw/public-kit/`.
+- **Dry run (31 Oct, 21:50):**
+  - 412 commits, and every scan gives 0 (paths, account, any Gmail, personal details, the build's account names, Notion, key-like strings) across all diffs, commit messages and sessions;
+  - the only email is the noreply;
+  - ruff passes and 2,757 tests pass in the public copy.
+- **Pending Ahmed:**
+  - The repo name.
+  - Going public, on Wed.
