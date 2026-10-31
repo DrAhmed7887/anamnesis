@@ -12,7 +12,7 @@ from pathlib import Path
 
 from anamnesis.core.catalogue import load_catalogue
 from anamnesis.core.reconcile import reconcile_all
-from anamnesis.schema import ReconciliationReport
+from anamnesis.schema import Readability, ReconciliationReport
 from anamnesis.schema.report import AgentAction
 
 CATALOGUE = load_catalogue()
@@ -77,8 +77,8 @@ def replaced_regions(report: ReconciliationReport) -> dict[str, str]:
 
 def without_second(report: ReconciliationReport, regions: dict[str, str]) -> ReconciliationReport:
     gone = {region for region, did in regions.items() if did == "replaced"}
-    observations = [o.model_copy(update={"readability": "partial"}) if set(o.visual_evidence) & gone else o
-                    for o in report.observations]
+    observations = [o.model_copy(update={"readability": Readability.PARTIAL})
+                    if set(o.visual_evidence) & gone else o for o in report.observations]
     findings = reconcile_all(list(report.claims), observations, CATALOGUE)
     return report.model_copy(update={"observations": observations, "findings": findings})
 
