@@ -346,3 +346,12 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Live (pre-registered):** U2 gave 1 of 3 `match` and 0 harmful, against an expected 2 of 3. The pack side was right in 3 of 3. The claim lost its amounts in 2 runs, while 11 direct calls with the same prompt were all right. That is Spark varying between calls (`evidence/batches/30/live-results.md`).
 - **Cost:** Muse $2.24 (with the audit); live and diagnostic $0.25. Meta is now $77.95 of the $80 line, with the grills.
 - **The engine closes here:** what remains on the Meta line is kept for anything before submission. Only release-gate fixes follow.
+
+## 2026-10-31, 20:55: the public repo's filter scope (the independent checker's README review)
+- **Tuesday's filter must cover four things:**
+  - the M1 Muse export (personal context);
+  - absolute home paths in 40 tracked files (409 hits);
+  - the Modal account name in 916454b's history;
+  - `CLAUDE.md`:10, which names the build's accounts.
+- **Then re-grep** for all of them and the email address before anything is public.
+- **Ahmed decides** what the public copy says about the build's accounts (already on his list for Tuesday).
