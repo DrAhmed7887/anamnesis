@@ -196,6 +196,33 @@ def test_a_second_reading_of_another_product_without_its_ingredients_keeps_the_f
     assert ("unreadable", "o0") in [(kind.value, target) for kind, target in requestable(report)]
 
 
+def test_a_second_reading_that_loses_a_known_release_keeps_the_first():
+    retard = reading(label="Concor 5 retard", strength=st(mg("bisoprolol", 5), release="modified"), readability="partial")
+    unknown = reading(label="Concor 5 mg\nBisoprolol fumarate", strength=st(mg("bisoprolol", 5)))
+    claims = [claim("c1", "Concor", intake=mg("bisoprolol", 5), per_day="1")]
+    report, _ = run({RC.region_id: [retard, retard]}, SecondReader({RC.region_id: [unknown]}), claims=claims)
+    assert report.observations[0].readability.value == "partial"
+    assert D.MATCH not in {finding.type for finding in report.findings}
+
+
+@pytest.mark.parametrize("first", [
+    reading(label="Metoprolol succ", strength=st(mg("metoprolol succinate", "47.5")), readability="partial"),
+    reading(label="Metoprolol succ", readability="partial").model_copy(update={"inn": "metoprolol succinate"}),
+])
+def test_a_second_reading_that_loses_or_changes_a_known_salt_keeps_the_first(first):
+    for second in (reading(label="Metoprolol 47.5 mg", strength=st(mg("metoprolol", "47.5"))),
+                   reading(label="Metoprolol tartrate", strength=st(mg("metoprolol tartrate", "47.5")))):
+        report, _ = run({RC.region_id: [first, first]}, SecondReader({RC.region_id: [second]}))
+        assert report.observations[0].readability.value == "partial", second.label_text
+
+
+def test_a_second_reading_can_complete_a_salt():
+    first = reading(label="Metoprolol", readability="partial").model_copy(update={"inn": "metoprolol"})
+    second = reading(label="Metoprolol succinate 47.5 mg", strength=st(mg("metoprolol succinate", "47.5")))
+    report, _ = run({RC.region_id: [first, first]}, SecondReader({RC.region_id: [second]}))
+    assert report.observations[0].readability.value == "readable"
+
+
 def test_a_second_reading_for_another_region_is_refused():
     report, _ = run({RC.region_id: [PARTIAL, PARTIAL]}, ElsewhereReader({RC.region_id: [CONCOR_5]}))
     assert report.observations[0].readability.value == "partial"
