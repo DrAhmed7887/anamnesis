@@ -33,14 +33,23 @@ U2_STRENGTH = {"ingredients": [{"inn": "amoxicillin", "salt": None, "amount": "8
                                {"inn": "clavulanic acid", "salt": None, "amount": "125", "unit": "mg"}],
                "per": "tablet", "release": "unknown"}
 _original_unsupported = fs._unsupported
+_original_unsupported_kept = fs._unsupported_kept
 
 
-def _brand_aware_unsupported(raw: dict, turns: list, keep: tuple[bool, bool] | None) -> list[str]:
-    found = _original_unsupported(raw, turns, keep)
-    entry = CAT.resolve(raw["name_text"]) if isinstance(raw.get("name_text"), str) else None
+def _without_brand_ingredients(found: list[str], name_text: object) -> list[str]:
+    entry = CAT.resolve(name_text) if isinstance(name_text, str) else None
     own = set(entry.inns) if entry else set()
     return [item for item in found
             if not (item.startswith("INN ") and canonical_inn(item.split("'")[1]) in own)]
+
+
+def _brand_aware_unsupported(raw: dict, turns: list, keep: tuple[bool, bool] | None) -> list[str]:
+    return _without_brand_ingredients(_original_unsupported(raw, turns, keep), raw.get("name_text"))
+
+
+def _brand_aware_unsupported_kept(claim, raw: dict, turns: list) -> list[str]:
+    # The first version patched only the raw-reply count; the view's definition covers both (fixed 31 Oct).
+    return _without_brand_ingredients(_original_unsupported_kept(claim, raw, turns), claim.name_text)
 
 
 def rekey(answers: list[dict]) -> list[dict]:
@@ -61,13 +70,14 @@ def tally(folder: Path, data: Path, split: str, view: int) -> tuple[int, int, in
     if view == 2 and split == "test_real":
         answers = rekey(answers)
     fs._unsupported = _brand_aware_unsupported if view == 2 else _original_unsupported
+    fs._unsupported_kept = _brand_aware_unsupported_kept if view == 2 else _original_unsupported_kept
     replies = fs.load_predictions(path, len(answers))
     right = harm = 0
     for index, answer in enumerate(answers):
         result = fs.score_example(answer, replies.get(index))
         right += not result["problems"]
         harm += len(result["harm_after"])
-    fs._unsupported = _original_unsupported
+    fs._unsupported, fs._unsupported_kept = _original_unsupported, _original_unsupported_kept
     return right, harm, len(answers)
 
 
