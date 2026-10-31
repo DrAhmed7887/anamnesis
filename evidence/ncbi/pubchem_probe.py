@@ -1,8 +1,9 @@
-"""Probe: does PubChem agree with Anamnesis's INN_ALIASES? Read-only, writes JSON. Run by hand to refresh the
-snapshot that tests/contract/test_pubchem_aliases.py pins (written by the NCBI review session, 31 Oct; reformatted
-for ruff by the engine, logic unchanged).
+"""Probe: does PubChem agree with Anamnesis's INN_ALIASES? Read-only, writes JSON. Run by hand to refresh
+the snapshot that tests/contract/test_pubchem_aliases.py pins (written by the NCBI review session, 31 Oct;
+reformatted for ruff by the engine, logic unchanged).
 
-    uv run python evidence/ncbi/pubchem_probe.py anamnesis/schema/medication.py evidence/ncbi/pubchem_aliases.json
+    uv run python evidence/ncbi/pubchem_probe.py anamnesis/schema/medication.py \
+        evidence/ncbi/pubchem_aliases.json
 """
 
 import importlib.util
@@ -57,7 +58,8 @@ def main() -> None:
     print(Counter(row["verdict"] for row in rows))
     for row in rows:
         if row["verdict"] != "agrees":
-            print(row["verdict"], row["alias"], "->", row["moiety"], row["moiety_cid"], row["alias_parent_cids"][:3])
+            print(row["verdict"], row["alias"], "->", row["moiety"], row["moiety_cid"],
+                  row["alias_parent_cids"][:3])
 
 
 if __name__ == "__main__":

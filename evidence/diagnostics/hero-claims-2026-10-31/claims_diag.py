@@ -7,7 +7,7 @@ from decimal import Decimal
 from pathlib import Path
 
 from anamnesis.providers import SpendGuard
-from anamnesis.providers.claims import MetaClaimExtractor, parse_claims_json
+from anamnesis.providers.claims import MetaClaimExtractor
 from anamnesis.providers.meta import MetaClient
 from anamnesis.schema import AudioTurn
 
