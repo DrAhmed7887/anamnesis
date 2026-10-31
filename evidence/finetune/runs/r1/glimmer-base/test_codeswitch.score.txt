@@ -3,7 +3,7 @@ valid JSON 41/50 (82.0%); dropped by the product's checks 4; invalid JSON 9; no 
 per-claim field accuracy:
   name_text        63/95 (66.3%)
   inn              46/95 (48.4%)
-  intake           50/95 (52.6%)
+  intake           52/95 (54.7%)
   strength         64/95 (67.4%)
   units_per_intake 62/95 (65.3%)
   intakes_per_day  60/95 (63.2%)
@@ -29,18 +29,18 @@ examples with a miss or a harmful claim: 45
   #14 [en-intake-6+en-intake-5] invalid JSON
   #15 [en-units-1+en-plain-2] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns
   #16 [en-range_units-1+en-intake-1] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns
-  #18 [ar-brand_inn-1] c1 intake: got 20 ml, want 20 mg
+  #18 [ar-brand_inn-1] c1 intake: got null, want 20 mg
   #19 [ar-strength-1] invalid JSON
   #20 [ar-units-1] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns | harmful before the checks: INN 'unknown' not in the transcript
   #21 [ar-stopped-4+ar-intake-6] c1 inn: got null, want glimepiride | c2 intake: got null, want 1 g
   #22 [en-unsure-1] c1 inn: got null, want glimepiride
-  #23 [en-intake-6+ar-stopped-3] c1 inn: got null, want losartan | c1 intake: got 25 ml, want 25 mg | c1 as_needed: got False, want null | c2 intake: got 25 ml, want 25 mg | c2 as_needed: got False, want null
-  #24 [en-units-1+en-units-3+en-strength-1] c1 intake: got 2 mg, want 1 mg | c1 status: got unknown, want active | c2 intake: got 3 mg, want 80 mg | c2 status: got unknown, want active | c3 inn: got null, want azithromycin | c3 intake: got 1 mg, want null | c3 strength: got null, want 600 mg | c3 intakes_per_day: got null, want 1 | c3 status: got unknown, want active | harmful before the checks: INN '600' not in the transcript
+  #23 [en-intake-6+ar-stopped-3] c1 inn: got null, want losartan | c1 intake: got null, want 25 mg | c1 as_needed: got False, want null | c2 intake: got null, want 25 mg | c2 as_needed: got False, want null
+  #24 [en-units-1+en-units-3+en-strength-1] c1 intake: got null, want 1 mg | c1 status: got unknown, want active | c2 intake: got null, want 80 mg | c2 status: got unknown, want active | c3 inn: got null, want azithromycin | c3 strength: got null, want 600 mg | c3 intakes_per_day: got null, want 1 | c3 status: got unknown, want active | harmful before the checks: INN '600' not in the transcript
   #25 [en-stopped-7] c1 inn: got null, want terbinafine
   #26 [en-range_freq-3+ar-range_freq-1] c1 as_needed: got False, want null | c2 as_needed: got False, want null
-  #27 [en-plain-3+en-intake-14] c2 inn: got null, want metoprolol | c2 intake: got 50 ml, want 50 mg | c2 intakes_per_day: got null, want 1 | c2 as_needed: got False, want null | missing claim 'Likmez'
+  #27 [en-plain-3+en-intake-14] c2 inn: got null, want metoprolol | c2 intake: got null, want 50 mg | c2 intakes_per_day: got null, want 1 | c2 as_needed: got False, want null | missing claim 'Likmez'
   #28 [ar-stopped-3+ar-stopped-3] c2 inn: got null, want metformin | harmful before the checks: INN '625 مللي جرام' not in the transcript
-  #29 [en-strength-2+en-intake-4+en-intake-8] c1 intake: got 1 g, want null | c1 strength: got null, want 10 mg | c1 as_needed: got False, want null | c2 units_per_intake: got 1, want null | c2 as_needed: got False, want null | c3 units_per_intake: got 1, want null | c3 as_needed: got False, want null
+  #29 [en-strength-2+en-intake-4+en-intake-8] c1 strength: got null, want 10 mg | c1 as_needed: got False, want null | c2 units_per_intake: got 1, want null | c2 as_needed: got False, want null | c3 units_per_intake: got 1, want null | c3 as_needed: got False, want null
   #30 [ar-intake-4+en-prn-3] dropped by the product's checks: malformed patient claims: claim turn_ids must cite existing turns | harmful before the checks: INN 'null' not in the transcript
   #32 [en-stopped-1+ar-plain-1+en-unsure-1] c1 inn: got null, want carvedilol
   #33 [en-prn-1+ar-plain-2] invalid JSON
@@ -49,9 +49,9 @@ examples with a miss or a harmful claim: 45
   #37 [en-intake-13] c1 inn: got null, want metformin
   #38 [en-units-3+ar-intake-7] c1 inn: got null, want azithromycin | c1 intake: got null, want 250 mg | c1 units_per_intake: got null, want 0.5
   #39 [en-prn-3] c1 intake: got null, want 0.6 mg
-  #40 [ar-intake-8] c1 name_text: got elavilelavil, want elavil | c1 intake: got 150 mcg, want 150 mg | c1 intakes_per_day: got null, want 1
+  #40 [ar-intake-8] c1 name_text: got elavilelavil, want elavil | c1 intake: got null, want 150 mg | c1 intakes_per_day: got null, want 1
   #41 [ar-stopped-1] c1 name_text: got البيلوكزوكزوك, want البيلوكزوك
-  #42 [en-intake-13] c1 intake: got 25 ml, want 25 mg | c1 as_needed: got False, want null
+  #42 [en-intake-13] c1 intake: got null, want 25 mg | c1 as_needed: got False, want null
   #43 [ar-intake-3+ar-plain-2+en-intake-6] invalid JSON
   #44 [en-range_units-1+ar-units-1] invalid JSON
   #45 [en-intake-8] c1 inn: got null, want fluoxetine | c1 intakes_per_day: got null, want 1

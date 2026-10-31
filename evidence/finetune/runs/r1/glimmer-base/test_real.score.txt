@@ -28,7 +28,7 @@ examples with a miss or a harmful claim: 28
   #13 [note:U2] c1 intake: got 875 mg, want null | c1 units_per_intake: got 1, want null | c1 as_needed: got False, want null | harmful before the checks: INN 'unknown' not in the transcript
   #14 [note:U2] c1 name_text: got augmentin875and125, want augmentin
   #15 [note:U2] c1 intake: got 875 mg, want null | c1 intakes_per_day: got null, want 2 | harmful before the checks: INN 'unknown' not in the transcript
-  #18 [note:U4] c1 intake: got 2 mg, want 500 mg | c1 status: got unknown, want active | harmful before the checks: INN '2' not in the transcript
+  #18 [note:U4] c1 intake: got null, want 500 mg | c1 status: got unknown, want active | harmful before the checks: INN '2' not in the transcript
   #19 [note:U4] c1 intake: got null, want 500 mg | c1 units_per_intake: got null, want 2 | c1 as_needed: got False, want null | extra claim 'Panadol'
   #20 [note:U4] c1 intake: got null, want 500 mg | c1 units_per_intake: got null, want 2
   #21 [note:U5] harmful before the checks: INN '5' not in the transcript
