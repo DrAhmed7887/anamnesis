@@ -216,6 +216,14 @@ def test_a_second_reading_that_loses_or_changes_a_known_salt_keeps_the_first(fir
         assert report.observations[0].readability.value == "partial", second.label_text
 
 
+def test_salts_are_compared_from_both_sources():
+    first = reading(label="Bisoprolol fum", readability="partial").model_copy(update={"inn": "bisoprolol fumarate"})
+    second = reading(label="Bisoprolol 5 mg", strength=st(mg("bisoprolol fumarate", 5))).model_copy(
+        update={"inn": "bisoprolol hemifumarate"})
+    report, _ = run({RC.region_id: [first, first]}, SecondReader({RC.region_id: [second]}))
+    assert report.observations[0].readability.value == "partial"
+
+
 def test_a_second_reading_can_complete_a_salt():
     first = reading(label="Metoprolol", readability="partial").model_copy(update={"inn": "metoprolol"})
     second = reading(label="Metoprolol succinate 47.5 mg", strength=st(mg("metoprolol succinate", "47.5")))
