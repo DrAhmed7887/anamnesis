@@ -12,6 +12,12 @@ from anamnesis.core.guardrails import AdviceLeak, assert_no_advice, assert_no_ad
 from anamnesis.providers.base import ProviderError, ProviderTrace, cost_usd, with_one_retry
 from anamnesis.providers.meta import MetaClient, spark_call_estimate
 from anamnesis.providers.numbers import coerce_strength, parse_amount_text
+from anamnesis.providers.relations import (
+    another_names_for_claim,
+    is_amount_grounded,
+    mentions_for_cited_turns,
+    own_names_for_claim,
+)
 from anamnesis.providers.spend import SpendGuard
 from anamnesis.providers.stated import UNIT_WORDS, has_number_role, stated_amounts
 from anamnesis.schema import (
@@ -356,6 +362,30 @@ def parse_claims_json(
                 strength = None
             if isinstance(intake_amount, dict) and intake_amount["amount"] not in said:
                 intake_amount = None
+            if isinstance(strength, dict) or isinstance(intake_amount, dict):
+                entry = cat.resolve(raw["name_text"]) if isinstance(raw.get("name_text"), str) else None
+                other_texts = [
+                    other.get("name_text")
+                    for pos, other in enumerate(raw_claims) if pos != index - 1
+                ]
+                own = own_names_for_claim(raw.get("name_text"), grounded_inn, cat)
+                another = another_names_for_claim(
+                    own, entry, cat, other_texts, raw.get("name_text"),
+                )
+                mentions = mentions_for_cited_turns(
+                    cited, own, another, raw.get("status") == "discontinued",
+                )
+                if isinstance(strength, dict) and not all(
+                    is_amount_grounded(
+                        part["amount"], part["unit"], mentions, False,
+                    )
+                    for part in strength["ingredients"]
+                ):
+                    strength = None
+                if isinstance(intake_amount, dict) and not is_amount_grounded(
+                    intake_amount["amount"], intake_amount["unit"], mentions, True,
+                ):
+                    intake_amount = None
             units_sent = (
                 isinstance(raw.get("regimen"), dict)
                 and raw["regimen"].get("units_per_intake") is not None
