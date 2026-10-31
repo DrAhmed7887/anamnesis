@@ -88,3 +88,43 @@ def test_the_claim_side_reads_a_combined_inn_too():
     assert not claim_identity_conflict(claim, CAT)
     wrong = CLAIM.model_copy(update={"inn": "amoxicillin and sulbactam"})
     assert claim_identity_conflict(wrong, CAT)
+
+
+# --- round 2, from the fresh Muse audit and the Opus supervisor (31 Oct) --------------------------------------
+
+def _claim(inn=None, claim_strength=AUGMENTIN):
+    return CLAIM.model_copy(update={"inn": inn, "strength": claim_strength})
+
+
+@pytest.mark.parametrize("claim_inn, claim_strength, pack_inn, pack_strength, want", [
+    ("amoxicillin sodium", AUGMENTIN, "amoxicillin trihydrate/potassium clavulanate", None, D.FORMULATION_MISMATCH),
+    ("amoxicillin sodium/clavulanic acid", AUGMENTIN, None,
+     strength(part("amoxicillin trihydrate", 875), part("clavulanic acid", 125), release="immediate"),
+     D.FORMULATION_MISMATCH),
+    (None, AUGMENTIN, "amoxicillin trihydrate/amoxicillin sodium/clavulanic acid", None, D.INSUFFICIENT_INFORMATION),
+])
+def test_salts_named_inside_a_combined_inn_count(claim_inn, claim_strength, pack_inn, pack_strength, want):
+    observation = pack(pack_inn, pack_strength) if pack_inn else pack(None, pack_strength)
+    assert finding(_claim(claim_inn, claim_strength), observation) is want
+
+
+def test_a_stray_separator_leaves_one_ingredient():
+    one = strength(part("amoxicillin", 875), release="immediate")
+    assert not pack_identity_conflict(pack("amoxicillin/", one, label="Amoxicillin 875 mg"), CAT)
+
+
+def test_arabic_wa_splits_only_as_a_spaced_word():
+    assert finding(CLAIM, pack("amoxicillin و clavulanic acid")) is D.MATCH
+    assert pack_identity_conflict(pack("amoxicillin وclavulanic acid"), CAT)  # attached: a known limit, fails safe
+
+
+def test_a_comma_inside_one_ingredients_name_doesnt_split():
+    dcba = strength(part("2,4-dichlorobenzyl alcohol", "1.2"), release="immediate")
+    assert not pack_identity_conflict(pack("2,4-dichlorobenzyl alcohol", dcba, label="Strepsils"), CAT)
+
+
+def test_a_long_run_of_spaces_stays_fast():
+    import time
+    start = time.monotonic()
+    pack_identity_conflict(pack("amoxicillin" + " " * 30000 + "x"), CAT)
+    assert time.monotonic() - start < 1.0
