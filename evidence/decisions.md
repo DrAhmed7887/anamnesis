@@ -298,3 +298,11 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - **Measured before the contract was written,** on a CEO prototype outside the product: all ten traps fail safe; no claim changes in 97 saved live reports; no fully-right reply lost among the committed replies of Spark 1.3, base Glimmer, r1 and r2 on every test split. The word lists were corrected twice on those replies, so that isn't a held-out result.
   - **Muse planned it read-only first** (`evidence/grills/b27-muse-plan/`); five of its points tightened the SPEC.
 - **The freeze, proposed:** engine changes until **Tue 3 Nov 12:00 CET**, each through the gate, the supervisor and a fresh clone. The film is captured Mon from the tag of that moment; a later change to what the demo shows means re-capturing that shot Tue morning. After Tue 12:00, only the release-gate fixes. Ahmed confirms or moves it.
+
+## 2026-10-31, 12:33: batch 27 merged (relation checks on claim amounts)
+- **What:** after the value check, six word rules decide what each number in a cited turn was said about: negation, another unit, a count, another medicine's amount, a past amount, and a split daily total (SPEC §2, "Relation checks (batch 27)"). Merged in 3d3a30e.
+- **How it was built:** the CEO prototyped and measured the rules first; Muse planned read-only, built in three rounds and was audited by a fresh Muse session; the Opus supervisor sent round 2 back with five findings (all taken) and approved round 3 after 32,000 fuzzed replies with no crash and nothing kept that the value check would drop.
+- **Checks after the merge** (`evidence/batches/27/checks.md`): the audit's ten traps all fail safe; 0 of 120 saved live claims change; Spark 1.3's, r1's and r2's re-scores are byte-identical; on base Glimmer's committed replies, 52 wrong amounts are no longer shown, with 2 right strengths dropped by the pairing rule.
+- **Batch 27.1, after batch 28** (both fail safe): a duration ("for five years") can split a daily total; German "weiß nicht" before a number still negates it.
+- **Cost:** Muse $7.29 (plan, three rounds, audit).
+- **Also today:** PubMed citations re-checked for the judge session (`evidence/ncbi/`), and a PubChem snapshot test of the INN aliases (35 agree, 0 disagree, 17 unlisted), from the NCBI review session's handoff (Ahmed's call).
