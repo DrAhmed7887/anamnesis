@@ -325,3 +325,10 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 ## 2026-10-31, 15:13: the Meta stop line moves to $80 (Ahmed's call)
 - **Ahmed:** "Fix U2 first (~$4)", then "Yes, up to $80" once the full cost was clear: the batch itself, Muse's grills (in neither ledger) and the re-measure of Spark 1.3 with its new prompt on 363 notes bring real Meta use to about $76, past the 50% line ($75).
 - **The new line is $80.** Real use then (ledgers $69.7 with this batch's reservation, plus about $2.7 of grills) leaves about $8 for the re-measure, U2's three live runs and anything before submission. The card still pays only past $150.
+
+## 2026-10-31, 15:28: batch 29 merged (one sentence in Spark's claim prompt, for combinations)
+- **What:** `MetaClaimExtractor` sends the trained prompt plus "A combination product said with one amount per ingredient, such as 'Augmentin 875 and 125 milligrams', is its strength: one ingredient per amount, in the order said, each named for the ingredient it belongs to." The tuned Glimmer's prompt is unchanged (pinned). Merged in 61ae0e5.
+- **Why:** U2 missed in all three of the day's live runs: Spark wrote no amount, or "875 and 125" as one string. Ahmed: "Fix U2 first (~$4)", then the $80 line.
+- **How:** a pilot written before the calls (6 of 6 combination calls right, controls unchanged), then the CEO's contract and reference build; Muse built it in one round; a fresh Muse audit found nothing; the Opus supervisor approved and noted that the scorer predates the fix, so the re-measure plan gained a second, labelled view before any call.
+- **Cost:** Muse $0.72; the pilot $0.13 of Meta.
+- **Running:** the re-measure of Spark 1.3 with the new prompt on 363 notes, and U2 three times live (`evidence/batches/29/remeasure-plan.md`).
