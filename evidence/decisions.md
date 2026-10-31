@@ -344,5 +344,5 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - the rule also closes a false `match` already on `main` ("paracetamol plus caffeine" beside a paracetamol-only strength).
 - **Known limit, in the safe direction:** an `inn` with a salt or strength the alias table lacks ("bisoprolol fumarato") abstains. None of the 132 saved reports has one.
 - **Live (pre-registered):** U2 gave 1 of 3 `match` and 0 harmful, against an expected 2 of 3. The pack side was right in 3 of 3. The claim lost its amounts in 2 runs, while 11 direct calls with the same prompt were all right. That is Spark varying between calls (`evidence/batches/30/live-results.md`).
-- **Cost:** Muse $2.24 (with the audit); live and diagnostic $0.25. Meta is now about $78.1 of the $80 line, with the grills.
+- **Cost:** Muse $2.24 (with the audit); live and diagnostic $0.25. Meta is now $77.95 of the $80 line, with the grills.
 - **The engine closes here:** what remains on the Meta line is kept for anything before submission. Only release-gate fixes follow.
