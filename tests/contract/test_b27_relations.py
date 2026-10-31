@@ -346,3 +346,73 @@ def test_an_unstated_amount_is_still_dropped_with_the_other():
     kept = parse(said, claim("Concor", intake_amount=amt("bisoprolol", 5),
                              strength=per_tablet(amt("bisoprolol", 10))))[0]
     assert kept.intake_amount is None and kept.strength is None
+
+
+# --- round 3, from the Opus supervisor's review (31 Oct) -------------------------------------------------------
+
+def test_ten_a_day_without_a_unit_is_a_daily_total():
+    said = "I take Concor 10 a day, 5 in the morning and 5 at night."
+    assert intake_of(said, claim("Concor", intake_amount=amt("bisoprolol", 10))) is None
+    assert intake_of(said, claim("Concor", intake_amount=amt("bisoprolol", 5), per_day="2")) == Decimal(5)
+    assert intake_of("I take Concor ten a day.", claim("Concor", intake_amount=amt("bisoprolol", 10),
+                                                       per_day="1")) == Decimal(10)
+
+
+def test_mili_alone_is_the_amounts_unit_word():
+    split = "باخد كونكور عشرة ملي في اليوم، خمسة الصبح وخمسة بالليل"
+    assert intake_of(split, claim("كونكور", intake_amount=amt("bisoprolol", 10))) is None
+    assert intake_of(split, claim("كونكور", intake_amount=amt("bisoprolol", 5), per_day="2")) == Decimal(5)
+    of_panadol = "باخد كونكور وخمسمية ملي من البنادول"
+    assert intake_of(of_panadol, claim("كونكور", intake_amount=amt("bisoprolol", 500))) is None
+    assert intake_of(of_panadol, claim("بنادول", intake_amount=amt("paracetamol", 500))) == Decimal(500)
+    pill = "باخد حباية كونكور خمسة ملي"
+    assert intake_of(pill, claim("كونكور", intake_amount=amt("bisoprolol", 5))) == Decimal(5)
+
+
+def test_an_arabic_thousands_mark_leaves_no_stray_digit():
+    # The value check states nothing for a thousands mark (as before); the relation checks must not read its
+    # first digit as a mention of its own.
+    assert intake_of("باخد كونكور مش واحد، ١٬٠٠٠", claim("كونكور", intake_amount=amt("bisoprolol", 1))) is None
+
+
+@pytest.mark.parametrize("said, name, dropped, kept", [
+    ("tomaba para la tensión Concor diez miligramos ahora tomo cinco miligramos", "Concor", "10", "5"),
+    ("With Concor I used to take sort of ten milligrams but now I take five milligrams", "Concor", "10", "5"),
+])
+def test_ordinary_words_dont_pass_for_a_medicines_name(said, name, dropped, kept):
+    assert intake_of(said, claim(name, intake_amount=amt("bisoprolol", dropped))) is None
+    assert intake_of(said, claim(name, intake_amount=amt("bisoprolol", kept))) == Decimal(kept)
+
+
+def test_acid_doesnt_block_a_split_daily_total():
+    said = ("I take Zyloric for uric acid three hundred milligrams a day one hundred fifty in the morning "
+            "and one hundred fifty at night")
+    assert intake_of(said, claim("Zyloric", intake_amount=amt("allopurinol", 300))) is None
+    assert intake_of(said, claim("Zyloric", intake_amount=amt("allopurinol", 150), per_day="2")) == Decimal(150)
+
+
+def test_a_brand_slip_still_blocks_a_splitter():
+    said = "I take Flolipid forty milligrams a day and Zyrtectec twenty"
+    both = [claim("Flolipid", intake_amount=amt("simvastatin", 40), per_day="1"),
+            claim("Zyrtec", intake_amount=amt("cetirizine", 20))]
+    assert intake_of(said, *both, index=0) == Decimal(40)
+
+
+@pytest.mark.parametrize("said, name", [
+    ("With Concor I'm not sure five milligrams", "Concor"),
+    ("With Concor I don't know five milligrams", "Concor"),
+    ("باخد كونكور مش عارف خمسة تقريبا", "كونكور"),
+    ("tomo Concor no sé cinco miligramos", "Concor"),
+])
+def test_not_sure_negates_the_knowing_not_the_amount(said, name):
+    assert intake_of(said, claim(name, intake_amount=amt("bisoprolol", 5))) == Decimal(5)
+
+
+def test_a_negation_right_before_the_amount_still_drops_it():
+    assert intake_of("With Concor not five milligrams", claim("Concor", intake_amount=amt("bisoprolol", 5))) is None
+
+
+def test_an_of_form_naming_the_claim_wins_over_the_walk_back():
+    said = "I take Panadol. Five milligrams of Concor."
+    assert intake_of(said, claim("Concor", intake_amount=amt("bisoprolol", 5))) == Decimal(5)
+    assert intake_of(said, claim("Panadol", intake_amount=amt("paracetamol", 5))) is None
