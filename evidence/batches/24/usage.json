@@ -1,0 +1,176 @@
+{
+  "batch": "24",
+  "rounds": [
+    {
+      "batch": "24",
+      "input_tokens": 12587847,
+      "cached_tokens": 11971923,
+      "output_tokens": 137438,
+      "reasoning_tokens": 105202,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a1889b-357b-7613-83aa-0c8e9646dc62"
+      ],
+      "cost_usd": "3.14980",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T17:17:28Z"
+    },
+    {
+      "batch": "24",
+      "input_tokens": 2634312,
+      "cached_tokens": 2409377,
+      "output_tokens": 43089,
+      "reasoning_tokens": 31236,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a188c4-e885-7962-9f38-6421f4b3ffb5"
+      ],
+      "cost_usd": "0.82570",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T17:51:26Z"
+    },
+    {
+      "batch": "24",
+      "input_tokens": 2578885,
+      "cached_tokens": 2380012,
+      "output_tokens": 35911,
+      "reasoning_tokens": 27064,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a188e5-5246-77f3-b5e2-6dea64c2174d"
+      ],
+      "cost_usd": "0.75821",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T18:27:18Z"
+    },
+    {
+      "batch": "24",
+      "input_tokens": 2215297,
+      "cached_tokens": 2040247,
+      "output_tokens": 30529,
+      "reasoning_tokens": 22708,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a18902-7124-7e83-91bb-8b807ad714f1"
+      ],
+      "cost_usd": "0.65460",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T18:56:56Z"
+    },
+    {
+      "batch": "24",
+      "input_tokens": 3652364,
+      "cached_tokens": 3432723,
+      "output_tokens": 44064,
+      "reasoning_tokens": 30918,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a1891b-e7ad-7ed0-a20e-ef335d31a098"
+      ],
+      "cost_usd": "0.97673",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T19:26:45Z"
+    },
+    {
+      "batch": "24",
+      "input_tokens": 4027795,
+      "cached_tokens": 3815503,
+      "output_tokens": 59682,
+      "reasoning_tokens": 44510,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a18937-463d-7cb0-87da-93ccd1f2df73"
+      ],
+      "cost_usd": "1.09134",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T19:58:16Z"
+    },
+    {
+      "batch": "24",
+      "input_tokens": 2873622,
+      "cached_tokens": 2676506,
+      "output_tokens": 45560,
+      "reasoning_tokens": 34746,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a18942-92fe-7691-9915-1d3ec1ff7116"
+      ],
+      "cost_usd": "0.84150",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T20:09:21Z"
+    },
+    {
+      "batch": "24",
+      "input_tokens": 3667643,
+      "cached_tokens": 3438694,
+      "output_tokens": 52705,
+      "reasoning_tokens": 39114,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a1896a-24e9-7fb0-8dfa-2db30a554550"
+      ],
+      "cost_usd": "1.02599",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T20:52:46Z"
+    },
+    {
+      "batch": "24",
+      "input_tokens": 3679001,
+      "cached_tokens": 3457382,
+      "output_tokens": 53183,
+      "reasoning_tokens": 37737,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a18992-9526-7310-a3f7-112265d3f966"
+      ],
+      "cost_usd": "1.02166",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T21:37:00Z"
+    },
+    {
+      "batch": "24",
+      "input_tokens": 1659763,
+      "cached_tokens": 1412497,
+      "output_tokens": 23460,
+      "reasoning_tokens": 16799,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a189b3-6b0f-73b3-90c2-33e95c302e01"
+      ],
+      "cost_usd": "0.62066",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T22:09:24Z"
+    }
+  ],
+  "total_cost_usd": "10.96619"
+}

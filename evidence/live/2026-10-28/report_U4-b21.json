@@ -1,0 +1,148 @@
+{
+  "intake_id": "26243e63501a95cf27242c2422f66bca6667486b3589cdc559582aa33fc4bfc9",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 3900,
+      "transcript": "I take Panadol five hundred milligrams two tablets at a time",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Panadol",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "panadol",
+        "salt": null,
+        "amount": "500",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": "2",
+        "intakes_per_day": null,
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "376fb0649082-0",
+      "image_sha256": "376fb064908278765ea08c0393f951ff2e5bebdd922b87342ac0427e700098fe",
+      "object_id": 0,
+      "x1": 1891,
+      "y1": 1562,
+      "x2": 3315,
+      "y2": 3218,
+      "frame_w": 4608,
+      "frame_h": 3456,
+      "confidence": 0.8632478713989258
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "Vnr 05 79 65\ngsk\nPanadol 500 mg\nparacetamol\nTilapäiseen särkyyn ja kuumeeseen\nVid tillfällig värk och feber\n30\nkalvopäällysteistä/ filmdragerade tabl.\nPanadol 500 mg",
+      "inn": "paracetamol",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "paracetamol",
+            "salt": null,
+            "amount": "500",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "readable",
+      "country": null,
+      "visual_evidence": [
+        "376fb0649082-0"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "c1:o0",
+      "type": "intake_differs_from_unit_strength",
+      "claim_id": "c1",
+      "observation_id": "o0",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "376fb0649082-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "Reported intake differs from the strength of one pack unit.",
+      "patient_question_id": "intake"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "76dec4ed-bb42-4405-ac4d-d84cc87f60f1"
+      ]
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "chatcmpl-01a18200-68c8-7103-b23f-ec8fa60cb064"
+      ]
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "376fb0649082:medicine box",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae1cade39d5d398cbd7429d"
+      ]
+    },
+    {
+      "n": 3,
+      "action": "read",
+      "target": "376fb0649082-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a18200-99d3-748f-bf30-cf922bbe3963"
+      ]
+    },
+    {
+      "n": 4,
+      "action": "zoom_read",
+      "target": "376fb0649082-0",
+      "outcome": "readable",
+      "call_ids": [
+        "chatcmpl-01a18200-b8c6-72c3-bfbe-16a5ccc805b3"
+      ]
+    },
+    {
+      "n": 5,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "1 findings",
+      "call_ids": []
+    }
+  ],
+  "calls": 5,
+  "spend_usd": "0.03867825",
+  "superseded": []
+}

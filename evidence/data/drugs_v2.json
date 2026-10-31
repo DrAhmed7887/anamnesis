@@ -1,0 +1,3108 @@
+{
+ "meta": {
+  "source": "https://cima.aemps.es/cima/rest",
+  "attribution": "Source: Agencia Española de Medicamentos y Productos Sanitarios (AEMPS), CIMA, https://cima.aemps.es. ATC codes as CIMA lists them; the ATC classification is the WHO Collaborating Centre for Drug Statistics Methodology's (Oslo).",
+  "max_brands": 4,
+  "fetched": [
+   "2026-10-29"
+  ]
+ },
+ "drugs": [
+  {
+   "inn": "amlodipine",
+   "searched": [
+    "amlodipine",
+    "amlodipin"
+   ],
+   "spanish_name": "amlodipino",
+   "status": "mapped",
+   "atc": {
+    "code": "C08CA01",
+    "name": "Amlodipino"
+   },
+   "brands": [
+    {
+     "name": "Astudal",
+     "products": 2,
+     "nregistro": [
+      "59161",
+      "59162"
+     ]
+    },
+    {
+     "name": "Norvas",
+     "products": 2,
+     "nregistro": [
+      "59159",
+      "59160"
+     ]
+    },
+    {
+     "name": "Zabart",
+     "products": 2,
+     "nregistro": [
+      "69939",
+      "69940"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "5",
+    "10"
+   ],
+   "dropped": {
+    "other_ingredients": 302
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 48
+  },
+  {
+   "inn": "bisoprolol",
+   "searched": [
+    "bisoprolol"
+   ],
+   "spanish_name": "bisoprolol",
+   "status": "mapped",
+   "atc": {
+    "code": "C07AB07",
+    "name": "Bisoprolol"
+   },
+   "brands": [
+    {
+     "name": "Emconcor",
+     "products": 4,
+     "nregistro": [
+      "57654",
+      "57655",
+      "63046",
+      "63048"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "1.25",
+    "2.5",
+    "5",
+    "10"
+   ],
+   "dropped": {
+    "other_ingredients": 9
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 51
+  },
+  {
+   "inn": "metoprolol",
+   "searched": [
+    "metoprolol"
+   ],
+   "spanish_name": "metoprolol",
+   "status": "mapped",
+   "atc": {
+    "code": "C07AB02",
+    "name": "Metoprolol"
+   },
+   "brands": [
+    {
+     "name": "Lopresor",
+     "products": 1,
+     "nregistro": [
+      "54503"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "100"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 1,
+    "other_ingredients": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 2
+  },
+  {
+   "inn": "atenolol",
+   "searched": [
+    "atenolol"
+   ],
+   "spanish_name": "atenolol",
+   "status": "mapped",
+   "atc": {
+    "code": "C07AB03",
+    "name": "Atenolol"
+   },
+   "brands": [
+    {
+     "name": "Blokium",
+     "products": 2,
+     "nregistro": [
+      "55529",
+      "56695"
+     ]
+    },
+    {
+     "name": "Tenormin",
+     "products": 1,
+     "nregistro": [
+      "56967"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "50",
+    "100"
+   ],
+   "dropped": {
+    "other_ingredients": 2,
+    "not_tablet_or_capsule": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 15
+  },
+  {
+   "inn": "carvedilol",
+   "searched": [
+    "carvedilol"
+   ],
+   "spanish_name": "carvedilol",
+   "status": "mapped",
+   "atc": {
+    "code": "C07AG02",
+    "name": "Carvedilol"
+   },
+   "brands": [
+    {
+     "name": "Coropres",
+     "products": 2,
+     "nregistro": [
+      "59695",
+      "61281"
+     ]
+    },
+    {
+     "name": "Normotride",
+     "products": 2,
+     "nregistro": [
+      "67966",
+      "68471"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "6.25",
+    "25"
+   ],
+   "dropped": {},
+   "forms": [
+    "tablet"
+   ],
+   "products": 25
+  },
+  {
+   "inn": "lisinopril",
+   "searched": [
+    "lisinopril"
+   ],
+   "spanish_name": "lisinopril",
+   "status": "mapped",
+   "atc": {
+    "code": "C09AA03",
+    "name": "Lisinopril"
+   },
+   "brands": [
+    {
+     "name": "Doneka",
+     "products": 2,
+     "nregistro": [
+      "60733",
+      "60734"
+     ]
+    },
+    {
+     "name": "Prinivil",
+     "products": 2,
+     "nregistro": [
+      "59128",
+      "59129"
+     ]
+    },
+    {
+     "name": "Zestril",
+     "products": 1,
+     "nregistro": [
+      "59127"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "5",
+    "20"
+   ],
+   "dropped": {
+    "other_ingredients": 9
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 19
+  },
+  {
+   "inn": "enalapril",
+   "searched": [
+    "enalapril"
+   ],
+   "spanish_name": "enalapril",
+   "status": "mapped",
+   "atc": {
+    "code": "C09AA02",
+    "name": "Enalapril"
+   },
+   "brands": [
+    {
+     "name": "Baripril",
+     "products": 2,
+     "nregistro": [
+      "57789",
+      "57790"
+     ]
+    },
+    {
+     "name": "Dabonal",
+     "products": 2,
+     "nregistro": [
+      "57787",
+      "57788"
+     ]
+    },
+    {
+     "name": "Acetensil",
+     "products": 1,
+     "nregistro": [
+      "58117"
+     ]
+    },
+    {
+     "name": "Herten",
+     "products": 1,
+     "nregistro": [
+      "59794"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "2.5",
+    "5",
+    "10",
+    "20"
+   ],
+   "dropped": {
+    "other_ingredients": 39
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 42
+  },
+  {
+   "inn": "ramipril",
+   "searched": [
+    "ramipril"
+   ],
+   "spanish_name": "ramipril",
+   "status": "mapped",
+   "atc": {
+    "code": "C09AA05",
+    "name": "Ramipril"
+   },
+   "brands": [
+    {
+     "name": "Acovil",
+     "products": 10,
+     "nregistro": [
+      "59562",
+      "59564",
+      "65104",
+      "LT1971617003",
+      "LT1971617003IP",
+      "LT1971617005",
+      "LT1971617005IP",
+      "PA-0540-084-007",
+      "PA-0540-084-008",
+      "PA0540-084-008IP"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "2.5",
+    "5",
+    "10"
+   ],
+   "dropped": {
+    "other_ingredients": 37
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 44
+  },
+  {
+   "inn": "losartan",
+   "searched": [
+    "losartan"
+   ],
+   "spanish_name": "losartán",
+   "status": "mapped",
+   "atc": {
+    "code": "C09CA01",
+    "name": "Losartan"
+   },
+   "brands": [
+    {
+     "name": "Cozaar",
+     "products": 3,
+     "nregistro": [
+      "60913",
+      "62117",
+      "64971"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "12.5",
+    "25",
+    "50",
+    "100"
+   ],
+   "dropped": {
+    "other_ingredients": 47
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 51
+  },
+  {
+   "inn": "valsartan",
+   "searched": [
+    "valsartan"
+   ],
+   "spanish_name": "valsartán",
+   "status": "mapped",
+   "atc": {
+    "code": "C09CA03",
+    "name": "Valsartan"
+   },
+   "brands": [
+    {
+     "name": "Diovan",
+     "products": 11,
+     "nregistro": [
+      "033178359",
+      "033178359IP",
+      "033178359IP1",
+      "033178942",
+      "033178942IP",
+      "033178942IP1",
+      "20020028",
+      "64454",
+      "64473",
+      "68817",
+      "8957618122012IP"
+     ]
+    },
+    {
+     "name": "Presar",
+     "products": 4,
+     "nregistro": [
+      "77987",
+      "77988",
+      "77989",
+      "77990"
+     ]
+    },
+    {
+     "name": "Kalpress",
+     "products": 3,
+     "nregistro": [
+      "64452",
+      "64453",
+      "69517"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "40",
+    "80",
+    "160",
+    "320"
+   ],
+   "dropped": {
+    "other_ingredients": 189,
+    "not_tablet_or_capsule": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 80
+  },
+  {
+   "inn": "candesartan",
+   "searched": [
+    "candesartan"
+   ],
+   "spanish_name": "candesartán",
+   "status": "mapped",
+   "atc": {
+    "code": "C09CA06",
+    "name": "Candesartan"
+   },
+   "brands": [
+    {
+     "name": "Atacand",
+     "products": 7,
+     "nregistro": [
+      "35812-16-04-2021IP",
+      "61892",
+      "61893",
+      "61894",
+      "6234-2014-01",
+      "66300",
+      "8926-04-02-2013"
+     ]
+    },
+    {
+     "name": "Blopress",
+     "products": 4,
+     "nregistro": [
+      "61995",
+      "61996",
+      "61997",
+      "66439"
+     ]
+    },
+    {
+     "name": "Parapres",
+     "products": 4,
+     "nregistro": [
+      "62006",
+      "62007",
+      "62008",
+      "66729"
+     ]
+    },
+    {
+     "name": "Karbis",
+     "products": 1,
+     "nregistro": [
+      "75836"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "4",
+    "8",
+    "16",
+    "32"
+   ],
+   "dropped": {
+    "other_ingredients": 53
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 71
+  },
+  {
+   "inn": "hydrochlorothiazide",
+   "searched": [
+    "hidroclorotiazida"
+   ],
+   "spanish_name": "hidroclorotiazida",
+   "status": "mapped",
+   "atc": {
+    "code": "C03AA03",
+    "name": "Hidroclorotiazida"
+   },
+   "brands": [
+    {
+     "name": "Hidrosaluretil",
+     "products": 2,
+     "nregistro": [
+      "74658",
+      "82547"
+     ]
+    },
+    {
+     "name": "Esidrex",
+     "products": 1,
+     "nregistro": [
+      "31556"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "12.5",
+    "25",
+    "50"
+   ],
+   "dropped": {
+    "other_ingredients": 592
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 16
+  },
+  {
+   "inn": "furosemide",
+   "searched": [
+    "furosemide",
+    "furosemid"
+   ],
+   "spanish_name": "furosemida",
+   "status": "mapped",
+   "atc": {
+    "code": "C03CA01",
+    "name": "Furosemida"
+   },
+   "brands": [
+    {
+     "name": "Seguril",
+     "products": 1,
+     "nregistro": [
+      "39969"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "40"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 5,
+    "other_ingredients": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 11
+  },
+  {
+   "inn": "spironolactone",
+   "searched": [
+    "espironolactona"
+   ],
+   "spanish_name": "espironolactona",
+   "status": "mapped",
+   "atc": {
+    "code": "C03DA01",
+    "name": "Espironolactona"
+   },
+   "brands": [
+    {
+     "name": "Aldactone",
+     "products": 2,
+     "nregistro": [
+      "39059",
+      "54900"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "25",
+    "100"
+   ],
+   "dropped": {
+    "other_ingredients": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 8
+  },
+  {
+   "inn": "indapamide",
+   "searched": [
+    "indapamide",
+    "indapamid"
+   ],
+   "spanish_name": "indapamida",
+   "status": "mapped",
+   "atc": {
+    "code": "C03BA11",
+    "name": "Indapamida"
+   },
+   "brands": [
+    {
+     "name": "Tertensif",
+     "products": 2,
+     "nregistro": [
+      "53338",
+      "61252"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "1.5",
+    "2.5"
+   ],
+   "dropped": {
+    "other_ingredients": 33
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 9
+  },
+  {
+   "inn": "atorvastatin",
+   "searched": [
+    "atorvastatin"
+   ],
+   "spanish_name": "atorvastatina",
+   "status": "mapped",
+   "atc": {
+    "code": "C10AA05",
+    "name": "Atorvastatina"
+   },
+   "brands": [
+    {
+     "name": "Cardyl",
+     "products": 27,
+     "nregistro": [
+      "3400934306983",
+      "3400934306983IP",
+      "3400934306983IP3",
+      "3400935557506",
+      "3400935557506IP",
+      "3400935557506IP1",
+      "61716",
+      "61717",
+      "61718",
+      "64571",
+      "819420150119",
+      "8194201506",
+      "8194201506IP",
+      "8194201506IP1",
+      "819520150119",
+      "8195201506",
+      "LT-1-98-3805-025",
+      "LT-1-98-3805-025_IP",
+      "LT1983805025IP1",
+      "LT1983805025IP2",
+      "LT1983805025IP3",
+      "LT1983805025IP4",
+      "LT1983805044IP",
+      "LT1983805063",
+      "PA1740-1-4",
+      "PA23055017002",
+      "PA23055017003"
+     ]
+    },
+    {
+     "name": "Zarator",
+     "products": 18,
+     "nregistro": [
+      "1983805025IP1",
+      "3400934306983IP1",
+      "3400934306983IP4",
+      "3400935557506IP2",
+      "34009_355_575_0_6IP",
+      "61654",
+      "61655",
+      "61656",
+      "64529",
+      "72599",
+      "72601",
+      "819420150120IP",
+      "8194201508",
+      "819520150120IP",
+      "8195201508",
+      "983805025IP",
+      "LT-1-98-3805-025IP",
+      "LT1983805044"
+     ]
+    },
+    {
+     "name": "Prevencor",
+     "products": 7,
+     "nregistro": [
+      "3400934306983IP2",
+      "61742",
+      "61743",
+      "61744",
+      "64642",
+      "BE184064",
+      "BE232933"
+     ]
+    },
+    {
+     "name": "Thervan",
+     "products": 6,
+     "nregistro": [
+      "85925",
+      "85926",
+      "85927",
+      "85928",
+      "85929",
+      "85930"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "10",
+    "20",
+    "30",
+    "40",
+    "60",
+    "80"
+   ],
+   "dropped": {
+    "other_ingredients": 98
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 200
+  },
+  {
+   "inn": "rosuvastatin",
+   "searched": [
+    "rosuvastatin"
+   ],
+   "spanish_name": "rosuvastatina",
+   "status": "mapped",
+   "atc": {
+    "code": "C10AA07",
+    "name": "Rosuvastatina"
+   },
+   "brands": [
+    {
+     "name": "Crestor",
+     "products": 14,
+     "nregistro": [
+      "035885209",
+      "035885209IP",
+      "035885209IP1",
+      "035885209IP2",
+      "250223IP",
+      "5610201301",
+      "5610201301IP",
+      "70243",
+      "70244",
+      "70334",
+      "BE250187IP",
+      "BE250187IP1",
+      "BE250223",
+      "BE250223IP"
+     ]
+    },
+    {
+     "name": "Provisacor",
+     "products": 6,
+     "nregistro": [
+      "035883180",
+      "035883180IP",
+      "035883180IP1",
+      "70241",
+      "70242",
+      "70333"
+     ]
+    },
+    {
+     "name": "Alzil",
+     "products": 5,
+     "nregistro": [
+      "82060",
+      "82061",
+      "82062",
+      "88744",
+      "88745"
+     ]
+    },
+    {
+     "name": "Arrox",
+     "products": 5,
+     "nregistro": [
+      "80280",
+      "80282",
+      "80283",
+      "83497",
+      "83937"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "5",
+    "10",
+    "15",
+    "20",
+    "30",
+    "40"
+   ],
+   "dropped": {
+    "other_ingredients": 99
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 106
+  },
+  {
+   "inn": "simvastatin",
+   "searched": [
+    "simvastatin"
+   ],
+   "spanish_name": "simvastatina",
+   "status": "mapped",
+   "atc": {
+    "code": "C10AA01",
+    "name": "Simvastatina"
+   },
+   "brands": [
+    {
+     "name": "Alcosin",
+     "products": 3,
+     "nregistro": [
+      "67691",
+      "67692",
+      "67693"
+     ]
+    },
+    {
+     "name": "Pantok",
+     "products": 3,
+     "nregistro": [
+      "59182",
+      "59183",
+      "62330"
+     ]
+    },
+    {
+     "name": "Zocor",
+     "products": 2,
+     "nregistro": [
+      "58845",
+      "58846"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "10",
+    "20",
+    "40"
+   ],
+   "dropped": {
+    "other_ingredients": 51
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 62
+  },
+  {
+   "inn": "ezetimibe",
+   "searched": [
+    "ezetimibe",
+    "ezetimib"
+   ],
+   "spanish_name": "ezetimiba",
+   "status": "mapped",
+   "atc": {
+    "code": "C10AX09",
+    "name": "Ezetimiba"
+   },
+   "brands": [
+    {
+     "name": "Ezetrol",
+     "products": 17,
+     "nregistro": [
+      "31-267-03-C",
+      "3126703CIP",
+      "3126703CIP1",
+      "6315201403",
+      "6315201403IP",
+      "6315201403IP1",
+      "6315201403IP3",
+      "65376",
+      "BE249085",
+      "BE249085IP",
+      "BE249085IP1",
+      "BE249094",
+      "BE249094IP",
+      "PA-1286-061-001",
+      "PA-1286-061-001IP",
+      "PA1286-061-001IP1",
+      "PA23198023001"
+     ]
+    },
+    {
+     "name": "Absorcol",
+     "products": 1,
+     "nregistro": [
+      "65382"
+     ]
+    },
+    {
+     "name": "Azibe",
+     "products": 1,
+     "nregistro": [
+      "81663"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "10"
+   ],
+   "dropped": {
+    "other_ingredients": 217
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 36
+  },
+  {
+   "inn": "metformin",
+   "searched": [
+    "metformin"
+   ],
+   "spanish_name": "metformina",
+   "status": "mapped",
+   "atc": {
+    "code": "A10BA02",
+    "name": "Metformina"
+   },
+   "brands": [
+    {
+     "name": "Brotmin",
+     "products": 2,
+     "nregistro": [
+      "85974",
+      "85976"
+     ]
+    },
+    {
+     "name": "Dianben",
+     "products": 1,
+     "nregistro": [
+      "55211"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "850",
+    "1000"
+   ],
+   "dropped": {
+    "other_ingredients": 131,
+    "no_strength_in_name": 5
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 18
+  },
+  {
+   "inn": "gliclazide",
+   "searched": [
+    "gliclazide",
+    "gliclazid"
+   ],
+   "spanish_name": "gliclazida",
+   "status": "mapped",
+   "atc": {
+    "code": "A10BB09",
+    "name": "Gliclazida"
+   },
+   "brands": [
+    {
+     "name": "Diamicron",
+     "products": 4,
+     "nregistro": [
+      "63644",
+      "71738",
+      "LT-1-05-0200-029",
+      "LT1050200024"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "30",
+    "60"
+   ],
+   "dropped": {},
+   "forms": [
+    "tablet"
+   ],
+   "products": 21
+  },
+  {
+   "inn": "glimepiride",
+   "searched": [
+    "glimepiride",
+    "glimepirid"
+   ],
+   "spanish_name": "glimepirida",
+   "status": "mapped",
+   "atc": {
+    "code": "A10BB12",
+    "name": "Glimepirida"
+   },
+   "brands": [
+    {
+     "name": "Amaryl",
+     "products": 2,
+     "nregistro": [
+      "61406",
+      "61409"
+     ]
+    },
+    {
+     "name": "Roname",
+     "products": 2,
+     "nregistro": [
+      "62807",
+      "62808"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "2",
+    "4"
+   ],
+   "dropped": {
+    "other_ingredients": 2
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 20
+  },
+  {
+   "inn": "sitagliptin",
+   "searched": [
+    "sitagliptin"
+   ],
+   "spanish_name": "sitagliptina",
+   "status": "mapped",
+   "atc": {
+    "code": "A10BH01",
+    "name": "Sitagliptina"
+   },
+   "brands": [
+    {
+     "name": "Januvia",
+     "products": 12,
+     "nregistro": [
+      "07383002",
+      "07383008",
+      "07383014",
+      "07383014IP",
+      "07383014IP1",
+      "07383014IP2",
+      "07383014IP3",
+      "07383015",
+      "07383015IP",
+      "07383015IP1",
+      "07383015IP2",
+      "07383015IP3"
+     ]
+    },
+    {
+     "name": "Ristaben",
+     "products": 4,
+     "nregistro": [
+      "10621014",
+      "10621015",
+      "110621002",
+      "110621008"
+     ]
+    },
+    {
+     "name": "Tesavel",
+     "products": 4,
+     "nregistro": [
+      "07435014",
+      "07435015",
+      "107435002",
+      "107435008"
+     ]
+    },
+    {
+     "name": "Xelevia",
+     "products": 4,
+     "nregistro": [
+      "07382014",
+      "07382015",
+      "107382002",
+      "107382008"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "25",
+    "50",
+    "100"
+   ],
+   "dropped": {
+    "other_ingredients": 46
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 85
+  },
+  {
+   "inn": "empagliflozin",
+   "searched": [
+    "empagliflozin"
+   ],
+   "spanish_name": "empagliflozina",
+   "status": "mapped",
+   "atc": {
+    "code": "A10BK03",
+    "name": "Empagliflozina"
+   },
+   "brands": [
+    {
+     "name": "Jardiance",
+     "products": 2,
+     "nregistro": [
+      "114930005",
+      "114930014"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "10",
+    "25"
+   ],
+   "dropped": {
+    "other_ingredients": 4
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 2
+  },
+  {
+   "inn": "dapagliflozin",
+   "searched": [
+    "dapagliflozin"
+   ],
+   "spanish_name": "dapagliflozina",
+   "status": "mapped",
+   "atc": {
+    "code": "A10BK01",
+    "name": "Dapagliflozina"
+   },
+   "brands": [
+    {
+     "name": "Edistride",
+     "products": 1,
+     "nregistro": [
+      "1151052007"
+     ]
+    },
+    {
+     "name": "Forxiga",
+     "products": 1,
+     "nregistro": [
+      "112795007"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "10"
+   ],
+   "dropped": {
+    "other_ingredients": 4
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 2
+  },
+  {
+   "inn": "levothyroxine",
+   "searched": [
+    "levotiroxina"
+   ],
+   "spanish_name": "levotiroxina",
+   "status": "mapped",
+   "atc": {
+    "code": "H03AA01",
+    "name": "Levotiroxina sodica"
+   },
+   "brands": [
+    {
+     "name": "Eutirox",
+     "products": 13,
+     "nregistro": [
+      "64011",
+      "64012",
+      "64013",
+      "64014",
+      "64015",
+      "64016",
+      "64017",
+      "64018",
+      "70042",
+      "70043",
+      "70044",
+      "89799",
+      "89800"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "0.025",
+    "0.038",
+    "0.05",
+    "0.063",
+    "0.075",
+    "0.088",
+    "0.1",
+    "0.112",
+    "0.125",
+    "0.137",
+    "0.15",
+    "0.175",
+    "0.2"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 32
+  },
+  {
+   "inn": "omeprazole",
+   "searched": [
+    "omeprazole",
+    "omeprazol"
+   ],
+   "spanish_name": "omeprazol",
+   "status": "mapped",
+   "atc": {
+    "code": "A02BC01",
+    "name": "Omeprazol"
+   },
+   "brands": [
+    {
+     "name": "Arapride",
+     "products": 3,
+     "nregistro": [
+      "65686",
+      "65687",
+      "65688"
+     ]
+    },
+    {
+     "name": "Belmazol",
+     "products": 2,
+     "nregistro": [
+      "59829",
+      "68863"
+     ]
+    },
+    {
+     "name": "Dolintol",
+     "products": 2,
+     "nregistro": [
+      "65823",
+      "68132"
+     ]
+    },
+    {
+     "name": "Parizac",
+     "products": 2,
+     "nregistro": [
+      "58466",
+      "67222"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "10",
+    "20",
+    "40"
+   ],
+   "dropped": {
+    "other_ingredients": 93,
+    "not_tablet_or_capsule": 2
+   },
+   "forms": [
+    "capsule"
+   ],
+   "products": 79
+  },
+  {
+   "inn": "pantoprazole",
+   "searched": [
+    "pantoprazole",
+    "pantoprazol"
+   ],
+   "spanish_name": "pantoprazol",
+   "status": "mapped",
+   "atc": {
+    "code": "A02BC02",
+    "name": "Pantoprazol"
+   },
+   "brands": [
+    {
+     "name": "Pantecta",
+     "products": 18,
+     "nregistro": [
+      "4207416072010",
+      "4787IP",
+      "4787IP1",
+      "4787IP3",
+      "61001",
+      "62580",
+      "772991623042018IP",
+      "BE318254IP",
+      "BE318254IP1",
+      "BE318272IP",
+      "BE318272IP1",
+      "PA2229-010-002",
+      "PA2229010002",
+      "PA229-010-001",
+      "R6898",
+      "R6898IP1",
+      "R6898IP2",
+      "R6898IP3"
+     ]
+    },
+    {
+     "name": "Anagastra",
+     "products": 17,
+     "nregistro": [
+      "04787IP",
+      "406641022062011",
+      "4787IP2",
+      "4787IP4",
+      "61002",
+      "62578",
+      "772991623042018",
+      "BE318254",
+      "BE318254IP2",
+      "BE318272",
+      "BE318272IP2",
+      "PA2229-010-001IP",
+      "PA2229-010-002IP",
+      "R-6898",
+      "R-6898IP",
+      "R-6898IP1",
+      "R-6898IP2"
+     ]
+    },
+    {
+     "name": "Citrel",
+     "products": 2,
+     "nregistro": [
+      "68253",
+      "69075"
+     ]
+    },
+    {
+     "name": "Nolpaza",
+     "products": 2,
+     "nregistro": [
+      "70515",
+      "70516"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "20",
+    "40"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 6
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 88
+  },
+  {
+   "inn": "esomeprazole",
+   "searched": [
+    "esomeprazole",
+    "esomeprazol"
+   ],
+   "spanish_name": "esomeprazol",
+   "status": "mapped",
+   "atc": {
+    "code": "A02BC05",
+    "name": "Esomeprazol"
+   },
+   "brands": [
+    {
+     "name": "Nexium",
+     "products": 28,
+     "nregistro": [
+      "034972291",
+      "034972291IP",
+      "034972291IP1",
+      "034972442",
+      "034972442IP",
+      "034972442IP1",
+      "034972442IP2",
+      "3400935533432",
+      "3400935533951",
+      "3400935533951IP",
+      "3400935533951IP1",
+      "63436",
+      "63437",
+      "84225112-2-12",
+      "84225112-2-12IP1",
+      "84225112-2-12IP2",
+      "84225112-2-12IP3",
+      "842261102022012",
+      "842261102022012IP",
+      "842261102022012IP1",
+      "842261102022012IP2",
+      "842261102022012IP3",
+      "BE215826",
+      "BE215826IP",
+      "BE215826IP1",
+      "BE215887",
+      "BE215887IP",
+      "BE215887IP1"
+     ]
+    },
+    {
+     "name": "Axiago",
+     "products": 2,
+     "nregistro": [
+      "63940",
+      "63944"
+     ]
+    },
+    {
+     "name": "Emanera",
+     "products": 2,
+     "nregistro": [
+      "72699",
+      "72700"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "20",
+    "40"
+   ],
+   "dropped": {
+    "other_ingredients": 2,
+    "not_tablet_or_capsule": 4
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 87
+  },
+  {
+   "inn": "acetylsalicylic acid",
+   "searched": [
+    "acetilsalic"
+   ],
+   "spanish_name": "ácido acetilsalicílico",
+   "status": "mapped",
+   "atc": {
+    "code": "B01AC06",
+    "name": "Acido acetilsalicilico"
+   },
+   "brands": [
+    {
+     "name": "Bioplak",
+     "products": 2,
+     "nregistro": [
+      "40498",
+      "40499"
+     ]
+    },
+    {
+     "name": "Adiro",
+     "products": 1,
+     "nregistro": [
+      "62825"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "75",
+    "100",
+    "125",
+    "250",
+    "500"
+   ],
+   "dropped": {
+    "other_ingredients": 35,
+    "not_tablet_or_capsule": 1,
+    "no_strength_in_name": 2
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 23
+  },
+  {
+   "inn": "clopidogrel",
+   "searched": [
+    "clopidogrel"
+   ],
+   "spanish_name": "clopidogrel",
+   "status": "mapped",
+   "atc": {
+    "code": "B01AC04",
+    "name": "Clopidogrel"
+   },
+   "brands": [
+    {
+     "name": "Plavix",
+     "products": 8,
+     "nregistro": [
+      "98069001",
+      "98069001AIP",
+      "98069001AIP2",
+      "98069001AIP3",
+      "98069001AIP4",
+      "98069001AIP5",
+      "98069002",
+      "98069009"
+     ]
+    },
+    {
+     "name": "Iscover",
+     "products": 1,
+     "nregistro": [
+      "98070001"
+     ]
+    },
+    {
+     "name": "Maboclop",
+     "products": 1,
+     "nregistro": [
+      "71882"
+     ]
+    },
+    {
+     "name": "Vatoud",
+     "products": 1,
+     "nregistro": [
+      "71869"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "75",
+    "300"
+   ],
+   "dropped": {
+    "other_ingredients": 5
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 36
+  },
+  {
+   "inn": "warfarin",
+   "searched": [
+    "warfarin"
+   ],
+   "spanish_name": "warfarina",
+   "status": "mapped",
+   "atc": {
+    "code": "B01AA03",
+    "name": "Warfarina"
+   },
+   "brands": [
+    {
+     "name": "Aldocumar",
+     "products": 4,
+     "nregistro": [
+      "32864",
+      "63062",
+      "63063",
+      "63064"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "1",
+    "3",
+    "5",
+    "10"
+   ],
+   "dropped": {},
+   "forms": [
+    "tablet"
+   ],
+   "products": 4
+  },
+  {
+   "inn": "apixaban",
+   "searched": [
+    "apixaban"
+   ],
+   "spanish_name": "apixabán",
+   "status": "mapped",
+   "atc": {
+    "code": "B01AF02",
+    "name": "Apixaban"
+   },
+   "brands": [
+    {
+     "name": "Eliquis",
+     "products": 7,
+     "nregistro": [
+      "111691009",
+      "111691010",
+      "111691014",
+      "11691002",
+      "11691003",
+      "11691003IP",
+      "11691005"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "2.5",
+    "5"
+   ],
+   "dropped": {},
+   "forms": [
+    "tablet"
+   ],
+   "products": 7
+  },
+  {
+   "inn": "rivaroxaban",
+   "searched": [
+    "rivaroxaban"
+   ],
+   "spanish_name": "rivaroxabán",
+   "status": "mapped",
+   "atc": {
+    "code": "B01AF01",
+    "name": "B01AF01- Rivaroxaban"
+   },
+   "brands": [
+    {
+     "name": "Xarelto",
+     "products": 9,
+     "nregistro": [
+      "08472007",
+      "08472008",
+      "08472012",
+      "08472012IP",
+      "08472016",
+      "08472018",
+      "08472018IP",
+      "08472021",
+      "108472027"
+     ]
+    },
+    {
+     "name": "Epicar",
+     "products": 3,
+     "nregistro": [
+      "87459",
+      "87460",
+      "87461"
+     ]
+    },
+    {
+     "name": "Plabelus",
+     "products": 3,
+     "nregistro": [
+      "90456",
+      "90457",
+      "90458"
+     ]
+    },
+    {
+     "name": "Rivaxa",
+     "products": 3,
+     "nregistro": [
+      "89273",
+      "89274",
+      "89276"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "2.5",
+    "10",
+    "15",
+    "20"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 1
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 76
+  },
+  {
+   "inn": "paracetamol",
+   "searched": [
+    "paracetamol"
+   ],
+   "spanish_name": "paracetamol",
+   "status": "mapped",
+   "atc": {
+    "code": "N02BE01",
+    "name": "Paracetamol"
+   },
+   "brands": [
+    {
+     "name": "Efferaldol",
+     "products": 4,
+     "nregistro": [
+      "58156",
+      "75243",
+      "83044",
+      "86627"
+     ]
+    },
+    {
+     "name": "Antidol",
+     "products": 3,
+     "nregistro": [
+      "56423",
+      "85780",
+      "85782"
+     ]
+    },
+    {
+     "name": "Apiretal",
+     "products": 3,
+     "nregistro": [
+      "70569",
+      "70571",
+      "70572"
+     ]
+    },
+    {
+     "name": "Calthek",
+     "products": 3,
+     "nregistro": [
+      "75233",
+      "75235",
+      "86549"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "250",
+    "325",
+    "500",
+    "650",
+    "1000"
+   ],
+   "dropped": {
+    "other_ingredients": 128,
+    "not_tablet_or_capsule": 34
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 102
+  },
+  {
+   "inn": "ibuprofen",
+   "searched": [
+    "ibuprofen"
+   ],
+   "spanish_name": "ibuprofeno",
+   "status": "mapped",
+   "atc": {
+    "code": "M01AE01",
+    "name": "Ibuprofeno"
+   },
+   "brands": [
+    {
+     "name": "Ibudol",
+     "products": 3,
+     "nregistro": [
+      "78529",
+      "88372",
+      "91110"
+     ]
+    },
+    {
+     "name": "Nurofen",
+     "products": 3,
+     "nregistro": [
+      "67968",
+      "68517",
+      "88618"
+     ]
+    },
+    {
+     "name": "Dalsydol",
+     "products": 2,
+     "nregistro": [
+      "54985",
+      "90651"
+     ]
+    },
+    {
+     "name": "Neobrufen",
+     "products": 2,
+     "nregistro": [
+      "61618",
+      "70030"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "200",
+    "400",
+    "600",
+    "800"
+   ],
+   "dropped": {
+    "other_ingredients": 16,
+    "not_tablet_or_capsule": 88
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 54
+  },
+  {
+   "inn": "diclofenac",
+   "searched": [
+    "diclofenac"
+   ],
+   "spanish_name": "diclofenaco",
+   "status": "mapped",
+   "atc": {
+    "code": "M01AB05",
+    "name": "Diclofenaco"
+   },
+   "brands": [
+    {
+     "name": "Voltaren",
+     "products": 3,
+     "nregistro": [
+      "55005",
+      "56562",
+      "62024"
+     ]
+    },
+    {
+     "name": "Dolotren",
+     "products": 2,
+     "nregistro": [
+      "57202",
+      "60068"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "46.5",
+    "50",
+    "75",
+    "100"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 34,
+    "other_ingredients": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 11
+  },
+  {
+   "inn": "naproxen",
+   "searched": [
+    "naproxen"
+   ],
+   "spanish_name": "naproxeno",
+   "status": "mapped",
+   "atc": {
+    "code": "M01AE02",
+    "name": "Naproxeno"
+   },
+   "brands": [
+    {
+     "name": "Lundiran",
+     "products": 1,
+     "nregistro": [
+      "54246"
+     ]
+    },
+    {
+     "name": "Naprosyn",
+     "products": 1,
+     "nregistro": [
+      "56267"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "250",
+    "500"
+   ],
+   "dropped": {
+    "other_ingredients": 10
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 5
+  },
+  {
+   "inn": "amoxicillin",
+   "searched": [
+    "amoxicilina"
+   ],
+   "spanish_name": "amoxicilina",
+   "status": "mapped",
+   "atc": {
+    "code": "J01CA04",
+    "name": "Amoxicilina"
+   },
+   "brands": [
+    {
+     "name": "Clamoxyl",
+     "products": 2,
+     "nregistro": [
+      "50239",
+      "59133"
+     ]
+    },
+    {
+     "name": "Amitron",
+     "products": 1,
+     "nregistro": [
+      "54626"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "500",
+    "750",
+    "1000"
+   ],
+   "dropped": {
+    "other_ingredients": 58,
+    "not_tablet_or_capsule": 12,
+    "no_strength_in_name": 1
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 31
+  },
+  {
+   "inn": "azithromycin",
+   "searched": [
+    "azitromicina"
+   ],
+   "spanish_name": "azitromicina",
+   "status": "mapped",
+   "atc": {
+    "code": "J01FA10",
+    "name": "Azitromicina"
+   },
+   "brands": [
+    {
+     "name": "Zitromax",
+     "products": 2,
+     "nregistro": [
+      "59616",
+      "61272"
+     ]
+    },
+    {
+     "name": "Aratro",
+     "products": 1,
+     "nregistro": [
+      "65642"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "250",
+    "500"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 19
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 28
+  },
+  {
+   "inn": "ciprofloxacin",
+   "searched": [
+    "ciprofloxacin"
+   ],
+   "spanish_name": "ciprofloxacino",
+   "status": "mapped",
+   "atc": {
+    "code": "J01MA02",
+    "name": "Ciprofloxacino"
+   },
+   "brands": [
+    {
+     "name": "Doriman",
+     "products": 2,
+     "nregistro": [
+      "64027",
+      "64028"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "250",
+    "500",
+    "750"
+   ],
+   "dropped": {
+    "other_ingredients": 5,
+    "not_tablet_or_capsule": 13
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 20
+  },
+  {
+   "inn": "metronidazole",
+   "searched": [
+    "metronidazole",
+    "metronidazol"
+   ],
+   "spanish_name": "metronidazol",
+   "status": "mapped",
+   "atc": {
+    "code": "J01XD01",
+    "name": "Metronidazol"
+   },
+   "brands": [
+    {
+     "name": "Flagyl",
+     "products": 1,
+     "nregistro": [
+      "35034"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "250"
+   ],
+   "dropped": {
+    "other_ingredients": 3,
+    "not_tablet_or_capsule": 9
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 3
+  },
+  {
+   "inn": "doxycycline",
+   "searched": [
+    "doxiciclina"
+   ],
+   "spanish_name": "doxiciclina",
+   "status": "mapped",
+   "atc": {
+    "code": "J01AA02",
+    "name": "Doxiciclina"
+   },
+   "brands": [
+    {
+     "name": "Proderma",
+     "products": 3,
+     "nregistro": [
+      "61226",
+      "61227",
+      "61230"
+     ]
+    },
+    {
+     "name": "Dosil",
+     "products": 1,
+     "nregistro": [
+      "48194"
+     ]
+    },
+    {
+     "name": "Doxiclat",
+     "products": 1,
+     "nregistro": [
+      "50404"
+     ]
+    },
+    {
+     "name": "Oracea",
+     "products": 1,
+     "nregistro": [
+      "73622"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "40",
+    "50",
+    "100",
+    "200"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 1
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 8
+  },
+  {
+   "inn": "cetirizine",
+   "searched": [
+    "cetirizine",
+    "cetirizin"
+   ],
+   "spanish_name": "cetirizina",
+   "status": "mapped",
+   "atc": {
+    "code": "R06AE07",
+    "name": "Cetirizina"
+   },
+   "brands": [
+    {
+     "name": "Zyrtec",
+     "products": 3,
+     "nregistro": [
+      "58481",
+      "R-1846IP",
+      "R1846IP"
+     ]
+    },
+    {
+     "name": "Alercina",
+     "products": 1,
+     "nregistro": [
+      "66044"
+     ]
+    },
+    {
+     "name": "Alerlisin",
+     "products": 1,
+     "nregistro": [
+      "58499"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "10"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 7,
+    "other_ingredients": 18,
+    "no_strength_in_name": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 21
+  },
+  {
+   "inn": "loratadine",
+   "searched": [
+    "loratadine",
+    "loratadin"
+   ],
+   "spanish_name": "loratadina",
+   "status": "mapped",
+   "atc": {
+    "code": "R06AX13",
+    "name": "Loratadina"
+   },
+   "brands": [
+    {
+     "name": "Clarityne",
+     "products": 1,
+     "nregistro": [
+      "58518"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "10"
+   ],
+   "dropped": {
+    "other_ingredients": 40,
+    "not_tablet_or_capsule": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 17
+  },
+  {
+   "inn": "montelukast",
+   "searched": [
+    "montelukast"
+   ],
+   "spanish_name": "montelukast",
+   "status": "mapped",
+   "atc": {
+    "code": "R03DC03",
+    "name": "Montelukast"
+   },
+   "brands": [
+    {
+     "name": "Singulair",
+     "products": 21,
+     "nregistro": [
+      "10454201702",
+      "10455201702",
+      "10455201702IP",
+      "1435199C",
+      "2639789",
+      "3400934614118IP",
+      "61979",
+      "61980",
+      "63673",
+      "7956",
+      "7956IP",
+      "7956IP1",
+      "7956IP2",
+      "7956IP3",
+      "7957",
+      "7957IP",
+      "7957IP1",
+      "7957IP2",
+      "7957IP3",
+      "7957IP4",
+      "8780"
+     ]
+    },
+    {
+     "name": "Pluralais",
+     "products": 4,
+     "nregistro": [
+      "70232",
+      "71408",
+      "71409",
+      "90179"
+     ]
+    },
+    {
+     "name": "Monkasta",
+     "products": 3,
+     "nregistro": [
+      "72930",
+      "72931",
+      "72932"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "4",
+    "5",
+    "10"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 4
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 78
+  },
+  {
+   "inn": "prednisolone",
+   "searched": [
+    "prednisolone",
+    "prednisolon"
+   ],
+   "spanish_name": "prednisolona",
+   "status": "no_products",
+   "atc": null,
+   "brands": [],
+   "strengths_mg": [],
+   "dropped": {
+    "other_ingredients": 26,
+    "not_tablet_or_capsule": 4
+   },
+   "forms": [],
+   "products": 0
+  },
+  {
+   "inn": "allopurinol",
+   "searched": [
+    "alopurinol"
+   ],
+   "spanish_name": "alopurinol",
+   "status": "mapped",
+   "atc": {
+    "code": "M04AA01",
+    "name": "Alopurinol"
+   },
+   "brands": [
+    {
+     "name": "Zyloric",
+     "products": 2,
+     "nregistro": [
+      "43775",
+      "56360"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "100",
+    "300"
+   ],
+   "dropped": {},
+   "forms": [
+    "tablet"
+   ],
+   "products": 20
+  },
+  {
+   "inn": "colchicine",
+   "searched": [
+    "colchicine",
+    "colchicin"
+   ],
+   "spanish_name": "colchicina",
+   "status": "mapped",
+   "atc": {
+    "code": "M04AC01",
+    "name": "Colchicina"
+   },
+   "brands": [],
+   "strengths_mg": [
+    "0.5",
+    "1"
+   ],
+   "dropped": {
+    "other_ingredients": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 3
+  },
+  {
+   "inn": "tamsulosin",
+   "searched": [
+    "tamsulosin"
+   ],
+   "spanish_name": "tamsulosina",
+   "status": "mapped",
+   "atc": {
+    "code": "G04CA02",
+    "name": "Tamsulosina"
+   },
+   "brands": [
+    {
+     "name": "Omnic",
+     "products": 10,
+     "nregistro": [
+      "11429IP",
+      "11429IP2",
+      "11429IP3",
+      "61426",
+      "66678",
+      "6775-2014-01IP",
+      "6775201401IP1",
+      "6775201401IP2",
+      "7164IP",
+      "R7164IP1"
+     ]
+    },
+    {
+     "name": "Sebrane",
+     "products": 2,
+     "nregistro": [
+      "67904",
+      "74971"
+     ]
+    },
+    {
+     "name": "Inreq",
+     "products": 1,
+     "nregistro": [
+      "74117"
+     ]
+    },
+    {
+     "name": "Zuantrip",
+     "products": 1,
+     "nregistro": [
+      "67584"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "0.4"
+   ],
+   "dropped": {
+    "other_ingredients": 41
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 48
+  },
+  {
+   "inn": "sertraline",
+   "searched": [
+    "sertraline",
+    "sertralin"
+   ],
+   "spanish_name": "sertralina",
+   "status": "mapped",
+   "atc": {
+    "code": "N06AB06",
+    "name": "Sertralina"
+   },
+   "brands": [
+    {
+     "name": "Altisben",
+     "products": 2,
+     "nregistro": [
+      "65924",
+      "65925"
+     ]
+    },
+    {
+     "name": "Aremis",
+     "products": 2,
+     "nregistro": [
+      "59734",
+      "59735"
+     ]
+    },
+    {
+     "name": "Besitran",
+     "products": 2,
+     "nregistro": [
+      "59717",
+      "59718"
+     ]
+    },
+    {
+     "name": "Semonic",
+     "products": 2,
+     "nregistro": [
+      "84190",
+      "84191"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "50",
+    "100",
+    "150",
+    "200"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 47
+  },
+  {
+   "inn": "escitalopram",
+   "searched": [
+    "escitalopram"
+   ],
+   "spanish_name": "escitalopram",
+   "status": "mapped",
+   "atc": {
+    "code": "N06AB10",
+    "name": "Escitalopram"
+   },
+   "brands": [
+    {
+     "name": "Cipralex",
+     "products": 3,
+     "nregistro": [
+      "65230",
+      "65233",
+      "65234"
+     ]
+    },
+    {
+     "name": "Esertia",
+     "products": 3,
+     "nregistro": [
+      "65182",
+      "65183",
+      "65184"
+     ]
+    },
+    {
+     "name": "Heipram",
+     "products": 3,
+     "nregistro": [
+      "78080",
+      "78081",
+      "78082"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "5",
+    "10",
+    "15",
+    "20"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 6
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 91
+  },
+  {
+   "inn": "fluoxetine",
+   "searched": [
+    "fluoxetine",
+    "fluoxetin"
+   ],
+   "spanish_name": "fluoxetina",
+   "status": "mapped",
+   "atc": {
+    "code": "N06AB03",
+    "name": "Fluoxetina"
+   },
+   "brands": [
+    {
+     "name": "Luramon",
+     "products": 1,
+     "nregistro": [
+      "64970"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "20"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 1
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 13
+  },
+  {
+   "inn": "amitriptyline",
+   "searched": [
+    "amitriptilina"
+   ],
+   "spanish_name": "amitriptilina",
+   "status": "mapped",
+   "atc": {
+    "code": "N06AA09",
+    "name": "Amitriptilina"
+   },
+   "brands": [
+    {
+     "name": "Tryptizol",
+     "products": 4,
+     "nregistro": [
+      "37130",
+      "51064",
+      "55013",
+      "55015"
+     ]
+    },
+    {
+     "name": "Deprelio",
+     "products": 1,
+     "nregistro": [
+      "43523"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "10",
+    "25",
+    "50",
+    "75"
+   ],
+   "dropped": {
+    "other_ingredients": 4
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 9
+  },
+  {
+   "inn": "gabapentin",
+   "searched": [
+    "gabapentin"
+   ],
+   "spanish_name": "gabapentina",
+   "status": "mapped",
+   "atc": {
+    "code": "N02BF01",
+    "name": "Gabapentina"
+   },
+   "brands": [
+    {
+     "name": "Neurontin",
+     "products": 4,
+     "nregistro": [
+      "60621",
+      "60622",
+      "63149",
+      "63150"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "100",
+    "300",
+    "400",
+    "600",
+    "800"
+   ],
+   "dropped": {},
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 62
+  },
+  {
+   "inn": "pregabalin",
+   "searched": [
+    "pregabalin"
+   ],
+   "spanish_name": "pregabalina",
+   "status": "mapped",
+   "atc": {
+    "code": "N02BF02",
+    "name": "Pregabalina"
+   },
+   "brands": [
+    {
+     "name": "Lyrica",
+     "products": 26,
+     "nregistro": [
+      "04279003",
+      "04279005",
+      "04279012",
+      "04279012IP",
+      "04279012IP1",
+      "04279013",
+      "04279018",
+      "04279018IP",
+      "04279018IP1",
+      "04279018IP2",
+      "04279018IP3",
+      "04279018IP4",
+      "04279018IP5",
+      "04279019",
+      "04279024",
+      "04279024IP",
+      "04279024IP1",
+      "04279024IP2",
+      "04279024IP3",
+      "04279024IP4",
+      "04279024IP5",
+      "04279025",
+      "104279009",
+      "104279015",
+      "104279021",
+      "104279034"
+     ]
+    },
+    {
+     "name": "Gatica",
+     "products": 7,
+     "nregistro": [
+      "79982",
+      "79983",
+      "79984",
+      "79985",
+      "84175",
+      "84176",
+      "84177"
+     ]
+    },
+    {
+     "name": "Premax",
+     "products": 7,
+     "nregistro": [
+      "82228",
+      "82229",
+      "82230",
+      "82231",
+      "83484",
+      "83486",
+      "83487"
+     ]
+    },
+    {
+     "name": "Aciryl",
+     "products": 4,
+     "nregistro": [
+      "79481",
+      "79482",
+      "79483",
+      "79484"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "25",
+    "50",
+    "75",
+    "82.5",
+    "100",
+    "150",
+    "165",
+    "200",
+    "225",
+    "300",
+    "330"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 2
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 160
+  },
+  {
+   "inn": "tramadol",
+   "searched": [
+    "tramadol"
+   ],
+   "spanish_name": "tramadol",
+   "status": "mapped",
+   "atc": {
+    "code": "N02AX02",
+    "name": "Tramadol"
+   },
+   "brands": [
+    {
+     "name": "Adolonta",
+     "products": 5,
+     "nregistro": [
+      "59088",
+      "61784",
+      "61785",
+      "61786",
+      "68570"
+     ]
+    },
+    {
+     "name": "Zytram",
+     "products": 5,
+     "nregistro": [
+      "63130",
+      "63131",
+      "63132",
+      "63133",
+      "63134"
+     ]
+    },
+    {
+     "name": "Captor",
+     "products": 4,
+     "nregistro": [
+      "68500",
+      "68501",
+      "68502",
+      "68503"
+     ]
+    },
+    {
+     "name": "Tioner",
+     "products": 4,
+     "nregistro": [
+      "62016",
+      "62919",
+      "62920",
+      "62921"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "50",
+    "75",
+    "100",
+    "150",
+    "200",
+    "300",
+    "400"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 10,
+    "other_ingredients": 51
+   },
+   "forms": [
+    "capsule",
+    "tablet"
+   ],
+   "products": 63
+  },
+  {
+   "inn": "alendronic acid",
+   "searched": [
+    "alendr"
+   ],
+   "spanish_name": "ácido alendrónico",
+   "status": "mapped",
+   "atc": {
+    "code": "M05BA04",
+    "name": "Acido alendronico"
+   },
+   "brands": [
+    {
+     "name": "Alendrofarm",
+     "products": 1,
+     "nregistro": [
+      "69015"
+     ]
+    },
+    {
+     "name": "Fosamax",
+     "products": 1,
+     "nregistro": [
+      "63955"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "70"
+   ],
+   "dropped": {
+    "other_ingredients": 18,
+    "not_tablet_or_capsule": 1
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 20
+  },
+  {
+   "inn": "terbinafine",
+   "searched": [
+    "terbinafine",
+    "terbinafin"
+   ],
+   "spanish_name": "terbinafina",
+   "status": "mapped",
+   "atc": {
+    "code": "D01BA02",
+    "name": "Terbinafina"
+   },
+   "brands": [],
+   "strengths_mg": [
+    "250"
+   ],
+   "dropped": {
+    "not_tablet_or_capsule": 5
+   },
+   "forms": [
+    "tablet"
+   ],
+   "products": 5
+  },
+  {
+   "inn": "famotidine",
+   "searched": [
+    "famotidine",
+    "famotidin"
+   ],
+   "spanish_name": "famotidina",
+   "status": "mapped",
+   "atc": {
+    "code": "A02BA03",
+    "name": "Famotidina"
+   },
+   "brands": [
+    {
+     "name": "Pepcid",
+     "products": 1,
+     "nregistro": [
+      "62090"
+     ]
+    }
+   ],
+   "strengths_mg": [
+    "10",
+    "20",
+    "40"
+   ],
+   "dropped": {},
+   "forms": [
+    "tablet"
+   ],
+   "products": 9
+  }
+ ],
+ "catalogue": [
+  {
+   "brand": "Concor",
+   "inns": [
+    "bisoprolol"
+   ],
+   "rxcui": [
+    "19484"
+   ],
+   "atc": {
+    "code": "C07AB07",
+    "name": "Bisoprolol"
+   }
+  },
+  {
+   "brand": "Beloc-Zok",
+   "inns": [
+    "metoprolol"
+   ],
+   "rxcui": [
+    "6918"
+   ],
+   "atc": {
+    "code": "C07AB02",
+    "name": "Metoprolol"
+   }
+  },
+  {
+   "brand": "Norvasc",
+   "inns": [
+    "amlodipine"
+   ],
+   "rxcui": [
+    "17767"
+   ],
+   "atc": {
+    "code": "C08CA01",
+    "name": "Amlodipino"
+   }
+  },
+  {
+   "brand": "Glucophage",
+   "inns": [
+    "metformin"
+   ],
+   "rxcui": [
+    "6809"
+   ],
+   "atc": {
+    "code": "A10BA02",
+    "name": "Metformina"
+   }
+  },
+  {
+   "brand": "Panadol",
+   "inns": [
+    "paracetamol"
+   ],
+   "rxcui": [
+    "161"
+   ],
+   "atc": {
+    "code": "N02BE01",
+    "name": "Paracetamol"
+   }
+  },
+  {
+   "brand": "Panadol Extra",
+   "inns": [
+    "caffeine",
+    "paracetamol"
+   ],
+   "rxcui": [
+    "161",
+    "1886"
+   ],
+   "atc": {
+    "code": "N02BE51",
+    "name": "Paracetamol, combinaciones excluyendo psicolepticos"
+   }
+  },
+  {
+   "brand": "Augmentin",
+   "inns": [
+    "amoxicillin",
+    "clavulanic acid"
+   ],
+   "rxcui": [
+    "723",
+    "48203"
+   ],
+   "atc": {
+    "code": "J01CR02",
+    "name": "Amoxicilina e inhibidores de la betalactamasa"
+   }
+  },
+  {
+   "brand": "Lipitor",
+   "inns": [
+    "atorvastatin"
+   ],
+   "rxcui": [
+    "83367"
+   ],
+   "atc": {
+    "code": "C10AA05",
+    "name": "Atorvastatina"
+   }
+  },
+  {
+   "brand": "Gelocatil",
+   "inns": [
+    "paracetamol"
+   ],
+   "rxcui": [
+    "161"
+   ],
+   "atc": {
+    "code": "N02BE01",
+    "name": "Paracetamol"
+   }
+  }
+ ]
+}

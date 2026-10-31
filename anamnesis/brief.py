@@ -5,16 +5,19 @@ from anamnesis.brief_html import (
     _SCRIPT,
     _STYLE,
     _across_html,
+    _codes_entry,
     _finding_html,
     _photos_html,
     _scope_html,
     _section_of,
+    _timeline_html,
     _voice_html,
 )
 from anamnesis.schema.report import AgentAction, ReconciliationReport
 from anamnesis.schema.review import RequestStatus
 from anamnesis.schema.templates import (
     BRIEF_TITLE,
+    CATALOGUE_CODES_REFERENCE,
     COVERAGE_BUDGET,
     COVERAGE_DETECTION_FAILED,
     COVERAGE_NO_PACK,
@@ -103,21 +106,29 @@ def render_brief(
     observations = {obs.observation_id: obs for obs in report.observations}
     turns = {turn.turn_id: turn for turn in report.turns}
     sections = {name: [] for name in SECTION_ORDER}
+    any_codes = False
     for finding in report.findings:
-        html = _finding_html(finding, claims, observations, turns, review)
+        html = _finding_html(finding, claims, observations, turns, review, catalogue)
         sections[_section_of(finding, claims)].append(html)
+        if _codes_entry(finding, claims, observations, catalogue) is not None:
+            any_codes = True
     sections["across"].append(_across_html(report, catalogue))
     sections["coverage"].append(_coverage_html(report, prepared, audio, review))
     sections["photos"].append(_photos_html(report, prepared))
     sections["voice"].append(_voice_html(report, audio))
     parts = [
         "<!DOCTYPE html>", '<html lang="en">',
-        f"<head><meta charset=\"utf-8\"><title>{BRIEF_TITLE}</title><style>{_STYLE}</style></head>",
+        '<head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        f"<title>{BRIEF_TITLE}</title><style>{_STYLE}</style></head>",
         "<body>", _scope_html(review),
     ]
     for name in SECTION_ORDER:
         body = "".join(sections[name]) or f"<p>{NONE_TEXT}</p>"
         parts.append(f'<section id="{name}"><h2>{SECTION_HEADINGS[name]}</h2>{body}</section>')
+    if any_codes:
+        parts.append(f"<p>{CATALOGUE_CODES_REFERENCE}</p>")
+    parts.append(_timeline_html(report))
     parts.append(f"<script>{_SCRIPT}</script></body></html>")
     return "".join(parts)
 

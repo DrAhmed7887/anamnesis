@@ -86,7 +86,7 @@ def test_arabic_runs(text, expected):
     ("1-2 tablets", {"1", "2"}),
     ("-5 mg", {"5"}),
     ("version 2 of 10", {"2", "10"}),
-    ("١٬٠٠٠", {"1"}),
+    ("١٬٠٠٠", set()),
     ("٣٫٧٥", {"3.75"}),
     ("", set()),
     ("no numbers here", set()),

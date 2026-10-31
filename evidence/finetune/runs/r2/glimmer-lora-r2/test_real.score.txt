@@ -1,0 +1,19 @@
+split test_real: 33 examples, 33 replies, 50 answer claims
+valid JSON 33/33 (100.0%); dropped by the product's checks 0; invalid JSON 0; no reply 0
+per-claim field accuracy:
+  name_text        50/50 (100.0%)
+  inn              50/50 (100.0%)
+  intake           47/50 (94.0%)
+  strength         50/50 (100.0%)
+  units_per_intake 50/50 (100.0%)
+  intakes_per_day  50/50 (100.0%)
+  as_needed        50/50 (100.0%)
+  status           50/50 (100.0%)
+claims missing 0, extra 0
+transcripts all correct 30/33 (90.9%)
+harmful claims, raw reply, before the product's checks: 0 (unsupported amounts 0, unsupported INNs 0)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+examples with a miss or a harmful claim: 3
+  #13 [note:U2] c1 intake: got 875 mg, want null
+  #14 [note:U2] c1 intake: got 875 mg, want null
+  #15 [note:U2] c1 intake: got 875 mg, want null

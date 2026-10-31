@@ -1,0 +1,538 @@
+[
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk014_a.jpg",
+  "pack": "bjy2svvmn8_pk014",
+  "brand_printed": "Augmentin",
+  "expected_inns": [
+   "amoxicillin",
+   "clavulanic acid"
+  ],
+  "expected_strengths": [
+   [
+    "amoxicillin",
+    875,
+    "mg"
+   ],
+   [
+    "clavulanic acid",
+    125,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk014_b.jpg",
+  "pack": "bjy2svvmn8_pk014",
+  "brand_printed": "Augmentin",
+  "expected_inns": [
+   "amoxicillin",
+   "clavulanic acid"
+  ],
+  "expected_strengths": [
+   [
+    "amoxicillin",
+    875,
+    "mg"
+   ],
+   [
+    "clavulanic acid",
+    125,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk101_a.jpg",
+  "pack": "bjy2svvmn8_pk101",
+  "brand_printed": "Megamox",
+  "expected_inns": [
+   "amoxicillin",
+   "clavulanic acid"
+  ],
+  "expected_strengths": [],
+  "strength_legible": "yes",
+  "abstain_is_correct": true
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk101_b.jpg",
+  "pack": "bjy2svvmn8_pk101",
+  "brand_printed": "Megamox",
+  "expected_inns": [
+   "amoxicillin",
+   "clavulanic acid"
+  ],
+  "expected_strengths": [],
+  "strength_legible": "yes",
+  "abstain_is_correct": true
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk084_a.jpg",
+  "pack": "bjy2svvmn8_pk084",
+  "brand_printed": "Glucophage",
+  "expected_inns": [
+   "metformin"
+  ],
+  "expected_strengths": [
+   [
+    "metformin",
+    500,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk084_b.jpg",
+  "pack": "bjy2svvmn8_pk084",
+  "brand_printed": "Glucophage",
+  "expected_inns": [
+   "metformin"
+  ],
+  "expected_strengths": [
+   [
+    "metformin",
+    500,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk092_a.jpg",
+  "pack": "bjy2svvmn8_pk092",
+  "brand_printed": "Janumet",
+  "expected_inns": [
+   "metformin",
+   "sitagliptin"
+  ],
+  "expected_strengths": [
+   [
+    "sitagliptin",
+    50,
+    "mg"
+   ],
+   [
+    "metformin",
+    1000,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk092_b.jpg",
+  "pack": "bjy2svvmn8_pk092",
+  "brand_printed": "Janumet",
+  "expected_inns": [
+   "metformin",
+   "sitagliptin"
+  ],
+  "expected_strengths": [
+   [
+    "sitagliptin",
+    50,
+    "mg"
+   ],
+   [
+    "metformin",
+    1000,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk136_a.jpg",
+  "pack": "bjy2svvmn8_pk136",
+  "brand_printed": "SelokenZOC",
+  "expected_inns": [
+   "metoprolol"
+  ],
+  "expected_strengths": [
+   [
+    "metoprolol",
+    95,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false,
+  "also_accepted_strengths": [
+   [
+    "metoprolol",
+    100,
+    "mg"
+   ]
+  ]
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk136_b.jpg",
+  "pack": "bjy2svvmn8_pk136",
+  "brand_printed": "SelokenZOC",
+  "expected_inns": [
+   "metoprolol"
+  ],
+  "expected_strengths": [
+   [
+    "metoprolol",
+    95,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false,
+  "also_accepted_strengths": [
+   [
+    "metoprolol",
+    100,
+    "mg"
+   ]
+  ]
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk013_a.jpg",
+  "pack": "bjy2svvmn8_pk013",
+  "brand_printed": "Atoreza",
+  "expected_inns": [
+   "atorvastatin",
+   "ezetimibe"
+  ],
+  "expected_strengths": [
+   [
+    "atorvastatin",
+    10,
+    "mg"
+   ],
+   [
+    "ezetimibe",
+    10,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk013_b.jpg",
+  "pack": "bjy2svvmn8_pk013",
+  "brand_printed": "Atoreza",
+  "expected_inns": [
+   "atorvastatin",
+   "ezetimibe"
+  ],
+  "expected_strengths": [
+   [
+    "atorvastatin",
+    10,
+    "mg"
+   ],
+   [
+    "ezetimibe",
+    10,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk002_a.jpg",
+  "pack": "bjy2svvmn8_pk002",
+  "brand_printed": "adol",
+  "expected_inns": [
+   "paracetamol"
+  ],
+  "expected_strengths": [
+   [
+    "paracetamol",
+    500,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk002_b.jpg",
+  "pack": "bjy2svvmn8_pk002",
+  "brand_printed": "adol",
+  "expected_inns": [
+   "paracetamol"
+  ],
+  "expected_strengths": [
+   [
+    "paracetamol",
+    500,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk035_a.jpg",
+  "pack": "bjy2svvmn8_pk035",
+  "brand_printed": "CETAL",
+  "expected_inns": [
+   "paracetamol"
+  ],
+  "expected_strengths": [
+   [
+    "paracetamol",
+    250,
+    "mg/5 ml"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk035_b.jpg",
+  "pack": "bjy2svvmn8_pk035",
+  "brand_printed": "CETAL",
+  "expected_inns": [
+   "paracetamol"
+  ],
+  "expected_strengths": [
+   [
+    "paracetamol",
+    250,
+    "mg/5 ml"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk028_a.jpg",
+  "pack": "bjy2svvmn8_pk028",
+  "brand_printed": "Candalkan Plus",
+  "expected_inns": [
+   "candesartan",
+   "hydrochlorothiazide"
+  ],
+  "expected_strengths": [
+   [
+    "candesartan",
+    16,
+    "mg"
+   ],
+   [
+    "hydrochlorothiazide",
+    12.5,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk028_b.jpg",
+  "pack": "bjy2svvmn8_pk028",
+  "brand_printed": "Candalkan Plus",
+  "expected_inns": [
+   "candesartan",
+   "hydrochlorothiazide"
+  ],
+  "expected_strengths": [
+   [
+    "candesartan",
+    16,
+    "mg"
+   ],
+   [
+    "hydrochlorothiazide",
+    12.5,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk025_a.jpg",
+  "pack": "bjy2svvmn8_pk025",
+  "brand_printed": "BRUFEN",
+  "expected_inns": [
+   "ibuprofen"
+  ],
+  "expected_strengths": [
+   [
+    "ibuprofen",
+    400,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk025_b.jpg",
+  "pack": "bjy2svvmn8_pk025",
+  "brand_printed": "BRUFEN",
+  "expected_inns": [
+   "ibuprofen"
+  ],
+  "expected_strengths": [
+   [
+    "ibuprofen",
+    400,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk068_a.jpg",
+  "pack": "bjy2svvmn8_pk068",
+  "brand_printed": "Flagyl",
+  "expected_inns": [
+   "metronidazole"
+  ],
+  "expected_strengths": [
+   [
+    "metronidazole",
+    500,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk068_b.jpg",
+  "pack": "bjy2svvmn8_pk068",
+  "brand_printed": "Flagyl",
+  "expected_inns": [
+   "metronidazole"
+  ],
+  "expected_strengths": [
+   [
+    "metronidazole",
+    500,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk034_a.jpg",
+  "pack": "bjy2svvmn8_pk034",
+  "brand_printed": "CEMICRESTO",
+  "expected_inns": [
+   "rosuvastatin"
+  ],
+  "expected_strengths": [
+   [
+    "rosuvastatin",
+    10,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk034_b.jpg",
+  "pack": "bjy2svvmn8_pk034",
+  "brand_printed": "CEMICRESTO",
+  "expected_inns": [
+   "rosuvastatin"
+  ],
+  "expected_strengths": [
+   [
+    "rosuvastatin",
+    10,
+    "mg"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk063_a.jpg",
+  "pack": "bjy2svvmn8_pk063",
+  "brand_printed": "EZAMOL-C",
+  "expected_inns": [],
+  "expected_strengths": [],
+  "strength_legible": "no",
+  "abstain_is_correct": true
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk063_b.jpg",
+  "pack": "bjy2svvmn8_pk063",
+  "brand_printed": "EZAMOL-C",
+  "expected_inns": [],
+  "expected_strengths": [],
+  "strength_legible": "no",
+  "abstain_is_correct": true
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk042_a.jpg",
+  "pack": "bjy2svvmn8_pk042",
+  "brand_printed": "Clarinase",
+  "expected_inns": [
+   "loratadine",
+   "pseudoephedrine"
+  ],
+  "expected_strengths": [],
+  "strength_legible": "no",
+  "abstain_is_correct": true
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk042_b.jpg",
+  "pack": "bjy2svvmn8_pk042",
+  "brand_printed": "Clarinase",
+  "expected_inns": [
+   "loratadine",
+   "pseudoephedrine"
+  ],
+  "expected_strengths": [],
+  "strength_legible": "no",
+  "abstain_is_correct": true
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk097_a.jpg",
+  "pack": "bjy2svvmn8_pk097",
+  "brand_printed": "LAMISIL",
+  "expected_inns": [
+   "terbinafine"
+  ],
+  "expected_strengths": [
+   [
+    "terbinafine",
+    1,
+    "%"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ },
+ {
+  "photo": "real-public/bjy2svvmn8/bjy2svvmn8_pk097_b.jpg",
+  "pack": "bjy2svvmn8_pk097",
+  "brand_printed": "LAMISIL",
+  "expected_inns": [
+   "terbinafine"
+  ],
+  "expected_strengths": [
+   [
+    "terbinafine",
+    1,
+    "%"
+   ]
+  ],
+  "strength_legible": "yes",
+  "abstain_is_correct": false
+ }
+]

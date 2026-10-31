@@ -1,0 +1,23 @@
+split test_shift: 120 examples, 120 replies, 217 answer claims
+valid JSON 120/120 (100.0%); dropped by the product's checks 0; invalid JSON 0; no reply 0
+per-claim field accuracy:
+  name_text        214/217 (98.6%)
+  inn              217/217 (100.0%)
+  intake           215/217 (99.1%)
+  strength         216/217 (99.5%)
+  units_per_intake 217/217 (100.0%)
+  intakes_per_day  217/217 (100.0%)
+  as_needed        216/217 (99.5%)
+  status           216/217 (99.5%)
+claims missing 0, extra 0
+transcripts all correct 113/120 (94.2%)
+harmful claims, raw reply, before the product's checks: 0 (unsupported amounts 0, unsupported INNs 0)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+examples with a miss or a harmful claim: 7
+  #13 [ar-prn-4] c1 name_text: got inzir, want inzirqo
+  #24 [en-stopped-9+en-stopped-9+en-prn-4] c3 as_needed: got null, want True
+  #34 [ar-units-2+ar-strength-3+ar-range_units-3] c1 intake: got null, want 550 mg | c1 strength: got 550 mg, want null
+  #59 [en-units-4+en-intake-17] c1 intake: got null, want 40 mg
+  #63 [ar-plain-4+ar-intake-11+ar-intake-10] c1 name_text: got inzirq, want inzirqo
+  #85 [en-brand_inn-2] c1 name_text: got inzirqor, want inzirqo
+  #97 [ar-stopped-6] c1 status: got active, want discontinued

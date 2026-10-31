@@ -30,8 +30,8 @@ evidence_part() {
   done
   for n in $(ls evidence/batches | sort -n); do
     (( n >= first && n <= last )) || continue
-    for f in briefs/$n.md evidence/batches/$n/round*-brief.md(N) evidence/batches/$n/review.md evidence/batches/$n/supervisor.md \
-             evidence/batches/$n/gate.json evidence/batches/$n/goal.md evidence/batches/$n/usage.json; do
+    # Every record in the batch folder, live results and pre-registrations included (QM M5 #1, 28 Oct).
+    for f in briefs/$n.md evidence/batches/$n/*.md(N) evidence/batches/$n/*.json(N); do
       [[ -f $f ]] && { section "$f"; cat "$f"; }
     done
   done
@@ -41,10 +41,7 @@ evidence_part() {
 code_part() {
   if [[ $part == code ]]; then section "SPEC.md"; cat SPEC.md; fi
   section "contract tests (names)"; uv run pytest -q --collect-only tests/contract 2>/dev/null | grep '::' | sed 's/\[.*//' | sort -u
-  for f in anamnesis/core/reconcile.py anamnesis/core/catalogue.py anamnesis/core/overlap.py anamnesis/core/guardrails.py \
-           anamnesis/schema/findings.py anamnesis/schema/templates.py anamnesis/schema/report.py anamnesis/providers/base.py \
-           anamnesis/providers/spend.py anamnesis/providers/meta.py anamnesis/providers/claims.py anamnesis/providers/spark.py \
-           anamnesis/providers/numbers.py anamnesis/agent/*.py anamnesis/brief.py anamnesis/brief_html.py; do
+  for f in anamnesis/**/*.py(N); do   # every module: a fixed list missed review.py and openweight.py (28 Oct)
     section "$f"; cat "$f"
   done
 }
@@ -70,6 +67,7 @@ inboxes=(${QM_SESSIONS_INBOX:-/nonexistent}(N/))
 inbox=${inboxes[1]:-/nonexistent}   # an inbox Antigravity must not write to (QM_SESSIONS_INBOX)
 before=$(ls "$inbox" 2>/dev/null | wc -l | tr -d ' ')
 if [[ ${QM_VIA:-agy} == vertex ]]; then
+  uv run python scripts/spend_check.py --next google=0.50 || { print -u2 "qm: spend gate (50% of a credit)"; exit 1; }
   # The same model on Vertex AI, billed to the gcloud project's billing account, when agy's quota is used up.
   uv run python scripts/vertex_ask.py "$pkg" --thinking medium > "$raw" 2> "$raw.usage" \
     || print "vertex exited non-zero" >> "$raw"

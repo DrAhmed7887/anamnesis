@@ -1,0 +1,40 @@
+{
+  "batch": "25",
+  "rounds": [
+    {
+      "batch": "25",
+      "input_tokens": 2331858,
+      "cached_tokens": 2090166,
+      "output_tokens": 50634,
+      "reasoning_tokens": 40888,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a18d03-7bf8-7000-97a5-2249503fb066"
+      ],
+      "cost_usd": "0.83083",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-30T13:39:24Z"
+    },
+    {
+      "batch": "25",
+      "input_tokens": 1070906,
+      "cached_tokens": 894925,
+      "output_tokens": 23057,
+      "reasoning_tokens": 17316,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a18d1b-cfcb-7393-b00b-28629cff047c"
+      ],
+      "cost_usd": "0.45221",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-30T14:02:12Z"
+    }
+  ],
+  "total_cost_usd": "1.28304"
+}

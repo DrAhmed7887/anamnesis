@@ -1,0 +1,23 @@
+{
+  "batch": "m8-audit",
+  "rounds": [
+    {
+      "batch": "m8-audit",
+      "input_tokens": 4008207,
+      "cached_tokens": 3672007,
+      "output_tokens": 51370,
+      "reasoning_tokens": 37815,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a18427-2a05-7c50-a929-d561e0a9daa6"
+      ],
+      "cost_usd": "1.18937",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-28T20:22:57Z"
+    }
+  ],
+  "total_cost_usd": "1.18937"
+}

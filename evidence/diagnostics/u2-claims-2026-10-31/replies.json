@@ -1,0 +1,62 @@
+[
+ {
+  "call": 0,
+  "kept": [
+   [
+    "Augmentin",
+    null
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": null, \"name_text\": \"Augmentin\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 1,
+  "kept": [
+   [
+    "Augmentin",
+    null
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"875 and 125\", \"inn\": \"Augmentin\", \"unit\": \"mg\"}, \"name_text\": \"Augmentin\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [], \"per\": \"dose\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 2,
+  "kept": [
+   [
+    "Augmentin",
+    null
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"875 and 125\", \"inn\": \"Augmentin\", \"unit\": \"mg\"}, \"name_text\": \"Augmentin\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 3,
+  "kept": [
+   [
+    "Augmentin",
+    null
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": null, \"name_text\": \"Augmentin\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 4,
+  "kept": [
+   [
+    "Augmentin",
+    null
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": null, \"name_text\": \"Augmentin\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ }
+]

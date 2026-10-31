@@ -19,6 +19,26 @@ from anamnesis.schema import (
 from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.templates import QUESTION_FOR, TEMPLATES
 
+_COMBINED_INN_SPLIT = re.compile(r"[/+&]|(?<!\d),|,(?!\d)|\band\b| و ", re.IGNORECASE)
+
+
+def _split_inn_parts(inn: str) -> list[str]:
+    """Split a combined `inn` into its named ingredients (SPEC §3, batch 30).
+
+    A comma between two digits stays (``2,4-dichlorobenzyl alcohol``) and only a spaced ``و``
+    splits, since Arabic names can start with an attached one (``وارفارين``). No ``\\s*`` around
+    the separators: parts are stripped anyway, and it backtracked on long space runs.
+    More than eight parts is read whole, as one name, so a runaway reading stays fast.
+    """
+    parts = []
+    for chunk in _COMBINED_INN_SPLIT.split(inn):
+        chunk = chunk.strip()
+        if chunk:
+            parts.append(chunk)
+    if len(parts) > 8:
+        return [inn.strip()]
+    return parts
+
 
 def _identity(
     strength: Strength | None, inn: str | None, text: str, catalogue: Catalogue,
@@ -29,12 +49,29 @@ def _identity(
     name_inns = entry.inns if entry else None
     if strength:
         inns = frozenset(_resolve_inn(part.inn, catalogue) for part in strength.ingredients)
-        conflict = ambiguous or (name_inns is not None and inns != name_inns)
-        if inn and _resolve_inn(inn, catalogue) not in inns:
-            conflict = True
+        conflict = (
+            ambiguous
+            or (name_inns is not None and inns != name_inns)
+            or len(inns) < len(strength.ingredients)
+        )
+        if inn:
+            parts = _split_inn_parts(inn)
+            if len(parts) >= 2:
+                named = frozenset(_resolve_inn_part(part, catalogue) for part in parts)
+                if named != inns:
+                    conflict = True
+            else:
+                single = parts[0] if parts else inn
+                if _resolve_inn_part(single, catalogue) not in inns:
+                    conflict = True
         return inns, conflict
     if inn:
-        inns = frozenset({_resolve_inn(inn, catalogue)})
+        parts = _split_inn_parts(inn)
+        if len(parts) >= 2:
+            inns = frozenset(_resolve_inn_part(part, catalogue) for part in parts)
+            return inns, ambiguous or (name_inns is not None and inns != name_inns)
+        single = parts[0] if parts else inn
+        inns = frozenset({_resolve_inn_part(single, catalogue)})
         return inns, ambiguous or (name_inns is not None and inns != name_inns)
     if ambiguous:
         return None, True
@@ -53,12 +90,36 @@ def _resolve_inn(name: str, catalogue: Catalogue) -> str:
     return canonical
 
 
+def _resolve_inn_part(name: str, catalogue: Catalogue) -> str:
+    """Resolve one `inn` part: through the catalogue only when one name covers all of it."""
+    canonical = canonical_inn(name)
+    known_moieties = {inn for entry in catalogue.entries for inn in entry.inns}
+    if canonical in known_moieties:
+        return canonical
+    if not catalogue.covers(name):
+        return canonical
+    entry = catalogue.resolve(name)
+    if entry is not None and len(entry.inns) == 1:
+        return next(iter(entry.inns))
+    return canonical
+
+
 def _claim_identity(claim: PatientClaim, catalogue: Catalogue) -> tuple[frozenset[str] | None, bool]:
     return _identity(claim.strength, claim.inn, claim.name_text, catalogue)
 
 
 def _pack_identity(pack: PackObservation, catalogue: Catalogue) -> tuple[frozenset[str] | None, bool]:
     return _identity(pack.strength, pack.inn, pack.label_text or "", catalogue, pack.country)
+
+
+def claim_identity_conflict(claim: PatientClaim, catalogue: Catalogue) -> bool:
+    """Whether a claim's stated INN or strength contradicts its own name (SPEC §7, batch 24.2)."""
+    return _claim_identity(claim, catalogue)[1]
+
+
+def pack_identity_conflict(pack: PackObservation, catalogue: Catalogue) -> bool:
+    """Whether a pack's reading contradicts its own label (SPEC §7, batch 24.2)."""
+    return _pack_identity(pack, catalogue)[1]
 
 
 def _amount(ingredient: IngredientAmount) -> tuple[Decimal, str]:
@@ -230,7 +291,8 @@ def _side_salts(
     parts.extend([intake] if intake else [])
     pairs = [(_resolve_inn(part.inn, catalogue), part.salt or salt_of(part.inn)) for part in parts]
     if inn:
-        pairs.append((_resolve_inn(inn, catalogue), salt_of(inn)))
+        for part in _split_inn_parts(inn):
+            pairs.append((_resolve_inn_part(part, catalogue), salt_of(part)))
     pairs.extend(_text_salts(text, catalogue))
     salts: dict[str, set[str]] = {}
     for moiety, salt in pairs:
@@ -275,7 +337,8 @@ def _release(
 _RELEASE_WORDS = frozenset({
     "retard", "depot", "xr", "xl", "sr", "er", "cr", "mr", "prolonged", "extended",
     "modified", "sustained", "controlled", "slow", "immediate", "ممتد", "بطيء",
-    "ممتده", "بطيئه",
+    "ممتده", "بطيئه", "prolongada", "modificada", "retardtablette",
+    "retardtabletten", "retardkapsel", "retardkapseln",
 })
 
 _ARABIC_RELEASE_WORDS = frozenset({"ممتد", "بطيء", "ممتده", "بطيئه"})
@@ -404,6 +467,13 @@ def _pair_score(claim: PatientClaim, pack: PackObservation, catalogue: Catalogue
         claim.strength
         and pack.strength
         and _claim_strength_type(claim, pack.strength, catalogue) is D.MATCH
+    ):
+        return 3
+    if (
+        claim.strength is None
+        and claim.intake_amount is not None
+        and pack.strength is not None
+        and _pair_type(claim, pack, catalogue) is D.MATCH
     ):
         return 3
     return 2

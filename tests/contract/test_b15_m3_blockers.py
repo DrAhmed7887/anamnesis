@@ -115,7 +115,8 @@ def test_the_report_counts_spend_of_a_failed_call():
 
     report = run_intake(b"RIFF", [(IMAGE, "image/png")], transcriber=Transcriber(), extractor=FailingExtractor(),
                         segmenter=NoRegions(), reader=None, catalogue=CAT)
-    assert report.spend_usd == Decimal("0.001") + Decimal("0.004") + 2 * Decimal("0.0025")
+    # Batch 23: a photo where nothing is found now asks SAM three concepts (medicine box, label, package).
+    assert report.spend_usd == Decimal("0.001") + Decimal("0.004") + 3 * Decimal("0.0025")
     failed = next(s for s in report.steps if s.action is AgentAction.EXTRACT_CLAIMS)
     assert failed.call_ids == ["x1", "x2"] and failed.outcome.startswith("error")
 

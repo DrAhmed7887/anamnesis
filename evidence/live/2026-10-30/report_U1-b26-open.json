@@ -1,0 +1,140 @@
+{
+  "intake_id": "0818c78f64418b811a78c16663710bc48d601a6413a926b89b18df15ae260daa",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 2220,
+      "transcript": "I take Concor five milligrams once a day",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Concor",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "concor",
+        "salt": null,
+        "amount": "5",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "1",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "3e1409f9205f-0",
+      "image_sha256": "3e1409f9205feeaeecbdba0ca3d94529b27bb196e7460e3739bf4b67724ef70a",
+      "object_id": 0,
+      "x1": 88,
+      "y1": 78,
+      "x2": 1729,
+      "y2": 1033,
+      "frame_w": 1800,
+      "frame_h": 2000,
+      "confidence": 0.7770034670829773
+    }
+  ],
+  "observations": [],
+  "findings": [
+    {
+      "finding_id": "c1:-",
+      "type": "missing_modality",
+      "claim_id": "c1",
+      "observation_id": null,
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [],
+      "needs_clinician_review": true,
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "e2868bd7-6f0c-4c7b-9d01-34639f267b8e"
+      ],
+      "model_id": "muse-voice-transcribe-1.0",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 2626,
+      "cost_usd": "0.00015"
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "fa432a0e06aa4b9a8f71f11c538f7261"
+      ],
+      "model_id": "muse-glimmer-30b+lora-r1@modal",
+      "input_tokens": 238,
+      "output_tokens": 92,
+      "latency_ms": 4734,
+      "cost_usd": "0.00636420"
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "3e1409f9205f:medicine box",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae4fbcdf98556406f1a49bc"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 4956,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 3,
+      "action": "read",
+      "target": "3e1409f9205f-0",
+      "outcome": "error: fireworks ProviderError",
+      "call_ids": [
+        "estimated-b0c15921-fcd6-4861-82a1-17a9a35615e8",
+        "estimated-3931815f-3291-4e03-8a0f-23c0bdfef83b"
+      ],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0.04834000"
+    },
+    {
+      "n": 4,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "1 findings",
+      "call_ids": [],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0"
+    }
+  ],
+  "calls": 4,
+  "spend_usd": "0.05735420",
+  "superseded": []
+}

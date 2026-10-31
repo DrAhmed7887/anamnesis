@@ -21,7 +21,7 @@ PATIENT_QUESTIONS: dict[str, str] = {
     "intake": "How much do you use at each intake?",
     "ingredients": "Which ingredients are listed on your medicine?",
     "ratio": "What amounts are listed for each ingredient?",
-    "formulation": "What release form is shown on your medicine pack?",
+    "formulation": "What salt or release form is shown on your medicine pack?",
     "information": "Could you provide the missing medication details?",
     "discontinued": "When did you stop using this medicine?",
     "unreadable": "Could you provide a clearer image of the pack label?",
@@ -128,6 +128,21 @@ REVIEW_REPLACED = "Replaced by a newer photo."
 REQUEST_UNREADABLE = ("Please send one new photo of this medicine pack, with the label facing the camera, "
                       "in good light.")
 REQUEST_NOT_PHOTOGRAPHED = "Please send one photo of the pack of the medicine you mentioned as “{name}”."
+
+TIMELINE_HEADING = "How it got here"
+TIMELINE_COLUMNS = ("#", "Step", "Target", "Outcome", "Model", "Tokens in", "Tokens out", "Time", "Cost")
+TIMELINE_NONE = "—"
+TIMELINE_TOTAL = "Total: {calls} calls, ${usd}"
+
+CATALOGUE_CODES_LINE = "Catalogue codes: {codes}"
+CATALOGUE_CODES_ATC = "ATC {code}"
+CATALOGUE_CODES_RXNORM = "RxNorm {codes}"
+CATALOGUE_CODES_SEPARATOR = " · "
+CATALOGUE_CODES_RX_SEPARATOR = ", "
+CATALOGUE_CODES_REFERENCE = (
+    "ATC codes: WHO Collaborating Centre for Drug Statistics Methodology, "
+    "as listed by AEMPS CIMA on 29 Oct 2026. RxNorm codes: RxNav. Sources and terms: NOTICE."
+)
 
 QUESTION_FOR: dict[D, str | None] = {
     D.MATCH: None,

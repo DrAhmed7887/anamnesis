@@ -8,7 +8,8 @@ from pydantic import ValidationError
 
 from anamnesis.schema import Strength
 
-_AMOUNT_RE = re.compile(r"\d+(?:[.,]\d+)?")
+_AMOUNT_RE = re.compile(r"[0-9٠-٩۰-۹]+(?:[.,][0-9٠-٩۰-۹]+)?")
+_WORD_RE = re.compile(r"(?:[^\W\d_]|ـ)+")
 
 
 def parse_amount_text(value: object) -> Decimal | None:
@@ -18,7 +19,8 @@ def parse_amount_text(value: object) -> Decimal | None:
     decimal mark only when 1-2 digits follow it (``"1,000"`` is ambiguous).
     A dot followed by exactly three digits with a non-zero whole part
     (``"1.000"``) is ambiguous the same way, unless the whole part is zero
-    (``"0.125"`` parses). Ranges, words, empty strings, zero and negatives
+    (``"0.125"`` parses). A single number word, the whole amount, parses as
+    its value. Ranges, two or more words, empty strings, zero and negatives
     return None.
     """
     if isinstance(value, bool):
@@ -33,7 +35,38 @@ def parse_amount_text(value: object) -> Decimal | None:
         return None
     text = value.strip().replace("٫", ".")
     if not _AMOUNT_RE.fullmatch(text):
-        return None
+        if not _WORD_RE.fullmatch(value.strip()):
+            return None
+        from anamnesis.core import catalogue
+        from anamnesis.providers.stated import (
+            ARABIC_NUMBERS,
+            ENGLISH_NUMBERS,
+            GERMAN_ARTICLES,
+            SPANISH_ARTICLES,
+            SPANISH_NUMBERS,
+            _combined_hundreds,
+            _german_number,
+        )
+
+        word = catalogue.normalise(value.strip())
+        if word in SPANISH_ARTICLES or word in GERMAN_ARTICLES:
+            return None
+        number = ENGLISH_NUMBERS.get(word)
+        if number is None:
+            number = ARABIC_NUMBERS.get(word)
+        if number is None:
+            number = SPANISH_NUMBERS.get(word)
+        if number is None:
+            number = _combined_hundreds(word)
+        if number is None:
+            german = _german_number(word)
+            if german is not None:
+                if isinstance(german, Decimal):
+                    return german if german > 0 else None
+                number = german
+        if number is None or number <= 0:
+            return None
+        return Decimal(number)
     if "," in text:
         head, _, tail = text.partition(",")
         if not 1 <= len(tail) <= 2:

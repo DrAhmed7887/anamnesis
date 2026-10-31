@@ -1,0 +1,17 @@
+stated_amounts('two point five milligrams')                ['2', '2.5', '5']
+stated_amounts('ten and fifty milligrams')                 ['10', '50', '60']
+stated_amounts('eight hundred seventy five')               ['5', '8', '70', '100', '875']
+stated_amounts('I take one tablet once a day')             ['1']
+stated_amounts('one and a half tablets')                   ['0.5', '1', '1.5']
+stated_amounts('tomo quinientos miligramos dos veces al día') []
+stated_amounts('ich nehme fünfhundert Milligramm')         []
+stated_amounts('dos coma cinco miligramos')                []
+stated_amounts('tomo 575 mg')                              ['575']
+parse_amount_text('five')                                  5
+parse_amount_text('fifty')                                 50
+parse_amount_text('خمسة')                                  5
+parse_amount_text('quinientos')                            None
+parse_amount_text('fünfzig')                               None
+normalise('Fünfhundertfünfundsiebzig')                     'fünfhundertfünfundsiebzig'
+normalise('dreißig')                                       'dreissig'
+normalise('veintitrés')                                    'veintitrés'

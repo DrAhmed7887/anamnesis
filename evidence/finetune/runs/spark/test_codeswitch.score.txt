@@ -1,0 +1,35 @@
+split test_codeswitch: 50 examples, 50 replies, 95 answer claims
+valid JSON 50/50 (100.0%); dropped by the product's checks 0; invalid JSON 0; no reply 0
+per-claim field accuracy:
+  name_text        91/95 (95.8%)
+  inn              95/95 (100.0%)
+  intake           91/95 (95.8%)
+  strength         92/95 (96.8%)
+  units_per_intake 95/95 (100.0%)
+  intakes_per_day  90/95 (94.7%)
+  as_needed        90/95 (94.7%)
+  status           93/95 (97.9%)
+claims missing 0, extra 0
+transcripts all correct 31/50 (62.0%)
+harmful claims, raw reply, before the product's checks: 0 (unsupported amounts 0, unsupported INNs 0)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+examples with a miss or a harmful claim: 19
+  #2 [en-plain-2+ar-intake-7+ar-plain-2] c2 status: got unknown, want active
+  #3 [ar-stopped-2+ar-plain-3] c2 intakes_per_day: got null, want 1
+  #5 [ar-plain-2+en-stopped-4+ar-intake-8] c3 intakes_per_day: got null, want 1
+  #7 [ar-range_units-1+ar-intake-1] c2 as_needed: got False, want null
+  #10 [en-units-3+ar-strength-2+ar-stopped-2] c1 name_text: got arblibli, want arbli
+  #11 [en-brand_inn-3+ar-prn-1+en-strength-2] c1 as_needed: got False, want null | c3 as_needed: got False, want null
+  #15 [en-units-1+en-plain-2] c2 intakes_per_day: got null, want 1
+  #19 [ar-strength-1] c1 strength: got null, want 325 mg
+  #20 [ar-units-1] c1 intake: got null, want 10 mg
+  #21 [ar-stopped-4+ar-intake-6] c2 intake: got null, want 1 g
+  #24 [en-units-1+en-units-3+en-strength-1] c1 intake: got null, want 1 mg | c1 strength: got 1 mg, want null | c2 intake: got null, want 80 mg | c2 strength: got 80 mg, want null
+  #29 [en-strength-2+en-intake-4+en-intake-8] c3 intakes_per_day: got null, want 1
+  #30 [ar-intake-4+en-prn-3] c1 as_needed: got False, want null
+  #33 [en-prn-1+ar-plain-2] c2 as_needed: got False, want null
+  #35 [ar-intake-6+ar-intake-5] c2 intakes_per_day: got null, want 1
+  #38 [en-units-3+ar-intake-7] c2 status: got unknown, want active
+  #41 [ar-stopped-1] c1 name_text: got البيلوكزوكزوك, want البيلوكزوك
+  #44 [en-range_units-1+ar-units-1] c2 name_text: got ibuibu, want ibu
+  #48 [en-intake-16+ar-range_freq-1] c1 name_text: got motrinrin, want motrin

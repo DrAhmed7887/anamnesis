@@ -1,0 +1,162 @@
+[
+ {
+  "call": 0,
+  "kept": [
+   [
+    "Concor",
+    "10"
+   ],
+   [
+    "BelocZok BelocZok",
+    "50"
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 1,
+  "kept": [
+   [
+    "Concor",
+    "10"
+   ],
+   [
+    "BelocZok BelocZok",
+    "50"
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 2,
+  "kept": [
+   [
+    "Concor",
+    "10"
+   ],
+   [
+    "BelocZok",
+    "50"
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 3,
+  "kept": [
+   [
+    "Concor",
+    "10"
+   ],
+   [
+    "BelocZok",
+    "50"
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 4,
+  "kept": [
+   [
+    "Concor",
+    "10"
+   ],
+   [
+    "BelocZok",
+    "50"
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 5,
+  "kept": [
+   [
+    "Concor",
+    "10"
+   ],
+   [
+    "BelocZok BelocZok",
+    "50"
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [], \"per\": \"tablet\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [], \"per\": \"tablet\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 6,
+  "kept": [
+   [
+    "Concor",
+    "10"
+   ],
+   [
+    "BelocZok",
+    "50"
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [], \"per\": \"dose\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [], \"per\": \"dose\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 7,
+  "kept": [
+   [
+    "Concor",
+    "10"
+   ],
+   [
+    "BelocZok",
+    "50"
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 8,
+  "kept": [
+   [
+    "Concor",
+    "10"
+   ],
+   [
+    "BelocZok",
+    "50"
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"null\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"null\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "call": 9,
+  "kept": [
+   [
+    "Concor",
+    "10"
+   ],
+   [
+    "BelocZok",
+    "50"
+   ]
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ }
+]

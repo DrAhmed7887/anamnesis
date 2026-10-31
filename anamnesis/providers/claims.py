@@ -1,17 +1,26 @@
 """Muse Spark extraction of patient-reported medication claims."""
 
 import json
+import re
+import unicodedata
 from typing import Any
 
 from pydantic import ValidationError
 
-from anamnesis.core.catalogue import normalise
+from anamnesis.core.catalogue import ARABIC_CLITICS, Catalogue, load_catalogue, normalise
 from anamnesis.core.guardrails import AdviceLeak, assert_no_advice, assert_no_advice_in_ingredients
 from anamnesis.providers.base import ProviderError, ProviderTrace, cost_usd, with_one_retry
 from anamnesis.providers.meta import MetaClient, spark_call_estimate
 from anamnesis.providers.numbers import coerce_strength, parse_amount_text
+from anamnesis.providers.relations import (
+    another_names_for_claim,
+    count_values_for_cited_turns,
+    is_amount_grounded,
+    mentions_for_cited_turns,
+    own_names_for_claim,
+)
 from anamnesis.providers.spend import SpendGuard
-from anamnesis.providers.stated import stated_amounts
+from anamnesis.providers.stated import UNIT_WORDS, has_number_role, stated_amounts
 from anamnesis.schema import (
     AudioTurn,
     IngredientAmount,
@@ -20,6 +29,8 @@ from anamnesis.schema import (
     Release,
     StrengthPer,
     Unit,
+    canonical_inn,
+    salt_of,
 )
 
 _SYSTEM_PROMPT = (
@@ -29,9 +40,21 @@ _SYSTEM_PROMPT = (
     "is an intake_amount with regimen.intakes_per_day. Use strength only when the patient explicitly "
     "describes the tablet or pack, such as 'the 5 mg tablets'. 'I stopped' or 'no longer take' means "
     "discontinued. If unclear, use unknown. Leave anything not said as null. Cite the turn_ids each "
-    "claim comes from. Write each amount with the number and unit the patient said, and never convert units. "
+    "claim comes from. Write every amount and count as digits, even when the patient said it in words "
+    "('five' is 5, 'خمسة' is 5, 'twice a day' is 2), with the unit the patient said, "
+    "and never convert units. "
     "Give no medical advice. Only report what the patient said."
 )
+
+_COMBINATION_SENTENCE = (
+    "A combination product said with one amount per ingredient, such as "
+    "'Augmentin 875 and 125 milligrams', is its strength: one ingredient per amount, "
+    "in the order said, each named for the ingredient it belongs to."
+)
+"""The batch 29 sentence, SPEC §2 word for word; only Spark 1.3's claim prompt gets it."""
+
+_SPARK_CLAIM_PROMPT = f"{_SYSTEM_PROMPT} {_COMBINATION_SENTENCE}"
+"""What MetaClaimExtractor sends: the trained prompt plus the combination sentence."""
 
 _AMOUNT_SCHEMA: dict[str, Any] = {
     "type": "object",
@@ -180,8 +203,107 @@ def _check_grounded(name: Any, turn_ids: list[Any], transcripts: dict[str, str])
         raise ValueError("claim name_text must occur in a turn the claim cites")
 
 
-def parse_claims_json(text: str, turns: list[AudioTurn]) -> list[PatientClaim]:
+_BUNDLED_CATALOGUE: Catalogue | None = None
+
+
+def _bundled_catalogue() -> Catalogue:
+    global _BUNDLED_CATALOGUE
+    if _BUNDLED_CATALOGUE is None:
+        _BUNDLED_CATALOGUE = load_catalogue()
+    return _BUNDLED_CATALOGUE
+
+
+_AMOUNT_ONLY_WORDS = frozenset({
+    "milligram", "milligrams", "gram", "grams", "microgram", "micrograms",
+    "millilitre", "millilitres", "milliliter", "milliliters",
+    "unit", "units", "iu",
+    "and", "y", "und", "a", "point", "coma", "komma",
+})
+"""English unit words and joiners that also count as amount words (SPEC §2, round 2 #7)."""
+
+
+def _resolve_strength_inn(name: str, catalogue: Catalogue) -> str:
+    """Resolve a strength label as the reconciler does (SPEC §2, round 2 #1)."""
+    canonical = canonical_inn(name)
+    known_moieties = {inn for entry in catalogue.entries for inn in entry.inns}
+    if canonical in known_moieties:
+        return canonical
+    entry = catalogue.resolve(name)
+    if entry is not None and len(entry.inns) == 1:
+        return next(iter(entry.inns))
+    return canonical
+
+
+def _grounded_by_turns(field: object, cited: list[str]) -> bool:
+    """An ingredient field grounded by cited turns (SPEC §2, batch 24)."""
+    if not isinstance(field, str):
+        return False
+    norm_field = normalise(unicodedata.normalize("NFC", field))
+    if not norm_field:
+        return False
+    field_words = norm_field.split()
+    only_numbers = True
+    for word in field_words:
+        if word in UNIT_WORDS or word in _AMOUNT_ONLY_WORDS or stated_amounts(word) or has_number_role(word):
+            continue
+        if word.isdigit():
+            continue
+        only_numbers = False
+        break
+    if only_numbers:
+        return False
+    field_pair = (canonical_inn(field), salt_of(field))
+    for text in cited:
+        norm_turn = normalise(unicodedata.normalize("NFC", text))
+        if not norm_turn:
+            continue
+        parts = []
+        for word in field_words:
+            if re.search(r"[\u0600-\u06ff]", word):
+                parts.append(f"{ARABIC_CLITICS}{re.escape(word)}")
+            else:
+                parts.append(re.escape(word))
+        if re.search(r"(?<!\w)" + r"\s+".join(parts) + r"(?!\w)", norm_turn):
+            return True
+        turn_words = norm_turn.split()
+        matched = True
+        for word in field_words:
+            if len(word) < 3:
+                if word not in turn_words:
+                    matched = False
+                    break
+                continue
+            stem = word[:-1] if len(word) >= 6 and word[-1] in "aeiou" else word
+            if not any(turn_word.startswith(stem) for turn_word in turn_words):
+                matched = False
+                break
+        if matched:
+            return True
+        for start in range(len(turn_words)):
+            for size in (1, 2, 3):
+                run = " ".join(turn_words[start:start + size])
+                if not run:
+                    continue
+                if (canonical_inn(run), salt_of(run)) == field_pair:
+                    return True
+    return False
+
+
+def _grounded_label(field: object, cited: list[str], catalogue: Catalogue, name_text: object) -> bool:
+    """An amount label grounded by turns or by the brand's own ingredients."""
+    if _grounded_by_turns(field, cited):
+        return True
+    if not isinstance(field, str) or not isinstance(name_text, str):
+        return False
+    entry = catalogue.resolve(name_text)
+    return entry is not None and canonical_inn(field) in entry.inns
+
+
+def parse_claims_json(
+    text: str, turns: list[AudioTurn], catalogue: Catalogue | None = None,
+) -> list[PatientClaim]:
     """Validate Spark JSON and attach only cited transcript turns as evidence."""
+    cat = catalogue if catalogue is not None else _bundled_catalogue()
     try:
         raw_claims = _validate_raw_shape(json.loads(text))
         transcripts = {turn.turn_id: turn.transcript for turn in turns}
@@ -196,20 +318,98 @@ def parse_claims_json(text: str, turns: list[AudioTurn]) -> list[PatientClaim]:
             if not isinstance(turn_ids, list) or not turn_ids or invalid_turn_ids:
                 raise ValueError("claim turn_ids must cite existing turns")
             _check_grounded(raw["name_text"], turn_ids, transcripts)
-            strength = (
-                coerce_strength(raw["strength"]) if raw["strength"] is not None else None
+            cited = [transcripts[turn_id] for turn_id in turn_ids]
+            raw_inn = raw.get("inn")
+            if raw_inn is None:
+                grounded_inn: Any = None
+            elif isinstance(raw_inn, str):
+                grounded_inn = raw_inn if _grounded_by_turns(raw_inn, cited) else None
+            else:
+                grounded_inn = raw_inn
+            raw_intake = raw["intake_amount"]
+            if isinstance(raw_intake, dict):
+                label = raw_intake.get("inn")
+                if not (
+                    isinstance(label, str) and _grounded_label(label, cited, cat, raw["name_text"])
+                ):
+                    fallback = grounded_inn if isinstance(grounded_inn, str) else raw["name_text"]
+                    raw_intake = {**raw_intake, "inn": fallback}
+            raw_strength: Any = raw["strength"]
+            if isinstance(raw_strength, dict) and isinstance(raw_strength.get("ingredients"), list):
+                relabelled = []
+                for part in raw_strength["ingredients"]:
+                    if isinstance(part, dict):
+                        label = part.get("inn")
+                        if isinstance(label, str) and _grounded_label(
+                            label, cited, cat, raw["name_text"],
+                        ):
+                            relabelled.append(part)
+                        else:
+                            fallback = (
+                                grounded_inn if isinstance(grounded_inn, str) else raw["name_text"]
+                            )
+                            relabelled.append({**part, "inn": fallback})
+                    else:
+                        relabelled.append(part)
+                raw_strength = {**raw_strength, "ingredients": relabelled}
+            strength_was_empty = (
+                isinstance(raw["strength"], dict) and raw["strength"].get("ingredients") == []
             )
-            intake_amount = _coerce_intake(raw["intake_amount"])
+            strength = coerce_strength(raw_strength) if raw_strength is not None else None
+            if isinstance(strength, dict):
+                resolved = {
+                    _resolve_strength_inn(part["inn"], cat) for part in strength["ingredients"]
+                }
+                if len(resolved) < len(strength["ingredients"]):
+                    strength = None
+            intake_amount = _coerce_intake(raw_intake)
             regimen = _coerce_regimen(raw["regimen"])
             said: set = set()
-            for cited in turn_ids:
-                said |= stated_amounts(transcripts[cited])
+            for cited_id in turn_ids:
+                said |= stated_amounts(transcripts[cited_id])
             if isinstance(strength, dict) and not all(
                 part["amount"] in said for part in strength["ingredients"]
             ):
                 strength = None
             if isinstance(intake_amount, dict) and intake_amount["amount"] not in said:
                 intake_amount = None
+            relation_dropped = False
+            own: list[str] = []
+            another: list[str] = []
+            is_discontinued = raw.get("status") == "discontinued"
+            if isinstance(strength, dict) or isinstance(intake_amount, dict):
+                entry = cat.resolve(raw["name_text"]) if isinstance(raw.get("name_text"), str) else None
+                other_texts = [
+                    other.get("name_text")
+                    for pos, other in enumerate(raw_claims) if pos != index - 1
+                ]
+                own = own_names_for_claim(raw.get("name_text"), grounded_inn, cat)
+                another = another_names_for_claim(
+                    own, entry, cat, other_texts, raw.get("name_text"),
+                )
+                mentions = mentions_for_cited_turns(cited, own, another, is_discontinued)
+                if isinstance(strength, dict) and not all(
+                    is_amount_grounded(
+                        part["amount"], part["unit"], mentions, False,
+                    )
+                    for part in strength["ingredients"]
+                ):
+                    strength = None
+                    relation_dropped = True
+                if isinstance(intake_amount, dict) and not is_amount_grounded(
+                    intake_amount["amount"], intake_amount["unit"], mentions, True,
+                ):
+                    intake_amount = None
+                    relation_dropped = True
+            if (
+                relation_dropped
+                and isinstance(regimen, dict)
+                and regimen.get("units_per_intake") is not None
+                and regimen["units_per_intake"] not in count_values_for_cited_turns(
+                    cited, own, another, is_discontinued,
+                )
+            ):
+                regimen = {**regimen, "units_per_intake": None}
             units_sent = (
                 isinstance(raw.get("regimen"), dict)
                 and raw["regimen"].get("units_per_intake") is not None
@@ -217,7 +417,7 @@ def parse_claims_json(text: str, turns: list[AudioTurn]) -> list[PatientClaim]:
             units_dropped = units_sent and (
                 not isinstance(regimen, dict) or regimen.get("units_per_intake") is None
             )
-            if (raw["strength"] is not None and strength is None) or (
+            if (raw["strength"] is not None and strength is None and not strength_was_empty) or (
                 raw["intake_amount"] is not None and intake_amount is None
             ) or units_dropped:
                 # A dropped claim amount takes the other one with it (SPEC §2).
@@ -225,6 +425,7 @@ def parse_claims_json(text: str, turns: list[AudioTurn]) -> list[PatientClaim]:
                 intake_amount = None
             values = {
                 **{key: value for key, value in raw.items() if key != "turn_ids"},
+                "inn": grounded_inn,
                 "regimen": regimen,
                 "intake_amount": intake_amount,
                 "strength": strength,
@@ -241,7 +442,7 @@ class MetaClaimExtractor:
     def __init__(
         self, client: MetaClient, guard: SpendGuard, model: str = "muse-spark-1.3",
     ) -> None:
-        if model.endswith("-contributor"):
+        if "-contributor" in model.strip().casefold():
             raise ValueError("contributor models are not permitted")
         self.client = client
         self.guard = guard
@@ -261,7 +462,7 @@ class MetaClaimExtractor:
             "reasoning_effort": "low",
             "max_tokens": 16000,
             "messages": [
-                {"role": "system", "content": _SYSTEM_PROMPT},
+                {"role": "system", "content": _SPARK_CLAIM_PROMPT},
                 {"role": "user", "content": transcript},
             ],
             "response_format": {"type": "json_schema", "json_schema": {

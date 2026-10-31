@@ -24,14 +24,19 @@ gate() {
   local base; base=$(contract_base)
   [[ -n $base ]] || { print -u2 "gate: no 'test(contract): batch $n' commit on this branch"; return 1; }
   local touched
-  touched=$( { git diff --name-only "$base" -- tests/contract; git ls-files --others --exclude-standard tests/contract; } | sort -u)
+  # Locked since the contract commit: the contract tests, every conftest.py, and pyproject.toml and uv.lock
+  # (their [tool.*] tables configure pytest and ruff). Plan grill #14, QM M5 #4.
+  touched=$( { git diff --name-only "$base" -- tests/contract pyproject.toml uv.lock ':(glob)**/conftest.py'
+              git ls-files --others --exclude-standard tests/contract ':(glob)**/conftest.py'; } | sort -u)
   local result=pass reason="" tests="0"
   if [[ -n $touched ]]; then
-    result=fail reason="contract tests were edited: ${touched//$'\n'/ }"
+    result=fail reason="locked files were edited: ${touched//$'\n'/ }"
   elif ! uv run ruff check . > "$ev/ruff.log" 2>&1; then
     result=fail reason="ruff failed (see ruff.log)"
-  elif ! uv run pytest -q > "$ev/pytest.log" 2>&1; then
+  elif ! uv run pytest -q -rsx > "$ev/pytest.log" 2>&1; then
     result=fail reason="pytest failed (see pytest.log)"
+  elif grep -qE '^(SKIPPED|XFAIL).*tests/contract' "$ev/pytest.log"; then
+    result=fail reason="a contract test was skipped or xfailed (see pytest.log)"
   fi
   [[ -f $ev/pytest.log ]] && tests=$(grep -Eo '[0-9]+ passed' "$ev/pytest.log" | grep -Eo '[0-9]+' || print 0)
   git add -N anamnesis tests 2>/dev/null || true   # count new build files in the diff stat
@@ -45,6 +50,8 @@ gate() {
 #   muse_build <label> <brief> <raw log> <export> <model>
 muse_build() {
   local label=$1 brief=$2 raw=$3 out=$4 model=$5
+  # Ahmed, 28 Oct: pause at 50% of Meta's or any partner's credit. A Muse round has cost up to $1.83.
+  uv run python scripts/spend_check.py --next meta=2.00 || { print -u2 "$label: spend gate (a credit's stop line)"; exit 1; }
   print "muse $model, $label, started $(now)" > "$raw"
   # Muse's goal tracking (cookbook 07): headless "/goal" text isn't parsed as the command (probe, 27 Oct), so the
   # prompt asks Muse to pin the goal with its own goal tool, with an oracle it can run inside its sandbox.
@@ -110,11 +117,21 @@ case $cmd in
     branch=$(git branch --show-current)
     title=$(head -1 "briefs/$n.md" | sed 's/^# *//')
     # Stage only build paths, so files another tool drops in the repo never ride along.
-    git add anamnesis tests "$ev" "briefs/$n.md" SPEC.md pyproject.toml uv.lock
+    git add anamnesis tests scripts "$ev" "briefs/$n.md" SPEC.md pyproject.toml uv.lock
+    # the read-only plan and audit grills (batch 28 left them behind)
+    git add evidence/grills/b"${n//./}"-muse-* 2>/dev/null || true
     git commit -q -m "feat: batch $n - $title" -m "Built by the batch builder (see Built-by in the review), gated (ruff + pytest + contract lock), reviewed by Claude Code (CEO). Evidence: $ev/"
-    git switch -q main
-    git merge -q --no-ff "$branch" -m "merge: $branch"
-    sha=$(git rev-parse --short HEAD)
+    # The engine may build in its own worktree while main stays checked out in the main checkout: merge there.
+    root=$(git worktree list --porcelain | awk '/^worktree /{wt=substr($0, 10)} $0 == "branch refs/heads/main" {print wt}')
+    if [[ -n $root && $root != "$PWD" ]]; then
+      [[ -z $(git -C "$root" status --porcelain --untracked-files=no) ]] || { print -u2 "merge: $root has uncommitted changes"; exit 1; }
+      git -C "$root" merge -q --no-ff "$branch" -m "merge: $branch"
+    else
+      root=$PWD
+      git switch -q main
+      git merge -q --no-ff "$branch" -m "merge: $branch"
+    fi
+    sha=$(git -C "$root" rev-parse --short HEAD)
     tests=$(grep -Eo '"tests_passed":[0-9]+' "$ev/gate.json" | grep -Eo '[0-9]+$')
     model=$(head -1 "$ev/builder.md" 2>/dev/null | awk '{print $2}' | sed 's/,$//' || print muse-spark-1.3)
     builder=$(head -1 "$ev/builder.md" 2>/dev/null | awk '{print $1}' || print muse)
@@ -123,9 +140,9 @@ case $cmd in
     built_by=${built_by:-$builder $model}
     contract=$(uv run pytest -q tests/contract 2>&1 | grep -Eo '[0-9]+ passed' | grep -Eo '[0-9]+' || print 0)
     unit=$(uv run pytest -q tests/unit 2>&1 | grep -Eo '[0-9]+ passed' | grep -Eo '[0-9]+' || print 0)
-    print -r -- "{\"batch\":$n,\"branch\":\"$branch\",\"model\":\"$model\",\"built_by\":\"$built_by\",\"tests_passed\":$tests,\"contract_tests\":$contract,\"unit_tests\":$unit,\"verdict\":\"pass\",\"merge_commit\":\"$sha\",\"at\":\"$(now)\"}" >> "$log"
-    git add "$log" && git commit -q -m "chore: log batch $n"
-    git push -q origin main 2>/dev/null && print "pushed main" || print "push skipped (no remote?)"
+    print -r -- "{\"batch\":$n,\"branch\":\"$branch\",\"model\":\"$model\",\"built_by\":\"$built_by\",\"tests_passed\":$tests,\"contract_tests\":$contract,\"unit_tests\":$unit,\"verdict\":\"pass\",\"merge_commit\":\"$sha\",\"at\":\"$(now)\"}" >> "$root/$log"
+    git -C "$root" add "$log" && git -C "$root" commit -q -m "chore: log batch $n"
+    git -C "$root" push -q origin main 2>/dev/null && print "pushed main" || print "push skipped (no remote?)"
     ;;
   *) print -u2 "unknown command: $cmd"; exit 1 ;;
 esac

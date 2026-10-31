@@ -1,0 +1,256 @@
+{
+  "intake_id": "1d88729f0d07c10a08cba5d19d854205ed2464fc1ab9e80973a2b0cf0e2de207",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 2140,
+      "transcript": "I take take Lipitor 20 milligrams at night",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Lipitor",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "lipitor",
+        "salt": null,
+        "amount": "20",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "1",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "7a26c60cafa5-0",
+      "image_sha256": "7a26c60cafa5c9f62db9df30d8d74b668e5e10e6eb762f9590e3537b910c961e",
+      "object_id": 0,
+      "x1": 3170,
+      "y1": 923,
+      "x2": 4175,
+      "y2": 2163,
+      "frame_w": 4176,
+      "frame_h": 3012,
+      "confidence": 0.6878048777580261
+    },
+    {
+      "region_id": "7a26c60cafa5-1",
+      "image_sha256": "7a26c60cafa5c9f62db9df30d8d74b668e5e10e6eb762f9590e3537b910c961e",
+      "object_id": 1,
+      "x1": 99,
+      "y1": 79,
+      "x2": 4042,
+      "y2": 2203,
+      "frame_w": 4176,
+      "frame_h": 3012,
+      "confidence": 0.8439024686813354
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "Pfizer\nSORTIS\n40 mg potahované tablety\nATORVASTATINUM\nJedna potahovaná tableta obsahuje atorvastatinum 40 mg (ve formě atorvastatini calcici trihydras)\nPřípravek obsahuje monohydrát laktosy.\nPerorální podání. Před použitím si přečtěte příbalovou informaci.\nUchovávejte mimo dohled a dosah dětí.\nTento léčivý přípravek nevyžaduje žádné zvláštní podmínky uchovávání.\nVýdej léčivého přípravku vázán na lékařský předpis.\nNepoužitelné léčivo vraťte do lékárny.\n30 tablet\nSORTIS® 40 mg atorvastatinum potahované tablety Pfizer\nSORTIS® potahované tablety",
+      "inn": "atorvastatin",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "atorvastatin",
+            "salt": null,
+            "amount": "40",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "readable",
+      "country": null,
+      "visual_evidence": [
+        "7a26c60cafa5-1"
+      ]
+    },
+    {
+      "observation_id": "o1",
+      "label_text": "",
+      "inn": null,
+      "strength": null,
+      "readability": "unreadable",
+      "country": null,
+      "visual_evidence": [
+        "7a26c60cafa5-0"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "-:o1",
+      "type": "unreadable_source",
+      "claim_id": null,
+      "observation_id": "o1",
+      "audio_evidence": [],
+      "visual_evidence": [
+        "7a26c60cafa5-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "The pack label is not fully readable.",
+      "patient_question_id": "unreadable"
+    },
+    {
+      "finding_id": "c1:o0",
+      "type": "strength_mismatch",
+      "claim_id": "c1",
+      "observation_id": "o0",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "7a26c60cafa5-1"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "Patient-reported strength differs from the pack label.",
+      "patient_question_id": "strength"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "ca79626c-60ad-4924-9eda-c715655a9118"
+      ],
+      "model_id": "muse-voice-transcribe-1.0",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 2329,
+      "cost_usd": "0.00015"
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "chatcmpl-01a191f8-c84c-7496-a3c3-9cdb748fc39e"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 583,
+      "output_tokens": 4235,
+      "latency_ms": 16034,
+      "cost_usd": "0.01872750"
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "7a26c60cafa5:medicine box",
+      "outcome": "2 regions",
+      "call_ids": [
+        "resp_6ae5e17c73367116cca94672"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 5080,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 3,
+      "action": "read",
+      "target": "7a26c60cafa5-1",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a191f9-053a-71bc-a5a3-f1dc53b82c69"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 4373,
+      "output_tokens": 1575,
+      "latency_ms": 10108,
+      "cost_usd": "0.01216000"
+    },
+    {
+      "n": 4,
+      "action": "read",
+      "target": "7a26c60cafa5-0",
+      "outcome": "unreadable",
+      "call_ids": [
+        "chatcmpl-01a191f9-1955-733d-a120-4b60165d49a9"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 2193,
+      "output_tokens": 778,
+      "latency_ms": 4539,
+      "cost_usd": "0.00604775"
+    },
+    {
+      "n": 5,
+      "action": "second_read",
+      "target": "7a26c60cafa5-1",
+      "outcome": "readable",
+      "call_ids": [
+        "chatcmpl-7df5254a7f894d949a40f3e1de1eea4a"
+      ],
+      "model_id": "muse-spark-open@fireworks",
+      "input_tokens": 4578,
+      "output_tokens": 747,
+      "latency_ms": 21633,
+      "cost_usd": "0.00889725"
+    },
+    {
+      "n": 6,
+      "action": "zoom_read",
+      "target": "7a26c60cafa5-0",
+      "outcome": "unreadable",
+      "call_ids": [
+        "chatcmpl-01a191f9-86d5-7400-8574-3ba5aad796fb"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 4363,
+      "output_tokens": 601,
+      "latency_ms": 4688,
+      "cost_usd": "0.00800800"
+    },
+    {
+      "n": 7,
+      "action": "second_read",
+      "target": "7a26c60cafa5-0",
+      "outcome": "unreadable",
+      "call_ids": [
+        "chatcmpl-50260c340c494fb286199f930b063c73"
+      ],
+      "model_id": "muse-spark-open@fireworks",
+      "input_tokens": 2398,
+      "output_tokens": 426,
+      "latency_ms": 12861,
+      "cost_usd": "0.00480800"
+    },
+    {
+      "n": 8,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "2 findings",
+      "call_ids": [],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0"
+    }
+  ],
+  "calls": 8,
+  "spend_usd": "0.06129850",
+  "superseded": []
+}

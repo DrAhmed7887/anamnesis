@@ -1,0 +1,23 @@
+{
+  "batch": "24.1",
+  "rounds": [
+    {
+      "batch": "24.1",
+      "input_tokens": 9273301,
+      "cached_tokens": 8914913,
+      "output_tokens": 66544,
+      "reasoning_tokens": 42176,
+      "models": [
+        "muse-spark-1.3"
+      ],
+      "sessions": [
+        "01a189d4-a027-73d2-98cf-aba919f31749"
+      ],
+      "cost_usd": "2.06803",
+      "estimated": true,
+      "source": "muse export billing records",
+      "at": "2026-10-29T22:52:52Z"
+    }
+  ],
+  "total_cost_usd": "2.06803"
+}

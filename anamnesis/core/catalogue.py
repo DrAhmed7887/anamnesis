@@ -14,7 +14,7 @@ def normalise(text: str) -> str:
     text = text.casefold().replace("®", "").replace("™", "")
     text = re.sub(r"[\u0640\u064b-\u065f\u0670]", "", text)
     text = text.translate(str.maketrans({"أ": "ا", "إ": "ا", "آ": "ا", "ٱ": "ا", "ى": "ي", "ة": "ه"}))
-    text = text.translate(str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789"))
+    text = text.translate(str.maketrans("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹", "01234567890123456789"))
     text = re.sub(r"(?<=[\u0600-\u06ff])(?=[a-z])|(?<=[a-z])(?=[\u0600-\u06ff])", " ", text)
     text = re.sub(r"[^\w\s]|_", " ", text)
     return " ".join(text.split())
@@ -33,6 +33,8 @@ class CatalogueEntry:
     release: Release
     splittable: bool | None
     aliases: tuple[str, ...] = ()
+    atc: str | None = None
+    rxcui: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -91,6 +93,11 @@ class Catalogue:
     def matches_brand(self, text: str) -> bool:
         """True when the text matches a catalogue brand or alias name."""
         return any(brand for _, _, _, brand in self._matches(text))
+
+    def covers(self, text: str) -> bool:
+        """True when one catalogue name matches all of the normalised text (SPEC §3, batch 30 round 3)."""
+        length = len(normalise(text))
+        return any(start == 0 and end == length for start, end, _, _ in self._matches(text))
 
     def mentions_moiety(self, text: str, moiety: str) -> bool:
         """True when the text names the moiety, or a brand whose only INN is that moiety, as whole words."""
@@ -156,6 +163,8 @@ def load_catalogue(path: str | Path | None = None) -> Catalogue:
                 release=Release(record["release"]),
                 splittable=record["splittable"],
                 aliases=tuple(record.get("aliases", ())),
+                atc=record.get("atc"),
+                rxcui=tuple(str(code) for code in record.get("rxcui") or ()),
             )
             for record in records
         )

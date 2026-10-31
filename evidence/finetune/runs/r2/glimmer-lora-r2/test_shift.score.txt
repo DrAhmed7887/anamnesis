@@ -1,0 +1,18 @@
+split test_shift: 120 examples, 120 replies, 217 answer claims
+valid JSON 120/120 (100.0%); dropped by the product's checks 0; invalid JSON 0; no reply 0
+per-claim field accuracy:
+  name_text        216/217 (99.5%)
+  inn              217/217 (100.0%)
+  intake           217/217 (100.0%)
+  strength         217/217 (100.0%)
+  units_per_intake 217/217 (100.0%)
+  intakes_per_day  217/217 (100.0%)
+  as_needed        217/217 (100.0%)
+  status           216/217 (99.5%)
+claims missing 0, extra 0
+transcripts all correct 118/120 (98.3%)
+harmful claims, raw reply, before the product's checks: 0 (unsupported amounts 0, unsupported INNs 0)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+examples with a miss or a harmful claim: 2
+  #85 [en-brand_inn-2] c1 name_text: got inzir, want inzirqo
+  #97 [ar-stopped-6] c1 status: got active, want discontinued

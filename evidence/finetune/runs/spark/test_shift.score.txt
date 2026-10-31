@@ -1,0 +1,56 @@
+split test_shift: 120 examples, 120 replies, 217 answer claims
+valid JSON 120/120 (100.0%); dropped by the product's checks 0; invalid JSON 0; no reply 0
+per-claim field accuracy:
+  name_text        206/217 (94.9%)
+  inn              217/217 (100.0%)
+  intake           214/217 (98.6%)
+  strength         214/217 (98.6%)
+  units_per_intake 217/217 (100.0%)
+  intakes_per_day  210/217 (96.8%)
+  as_needed        209/217 (96.3%)
+  status           203/217 (93.5%)
+claims missing 0, extra 0
+transcripts all correct 80/120 (66.7%)
+harmful claims, raw reply, before the product's checks: 0 (unsupported amounts 0, unsupported INNs 0)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+examples with a miss or a harmful claim: 40
+  #0 [en-range_units-3+en-prn-4] c2 name_text: got xareltolto, want xarelto
+  #1 [ar-stopped-6+ar-prn-4+ar-intake-10] c3 as_needed: got False, want null
+  #6 [ar-intake-11+ar-plain-4+ar-prn-4] c2 intakes_per_day: got null, want 1
+  #7 [ar-stopped-5+ar-prn-4+ar-intake-9] c3 intakes_per_day: got null, want 1
+  #8 [en-intake-17] c1 name_text: got naprelanlan, want naprelan
+  #9 [en-strength-5] c1 strength: got null, want 12.5 mg
+  #11 [ar-range_units-3+ar-intake-9] c2 as_needed: got False, want null
+  #14 [ar-prn-4] c1 name_text: got pepcidcid, want pepcid
+  #18 [ar-prn-4+ar-plain-5] c2 status: got unknown, want active
+  #20 [ar-plain-5] c1 status: got unknown, want active
+  #25 [en-stopped-9+en-intake-18+en-intake-12] c3 name_text: got zyloprimrim, want zyloprim
+  #27 [en-strength-5+en-intake-11+en-brand_inn-4] c2 status: got unknown, want active
+  #30 [ar-intake-10+ar-intake-10] c1 intakes_per_day: got null, want 1
+  #31 [ar-plain-5+ar-intake-9] c1 status: got unknown, want active | c2 status: got unknown, want active
+  #32 [ar-plain-4+ar-intake-10] c1 intakes_per_day: got null, want 1
+  #34 [ar-units-2+ar-strength-3+ar-range_units-3] c2 intake: got 200 mg, want null | c2 as_needed: got False, want null
+  #37 [en-intake-11] c1 status: got unknown, want active
+  #38 [ar-stopped-5+ar-plain-5] c2 status: got unknown, want active
+  #41 [en-stopped-9+en-range_freq-2] c1 name_text: got jardiancence, want jardiance
+  #45 [en-strength-5] c1 strength: got null, want 100 mg
+  #50 [en-intake-18+en-prn-7] c1 as_needed: got False, want null
+  #58 [en-units-2] c1 name_text: got xareltolto, want xarelto | c1 status: got unknown, want active
+  #62 [ar-plain-4+ar-units-2] c1 name_text: got zyloprimrim, want zyloprim
+  #68 [en-stopped-5+en-plain-5+en-intake-12] c2 status: got unknown, want active | c3 status: got unknown, want active
+  #70 [ar-plain-4+ar-strength-3] c1 intakes_per_day: got null, want 1
+  #71 [en-intake-11] c1 status: got unknown, want active
+  #76 [en-prn-7+en-strength-3] c2 as_needed: got False, want null
+  #77 [ar-plain-4] c1 name_text: got xareltolto, want xarelto
+  #78 [ar-intake-12+ar-plain-5] c2 status: got unknown, want active
+  #79 [en-plain-8+en-units-4] c1 intakes_per_day: got null, want 1
+  #80 [en-unsure-2+en-strength-5] c2 strength: got null, want 10 mg
+  #82 [ar-plain-4+ar-prn-4+ar-stopped-6] c1 intakes_per_day: got null, want 1
+  #84 [en-intake-12+en-intake-12] c1 as_needed: got False, want null | c2 as_needed: got False, want null
+  #85 [en-brand_inn-2] c1 name_text: got inzirqorqo, want inzirqo
+  #90 [en-intake-11+en-stopped-5] c1 intake: got null, want 375 mg
+  #96 [ar-intake-9] c1 name_text: got zorvolexlex, want zorvolex
+  #106 [en-intake-11+en-unsure-2] c1 intake: got null, want 2.5 mg
+  #109 [ar-plain-5] c1 status: got unknown, want active
+  #111 [en-intake-12] c1 name_text: got aleveeve, want aleve | c1 status: got unknown, want active
+  #115 [ar-prn-4+ar-range_units-3+ar-intake-9] c3 as_needed: got False, want null

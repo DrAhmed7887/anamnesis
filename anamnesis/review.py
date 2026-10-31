@@ -1,6 +1,15 @@
 """Clinician review: request one new photo, then sign off (SPEC §8, batch 20)."""
 
-from anamnesis.agent.loop import _NEEDS_ZOOM, _intake_id, _observation, _prepare, _read_photo, _zoom
+from anamnesis.agent.loop import (
+    _NEEDS_ZOOM,
+    SAM_CONCEPTS,
+    _intake_id,
+    _observation,
+    _prepare,
+    _read_photo,
+    _second_read,
+    _zoom,
+)
 from anamnesis.agent.session import IntakeSession
 from anamnesis.core.reconcile import reconcile_all
 from anamnesis.schema import DiscrepancyType as D
@@ -88,8 +97,8 @@ def request_message(report: ReconciliationReport, request: PhotoRequest) -> str:
 def add_photo(
     report: ReconciliationReport, review: Review, request_id: str, photo: Image,
     images: list[Image], audio: Image | None, *, segmenter, reader, catalogue,
-    concepts: tuple[str, ...] = ("medicine box", "label"), top_k: int = 3,
-    max_provider_calls: int = 8,
+    second_reader=None, concepts: tuple[str, ...] = SAM_CONCEPTS, top_k: int = 3,
+    max_provider_calls: int | None = None,
 ) -> tuple[ReconciliationReport, Review]:
     if review.intake_id != report.intake_id:
         raise ValueError("review is for another report")
@@ -104,6 +113,9 @@ def add_photo(
     fresh = _prepare([photo])[0]
     if any(fresh[0][0] == item[0][0] for item in prepared):
         raise ValueError("photo was already given")
+    if max_provider_calls is None:
+        per_region = 3 * top_k if second_reader is not None else 2 * top_k
+        max_provider_calls = len(concepts) + per_region
     session = IntakeSession(max_provider_calls)
     kept, readings = [], []
     if fresh[1] is None:
@@ -111,10 +123,12 @@ def add_photo(
             session.note(AgentAction.SEGMENT, fresh[2][:12], "error: image cannot be decoded")
     else:
         kept, readings = _read_photo(session, segmenter, reader, fresh, concepts, top_k)
-    final = [
-        _zoom(session, reader, image, region, reading) if reading.readability in _NEEDS_ZOOM else reading
-        for image, region, reading in readings
-    ]
+    final = []
+    for image, region, reading in readings:
+        if reading.readability in _NEEDS_ZOOM:
+            reading = _zoom(session, reader, image, region, reading)
+            reading = _second_read(session, second_reader, image, region, reading)
+        final.append(reading)
     fresh_observations = [
         _observation(len(report.observations) + index, reading)
         for index, reading in enumerate(final)
@@ -130,7 +144,8 @@ def add_photo(
     base = len(report.steps)
     steps = [*report.steps, *(
         AgentStep(n=base + index, action=step.action, target=step.target, outcome=step.outcome,
-                  call_ids=list(step.call_ids))
+                  call_ids=list(step.call_ids), model_id=step.model_id, input_tokens=step.input_tokens,
+                  output_tokens=step.output_tokens, latency_ms=step.latency_ms, cost_usd=step.cost_usd)
         for index, step in enumerate(session.steps)
     )]
     fresh_intake = _intake_id(audio_bytes, [item for item, _, _ in prepared] + [fresh[0]])

@@ -1,0 +1,21 @@
+split test_spain: 60 examples, 60 replies, 108 answer claims
+valid JSON 60/60 (100.0%); dropped by the product's checks 1; invalid JSON 0; no reply 0
+per-claim field accuracy:
+  name_text        103/108 (95.4%)
+  inn              104/108 (96.3%)
+  intake           102/108 (94.4%)
+  strength         104/108 (96.3%)
+  units_per_intake 104/108 (96.3%)
+  intakes_per_day  103/108 (95.4%)
+  as_needed        103/108 (95.4%)
+  status           104/108 (96.3%)
+claims missing 4, extra 0
+transcripts all correct 55/60 (91.7%)
+harmful claims, raw reply, before the product's checks: 0 (unsupported amounts 0, unsupported INNs 0)
+harmful claims, after them: 0 (unsupported amounts 0, unsupported INNs 0)
+examples with a miss or a harmful claim: 5
+  #6 [en-plain-7+en-plain-3] c1 name_text: got aldocumarplusthervan, want aldocumar | c1 intakes_per_day: got 4, want null | missing claim 'Thervan'
+  #24 [ar-intake-2+ar-intake-5+ar-strength-1] c2 intake: got null, want 1000 mg
+  #26 [ar-plain-3+ar-range_units-1] c2 intake: got 10 mg, want null
+  #34 [en-unsure-3+en-range_units-4+en-prn-3] dropped by the product's checks: malformed patient claims: claim name_text must occur in a turn the claim cites
+  #39 [en-prn-2+en-prn-3+en-units-1] c3 as_needed: got False, want null

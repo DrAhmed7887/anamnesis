@@ -1,0 +1,757 @@
+{
+ "seed": 20261029,
+ "noise_rate": 0.25,
+ "refused_slips": 0,
+ "duplicates_redrawn": 0,
+ "splits": {
+  "train": {
+   "examples": 1200,
+   "claims": 2255,
+   "noisy": 300,
+   "noise_share": 0.25
+  },
+  "val": {
+   "examples": 150,
+   "claims": 278,
+   "noisy": 38,
+   "noise_share": 0.253
+  },
+  "test_spain": {
+   "examples": 60,
+   "claims": 108,
+   "noisy": 15,
+   "noise_share": 0.25
+  }
+ },
+ "held_out": [
+  {
+   "key": "rxnorm:hydrochlorothiazide",
+   "inn": "hydrochlorothiazide",
+   "rxcui": "5487",
+   "brands": [
+    "Inzirqo"
+   ]
+  },
+  {
+   "key": "rxnorm:empagliflozin",
+   "inn": "empagliflozin",
+   "rxcui": "1545653",
+   "brands": [
+    "Jardiance"
+   ]
+  },
+  {
+   "key": "rxnorm:omeprazole",
+   "inn": "omeprazole",
+   "rxcui": "7646",
+   "brands": [
+    "Prilosec"
+   ]
+  },
+  {
+   "key": "rxnorm:rivaroxaban",
+   "inn": "rivaroxaban",
+   "rxcui": "1114195",
+   "brands": [
+    "Xarelto"
+   ]
+  },
+  {
+   "key": "rxnorm:diclofenac",
+   "inn": "diclofenac",
+   "rxcui": "3355",
+   "brands": [
+    "Zorvolex",
+    "Cataflam",
+    "Zipsor"
+   ]
+  },
+  {
+   "key": "rxnorm:naproxen",
+   "inn": "naproxen",
+   "rxcui": "7258",
+   "brands": [
+    "Naprosyn",
+    "Naprelan",
+    "Aleve"
+   ]
+  },
+  {
+   "key": "rxnorm:montelukast",
+   "inn": "montelukast",
+   "rxcui": "88249",
+   "brands": [
+    "Singulair"
+   ]
+  },
+  {
+   "key": "rxnorm:prednisolone",
+   "inn": "prednisolone",
+   "rxcui": "8638",
+   "brands": [
+    "Orapred",
+    "Pediapred",
+    "Millipred"
+   ]
+  },
+  {
+   "key": "rxnorm:allopurinol",
+   "inn": "allopurinol",
+   "rxcui": "519",
+   "brands": [
+    "Zyloprim"
+   ]
+  },
+  {
+   "key": "rxnorm:famotidine",
+   "inn": "famotidine",
+   "rxcui": "4278",
+   "brands": [
+    "Pepcid"
+   ]
+  }
+ ],
+ "templates": {
+  "train": [
+   "en-intake-1",
+   "en-intake-2",
+   "en-intake-3",
+   "en-intake-4",
+   "en-intake-5",
+   "en-intake-6",
+   "en-intake-7",
+   "en-intake-8",
+   "en-strength-1",
+   "en-strength-2",
+   "en-units-1",
+   "en-prn-1",
+   "en-prn-2",
+   "en-prn-3",
+   "en-plain-1",
+   "en-plain-2",
+   "en-plain-3",
+   "en-stopped-1",
+   "en-stopped-2",
+   "en-stopped-3",
+   "en-stopped-4",
+   "en-unsure-1",
+   "en-range_units-1",
+   "en-range_units-2",
+   "en-range_freq-1",
+   "en-brand_inn-1",
+   "en-intake-13",
+   "en-intake-14",
+   "en-intake-15",
+   "en-intake-16",
+   "en-strength-4",
+   "en-units-3",
+   "en-prn-5",
+   "en-prn-6",
+   "en-plain-6",
+   "en-plain-7",
+   "en-stopped-7",
+   "en-stopped-8",
+   "en-unsure-3",
+   "en-range_units-4",
+   "en-range_freq-3",
+   "en-brand_inn-3",
+   "ar-intake-1",
+   "ar-intake-2",
+   "ar-intake-3",
+   "ar-intake-4",
+   "ar-intake-5",
+   "ar-intake-6",
+   "ar-intake-7",
+   "ar-intake-8",
+   "ar-strength-1",
+   "ar-strength-2",
+   "ar-units-1",
+   "ar-prn-1",
+   "ar-prn-2",
+   "ar-prn-3",
+   "ar-plain-1",
+   "ar-plain-2",
+   "ar-plain-3",
+   "ar-stopped-1",
+   "ar-stopped-2",
+   "ar-stopped-3",
+   "ar-stopped-4",
+   "ar-unsure-1",
+   "ar-range_units-1",
+   "ar-range_units-2",
+   "ar-range_freq-1",
+   "ar-brand_inn-1"
+  ],
+  "test_only": [
+   "en-intake-9",
+   "en-intake-10",
+   "en-intake-11",
+   "en-intake-12",
+   "en-strength-3",
+   "en-units-2",
+   "en-prn-4",
+   "en-plain-4",
+   "en-plain-5",
+   "en-stopped-5",
+   "en-stopped-6",
+   "en-unsure-2",
+   "en-range_units-3",
+   "en-range_freq-2",
+   "en-brand_inn-2",
+   "en-intake-17",
+   "en-intake-18",
+   "en-strength-5",
+   "en-units-4",
+   "en-prn-7",
+   "en-plain-8",
+   "en-stopped-9",
+   "en-unsure-4",
+   "en-range_units-5",
+   "en-range_freq-4",
+   "en-brand_inn-4",
+   "ar-intake-9",
+   "ar-intake-10",
+   "ar-intake-11",
+   "ar-intake-12",
+   "ar-strength-3",
+   "ar-units-2",
+   "ar-prn-4",
+   "ar-plain-4",
+   "ar-plain-5",
+   "ar-stopped-5",
+   "ar-stopped-6",
+   "ar-unsure-2",
+   "ar-range_units-3",
+   "ar-range_freq-2",
+   "ar-brand_inn-2"
+  ]
+ },
+ "rxnorm_brands_kept": {
+  "amlodipine": [
+   "Norvasc",
+   "Sdamlo",
+   "Katerzia",
+   "Norvas",
+   "Zabart"
+  ],
+  "bisoprolol": [
+   "Emconcor"
+  ],
+  "metoprolol": [
+   "Lopressor",
+   "Toprol",
+   "Kapspargo",
+   "Lopresor"
+  ],
+  "atenolol": [
+   "Tenormin",
+   "Blokium"
+  ],
+  "carvedilol": [
+   "Coreg",
+   "Coropres",
+   "Normotride"
+  ],
+  "lisinopril": [
+   "Zestril",
+   "Prinivil",
+   "Qbrelis",
+   "Doneka"
+  ],
+  "enalapril": [
+   "Vasotec",
+   "Epaned",
+   "Acetensil",
+   "Baripril",
+   "Dabonal",
+   "Herten"
+  ],
+  "ramipril": [
+   "Altace",
+   "Vostally",
+   "Acovil"
+  ],
+  "losartan": [
+   "Cozaar",
+   "Arbli"
+  ],
+  "valsartan": [
+   "Diovan",
+   "Kalpress",
+   "Presar"
+  ],
+  "candesartan": [
+   "Atacand",
+   "Blopress",
+   "Karbis"
+  ],
+  "hydrochlorothiazide": [
+   "Inzirqo"
+  ],
+  "furosemide": [
+   "Lasix"
+  ],
+  "spironolactone": [
+   "Aldactone",
+   "Carospir"
+  ],
+  "indapamide": [
+   "Tertensif"
+  ],
+  "atorvastatin": [
+   "Lipitor",
+   "Atorvaliq",
+   "Cardyl",
+   "Prevencor",
+   "Zarator"
+  ],
+  "rosuvastatin": [
+   "Crestor",
+   "Ezallor",
+   "Arrox",
+   "Provisacor"
+  ],
+  "simvastatin": [
+   "Zocor",
+   "Flolipid",
+   "Alcosin",
+   "Pantok"
+  ],
+  "ezetimibe": [
+   "Zetia",
+   "Absorcol",
+   "Azibe",
+   "Ezetrol"
+  ],
+  "metformin": [
+   "Glucophage",
+   "Glumetza",
+   "Riomet",
+   "Dianben"
+  ],
+  "gliclazide": [
+   "Diamicron"
+  ],
+  "glimepiride": [
+   "Amaryl",
+   "Roname"
+  ],
+  "sitagliptin": [
+   "Januvia",
+   "Zituvio",
+   "Brynovin",
+   "Ristaben",
+   "Tesavel",
+   "Xelevia"
+  ],
+  "empagliflozin": [
+   "Jardiance"
+  ],
+  "dapagliflozin": [
+   "Farxiga",
+   "Edistride"
+  ],
+  "levothyroxine": [
+   "Tirosint",
+   "Synthroid",
+   "Eutirox"
+  ],
+  "omeprazole": [
+   "Prilosec"
+  ],
+  "pantoprazole": [
+   "Protonix",
+   "Anagastra",
+   "Citrel",
+   "Pantecta"
+  ],
+  "esomeprazole": [
+   "Nexium",
+   "Axiago",
+   "Emanera"
+  ],
+  "acetylsalicylic acid": [
+   "Ecotrin",
+   "Bufferin",
+   "Adiro",
+   "Bioplak"
+  ],
+  "clopidogrel": [
+   "Plavix",
+   "Maboclop"
+  ],
+  "warfarin": [
+   "Jantoven"
+  ],
+  "apixaban": [
+   "Eliquis"
+  ],
+  "rivaroxaban": [
+   "Xarelto"
+  ],
+  "paracetamol": [
+   "Tylenol",
+   "Panadol",
+   "Antidol",
+   "Apiretal",
+   "Calthek",
+   "Efferaldol"
+  ],
+  "ibuprofen": [
+   "Advil",
+   "Motrin",
+   "Ibu",
+   "Dalsydol",
+   "Ibudol",
+   "Neobrufen",
+   "Nurofen"
+  ],
+  "diclofenac": [
+   "Zorvolex",
+   "Cataflam",
+   "Zipsor"
+  ],
+  "naproxen": [
+   "Naprosyn",
+   "Naprelan",
+   "Aleve"
+  ],
+  "amoxicillin": [
+   "Moxatag",
+   "Amitron"
+  ],
+  "azithromycin": [
+   "Zithromax",
+   "Aratro",
+   "Zitromax"
+  ],
+  "ciprofloxacin": [
+   "Cipro",
+   "Proquin",
+   "Doriman"
+  ],
+  "metronidazole": [
+   "Flagyl",
+   "Likmez"
+  ],
+  "doxycycline": [
+   "Doryx",
+   "Acticlate",
+   "Mondoxyne",
+   "Doxiclat",
+   "Oracea"
+  ],
+  "cetirizine": [
+   "Zyrtec",
+   "Alercina",
+   "Alerlisin"
+  ],
+  "loratadine": [
+   "Claritin",
+   "Alavert",
+   "Clarityne"
+  ],
+  "montelukast": [
+   "Singulair"
+  ],
+  "prednisolone": [
+   "Orapred",
+   "Pediapred",
+   "Millipred"
+  ],
+  "allopurinol": [
+   "Zyloprim"
+  ],
+  "colchicine": [
+   "Colcrys",
+   "Mitigare",
+   "Gloperba"
+  ],
+  "tamsulosin": [
+   "Flomax",
+   "Inreq",
+   "Omnic",
+   "Sebrane",
+   "Zuantrip"
+  ],
+  "sertraline": [
+   "Zoloft",
+   "Altisben",
+   "Aremis",
+   "Semonic"
+  ],
+  "escitalopram": [
+   "Lexapro",
+   "Esertia",
+   "Heipram"
+  ],
+  "fluoxetine": [
+   "Prozac",
+   "Luramon"
+  ],
+  "amitriptyline": [
+   "Elavil",
+   "Deprelio"
+  ],
+  "gabapentin": [
+   "Neurontin",
+   "Gralise",
+   "Relgaabi"
+  ],
+  "pregabalin": [
+   "Lyrica",
+   "Aciryl",
+   "Gatica"
+  ],
+  "tramadol": [
+   "ConZip",
+   "Ultram",
+   "Qdolo",
+   "Adolonta",
+   "Captor",
+   "Zytram"
+  ],
+  "alendronic acid": [
+   "Fosamax",
+   "Binosto",
+   "Alendrofarm"
+  ],
+  "terbinafine": [],
+  "famotidine": [
+   "Pepcid"
+  ]
+ },
+ "rxnorm_brands_dropped": [
+  "Levo-T",
+  "Bayer Aspirin",
+  "Mapap",
+  "Wal-Zyr",
+  "Aller-Tec",
+  "Wal-itin",
+  "Zantac Reformulated Aug 2022"
+ ],
+ "vocab": "v2",
+ "spanish_brands": {
+  "trained": {
+   "acetylsalicylic acid": [
+    "Adiro",
+    "Bioplak"
+   ],
+   "alendronic acid": [
+    "Alendrofarm"
+   ],
+   "amitriptyline": [
+    "Deprelio"
+   ],
+   "amlodipine": [
+    "Norvas",
+    "Zabart"
+   ],
+   "amoxicillin": [
+    "Amitron"
+   ],
+   "atenolol": [
+    "Blokium"
+   ],
+   "atorvastatin": [
+    "Cardyl",
+    "Prevencor",
+    "Zarator"
+   ],
+   "azithromycin": [
+    "Aratro",
+    "Zitromax"
+   ],
+   "bisoprolol": [
+    "Emconcor"
+   ],
+   "candesartan": [
+    "Blopress",
+    "Karbis"
+   ],
+   "carvedilol": [
+    "Coropres",
+    "Normotride"
+   ],
+   "cetirizine": [
+    "Alercina",
+    "Alerlisin"
+   ],
+   "ciprofloxacin": [
+    "Doriman"
+   ],
+   "clopidogrel": [
+    "Maboclop"
+   ],
+   "dapagliflozin": [
+    "Edistride"
+   ],
+   "doxycycline": [
+    "Doxiclat",
+    "Oracea"
+   ],
+   "enalapril": [
+    "Acetensil",
+    "Baripril",
+    "Dabonal",
+    "Herten"
+   ],
+   "escitalopram": [
+    "Esertia",
+    "Heipram"
+   ],
+   "esomeprazole": [
+    "Axiago",
+    "Emanera"
+   ],
+   "ezetimibe": [
+    "Absorcol",
+    "Azibe",
+    "Ezetrol"
+   ],
+   "fluoxetine": [
+    "Luramon"
+   ],
+   "gliclazide": [
+    "Diamicron"
+   ],
+   "glimepiride": [
+    "Amaryl",
+    "Roname"
+   ],
+   "ibuprofen": [
+    "Dalsydol",
+    "Ibudol",
+    "Neobrufen",
+    "Nurofen"
+   ],
+   "indapamide": [
+    "Tertensif"
+   ],
+   "levothyroxine": [
+    "Eutirox"
+   ],
+   "lisinopril": [
+    "Doneka"
+   ],
+   "loratadine": [
+    "Clarityne"
+   ],
+   "metformin": [
+    "Dianben"
+   ],
+   "metoprolol": [
+    "Lopresor"
+   ],
+   "pantoprazole": [
+    "Anagastra",
+    "Citrel",
+    "Pantecta"
+   ],
+   "paracetamol": [
+    "Antidol",
+    "Apiretal",
+    "Calthek",
+    "Efferaldol"
+   ],
+   "pregabalin": [
+    "Aciryl",
+    "Gatica"
+   ],
+   "ramipril": [
+    "Acovil"
+   ],
+   "rosuvastatin": [
+    "Arrox",
+    "Provisacor"
+   ],
+   "sertraline": [
+    "Altisben",
+    "Aremis",
+    "Semonic"
+   ],
+   "simvastatin": [
+    "Alcosin",
+    "Pantok"
+   ],
+   "sitagliptin": [
+    "Ristaben",
+    "Tesavel",
+    "Xelevia"
+   ],
+   "tamsulosin": [
+    "Inreq",
+    "Omnic",
+    "Sebrane",
+    "Zuantrip"
+   ],
+   "tramadol": [
+    "Adolonta",
+    "Captor",
+    "Zytram"
+   ],
+   "valsartan": [
+    "Kalpress",
+    "Presar"
+   ]
+  },
+  "held_out": {
+   "amitriptyline": [
+    "Tryptizol"
+   ],
+   "amlodipine": [
+    "Astudal"
+   ],
+   "amoxicillin": [
+    "Clamoxyl"
+   ],
+   "atorvastatin": [
+    "Thervan"
+   ],
+   "candesartan": [
+    "Parapres"
+   ],
+   "clopidogrel": [
+    "Iscover",
+    "Vatoud"
+   ],
+   "dapagliflozin": [
+    "Forxiga"
+   ],
+   "doxycycline": [
+    "Dosil",
+    "Proderma"
+   ],
+   "escitalopram": [
+    "Cipralex"
+   ],
+   "furosemide": [
+    "Seguril"
+   ],
+   "metformin": [
+    "Brotmin"
+   ],
+   "pantoprazole": [
+    "Nolpaza"
+   ],
+   "pregabalin": [
+    "Premax"
+   ],
+   "rosuvastatin": [
+    "Alzil"
+   ],
+   "sertraline": [
+    "Besitran"
+   ],
+   "tramadol": [
+    "Tioner"
+   ],
+   "warfarin": [
+    "Aldocumar"
+   ]
+  }
+ },
+ "drugs_v2_read": [
+  "2026-10-29"
+ ]
+}

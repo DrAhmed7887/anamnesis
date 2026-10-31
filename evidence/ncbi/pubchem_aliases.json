@@ -1,0 +1,593 @@
+[
+ {
+  "alias": "bisoprolol fumarate",
+  "moiety": "bisoprolol",
+  "salt": "fumarate",
+  "moiety_cid": [
+   2405
+  ],
+  "alias_parent_cids": [
+   2405
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "bisoprolol hemifumarate",
+  "moiety": "bisoprolol",
+  "salt": "hemifumarate",
+  "moiety_cid": [
+   2405
+  ],
+  "alias_parent_cids": [
+   2405
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "metoprolol succinate",
+  "moiety": "metoprolol",
+  "salt": "succinate",
+  "moiety_cid": [
+   4171
+  ],
+  "alias_parent_cids": [
+   4171
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "metoprolol tartrate",
+  "moiety": "metoprolol",
+  "salt": "tartrate",
+  "moiety_cid": [
+   4171
+  ],
+  "alias_parent_cids": [
+   4171,
+   444305
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amlodipine besilate",
+  "moiety": "amlodipine",
+  "salt": "besilate",
+  "moiety_cid": [
+   2162
+  ],
+  "alias_parent_cids": [
+   2162
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amlodipine besylate",
+  "moiety": "amlodipine",
+  "salt": "besilate",
+  "moiety_cid": [
+   2162
+  ],
+  "alias_parent_cids": [
+   2162
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amlodipine mesilate",
+  "moiety": "amlodipine",
+  "salt": "mesilate",
+  "moiety_cid": [
+   2162
+  ],
+  "alias_parent_cids": [
+   2162
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amlodipine maleate",
+  "moiety": "amlodipine",
+  "salt": "maleate",
+  "moiety_cid": [
+   2162
+  ],
+  "alias_parent_cids": [
+   2162
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "metformin hydrochloride",
+  "moiety": "metformin",
+  "salt": "hydrochloride",
+  "moiety_cid": [
+   4091
+  ],
+  "alias_parent_cids": [
+   4091
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "metformin hcl",
+  "moiety": "metformin",
+  "salt": "hydrochloride",
+  "moiety_cid": [
+   4091
+  ],
+  "alias_parent_cids": [
+   4091
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "atorvastatin calcium",
+  "moiety": "atorvastatin",
+  "salt": "calcium",
+  "moiety_cid": [
+   60823
+  ],
+  "alias_parent_cids": [
+   60823
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "atorvastatin calcium trihydrate",
+  "moiety": "atorvastatin",
+  "salt": "calcium trihydrate",
+  "moiety_cid": [
+   60823
+  ],
+  "alias_parent_cids": [
+   60823
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amoxicillin trihydrate",
+  "moiety": "amoxicillin",
+  "salt": "trihydrate",
+  "moiety_cid": [
+   33613
+  ],
+  "alias_parent_cids": [
+   33613
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amoxicillin sodium",
+  "moiety": "amoxicillin",
+  "salt": "sodium",
+  "moiety_cid": [
+   33613
+  ],
+  "alias_parent_cids": [
+   33613
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "potassium clavulanate",
+  "moiety": "clavulanic acid",
+  "salt": "potassium",
+  "moiety_cid": [
+   5280980
+  ],
+  "alias_parent_cids": [
+   5280980
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "clavulanate potassium",
+  "moiety": "clavulanic acid",
+  "salt": "potassium",
+  "moiety_cid": [
+   5280980
+  ],
+  "alias_parent_cids": [
+   5280980
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "acetaminophen",
+  "moiety": "paracetamol",
+  "salt": null,
+  "moiety_cid": [
+   1983
+  ],
+  "alias_parent_cids": [
+   1983
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amoxicilline",
+  "moiety": "amoxicillin",
+  "salt": null,
+  "moiety_cid": [
+   33613
+  ],
+  "alias_parent_cids": [
+   33613
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amoxicilina",
+  "moiety": "amoxicillin",
+  "salt": null,
+  "moiety_cid": [
+   33613
+  ],
+  "alias_parent_cids": [
+   33613
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amoxicillinum",
+  "moiety": "amoxicillin",
+  "salt": null,
+  "moiety_cid": [
+   33613
+  ],
+  "alias_parent_cids": [
+   33613
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "acide clavulanique",
+  "moiety": "clavulanic acid",
+  "salt": null,
+  "moiety_cid": [
+   5280980
+  ],
+  "alias_parent_cids": [
+   5280980
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "ácido clavulánico",
+  "moiety": "clavulanic acid",
+  "salt": null,
+  "moiety_cid": [
+   5280980
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "clavulansäure",
+  "moiety": "clavulanic acid",
+  "salt": null,
+  "moiety_cid": [
+   5280980
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "acidum clavulanicum",
+  "moiety": "clavulanic acid",
+  "salt": null,
+  "moiety_cid": [
+   5280980
+  ],
+  "alias_parent_cids": [
+   5280980
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "paracétamol",
+  "moiety": "paracetamol",
+  "salt": null,
+  "moiety_cid": [
+   1983
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "paracetamolum",
+  "moiety": "paracetamol",
+  "salt": null,
+  "moiety_cid": [
+   1983
+  ],
+  "alias_parent_cids": [
+   1983
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "métoprolol",
+  "moiety": "metoprolol",
+  "salt": null,
+  "moiety_cid": [
+   4171
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "metoprololum",
+  "moiety": "metoprolol",
+  "salt": null,
+  "moiety_cid": [
+   4171
+  ],
+  "alias_parent_cids": [
+   4171
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "metoprololi succinas",
+  "moiety": "metoprolol",
+  "salt": "succinate",
+  "moiety_cid": [
+   4171
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "metoprololsuccinat",
+  "moiety": "metoprolol",
+  "salt": "succinate",
+  "moiety_cid": [
+   4171
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "metoprololi tartras",
+  "moiety": "metoprolol",
+  "salt": "tartrate",
+  "moiety_cid": [
+   4171
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "metoprololtartrat",
+  "moiety": "metoprolol",
+  "salt": "tartrate",
+  "moiety_cid": [
+   4171
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "bisoprololum",
+  "moiety": "bisoprolol",
+  "salt": null,
+  "moiety_cid": [
+   2405
+  ],
+  "alias_parent_cids": [
+   2405
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "bisoprololi fumaras",
+  "moiety": "bisoprolol",
+  "salt": "fumarate",
+  "moiety_cid": [
+   2405
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "bisoprololfumarat",
+  "moiety": "bisoprolol",
+  "salt": "fumarate",
+  "moiety_cid": [
+   2405
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "amlodipino",
+  "moiety": "amlodipine",
+  "salt": null,
+  "moiety_cid": [
+   2162
+  ],
+  "alias_parent_cids": [
+   2162
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amlodipinum",
+  "moiety": "amlodipine",
+  "salt": null,
+  "moiety_cid": [
+   2162
+  ],
+  "alias_parent_cids": [
+   2162
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "amlodipini besilas",
+  "moiety": "amlodipine",
+  "salt": "besilate",
+  "moiety_cid": [
+   2162
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "amlodipinbesilat",
+  "moiety": "amlodipine",
+  "salt": "besilate",
+  "moiety_cid": [
+   2162
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "metformina",
+  "moiety": "metformin",
+  "salt": null,
+  "moiety_cid": [
+   4091
+  ],
+  "alias_parent_cids": [
+   4091
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "metformine",
+  "moiety": "metformin",
+  "salt": null,
+  "moiety_cid": [
+   4091
+  ],
+  "alias_parent_cids": [
+   4091
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "metforminum",
+  "moiety": "metformin",
+  "salt": null,
+  "moiety_cid": [
+   4091
+  ],
+  "alias_parent_cids": [
+   4091
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "metformini hydrochloridum",
+  "moiety": "metformin",
+  "salt": "hydrochloride",
+  "moiety_cid": [
+   4091
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "metforminhydrochlorid",
+  "moiety": "metformin",
+  "salt": "hydrochloride",
+  "moiety_cid": [
+   4091
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "atorvastatina",
+  "moiety": "atorvastatin",
+  "salt": null,
+  "moiety_cid": [
+   60823
+  ],
+  "alias_parent_cids": [
+   60823
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "atorvastatine",
+  "moiety": "atorvastatin",
+  "salt": null,
+  "moiety_cid": [
+   60823
+  ],
+  "alias_parent_cids": [
+   60823
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "atorvastatinum",
+  "moiety": "atorvastatin",
+  "salt": null,
+  "moiety_cid": [
+   60823
+  ],
+  "alias_parent_cids": [
+   60823
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "atorvastatinum calcicum",
+  "moiety": "atorvastatin",
+  "salt": "calcium",
+  "moiety_cid": [
+   60823
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "caféine",
+  "moiety": "caffeine",
+  "salt": null,
+  "moiety_cid": [
+   2519
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "cafeína",
+  "moiety": "caffeine",
+  "salt": null,
+  "moiety_cid": [
+   2519
+  ],
+  "alias_parent_cids": [],
+  "verdict": "not_in_pubchem"
+ },
+ {
+  "alias": "coffein",
+  "moiety": "caffeine",
+  "salt": null,
+  "moiety_cid": [
+   2519
+  ],
+  "alias_parent_cids": [
+   2519
+  ],
+  "verdict": "agrees"
+ },
+ {
+  "alias": "coffeinum",
+  "moiety": "caffeine",
+  "salt": null,
+  "moiety_cid": [
+   2519
+  ],
+  "alias_parent_cids": [
+   2519
+  ],
+  "verdict": "agrees"
+ }
+]

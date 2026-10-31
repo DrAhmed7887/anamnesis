@@ -1,0 +1,81 @@
+test_iid         #  8 other       GAINED | old: c1 intake: got null, want 40 mg | new: 
+test_iid         # 14 other       LOST   | old:  | new: c1 intake: got null, want 850 mg; c1 strength: got 850 mg, want null
+test_iid         # 23 other       GAINED | old: c2 intake: got null, want 300 mg | new: 
+test_iid         # 24 other       GAINED | old: c1 strength: got null, want 0.075 mg; c2 intake: got null, want 40 mg | new: 
+test_iid         # 32 other       GAINED | old: c2 intakes_per_day: got null, want 1 | new: 
+test_iid         # 34 other       LOST   | old:  | new: c1 intake: got null, want 100 mg; c2 intake: got null, want 2.5 mg
+test_iid         # 38 other       GAINED | old: c1 name_text: got بلوكزوك100مليجرام, want بلوكزوك; c1 intake: got null, want 100 mg | new: 
+test_iid         # 41 other       LOST   | old:  | new: c1 name_text: got proquinproquin, want proquin
+test_iid         # 47 other       LOST   | old:  | new: c1 name_text: got vasotecvasotec, want vasotec
+test_iid         # 50 other       LOST   | old:  | new: c1 intakes_per_day: got null, want 1; c3 intakes_per_day: got null, want 1
+test_iid         # 53 other       LOST   | old:  | new: c2 intake: got null, want 500 mg; c2 strength: got 500 mg, want null
+test_iid         # 57 other       LOST   | old:  | new: c3 as_needed: got False, want null
+test_iid         # 58 other       GAINED | old: c1 as_needed: got False, want null; c3 as_needed: got False, want null | new: 
+test_iid         # 66 other       GAINED | old: c1 name_text: got binostobinosto, want binosto | new: 
+test_iid         # 73 other       GAINED | old: c2 as_needed: got False, want null | new: 
+test_iid         # 86 other       GAINED | old: c2 as_needed: got False, want null | new: 
+test_iid         # 96 combination LOST   | old:  | new: c1 as_needed: got False, want null
+test_iid         # 98 other       GAINED | old: c2 status: got unknown, want active | new: 
+test_shift       #  6 other       GAINED | old: c2 intakes_per_day: got null, want 1 | new: 
+test_shift       #  9 other       GAINED | old: c1 strength: got null, want 12.5 mg | new: 
+test_shift       # 11 other       GAINED | old: c2 as_needed: got False, want null | new: 
+test_shift       # 19 other       LOST   | old:  | new: c2 as_needed: got False, want null
+test_shift       # 29 other       LOST   | old:  | new: c1 intakes_per_day: got null, want 1
+test_shift       # 30 other       GAINED | old: c1 intakes_per_day: got null, want 1 | new: 
+test_shift       # 31 other       GAINED | old: c1 status: got unknown, want active; c2 status: got unknown, want active | new: 
+test_shift       # 32 other       GAINED | old: c1 intakes_per_day: got null, want 1 | new: 
+test_shift       # 36 other       LOST   | old:  | new: c1 as_needed: got False, want null
+test_shift       # 39 other       LOST   | old:  | new: c1 status: got unknown, want active
+test_shift       # 40 other       LOST   | old:  | new: c1 as_needed: got False, want null; c2 as_needed: got False, want null
+test_shift       # 42 other       LOST   | old:  | new: c1 as_needed: got False, want null
+test_shift       # 43 other       LOST   | old:  | new: c1 intake: got null, want 75 mg
+test_shift       # 49 other       LOST   | old:  | new: c1 as_needed: got False, want null; c3 as_needed: got False, want null
+test_shift       # 53 other       LOST   | old:  | new: c1 as_needed: got False, want null
+test_shift       # 59 other       LOST   | old:  | new: c2 intakes_per_day: got null, want 1
+test_shift       # 76 other       GAINED | old: c2 as_needed: got False, want null | new: 
+test_shift       # 80 other       GAINED | old: c2 strength: got null, want 10 mg | new: 
+test_shift       #101 other       LOST   | old:  | new: c1 status: got unknown, want active
+test_shift       #107 other       LOST   | old:  | new: c1 strength: got 50 mg, want null
+test_codeswitch  #  2 other       GAINED | old: c2 status: got unknown, want active | new: 
+test_codeswitch  #  3 other       GAINED | old: c2 intakes_per_day: got null, want 1 | new: 
+test_codeswitch  #  6 other       LOST   | old:  | new: c1 as_needed: got False, want null
+test_codeswitch  #  9 other       LOST   | old:  | new: c1 as_needed: got False, want null; c3 as_needed: got False, want null
+test_codeswitch  # 11 other       GAINED | old: c1 as_needed: got False, want null; c3 as_needed: got False, want null | new: 
+test_codeswitch  # 16 other       LOST   | old:  | new: c2 as_needed: got False, want null
+test_codeswitch  # 21 other       GAINED | old: c2 intake: got null, want 1 g | new: 
+test_codeswitch  # 29 other       GAINED | old: c3 intakes_per_day: got null, want 1 | new: 
+test_codeswitch  # 35 other       GAINED | old: c2 intakes_per_day: got null, want 1 | new: 
+test_codeswitch  # 43 other       LOST   | old:  | new: c1 as_needed: got False, want null; c2 as_needed: got False, want null
+test_codeswitch  # 45 other       LOST   | old:  | new: c1 intakes_per_day: got null, want 1
+test_real        #  3 other       GAINED | old: c1 as_needed: got False, want null | new: 
+test_real        # 13 combination LOST   | old:  | new: c1 strength: got 125 mg + 875 mg, want null
+test_real        # 14 combination LOST   | old:  | new: c1 strength: got 125 mg + 875 mg, want null
+test_real        # 15 combination LOST   | old:  | new: c1 strength: got 125 mg + 875 mg, want null
+test_real        # 20 other       LOST   | old:  | new: c1 intake: got null, want 500 mg
+test_real        # 21 other       GAINED | old: c1 intakes_per_day: got null, want 1 | new: 
+test_spain       #  3 other       LOST   | old:  | new: c1 as_needed: got False, want null
+test_spain       #  7 other       GAINED | old: c1 as_needed: got False, want null | new: 
+test_spain       #  8 other       LOST   | old:  | new: c1 as_needed: got False, want null
+test_spain       # 15 other       LOST   | old:  | new: c1 as_needed: got False, want null
+test_spain       # 22 other       LOST   | old:  | new: c2 as_needed: got False, want null
+test_spain       # 23 other       GAINED | old: c2 status: got unknown, want active | new: 
+test_spain       # 33 other       LOST   | old:  | new: c1 status: got unknown, want active
+test_spain       # 45 other       GAINED | old: c1 intake: got 10 mg, want null; c1 as_needed: got False, want null | new: 
+test_spain       # 46 other       LOST   | old:  | new: c3 intakes_per_day: got null, want 1
+test_spain       # 49 other       LOST   | old:  | new: c1 as_needed: got False, want null
+test_spain       # 53 other       LOST   | old:  | new: c1 as_needed: got False, want null
+test_spain       # 54 other       GAINED | old: c1 intake: got null, want 300 mg | new: 
+test_spain       # 58 other       GAINED | old: c2 strength: got null, want 5 mg | new: 
+
+('test_codeswitch', 'other', 'gained') 6
+('test_codeswitch', 'other', 'lost') 5
+('test_iid', 'combination', 'lost') 1
+('test_iid', 'other', 'gained') 10
+('test_iid', 'other', 'lost') 7
+('test_real', 'combination', 'lost') 3
+('test_real', 'other', 'gained') 2
+('test_real', 'other', 'lost') 1
+('test_shift', 'other', 'gained') 8
+('test_shift', 'other', 'lost') 12
+('test_spain', 'other', 'gained') 5
+('test_spain', 'other', 'lost') 8

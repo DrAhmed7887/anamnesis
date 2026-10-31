@@ -16,6 +16,13 @@ def _error_outcome(exc: Exception) -> str:
     return f"error: {type(exc).__name__}"
 
 
+def _attempt_fields(attempt: ProviderTrace | None) -> dict[str, Any]:
+    if attempt is None:
+        return {}
+    return {"model_id": attempt.model_id, "input_tokens": attempt.input_tokens,
+            "output_tokens": attempt.output_tokens, "latency_ms": attempt.latency_ms}
+
+
 class IntakeSession:
     """Counts provider calls against a budget and records one step per action."""
 
@@ -26,9 +33,12 @@ class IntakeSession:
         self.exhausted = False
         self.steps: list[AgentStep] = []
 
-    def note(self, action: AgentAction, target: str, outcome: str, call_ids: list[str] | None = None) -> None:
+    def note(self, action: AgentAction, target: str, outcome: str, call_ids: list[str] | None = None,
+             model_id: str | None = None, input_tokens: int = 0, output_tokens: int = 0,
+             latency_ms: int = 0, cost_usd: Decimal = Decimal(0)) -> None:
         self.steps.append(AgentStep(n=len(self.steps), action=action, target=target, outcome=outcome,
-                                    call_ids=call_ids or []))
+                                    call_ids=call_ids or [], model_id=model_id, input_tokens=input_tokens,
+                                    output_tokens=output_tokens, latency_ms=latency_ms, cost_usd=cost_usd))
 
     def call(self, action: AgentAction, target: str, fn: Callable[[], tuple[Any, ProviderTrace | None]],
              describe: Callable[[Any], str]) -> Any | None:
@@ -45,18 +55,28 @@ class IntakeSession:
         except SpendCapExceeded as exc:  # a money cap ends the session, like the call budget
             self.exhausted = True
             self.spend_usd += exc.charged_usd  # attempts charged before the cap refused the next one
-            self.note(AgentAction.BUDGET_EXHAUSTED, target, _error_outcome(exc), exc.charged_call_ids)
+            attempt = getattr(exc, "attempt_trace", None)
+            self.note(AgentAction.BUDGET_EXHAUSTED, target, _error_outcome(exc), exc.charged_call_ids,
+                      **_attempt_fields(attempt), cost_usd=exc.charged_usd)
             return None
         except ProviderError as exc:  # charged attempts of a failed call still count as spend
             self.spend_usd += exc.charged_usd
-            self.note(action, target, _error_outcome(exc), exc.charged_call_ids)
+            self.note(action, target, _error_outcome(exc), exc.charged_call_ids,
+                      **_attempt_fields(exc.attempt_trace), cost_usd=exc.charged_usd)
             return None
         except ValueError as exc:  # a non-provider error may still follow charged attempts
-            self.spend_usd += getattr(exc, "charged_usd", Decimal(0))
-            self.note(action, target, _error_outcome(exc), getattr(exc, "charged_call_ids", []))
+            charged = getattr(exc, "charged_usd", Decimal(0))
+            self.spend_usd += charged
+            self.note(action, target, _error_outcome(exc), getattr(exc, "charged_call_ids", []),
+                      **_attempt_fields(getattr(exc, "attempt_trace", None)), cost_usd=charged)
             return None
         ids = self._charge(trace)
-        self.note(action, target, describe(value), ids)
+        if trace is None:
+            self.note(action, target, describe(value), ids)
+        else:
+            self.note(action, target, describe(value), ids, model_id=trace.model_id,
+                      input_tokens=trace.input_tokens, output_tokens=trace.output_tokens,
+                      latency_ms=trace.latency_ms, cost_usd=trace.cost_usd + trace.prior_cost_usd)
         return value
 
     def _charge(self, trace: ProviderTrace | None) -> list[str]:

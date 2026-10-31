@@ -1,0 +1,75 @@
+{
+ "run": "smoke1",
+ "model": "meta-models/Muse-Glimmer-30B",
+ "revision": "cec94fcfd6512f2cfe708138c32533b346ea4f69",
+ "lora": {
+  "r": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "bias": "none",
+  "target_modules": ".*language_model\\.layers\\.\\d+\\.(self_attn\\.(q|k|v|o)_proj|mlp\\.(gate|up|down)_proj)"
+ },
+ "train": {
+  "epochs": 2,
+  "lr": 0.0001,
+  "warmup_steps": 8,
+  "micro_batch": 2,
+  "grad_accum": 8,
+  "max_grad_norm": 1.0,
+  "seed": 20261029
+ },
+ "examples": 32,
+ "val_examples": 8,
+ "steps": 2,
+ "tokens_seen": 12989,
+ "load_s": 38.6,
+ "train_s": 20.7,
+ "peak_gib": 60.8,
+ "trainable": 95846400,
+ "adapted_layers": 364,
+ "adapter_files": [
+  "README.md",
+  "adapter_config.json",
+  "adapter_model.safetensors"
+ ],
+ "versions": {
+  "torch": "2.15.0+cu132",
+  "transformers": "5.21.0",
+  "peft": "0.21.2"
+ },
+ "check": {
+  "prompt_end": " taking valsartan<|eot|><|start|>assistant",
+  "target": " to=user<|message|>{\"claims\": [{\"name_text\": \"valsartan\", \"inn\": \"valsartan\", \"strength\": null, \"intake_amount\": null, \"regimen\": null, \"status\": \"discontinued\", \"turn_ids\": [\"turn-0\"]}]}<|eot|>",
+  "special_ids": {
+   "<|eot|>": 200008,
+   "<|eom|>": 200007,
+   "<|start|>": 200022,
+   "<|message|>": 200023,
+   "<|end_of_text|>": 200001
+  },
+  "pad_id": 200018
+ },
+ "val_losses": [
+  {
+   "epoch": 1,
+   "after_step": 2,
+   "val_loss": 0.5415
+  }
+ ],
+ "history": [
+  {
+   "step": 1,
+   "epoch": 1,
+   "loss": 0.6834,
+   "lr": 1.25e-05,
+   "grad_norm": 2.7265
+  },
+  {
+   "step": 2,
+   "epoch": 1,
+   "loss": 0.6579,
+   "lr": 2.5e-05,
+   "grad_norm": 2.5743
+  }
+ ]
+}

@@ -1,0 +1,7069 @@
+{
+  "meta": {
+    "script": "scripts/rxnorm_drugs.py",
+    "api": "https://rxnav.nlm.nih.gov/REST",
+    "rxnorm_release": "05-Oct-2026",
+    "api_version": "3.1.356",
+    "retrieved": "2026-10-28 to 2026-10-29",
+    "oral_dose_forms_in_rxnorm": [
+      "Buccal Film",
+      "Buccal Tablet",
+      "Chewable Extended Release Oral Tablet",
+      "Chewable Tablet",
+      "Chewing Gum",
+      "Delayed Release Oral Capsule",
+      "Delayed Release Oral Granules",
+      "Delayed Release Oral Tablet",
+      "Disintegrating Oral Tablet",
+      "Effervescent Oral Tablet",
+      "Extended Release Oral Capsule",
+      "Extended Release Oral Tablet",
+      "Extended Release Suspension",
+      "Granules for Oral Solution",
+      "Granules for Oral Suspension",
+      "Oral Capsule",
+      "Oral Cream",
+      "Oral Film",
+      "Oral Flakes",
+      "Oral Foam",
+      "Oral Gel",
+      "Oral Granules",
+      "Oral Lozenge",
+      "Oral Ointment",
+      "Oral Paste",
+      "Oral Pellet",
+      "Oral Powder",
+      "Oral Solution",
+      "Oral Spray",
+      "Oral Suspension",
+      "Oral Tablet",
+      "Oral Wafer",
+      "Powder for Oral Solution",
+      "Powder for Oral Suspension",
+      "Sublingual Film",
+      "Sublingual Powder",
+      "Sublingual Tablet",
+      "Sustained Release Buccal Tablet",
+      "Tablet for Oral Suspension"
+    ],
+    "marketed_rule": "attribute HUMAN_DRUG present and PRESCRIBABLE = Y",
+    "limits": {
+      "brands": 3,
+      "strengths": 6
+    },
+    "inn_us_name_table": {
+      "acetylsalicylic acid": "aspirin",
+      "alendronic acid": "alendronate",
+      "paracetamol": "acetaminophen"
+    },
+    "inn_us_name_used": {},
+    "counts": {
+      "inns": 60,
+      "mapped": 60,
+      "unmapped": 0,
+      "with_brand": 55,
+      "brands": 102,
+      "with_oral_strength": 59,
+      "strengths": 270,
+      "capped": 17,
+      "dose_forms": 17,
+      "scd": {
+        "total": 1633,
+        "oral": 463,
+        "combination": 899,
+        "non_oral": 118,
+        "other_unit": 4,
+        "unparsed": 0,
+        "not_marketed": 149,
+        "strength_mismatch": 0
+      }
+    }
+  },
+  "drugs": [
+    {
+      "inn": "amlodipine",
+      "status": "mapped",
+      "rxcui": "17767",
+      "tty": "IN",
+      "rxnorm_name": "amlodipine",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "58927",
+          "name": "Norvasc"
+        },
+        {
+          "rxcui": "2726059",
+          "name": "Sdamlo"
+        },
+        {
+          "rxcui": "2184121",
+          "name": "Katerzia"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet",
+            "Powder for Oral Solution"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "308136",
+              "name": "amlodipine 2.5 MG Oral Tablet"
+            },
+            {
+              "rxcui": "2726058",
+              "name": "amlodipine 2.5 MG Powder for Oral Solution"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet",
+            "Powder for Oral Solution"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "197361",
+              "name": "amlodipine 5 MG Oral Tablet"
+            },
+            {
+              "rxcui": "2726065",
+              "name": "amlodipine 5 MG Powder for Oral Solution"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet",
+            "Powder for Oral Solution"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "308135",
+              "name": "amlodipine 10 MG Oral Tablet"
+            },
+            {
+              "rxcui": "2726068",
+              "name": "amlodipine 10 MG Powder for Oral Solution"
+            }
+          ]
+        },
+        {
+          "strength": "1 MG/ML",
+          "value": "1",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution",
+            "Oral Suspension"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "2599173",
+              "name": "amlodipine 1 MG/ML Oral Solution"
+            },
+            {
+              "rxcui": "2184120",
+              "name": "amlodipine 1 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Oral Solution",
+        "Oral Suspension",
+        "Oral Tablet",
+        "Powder for Oral Solution"
+      ],
+      "scd_counts": {
+        "total": 65,
+        "oral": 8,
+        "combination": 53,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 4,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "bisoprolol",
+      "status": "mapped",
+      "rxcui": "19484",
+      "tty": "IN",
+      "rxnorm_name": "bisoprolol",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [],
+      "oral_strengths": [
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "865155",
+              "name": "bisoprolol fumarate 2.5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "854905",
+              "name": "bisoprolol fumarate 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "854901",
+              "name": "bisoprolol fumarate 10 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 3,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 9,
+        "oral": 3,
+        "combination": 3,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 3,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "metoprolol",
+      "status": "mapped",
+      "rxcui": "6918",
+      "tty": "IN",
+      "rxnorm_name": "metoprolol",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "203344",
+          "name": "Lopressor"
+        },
+        {
+          "rxcui": "865575",
+          "name": "Toprol"
+        },
+        {
+          "rxcui": "2047761",
+          "name": "Kapspargo"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "12.5 MG",
+          "value": "12.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2723025",
+              "name": "metoprolol tartrate 12.5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Capsule",
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "1999035",
+              "name": "24 HR metoprolol succinate 25 MG Extended Release Oral Capsule"
+            },
+            {
+              "rxcui": "866427",
+              "name": "24 HR metoprolol succinate 25 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "866924",
+              "name": "metoprolol tartrate 25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Capsule",
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 6,
+          "scd": [
+            {
+              "rxcui": "1999037",
+              "name": "24 HR metoprolol succinate 50 MG Extended Release Oral Capsule"
+            },
+            {
+              "rxcui": "866436",
+              "name": "24 HR metoprolol succinate 50 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "866514",
+              "name": "metoprolol tartrate 50 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Capsule",
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 6,
+          "scd": [
+            {
+              "rxcui": "1999031",
+              "name": "24 HR metoprolol succinate 100 MG Extended Release Oral Capsule"
+            },
+            {
+              "rxcui": "866412",
+              "name": "24 HR metoprolol succinate 100 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "866511",
+              "name": "metoprolol tartrate 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "200 MG",
+          "value": "200",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Capsule",
+            "Extended Release Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "1999033",
+              "name": "24 HR metoprolol succinate 200 MG Extended Release Oral Capsule"
+            },
+            {
+              "rxcui": "866419",
+              "name": "24 HR metoprolol succinate 200 MG Extended Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG/ML",
+          "value": "10",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2712147",
+              "name": "metoprolol tartrate 10 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 8,
+      "oral_dose_forms": [
+        "Extended Release Oral Capsule",
+        "Extended Release Oral Tablet",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 22,
+        "oral": 15,
+        "combination": 5,
+        "non_oral": 2,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "atenolol",
+      "status": "mapped",
+      "rxcui": "1202",
+      "tty": "IN",
+      "rxnorm_name": "atenolol",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "152413",
+          "name": "Tenormin"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "197380",
+              "name": "atenolol 25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "197381",
+              "name": "atenolol 50 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "197379",
+              "name": "atenolol 100 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 3,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 11,
+        "oral": 3,
+        "combination": 6,
+        "non_oral": 1,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 1,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "carvedilol",
+      "status": "mapped",
+      "rxcui": "20352",
+      "tty": "IN",
+      "rxnorm_name": "carvedilol",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "216221",
+          "name": "Coreg"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "3.125 MG",
+          "value": "3.125",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "686924",
+              "name": "carvedilol 3.125 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "6.25 MG",
+          "value": "6.25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "200031",
+              "name": "carvedilol 6.25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "860510",
+              "name": "24 HR carvedilol phosphate 10 MG Extended Release Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "12.5 MG",
+          "value": "12.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "200032",
+              "name": "carvedilol 12.5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "860516",
+              "name": "24 HR carvedilol phosphate 20 MG Extended Release Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "200033",
+              "name": "carvedilol 25 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 8,
+      "oral_dose_forms": [
+        "Extended Release Oral Capsule",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 8,
+        "oral": 8,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "lisinopril",
+      "status": "mapped",
+      "rxcui": "29046",
+      "tty": "IN",
+      "rxnorm_name": "lisinopril",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "196472",
+          "name": "Zestril"
+        },
+        {
+          "rxcui": "203644",
+          "name": "Prinivil"
+        },
+        {
+          "rxcui": "1806885",
+          "name": "Qbrelis"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "311353",
+              "name": "lisinopril 2.5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "311354",
+              "name": "lisinopril 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "314076",
+              "name": "lisinopril 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "314077",
+              "name": "lisinopril 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "30 MG",
+          "value": "30",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "205326",
+              "name": "lisinopril 30 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "197884",
+              "name": "lisinopril 40 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 7,
+      "oral_dose_forms": [
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 10,
+        "oral": 7,
+        "combination": 3,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "enalapril",
+      "status": "mapped",
+      "rxcui": "3827",
+      "tty": "IN",
+      "rxnorm_name": "enalapril",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "224921",
+          "name": "Vasotec"
+        },
+        {
+          "rxcui": "1435625",
+          "name": "Epaned"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "858804",
+              "name": "enalapril maleate 2.5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "858813",
+              "name": "enalapril maleate 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "858817",
+              "name": "enalapril maleate 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "858810",
+              "name": "enalapril maleate 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "1 MG/ML",
+          "value": "1",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1435624",
+              "name": "enalapril maleate 1 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 5,
+      "oral_dose_forms": [
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 9,
+        "oral": 5,
+        "combination": 3,
+        "non_oral": 1,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "ramipril",
+      "status": "mapped",
+      "rxcui": "35296",
+      "tty": "IN",
+      "rxnorm_name": "ramipril",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "262418",
+          "name": "Altace"
+        },
+        {
+          "rxcui": "2727325",
+          "name": "Vostally"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "1.25 MG",
+          "value": "1.25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "845488",
+              "name": "ramipril 1.25 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "198188",
+              "name": "ramipril 2.5 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "198189",
+              "name": "ramipril 5 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "261962",
+              "name": "ramipril 10 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "1 MG/ML",
+          "value": "1",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2727324",
+              "name": "ramipril 1 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 5,
+      "oral_dose_forms": [
+        "Oral Capsule",
+        "Oral Solution"
+      ],
+      "scd_counts": {
+        "total": 11,
+        "oral": 5,
+        "combination": 2,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 4,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "losartan",
+      "status": "mapped",
+      "rxcui": "52175",
+      "tty": "IN",
+      "rxnorm_name": "losartan",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "151558",
+          "name": "Cozaar"
+        },
+        {
+          "rxcui": "2709040",
+          "name": "Arbli"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "979485",
+              "name": "losartan potassium 25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "979492",
+              "name": "losartan potassium 50 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "979480",
+              "name": "losartan potassium 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG/ML",
+          "value": "10",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2709039",
+              "name": "losartan potassium 10 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 7,
+        "oral": 4,
+        "combination": 3,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "valsartan",
+      "status": "mapped",
+      "rxcui": "69749",
+      "tty": "IN",
+      "rxnorm_name": "valsartan",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "216652",
+          "name": "Diovan"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "349483",
+              "name": "valsartan 40 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "80 MG",
+          "value": "80",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "349199",
+              "name": "valsartan 80 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "160 MG",
+          "value": "160",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "349201",
+              "name": "valsartan 160 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "320 MG",
+          "value": "320",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "349200",
+              "name": "valsartan 320 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "4 MG/ML",
+          "value": "4",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "1996254",
+              "name": "valsartan 4 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 5,
+      "oral_dose_forms": [
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 30,
+        "oral": 5,
+        "combination": 22,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 3,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "candesartan",
+      "status": "mapped",
+      "rxcui": "214354",
+      "tty": "IN",
+      "rxnorm_name": "candesartan",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "215458",
+          "name": "Atacand"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "4 MG",
+          "value": "4",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "153822",
+              "name": "candesartan cilexetil 4 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "8 MG",
+          "value": "8",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "153823",
+              "name": "candesartan cilexetil 8 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "16 MG",
+          "value": "16",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "577776",
+              "name": "candesartan cilexetil 16 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "32 MG",
+          "value": "32",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "639537",
+              "name": "candesartan cilexetil 32 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 8,
+        "oral": 4,
+        "combination": 3,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 1,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "hydrochlorothiazide",
+      "status": "mapped",
+      "rxcui": "5487",
+      "tty": "IN",
+      "rxnorm_name": "hydrochlorothiazide",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "2704013",
+          "name": "Inzirqo"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "12.5 MG",
+          "value": "12.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "199903",
+              "name": "hydrochlorothiazide 12.5 MG Oral Capsule"
+            },
+            {
+              "rxcui": "429503",
+              "name": "hydrochlorothiazide 12.5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "310798",
+              "name": "hydrochlorothiazide 25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "197770",
+              "name": "hydrochlorothiazide 50 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "800 MG",
+          "value": "800",
+          "unit": "MG",
+          "dose_forms": [
+            "Powder for Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2704012",
+              "name": "hydrochlorothiazide 800 MG Powder for Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Oral Capsule",
+        "Oral Tablet",
+        "Powder for Oral Suspension"
+      ],
+      "scd_counts": {
+        "total": 103,
+        "oral": 5,
+        "combination": 98,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "furosemide",
+      "status": "mapped",
+      "rxcui": "4603",
+      "tty": "IN",
+      "rxnorm_name": "furosemide",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "202991",
+          "name": "Lasix"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "310429",
+              "name": "furosemide 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "313988",
+              "name": "furosemide 40 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "80 MG",
+          "value": "80",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "197732",
+              "name": "furosemide 80 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "8 MG/ML",
+          "value": "8",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "197731",
+              "name": "furosemide 8 MG/ML Oral Solution"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG/ML",
+          "value": "10",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "197730",
+              "name": "furosemide 10 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 5,
+      "oral_dose_forms": [
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 25,
+        "oral": 5,
+        "combination": 5,
+        "non_oral": 10,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 5,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "spironolactone",
+      "status": "mapped",
+      "rxcui": "9997",
+      "tty": "IN",
+      "rxnorm_name": "spironolactone",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "151317",
+          "name": "Aldactone"
+        },
+        {
+          "rxcui": "1943340",
+          "name": "Carospir"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "313096",
+              "name": "spironolactone 25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "198223",
+              "name": "spironolactone 50 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "198222",
+              "name": "spironolactone 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG/ML",
+          "value": "5",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "104232",
+              "name": "spironolactone 5 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 15,
+        "oral": 4,
+        "combination": 8,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 3,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "indapamide",
+      "status": "mapped",
+      "rxcui": "5764",
+      "tty": "IN",
+      "rxnorm_name": "indapamide",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [],
+      "oral_strengths": [
+        {
+          "strength": "1.25 MG",
+          "value": "1.25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "197815",
+              "name": "indapamide 1.25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "197816",
+              "name": "indapamide 2.5 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 2,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 7,
+        "oral": 2,
+        "combination": 4,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 1,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "atorvastatin",
+      "status": "mapped",
+      "rxcui": "83367",
+      "tty": "IN",
+      "rxnorm_name": "atorvastatin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "153165",
+          "name": "Lipitor"
+        },
+        {
+          "rxcui": "2631862",
+          "name": "Atorvaliq"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "617312",
+              "name": "atorvastatin 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "617310",
+              "name": "atorvastatin 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "617311",
+              "name": "atorvastatin 40 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "80 MG",
+          "value": "80",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "259255",
+              "name": "atorvastatin 80 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "4 MG/ML",
+          "value": "4",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2630760",
+              "name": "atorvastatin 4 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 5,
+      "oral_dose_forms": [
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 19,
+        "oral": 5,
+        "combination": 14,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "rosuvastatin",
+      "status": "mapped",
+      "rxcui": "301542",
+      "tty": "IN",
+      "rxnorm_name": "rosuvastatin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "320864",
+          "name": "Crestor"
+        },
+        {
+          "rxcui": "2167558",
+          "name": "Ezallor"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "2167573",
+              "name": "rosuvastatin 5 MG Oral Capsule"
+            },
+            {
+              "rxcui": "859424",
+              "name": "rosuvastatin calcium 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "2167557",
+              "name": "rosuvastatin 10 MG Oral Capsule"
+            },
+            {
+              "rxcui": "859747",
+              "name": "rosuvastatin calcium 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "2167565",
+              "name": "rosuvastatin 20 MG Oral Capsule"
+            },
+            {
+              "rxcui": "859751",
+              "name": "rosuvastatin calcium 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "2167569",
+              "name": "rosuvastatin 40 MG Oral Capsule"
+            },
+            {
+              "rxcui": "859419",
+              "name": "rosuvastatin calcium 40 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Oral Capsule",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 12,
+        "oral": 8,
+        "combination": 4,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "simvastatin",
+      "status": "mapped",
+      "rxcui": "36567",
+      "tty": "IN",
+      "rxnorm_name": "simvastatin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "196503",
+          "name": "Zocor"
+        },
+        {
+          "rxcui": "1944257",
+          "name": "Flolipid"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "312962",
+              "name": "simvastatin 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "314231",
+              "name": "simvastatin 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "312961",
+              "name": "simvastatin 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "198211",
+              "name": "simvastatin 40 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "4 MG/ML",
+          "value": "4",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1790679",
+              "name": "simvastatin 4 MG/ML Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "8 MG/ML",
+          "value": "8",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1944264",
+              "name": "simvastatin 8 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 7,
+      "oral_dose_forms": [
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 18,
+        "oral": 7,
+        "combination": 7,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 4,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "ezetimibe",
+      "status": "mapped",
+      "rxcui": "341248",
+      "tty": "IN",
+      "rxnorm_name": "ezetimibe",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "353099",
+          "name": "Zetia"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "349556",
+              "name": "ezetimibe 10 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 1,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 13,
+        "oral": 1,
+        "combination": 12,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "metformin",
+      "status": "mapped",
+      "rxcui": "6809",
+      "tty": "IN",
+      "rxnorm_name": "metformin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "151827",
+          "name": "Glucophage"
+        },
+        {
+          "rxcui": "645109",
+          "name": "Glumetza"
+        },
+        {
+          "rxcui": "405304",
+          "name": "Riomet"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "500 MG",
+          "value": "500",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 6,
+          "scd": [
+            {
+              "rxcui": "860975",
+              "name": "24 HR metformin hydrochloride 500 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "861007",
+              "name": "metformin hydrochloride 500 MG Oral Tablet"
+            },
+            {
+              "rxcui": "1807915",
+              "name": "Modified 24 HR metformin hydrochloride 500 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "1807917",
+              "name": "Osmotic 24 HR metformin hydrochloride 500 MG Extended Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "625 MG",
+          "value": "625",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "861021",
+              "name": "metformin hydrochloride 625 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "750 MG",
+          "value": "750",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "860981",
+              "name": "24 HR metformin hydrochloride 750 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "2703582",
+              "name": "metformin hydrochloride 750 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "850 MG",
+          "value": "850",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "861010",
+              "name": "metformin hydrochloride 850 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "1000 MG",
+          "value": "1000",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "861004",
+              "name": "metformin hydrochloride 1000 MG Oral Tablet"
+            },
+            {
+              "rxcui": "1807888",
+              "name": "Modified 24 HR metformin hydrochloride 1000 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "1807894",
+              "name": "Osmotic 24 HR metformin hydrochloride 1000 MG Extended Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG/ML",
+          "value": "100",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "861025",
+              "name": "metformin hydrochloride 100 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 6,
+      "oral_dose_forms": [
+        "Extended Release Oral Tablet",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 76,
+        "oral": 12,
+        "combination": 64,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "gliclazide",
+      "status": "mapped",
+      "rxcui": "4816",
+      "tty": "IN",
+      "rxnorm_name": "gliclazide",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [],
+      "oral_strengths": [],
+      "oral_strengths_total": 0,
+      "oral_dose_forms": [],
+      "scd_counts": {
+        "total": 2,
+        "oral": 0,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 2,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "glimepiride",
+      "status": "mapped",
+      "rxcui": "25789",
+      "tty": "IN",
+      "rxnorm_name": "glimepiride",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [],
+      "oral_strengths": [
+        {
+          "strength": "1 MG",
+          "value": "1",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "199245",
+              "name": "glimepiride 1 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "2 MG",
+          "value": "2",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "199246",
+              "name": "glimepiride 2 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "3 MG",
+          "value": "3",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "153842",
+              "name": "glimepiride 3 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "4 MG",
+          "value": "4",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "199247",
+              "name": "glimepiride 4 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "6 MG",
+          "value": "6",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "1361493",
+              "name": "glimepiride 6 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "8 MG",
+          "value": "8",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "1361495",
+              "name": "glimepiride 8 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 6,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 13,
+        "oral": 6,
+        "combination": 7,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "sitagliptin",
+      "status": "mapped",
+      "rxcui": "593411",
+      "tty": "IN",
+      "rxnorm_name": "sitagliptin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "638596",
+          "name": "Januvia"
+        },
+        {
+          "rxcui": "2670442",
+          "name": "Zituvio"
+        },
+        {
+          "rxcui": "2716486",
+          "name": "Brynovin"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "665038",
+              "name": "sitagliptin 25 MG Oral Tablet"
+            },
+            {
+              "rxcui": "2709612",
+              "name": "sitagliptin phosphate 25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "665042",
+              "name": "sitagliptin 50 MG Oral Tablet"
+            },
+            {
+              "rxcui": "2709608",
+              "name": "sitagliptin phosphate 50 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "665033",
+              "name": "sitagliptin 100 MG Oral Tablet"
+            },
+            {
+              "rxcui": "2709603",
+              "name": "sitagliptin phosphate 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "25 MG/ML",
+          "value": "25",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2716485",
+              "name": "sitagliptin 25 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 19,
+        "oral": 7,
+        "combination": 12,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "empagliflozin",
+      "status": "mapped",
+      "rxcui": "1545653",
+      "tty": "IN",
+      "rxnorm_name": "empagliflozin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "1545659",
+          "name": "Jardiance"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1545658",
+              "name": "empagliflozin 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1545666",
+              "name": "empagliflozin 25 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 2,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 16,
+        "oral": 2,
+        "combination": 14,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "dapagliflozin",
+      "status": "mapped",
+      "rxcui": "1488564",
+      "tty": "IN",
+      "rxnorm_name": "dapagliflozin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "1486972",
+          "name": "Farxiga"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1488574",
+              "name": "dapagliflozin 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1488569",
+              "name": "dapagliflozin 10 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 2,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 9,
+        "oral": 2,
+        "combination": 7,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "levothyroxine",
+      "status": "mapped",
+      "rxcui": "10582",
+      "tty": "IN",
+      "rxnorm_name": "levothyroxine",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "728656",
+          "name": "Tirosint"
+        },
+        {
+          "rxcui": "217996",
+          "name": "Levo-T"
+        },
+        {
+          "rxcui": "224920",
+          "name": "Synthroid"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "0.025 MG",
+          "value": "0.025",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 8,
+          "scd": [
+            {
+              "rxcui": "966406",
+              "name": "levothyroxine sodium 0.025 MG Oral Capsule"
+            },
+            {
+              "rxcui": "966220",
+              "name": "levothyroxine sodium 0.025 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "0.05 MG",
+          "value": "0.05",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 8,
+          "scd": [
+            {
+              "rxcui": "966407",
+              "name": "levothyroxine sodium 0.05 MG Oral Capsule"
+            },
+            {
+              "rxcui": "966221",
+              "name": "levothyroxine sodium 0.05 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "0.075 MG",
+          "value": "0.075",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 8,
+          "scd": [
+            {
+              "rxcui": "905458",
+              "name": "levothyroxine sodium 0.075 MG Oral Capsule"
+            },
+            {
+              "rxcui": "966222",
+              "name": "levothyroxine sodium 0.075 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "0.088 MG",
+          "value": "0.088",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 8,
+          "scd": [
+            {
+              "rxcui": "905462",
+              "name": "levothyroxine sodium 0.088 MG Oral Capsule"
+            },
+            {
+              "rxcui": "966253",
+              "name": "levothyroxine sodium 0.088 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "0.1 MG",
+          "value": "0.1",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 9,
+          "scd": [
+            {
+              "rxcui": "966404",
+              "name": "levothyroxine sodium 0.1 MG Oral Capsule"
+            },
+            {
+              "rxcui": "892246",
+              "name": "levothyroxine sodium 0.1 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "0.2 MG",
+          "value": "0.2",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 9,
+          "scd": [
+            {
+              "rxcui": "1923050",
+              "name": "levothyroxine sodium 0.2 MG Oral Capsule"
+            },
+            {
+              "rxcui": "892251",
+              "name": "levothyroxine sodium 0.2 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 33,
+      "oral_dose_forms": [
+        "Oral Capsule",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 64,
+        "oral": 44,
+        "combination": 5,
+        "non_oral": 7,
+        "other_unit": 1,
+        "unparsed": 0,
+        "not_marketed": 7,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "omeprazole",
+      "status": "mapped",
+      "rxcui": "7646",
+      "tty": "IN",
+      "rxnorm_name": "omeprazole",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "203345",
+          "name": "Prilosec"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Granules for Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "797063",
+              "name": "omeprazole 2.5 MG Granules for Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Capsule",
+            "Granules for Oral Suspension"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "199119",
+              "name": "omeprazole 10 MG Delayed Release Oral Capsule"
+            },
+            {
+              "rxcui": "797058",
+              "name": "omeprazole 10 MG Granules for Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Capsule",
+            "Delayed Release Oral Tablet",
+            "Disintegrating Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "198051",
+              "name": "omeprazole 20 MG Delayed Release Oral Capsule"
+            },
+            {
+              "rxcui": "402014",
+              "name": "omeprazole 20 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "2003656",
+              "name": "omeprazole 20 MG Disintegrating Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "200329",
+              "name": "omeprazole 40 MG Delayed Release Oral Capsule"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Delayed Release Oral Capsule",
+        "Delayed Release Oral Tablet",
+        "Disintegrating Oral Tablet",
+        "Granules for Oral Suspension"
+      ],
+      "scd_counts": {
+        "total": 23,
+        "oral": 7,
+        "combination": 10,
+        "non_oral": 0,
+        "other_unit": 1,
+        "unparsed": 0,
+        "not_marketed": 5,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "pantoprazole",
+      "status": "mapped",
+      "rxcui": "40790",
+      "tty": "IN",
+      "rxnorm_name": "pantoprazole",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "261624",
+          "name": "Protonix"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "251872",
+              "name": "pantoprazole 20 MG Delayed Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Oral Granules"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "314200",
+              "name": "pantoprazole 40 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "763306",
+              "name": "pantoprazole 40 MG Oral Granules"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 2,
+      "oral_dose_forms": [
+        "Delayed Release Oral Tablet",
+        "Oral Granules"
+      ],
+      "scd_counts": {
+        "total": 7,
+        "oral": 3,
+        "combination": 0,
+        "non_oral": 4,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "esomeprazole",
+      "status": "mapped",
+      "rxcui": "283742",
+      "tty": "IN",
+      "rxnorm_name": "esomeprazole",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "284799",
+          "name": "Nexium"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Granules for Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1297658",
+              "name": "esomeprazole 2.5 MG Granules for Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Granules for Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1297761",
+              "name": "esomeprazole 5 MG Granules for Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Granules for Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "861568",
+              "name": "esomeprazole 10 MG Granules for Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Capsule",
+            "Delayed Release Oral Tablet",
+            "Granules for Oral Suspension"
+          ],
+          "products": 6,
+          "scd": [
+            {
+              "rxcui": "606726",
+              "name": "esomeprazole 20 MG Delayed Release Oral Capsule"
+            },
+            {
+              "rxcui": "433733",
+              "name": "esomeprazole 20 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "692576",
+              "name": "esomeprazole 20 MG Granules for Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "24.65 MG",
+          "value": "24.65",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Capsule"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "1810789",
+              "name": "esomeprazole strontium 24.65 MG Delayed Release Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Capsule",
+            "Granules for Oral Suspension"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "606730",
+              "name": "esomeprazole 40 MG Delayed Release Oral Capsule"
+            },
+            {
+              "rxcui": "692578",
+              "name": "esomeprazole 40 MG Granules for Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 7,
+      "oral_dose_forms": [
+        "Delayed Release Oral Capsule",
+        "Delayed Release Oral Tablet",
+        "Granules for Oral Suspension"
+      ],
+      "scd_counts": {
+        "total": 19,
+        "oral": 10,
+        "combination": 2,
+        "non_oral": 2,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 5,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "acetylsalicylic acid",
+      "status": "mapped",
+      "rxcui": "1191",
+      "tty": "IN",
+      "rxnorm_name": "aspirin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "215568",
+          "name": "Bayer Aspirin"
+        },
+        {
+          "rxcui": "202554",
+          "name": "Ecotrin"
+        },
+        {
+          "rxcui": "215770",
+          "name": "Bufferin"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "81 MG",
+          "value": "81",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Delayed Release Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 13,
+          "scd": [
+            {
+              "rxcui": "318272",
+              "name": "aspirin 81 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "308416",
+              "name": "aspirin 81 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "252857",
+              "name": "aspirin 81 MG Oral Capsule"
+            },
+            {
+              "rxcui": "243670",
+              "name": "aspirin 81 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "162.5 MG",
+          "value": "162.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1665356",
+              "name": "24 HR aspirin 162.5 MG Extended Release Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "325 MG",
+          "value": "325",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Effervescent Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 10,
+          "scd": [
+            {
+              "rxcui": "198467",
+              "name": "aspirin 325 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "2606079",
+              "name": "aspirin 325 MG Effervescent Oral Tablet"
+            },
+            {
+              "rxcui": "198466",
+              "name": "aspirin 325 MG Oral Capsule"
+            },
+            {
+              "rxcui": "212033",
+              "name": "aspirin 325 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "500 MG",
+          "value": "500",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "308409",
+              "name": "aspirin 500 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "198471",
+              "name": "aspirin 500 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "650 MG",
+          "value": "650",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "308411",
+              "name": "aspirin 650 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "198475",
+              "name": "aspirin 650 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 5,
+      "oral_dose_forms": [
+        "Chewable Tablet",
+        "Delayed Release Oral Tablet",
+        "Effervescent Oral Tablet",
+        "Extended Release Oral Capsule",
+        "Oral Capsule",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 111,
+        "oral": 13,
+        "combination": 71,
+        "non_oral": 5,
+        "other_unit": 1,
+        "unparsed": 0,
+        "not_marketed": 21,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "clopidogrel",
+      "status": "mapped",
+      "rxcui": "32968",
+      "tty": "IN",
+      "rxnorm_name": "clopidogrel",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "174742",
+          "name": "Plavix"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "75 MG",
+          "value": "75",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "309362",
+              "name": "clopidogrel 75 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "300 MG",
+          "value": "300",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "749196",
+              "name": "clopidogrel 300 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 2,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 2,
+        "oral": 2,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "warfarin",
+      "status": "mapped",
+      "rxcui": "11289",
+      "tty": "IN",
+      "rxnorm_name": "warfarin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "405155",
+          "name": "Jantoven"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "1 MG",
+          "value": "1",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "855288",
+              "name": "warfarin sodium 1 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "2 MG",
+          "value": "2",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "855302",
+              "name": "warfarin sodium 2 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "855312",
+              "name": "warfarin sodium 2.5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "3 MG",
+          "value": "3",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "855318",
+              "name": "warfarin sodium 3 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "855332",
+              "name": "warfarin sodium 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "6 MG",
+          "value": "6",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "855338",
+              "name": "warfarin sodium 6 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 9,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 10,
+        "oral": 9,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 1,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "apixaban",
+      "status": "mapped",
+      "rxcui": "1364430",
+      "tty": "IN",
+      "rxnorm_name": "apixaban",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "1364436",
+          "name": "Eliquis"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "0.15 MG",
+          "value": "0.15",
+          "unit": "MG",
+          "dose_forms": [
+            "Powder for Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2749579",
+              "name": "apixaban 0.15 MG Powder for Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "0.5 MG",
+          "value": "0.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Tablet for Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2749685",
+              "name": "apixaban 0.5 MG Tablet for Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1364435",
+              "name": "apixaban 2.5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1364445",
+              "name": "apixaban 5 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Oral Tablet",
+        "Powder for Oral Suspension",
+        "Tablet for Oral Suspension"
+      ],
+      "scd_counts": {
+        "total": 4,
+        "oral": 4,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "rivaroxaban",
+      "status": "mapped",
+      "rxcui": "1114195",
+      "tty": "IN",
+      "rxnorm_name": "rivaroxaban",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "1114199",
+          "name": "Xarelto"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2059015",
+              "name": "rivaroxaban 2.5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1114198",
+              "name": "rivaroxaban 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "15 MG",
+          "value": "15",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1232082",
+              "name": "rivaroxaban 15 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1232086",
+              "name": "rivaroxaban 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "1 MG/ML",
+          "value": "1",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2588062",
+              "name": "rivaroxaban 1 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 5,
+      "oral_dose_forms": [
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 5,
+        "oral": 5,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "paracetamol",
+      "status": "mapped",
+      "rxcui": "161",
+      "tty": "IN",
+      "rxnorm_name": "acetaminophen",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "202433",
+          "name": "Tylenol"
+        },
+        {
+          "rxcui": "218205",
+          "name": "Mapap"
+        },
+        {
+          "rxcui": "202432",
+          "name": "Panadol"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "80 MG",
+          "value": "80",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Disintegrating Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "307696",
+              "name": "acetaminophen 80 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "251374",
+              "name": "acetaminophen 80 MG Disintegrating Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "160 MG",
+          "value": "160",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Disintegrating Oral Tablet",
+            "Oral Powder"
+          ],
+          "products": 7,
+          "scd": [
+            {
+              "rxcui": "313820",
+              "name": "acetaminophen 160 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "477282",
+              "name": "acetaminophen 160 MG Disintegrating Oral Tablet"
+            },
+            {
+              "rxcui": "2178755",
+              "name": "acetaminophen 160 MG Oral Powder"
+            }
+          ]
+        },
+        {
+          "strength": "325 MG",
+          "value": "325",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Disintegrating Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 12,
+          "scd": [
+            {
+              "rxcui": "2264779",
+              "name": "acetaminophen 325 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "603136",
+              "name": "acetaminophen 325 MG Disintegrating Oral Tablet"
+            },
+            {
+              "rxcui": "198436",
+              "name": "acetaminophen 325 MG Oral Capsule"
+            },
+            {
+              "rxcui": "313782",
+              "name": "acetaminophen 325 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "500 MG",
+          "value": "500",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Effervescent Oral Tablet",
+            "Oral Capsule",
+            "Oral Powder",
+            "Oral Tablet"
+          ],
+          "products": 15,
+          "scd": [
+            {
+              "rxcui": "665056",
+              "name": "acetaminophen 500 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "1536880",
+              "name": "acetaminophen 500 MG Effervescent Oral Tablet"
+            },
+            {
+              "rxcui": "198439",
+              "name": "acetaminophen 500 MG Oral Capsule"
+            },
+            {
+              "rxcui": "2374360",
+              "name": "acetaminophen 500 MG Oral Powder"
+            },
+            {
+              "rxcui": "198440",
+              "name": "acetaminophen 500 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "650 MG",
+          "value": "650",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "1148399",
+              "name": "8 HR acetaminophen 650 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "198444",
+              "name": "acetaminophen 650 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "32 MG/ML",
+          "value": "32",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution",
+            "Oral Suspension"
+          ],
+          "products": 8,
+          "scd": [
+            {
+              "rxcui": "307675",
+              "name": "acetaminophen 32 MG/ML Oral Solution"
+            },
+            {
+              "rxcui": "307668",
+              "name": "acetaminophen 32 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 9,
+      "oral_dose_forms": [
+        "Chewable Tablet",
+        "Disintegrating Oral Tablet",
+        "Effervescent Oral Tablet",
+        "Extended Release Oral Tablet",
+        "Oral Capsule",
+        "Oral Powder",
+        "Oral Solution",
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 400,
+        "oral": 22,
+        "combination": 345,
+        "non_oral": 14,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 19,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "ibuprofen",
+      "status": "mapped",
+      "rxcui": "5640",
+      "tty": "IN",
+      "rxnorm_name": "ibuprofen",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "153010",
+          "name": "Advil"
+        },
+        {
+          "rxcui": "202488",
+          "name": "Motrin"
+        },
+        {
+          "rxcui": "217693",
+          "name": "Ibu"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "310963",
+              "name": "ibuprofen 100 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "198405",
+              "name": "ibuprofen 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "200 MG",
+          "value": "200",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 14,
+          "scd": [
+            {
+              "rxcui": "310964",
+              "name": "ibuprofen 200 MG Oral Capsule"
+            },
+            {
+              "rxcui": "310965",
+              "name": "ibuprofen 200 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "400 MG",
+          "value": "400",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "197805",
+              "name": "ibuprofen 400 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "800 MG",
+          "value": "800",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "197807",
+              "name": "ibuprofen 800 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG/ML",
+          "value": "20",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "197803",
+              "name": "ibuprofen 20 MG/ML Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG/ML",
+          "value": "40",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "204442",
+              "name": "ibuprofen 40 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 8,
+      "oral_dose_forms": [
+        "Chewable Tablet",
+        "Oral Capsule",
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 46,
+        "oral": 10,
+        "combination": 23,
+        "non_oral": 8,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 5,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "diclofenac",
+      "status": "mapped",
+      "rxcui": "3355",
+      "tty": "IN",
+      "rxnorm_name": "diclofenac",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "1442117",
+          "name": "Zorvolex"
+        },
+        {
+          "rxcui": "215916",
+          "name": "Cataflam"
+        },
+        {
+          "rxcui": "858343",
+          "name": "Zipsor"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "18 MG",
+          "value": "18",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1442116",
+              "name": "diclofenac 18 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "858342",
+              "name": "diclofenac 25 MG Oral Capsule"
+            },
+            {
+              "rxcui": "857702",
+              "name": "diclofenac potassium 25 MG Oral Tablet"
+            },
+            {
+              "rxcui": "855664",
+              "name": "diclofenac sodium 25 MG Delayed Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "35 MG",
+          "value": "35",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1442128",
+              "name": "diclofenac 35 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Oral Tablet",
+            "Powder for Oral Solution"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "855942",
+              "name": "diclofenac potassium 50 MG Oral Tablet"
+            },
+            {
+              "rxcui": "859063",
+              "name": "diclofenac potassium 50 MG Powder for Oral Solution"
+            },
+            {
+              "rxcui": "855906",
+              "name": "diclofenac sodium 50 MG Delayed Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "75 MG",
+          "value": "75",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2753518",
+              "name": "diclofenac potassium 75 MG Oral Tablet"
+            },
+            {
+              "rxcui": "855926",
+              "name": "diclofenac sodium 75 MG Delayed Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "855657",
+              "name": "24 HR diclofenac sodium 100 MG Extended Release Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 6,
+      "oral_dose_forms": [
+        "Delayed Release Oral Tablet",
+        "Extended Release Oral Tablet",
+        "Oral Capsule",
+        "Oral Tablet",
+        "Powder for Oral Solution"
+      ],
+      "scd_counts": {
+        "total": 38,
+        "oral": 11,
+        "combination": 7,
+        "non_oral": 14,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 6,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "naproxen",
+      "status": "mapped",
+      "rxcui": "7258",
+      "tty": "IN",
+      "rxnorm_name": "naproxen",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "203012",
+          "name": "Naprosyn"
+        },
+        {
+          "rxcui": "218599",
+          "name": "Naprelan"
+        },
+        {
+          "rxcui": "215101",
+          "name": "Aleve"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "220 MG",
+          "value": "220",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "1112231",
+              "name": "naproxen sodium 220 MG Oral Capsule"
+            },
+            {
+              "rxcui": "849574",
+              "name": "naproxen sodium 220 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "375 MG",
+          "value": "375",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "1116320",
+              "name": "24 HR naproxen 375 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "603103",
+              "name": "naproxen 375 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "198012",
+              "name": "naproxen 375 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "500 MG",
+          "value": "500",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 6,
+          "scd": [
+            {
+              "rxcui": "1116339",
+              "name": "24 HR naproxen 500 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "311915",
+              "name": "naproxen 500 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "198014",
+              "name": "naproxen 500 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "550 MG",
+          "value": "550",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "849431",
+              "name": "naproxen sodium 550 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "750 MG",
+          "value": "750",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1116349",
+              "name": "24 HR naproxen 750 MG Extended Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "25 MG/ML",
+          "value": "25",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "311913",
+              "name": "naproxen 25 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 8,
+      "oral_dose_forms": [
+        "Delayed Release Oral Tablet",
+        "Extended Release Oral Tablet",
+        "Oral Capsule",
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 23,
+        "oral": 13,
+        "combination": 7,
+        "non_oral": 1,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 2,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "amoxicillin",
+      "status": "mapped",
+      "rxcui": "723",
+      "tty": "IN",
+      "rxnorm_name": "amoxicillin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "828243",
+          "name": "Moxatag"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "125 MG",
+          "value": "125",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "308177",
+              "name": "amoxicillin 125 MG Chewable Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "250 MG",
+          "value": "250",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "598025",
+              "name": "amoxicillin 250 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "308182",
+              "name": "amoxicillin 250 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "400 MG",
+          "value": "400",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "308188",
+              "name": "amoxicillin 400 MG Chewable Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "500 MG",
+          "value": "500",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "308191",
+              "name": "amoxicillin 500 MG Oral Capsule"
+            },
+            {
+              "rxcui": "308192",
+              "name": "amoxicillin 500 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "775 MG",
+          "value": "775",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "802550",
+              "name": "amoxicillin 775 MG Extended Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG/ML",
+          "value": "50",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "239191",
+              "name": "amoxicillin 50 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 10,
+      "oral_dose_forms": [
+        "Chewable Tablet",
+        "Extended Release Oral Tablet",
+        "Oral Capsule",
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 42,
+        "oral": 12,
+        "combination": 23,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 7,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "azithromycin",
+      "status": "mapped",
+      "rxcui": "18631",
+      "tty": "IN",
+      "rxnorm_name": "azithromycin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "196474",
+          "name": "Zithromax"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "250 MG",
+          "value": "250",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "308460",
+              "name": "azithromycin 250 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "500 MG",
+          "value": "500",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "248656",
+              "name": "azithromycin 500 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "600 MG",
+          "value": "600",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "204844",
+              "name": "azithromycin 600 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "1000 MG",
+          "value": "1000",
+          "unit": "MG",
+          "dose_forms": [
+            "Powder for Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "861416",
+              "name": "azithromycin 1000 MG Powder for Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG/ML",
+          "value": "20",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "308459",
+              "name": "azithromycin 20 MG/ML Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG/ML",
+          "value": "40",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "141963",
+              "name": "azithromycin 40 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 6,
+      "oral_dose_forms": [
+        "Oral Suspension",
+        "Oral Tablet",
+        "Powder for Oral Suspension"
+      ],
+      "scd_counts": {
+        "total": 10,
+        "oral": 6,
+        "combination": 0,
+        "non_oral": 2,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 2,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "ciprofloxacin",
+      "status": "mapped",
+      "rxcui": "2551",
+      "tty": "IN",
+      "rxnorm_name": "ciprofloxacin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "203563",
+          "name": "Cipro"
+        },
+        {
+          "rxcui": "602786",
+          "name": "Proquin"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "199370",
+              "name": "ciprofloxacin 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "250 MG",
+          "value": "250",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "197511",
+              "name": "ciprofloxacin 250 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "500 MG",
+          "value": "500",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "359383",
+              "name": "24 HR ciprofloxacin 500 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "309309",
+              "name": "ciprofloxacin 500 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "1000 MG",
+          "value": "1000",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "403921",
+              "name": "24 HR ciprofloxacin 1000 MG Extended Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG/ML",
+          "value": "50",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "309308",
+              "name": "ciprofloxacin 50 MG/ML Oral Suspension"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG/ML",
+          "value": "100",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "309310",
+              "name": "ciprofloxacin 100 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 7,
+      "oral_dose_forms": [
+        "Extended Release Oral Tablet",
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 17,
+        "oral": 8,
+        "combination": 3,
+        "non_oral": 6,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "metronidazole",
+      "status": "mapped",
+      "rxcui": "6922",
+      "tty": "IN",
+      "rxnorm_name": "metronidazole",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "202866",
+          "name": "Flagyl"
+        },
+        {
+          "rxcui": "2667643",
+          "name": "Likmez"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "125 MG",
+          "value": "125",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "2702348",
+              "name": "metronidazole 125 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "250 MG",
+          "value": "250",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "314106",
+              "name": "metronidazole 250 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "375 MG",
+          "value": "375",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "199055",
+              "name": "metronidazole 375 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "500 MG",
+          "value": "500",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "311681",
+              "name": "metronidazole 500 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "750 MG",
+          "value": "750",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "636559",
+              "name": "24 HR metronidazole 750 MG Extended Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG/ML",
+          "value": "100",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2667642",
+              "name": "metronidazole 100 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 6,
+      "oral_dose_forms": [
+        "Extended Release Oral Tablet",
+        "Oral Capsule",
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 25,
+        "oral": 6,
+        "combination": 4,
+        "non_oral": 11,
+        "other_unit": 1,
+        "unparsed": 0,
+        "not_marketed": 3,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "doxycycline",
+      "status": "mapped",
+      "rxcui": "3640",
+      "tty": "IN",
+      "rxnorm_name": "doxycycline",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "216727",
+          "name": "Doryx"
+        },
+        {
+          "rxcui": "1543946",
+          "name": "Acticlate"
+        },
+        {
+          "rxcui": "1666093",
+          "name": "Mondoxyne"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "283535",
+              "name": "doxycycline hyclate 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "901399",
+              "name": "doxycycline anhydrous 40 MG Delayed Release Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 10,
+          "scd": [
+            {
+              "rxcui": "1653433",
+              "name": "doxycycline hyclate 50 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "1649405",
+              "name": "doxycycline hyclate 50 MG Oral Capsule"
+            },
+            {
+              "rxcui": "1652674",
+              "name": "doxycycline hyclate 50 MG Oral Tablet"
+            },
+            {
+              "rxcui": "1649401",
+              "name": "doxycycline monohydrate 50 MG Oral Capsule"
+            },
+            {
+              "rxcui": "1652673",
+              "name": "doxycycline monohydrate 50 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "75 MG",
+          "value": "75",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 10,
+          "scd": [
+            {
+              "rxcui": "406524",
+              "name": "doxycycline hyclate 75 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "1791505",
+              "name": "doxycycline hyclate 75 MG Oral Capsule"
+            },
+            {
+              "rxcui": "1649425",
+              "name": "doxycycline hyclate 75 MG Oral Tablet"
+            },
+            {
+              "rxcui": "700408",
+              "name": "doxycycline monohydrate 75 MG Oral Capsule"
+            },
+            {
+              "rxcui": "1649429",
+              "name": "doxycycline monohydrate 75 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 12,
+          "scd": [
+            {
+              "rxcui": "434018",
+              "name": "doxycycline hyclate 100 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "1649988",
+              "name": "doxycycline hyclate 100 MG Oral Capsule"
+            },
+            {
+              "rxcui": "1650143",
+              "name": "doxycycline hyclate 100 MG Oral Tablet"
+            },
+            {
+              "rxcui": "1649990",
+              "name": "doxycycline monohydrate 100 MG Oral Capsule"
+            },
+            {
+              "rxcui": "1650142",
+              "name": "doxycycline monohydrate 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "150 MG",
+          "value": "150",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 7,
+          "scd": [
+            {
+              "rxcui": "799048",
+              "name": "doxycycline hyclate 150 MG Delayed Release Oral Tablet"
+            },
+            {
+              "rxcui": "1650446",
+              "name": "doxycycline hyclate 150 MG Oral Tablet"
+            },
+            {
+              "rxcui": "728207",
+              "name": "doxycycline monohydrate 150 MG Oral Capsule"
+            },
+            {
+              "rxcui": "1650444",
+              "name": "doxycycline monohydrate 150 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 11,
+      "oral_dose_forms": [
+        "Delayed Release Oral Capsule",
+        "Delayed Release Oral Tablet",
+        "Oral Capsule",
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 31,
+        "oral": 26,
+        "combination": 0,
+        "non_oral": 2,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 3,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "cetirizine",
+      "status": "mapped",
+      "rxcui": "20610",
+      "tty": "IN",
+      "rxnorm_name": "cetirizine",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "58930",
+          "name": "Zyrtec"
+        },
+        {
+          "rxcui": "1086791",
+          "name": "Wal-Zyr"
+        },
+        {
+          "rxcui": "865258",
+          "name": "Aller-Tec"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "2.5 MG",
+          "value": "2.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2558501",
+              "name": "cetirizine hydrochloride 2.5 MG Chewable Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "1014643",
+              "name": "cetirizine hydrochloride 5 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "1014676",
+              "name": "cetirizine hydrochloride 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Disintegrating Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 13,
+          "scd": [
+            {
+              "rxcui": "1014674",
+              "name": "cetirizine hydrochloride 10 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "1011482",
+              "name": "cetirizine hydrochloride 10 MG Disintegrating Oral Tablet"
+            },
+            {
+              "rxcui": "1014675",
+              "name": "cetirizine hydrochloride 10 MG Oral Capsule"
+            },
+            {
+              "rxcui": "1014678",
+              "name": "cetirizine hydrochloride 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "1 MG/ML",
+          "value": "1",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "1014673",
+              "name": "cetirizine hydrochloride 1 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Chewable Tablet",
+        "Disintegrating Oral Tablet",
+        "Oral Capsule",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 11,
+        "oral": 8,
+        "combination": 1,
+        "non_oral": 2,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "loratadine",
+      "status": "mapped",
+      "rxcui": "28889",
+      "tty": "IN",
+      "rxnorm_name": "loratadine",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "203576",
+          "name": "Claritin"
+        },
+        {
+          "rxcui": "700794",
+          "name": "Wal-itin"
+        },
+        {
+          "rxcui": "352401",
+          "name": "Alavert"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Disintegrating Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "665078",
+              "name": "loratadine 5 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "672558",
+              "name": "loratadine 5 MG Disintegrating Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Disintegrating Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 17,
+          "scd": [
+            {
+              "rxcui": "2265266",
+              "name": "loratadine 10 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "311373",
+              "name": "loratadine 10 MG Disintegrating Oral Tablet"
+            },
+            {
+              "rxcui": "828269",
+              "name": "loratadine 10 MG Oral Capsule"
+            },
+            {
+              "rxcui": "311372",
+              "name": "loratadine 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "1 MG/ML",
+          "value": "1",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "692783",
+              "name": "loratadine 1 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 3,
+      "oral_dose_forms": [
+        "Chewable Tablet",
+        "Disintegrating Oral Tablet",
+        "Oral Capsule",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 11,
+        "oral": 7,
+        "combination": 3,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 1,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "montelukast",
+      "status": "mapped",
+      "rxcui": "88249",
+      "tty": "IN",
+      "rxnorm_name": "montelukast",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "153889",
+          "name": "Singulair"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "4 MG",
+          "value": "4",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Oral Granules"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "311759",
+              "name": "montelukast 4 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "351246",
+              "name": "montelukast 4 MG Oral Granules"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "242438",
+              "name": "montelukast 5 MG Chewable Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "200224",
+              "name": "montelukast 10 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 3,
+      "oral_dose_forms": [
+        "Chewable Tablet",
+        "Oral Granules",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 6,
+        "oral": 4,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 2,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "prednisolone",
+      "status": "mapped",
+      "rxcui": "8638",
+      "tty": "IN",
+      "rxnorm_name": "prednisolone",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "285077",
+          "name": "Orapred"
+        },
+        {
+          "rxcui": "219136",
+          "name": "Pediapred"
+        },
+        {
+          "rxcui": "795094",
+          "name": "MILLIPRED"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "198142",
+              "name": "prednisolone 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Disintegrating Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "643123",
+              "name": "prednisolone 10 MG Disintegrating Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "15 MG",
+          "value": "15",
+          "unit": "MG",
+          "dose_forms": [
+            "Disintegrating Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "643125",
+              "name": "prednisolone 15 MG Disintegrating Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "429199",
+              "name": "prednisolone 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "30 MG",
+          "value": "30",
+          "unit": "MG",
+          "dose_forms": [
+            "Disintegrating Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "643127",
+              "name": "prednisolone 30 MG Disintegrating Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "1 MG/ML",
+          "value": "1",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "312614",
+              "name": "prednisolone 1 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 10,
+      "oral_dose_forms": [
+        "Disintegrating Oral Tablet",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 41,
+        "oral": 10,
+        "combination": 8,
+        "non_oral": 15,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 8,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "allopurinol",
+      "status": "mapped",
+      "rxcui": "519",
+      "tty": "IN",
+      "rxnorm_name": "allopurinol",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "203600",
+          "name": "Zyloprim"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "197319",
+              "name": "allopurinol 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "200 MG",
+          "value": "200",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "245422",
+              "name": "allopurinol 200 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "300 MG",
+          "value": "300",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "197320",
+              "name": "allopurinol 300 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 3,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 6,
+        "oral": 3,
+        "combination": 2,
+        "non_oral": 1,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "colchicine",
+      "status": "mapped",
+      "rxcui": "2683",
+      "tty": "IN",
+      "rxnorm_name": "colchicine",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "858068",
+          "name": "Colcrys"
+        },
+        {
+          "rxcui": "1550941",
+          "name": "Mitigare"
+        },
+        {
+          "rxcui": "2180553",
+          "name": "Gloperba"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "0.5 MG",
+          "value": "0.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "197540",
+              "name": "colchicine 0.5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "0.6 MG",
+          "value": "0.6",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "1550940",
+              "name": "colchicine 0.6 MG Oral Capsule"
+            },
+            {
+              "rxcui": "197541",
+              "name": "colchicine 0.6 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "0.12 MG/ML",
+          "value": "0.12",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2118892",
+              "name": "colchicine 0.12 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 3,
+      "oral_dose_forms": [
+        "Oral Capsule",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 5,
+        "oral": 4,
+        "combination": 1,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "tamsulosin",
+      "status": "mapped",
+      "rxcui": "77492",
+      "tty": "IN",
+      "rxnorm_name": "tamsulosin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "190283",
+          "name": "Flomax"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "0.4 MG",
+          "value": "0.4",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "863669",
+              "name": "tamsulosin hydrochloride 0.4 MG Oral Capsule"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 1,
+      "oral_dose_forms": [
+        "Oral Capsule"
+      ],
+      "scd_counts": {
+        "total": 3,
+        "oral": 1,
+        "combination": 1,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 1,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "sertraline",
+      "status": "mapped",
+      "rxcui": "36437",
+      "tty": "IN",
+      "rxnorm_name": "sertraline",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "82728",
+          "name": "Zoloft"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "312940",
+              "name": "sertraline 25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "312941",
+              "name": "sertraline 50 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "312938",
+              "name": "sertraline 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "150 MG",
+          "value": "150",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "410584",
+              "name": "sertraline 150 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "200 MG",
+          "value": "200",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "251201",
+              "name": "sertraline 200 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG/ML",
+          "value": "20",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "861064",
+              "name": "sertraline 20 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 6,
+      "oral_dose_forms": [
+        "Oral Capsule",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 6,
+        "oral": 6,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "escitalopram",
+      "status": "mapped",
+      "rxcui": "321988",
+      "tty": "IN",
+      "rxnorm_name": "escitalopram",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "352741",
+          "name": "Lexapro"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "351249",
+              "name": "escitalopram 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "349332",
+              "name": "escitalopram 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "15 MG",
+          "value": "15",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "2725159",
+              "name": "escitalopram 15 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "351250",
+              "name": "escitalopram 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "1 MG/ML",
+          "value": "1",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "351285",
+              "name": "escitalopram 1 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 5,
+      "oral_dose_forms": [
+        "Oral Capsule",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 5,
+        "oral": 5,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "fluoxetine",
+      "status": "mapped",
+      "rxcui": "4493",
+      "tty": "IN",
+      "rxnorm_name": "fluoxetine",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "58827",
+          "name": "Prozac"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "310384",
+              "name": "fluoxetine 10 MG Oral Capsule"
+            },
+            {
+              "rxcui": "313990",
+              "name": "fluoxetine 10 MG Oral Tablet"
+            },
+            {
+              "rxcui": "2532159",
+              "name": "PMDD fluoxetine 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "310385",
+              "name": "fluoxetine 20 MG Oral Capsule"
+            },
+            {
+              "rxcui": "248642",
+              "name": "fluoxetine 20 MG Oral Tablet"
+            },
+            {
+              "rxcui": "2532163",
+              "name": "PMDD fluoxetine 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "313989",
+              "name": "fluoxetine 40 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "60 MG",
+          "value": "60",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "1190110",
+              "name": "fluoxetine 60 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "90 MG",
+          "value": "90",
+          "unit": "MG",
+          "dose_forms": [
+            "Delayed Release Oral Capsule"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "313995",
+              "name": "fluoxetine 90 MG Delayed Release Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "4 MG/ML",
+          "value": "4",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "310386",
+              "name": "fluoxetine 4 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 6,
+      "oral_dose_forms": [
+        "Delayed Release Oral Capsule",
+        "Oral Capsule",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 20,
+        "oral": 10,
+        "combination": 5,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 5,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "amitriptyline",
+      "status": "mapped",
+      "rxcui": "704",
+      "tty": "IN",
+      "rxnorm_name": "amitriptyline",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "42940",
+          "name": "Elavil"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "856783",
+              "name": "amitriptyline hydrochloride 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "856834",
+              "name": "amitriptyline hydrochloride 25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "856845",
+              "name": "amitriptyline hydrochloride 50 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "75 MG",
+          "value": "75",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "856853",
+              "name": "amitriptyline hydrochloride 75 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "856762",
+              "name": "amitriptyline hydrochloride 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "150 MG",
+          "value": "150",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "856773",
+              "name": "amitriptyline hydrochloride 150 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 6,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 18,
+        "oral": 6,
+        "combination": 8,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 4,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "gabapentin",
+      "status": "mapped",
+      "rxcui": "25480",
+      "tty": "IN",
+      "rxnorm_name": "gabapentin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "196498",
+          "name": "Neurontin"
+        },
+        {
+          "rxcui": "1087976",
+          "name": "Gralise"
+        },
+        {
+          "rxcui": "2739002",
+          "name": "Relgaabi"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "310430",
+              "name": "gabapentin 100 MG Oral Capsule"
+            },
+            {
+              "rxcui": "476673",
+              "name": "gabapentin 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "200 MG",
+          "value": "200",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2739001",
+              "name": "gabapentin 200 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "300 MG",
+          "value": "300",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet",
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 7,
+          "scd": [
+            {
+              "rxcui": "310431",
+              "name": "gabapentin 300 MG Oral Capsule"
+            },
+            {
+              "rxcui": "1482820",
+              "name": "gabapentin enacarbil 300 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "1806380",
+              "name": "Once-Daily gabapentin 300 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "400 MG",
+          "value": "400",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "310432",
+              "name": "gabapentin 400 MG Oral Capsule"
+            },
+            {
+              "rxcui": "476679",
+              "name": "gabapentin 400 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "450 MG",
+          "value": "450",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2634747",
+              "name": "Once-Daily gabapentin 450 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "600 MG",
+          "value": "600",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 6,
+          "scd": [
+            {
+              "rxcui": "310433",
+              "name": "gabapentin 600 MG Oral Tablet"
+            },
+            {
+              "rxcui": "1101338",
+              "name": "gabapentin enacarbil 600 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "1806382",
+              "name": "Once-Daily gabapentin 600 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 10,
+      "oral_dose_forms": [
+        "Extended Release Oral Tablet",
+        "Oral Capsule",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 16,
+        "oral": 16,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "pregabalin",
+      "status": "mapped",
+      "rxcui": "187832",
+      "tty": "IN",
+      "rxnorm_name": "pregabalin",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "593441",
+          "name": "Lyrica"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "483442",
+              "name": "pregabalin 25 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "483448",
+              "name": "pregabalin 50 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "75 MG",
+          "value": "75",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "483450",
+              "name": "pregabalin 75 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "82.5 MG",
+          "value": "82.5",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "1988980",
+              "name": "24 HR pregabalin 82.5 MG Extended Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "483438",
+              "name": "pregabalin 100 MG Oral Capsule"
+            }
+          ]
+        },
+        {
+          "strength": "150 MG",
+          "value": "150",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Capsule"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "483440",
+              "name": "pregabalin 150 MG Oral Capsule"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 12,
+      "oral_dose_forms": [
+        "Extended Release Oral Tablet",
+        "Oral Capsule",
+        "Oral Solution"
+      ],
+      "scd_counts": {
+        "total": 13,
+        "oral": 12,
+        "combination": 0,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 1,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "tramadol",
+      "status": "mapped",
+      "rxcui": "10689",
+      "tty": "IN",
+      "rxnorm_name": "tramadol",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "1148479",
+          "name": "ConZip"
+        },
+        {
+          "rxcui": "220606",
+          "name": "Ultram"
+        },
+        {
+          "rxcui": "2395809",
+          "name": "Qdolo"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "25 MG",
+          "value": "25",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "2670390",
+              "name": "tramadol hydrochloride 25 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "50 MG",
+          "value": "50",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "835603",
+              "name": "tramadol hydrochloride 50 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "100 MG",
+          "value": "100",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Capsule",
+            "Extended Release Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "1148478",
+              "name": "24 HR tramadol hydrochloride 100 MG Extended Release Oral Capsule"
+            },
+            {
+              "rxcui": "833709",
+              "name": "24 HR tramadol hydrochloride 100 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "1946529",
+              "name": "Matrix Delivery 24 HR tramadol hydrochloride 100 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "2179635",
+              "name": "tramadol hydrochloride 100 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "200 MG",
+          "value": "200",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Capsule",
+            "Extended Release Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "1148485",
+              "name": "24 HR tramadol hydrochloride 200 MG Extended Release Oral Capsule"
+            },
+            {
+              "rxcui": "833711",
+              "name": "24 HR tramadol hydrochloride 200 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "1946527",
+              "name": "Matrix Delivery 24 HR tramadol hydrochloride 200 MG Extended Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "300 MG",
+          "value": "300",
+          "unit": "MG",
+          "dose_forms": [
+            "Extended Release Oral Capsule",
+            "Extended Release Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "1148489",
+              "name": "24 HR tramadol hydrochloride 300 MG Extended Release Oral Capsule"
+            },
+            {
+              "rxcui": "833713",
+              "name": "24 HR tramadol hydrochloride 300 MG Extended Release Oral Tablet"
+            },
+            {
+              "rxcui": "1946525",
+              "name": "Matrix Delivery 24 HR tramadol hydrochloride 300 MG Extended Release Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "5 MG/ML",
+          "value": "5",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "2395808",
+              "name": "tramadol hydrochloride 5 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 8,
+      "oral_dose_forms": [
+        "Extended Release Oral Capsule",
+        "Extended Release Oral Tablet",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 24,
+        "oral": 15,
+        "combination": 2,
+        "non_oral": 1,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 6,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "alendronic acid",
+      "status": "mapped",
+      "rxcui": "46041",
+      "tty": "IN",
+      "rxnorm_name": "alendronate",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": {
+        "rxcui": "236083",
+        "name": "alendronic acid",
+        "tty": "PIN"
+      },
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "114265",
+          "name": "Fosamax"
+        },
+        {
+          "rxcui": "1248078",
+          "name": "Binosto"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "5 MG",
+          "value": "5",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "904425",
+              "name": "alendronic acid 5 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "904419",
+              "name": "alendronic acid 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "35 MG",
+          "value": "35",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "904396",
+              "name": "alendronic acid 35 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "70 MG",
+          "value": "70",
+          "unit": "MG",
+          "dose_forms": [
+            "Effervescent Oral Tablet",
+            "Oral Tablet"
+          ],
+          "products": 4,
+          "scd": [
+            {
+              "rxcui": "1248077",
+              "name": "alendronic acid 70 MG Effervescent Oral Tablet"
+            },
+            {
+              "rxcui": "904431",
+              "name": "alendronic acid 70 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "0.933 MG/ML",
+          "value": "0.933",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Solution"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "904447",
+              "name": "alendronic acid 0.933 MG/ML Oral Solution"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 5,
+      "oral_dose_forms": [
+        "Effervescent Oral Tablet",
+        "Oral Solution",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 9,
+        "oral": 6,
+        "combination": 2,
+        "non_oral": 0,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 1,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "terbinafine",
+      "status": "mapped",
+      "rxcui": "37801",
+      "tty": "IN",
+      "rxnorm_name": "terbinafine",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [],
+      "oral_strengths": [
+        {
+          "strength": "250 MG",
+          "value": "250",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "313222",
+              "name": "terbinafine 250 MG Oral Tablet"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 1,
+      "oral_dose_forms": [
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 10,
+        "oral": 1,
+        "combination": 5,
+        "non_oral": 4,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 0,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    },
+    {
+      "inn": "famotidine",
+      "status": "mapped",
+      "rxcui": "4278",
+      "tty": "IN",
+      "rxnorm_name": "famotidine",
+      "match": "exact",
+      "us_name_used": null,
+      "pin": null,
+      "reason": null,
+      "brands": [
+        {
+          "rxcui": "196458",
+          "name": "Pepcid"
+        },
+        {
+          "rxcui": "2607010",
+          "name": "Zantac Reformulated Aug 2022"
+        }
+      ],
+      "oral_strengths": [
+        {
+          "strength": "10 MG",
+          "value": "10",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 3,
+          "scd": [
+            {
+              "rxcui": "199047",
+              "name": "famotidine 10 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "20 MG",
+          "value": "20",
+          "unit": "MG",
+          "dose_forms": [
+            "Chewable Tablet",
+            "Oral Tablet"
+          ],
+          "products": 5,
+          "scd": [
+            {
+              "rxcui": "799049",
+              "name": "famotidine 20 MG Chewable Tablet"
+            },
+            {
+              "rxcui": "310273",
+              "name": "famotidine 20 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "40 MG",
+          "value": "40",
+          "unit": "MG",
+          "dose_forms": [
+            "Oral Tablet"
+          ],
+          "products": 2,
+          "scd": [
+            {
+              "rxcui": "284245",
+              "name": "famotidine 40 MG Oral Tablet"
+            }
+          ]
+        },
+        {
+          "strength": "8 MG/ML",
+          "value": "8",
+          "unit": "MG/ML",
+          "dose_forms": [
+            "Oral Suspension"
+          ],
+          "products": 1,
+          "scd": [
+            {
+              "rxcui": "310274",
+              "name": "famotidine 8 MG/ML Oral Suspension"
+            }
+          ]
+        }
+      ],
+      "oral_strengths_total": 4,
+      "oral_dose_forms": [
+        "Chewable Tablet",
+        "Oral Suspension",
+        "Oral Tablet"
+      ],
+      "scd_counts": {
+        "total": 15,
+        "oral": 5,
+        "combination": 2,
+        "non_oral": 5,
+        "other_unit": 0,
+        "unparsed": 0,
+        "not_marketed": 3,
+        "strength_mismatch": 0
+      },
+      "unparsed_names": [],
+      "brand_names_without_bn": []
+    }
+  ]
+}

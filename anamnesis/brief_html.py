@@ -5,10 +5,16 @@ import html
 
 from anamnesis.agent.crop import crop_region
 from anamnesis.core.overlap import cross_medication
+from anamnesis.core.reconcile import claim_identity_conflict, pack_identity_conflict
 from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.review import RequestKind, RequestStatus, ReviewStatus
 from anamnesis.schema.templates import (
     BRIEF_TITLE,
+    CATALOGUE_CODES_ATC,
+    CATALOGUE_CODES_LINE,
+    CATALOGUE_CODES_RX_SEPARATOR,
+    CATALOGUE_CODES_RXNORM,
+    CATALOGUE_CODES_SEPARATOR,
     FIELD_COUNTRY,
     FIELD_INN,
     FIELD_INTAKE,
@@ -48,6 +54,10 @@ from anamnesis.schema.templates import (
     SEEN_REGION,
     STRENGTH_PER,
     TEMPLATES,
+    TIMELINE_COLUMNS,
+    TIMELINE_HEADING,
+    TIMELINE_NONE,
+    TIMELINE_TOTAL,
     TURN_BUTTON,
     UNNAMED_PACK,
     YES,
@@ -59,17 +69,66 @@ _DISAGREE = frozenset({
 })
 
 _STYLE = (
-    "body{font-family:system-ui,sans-serif;margin:2rem auto;max-width:60rem;padding:0 1rem;color:#111}"
+    "body{font-family:system-ui,sans-serif;font-size:16px;line-height:1.5;color:#111;background:#fff}"
+    "body{margin:2rem auto;max-width:60rem;padding:0 1rem;overflow-wrap:anywhere}"
+    "*{box-sizing:border-box}"
+    "h1{font-size:1.75rem;line-height:1.2;margin:0 0 1rem}"
+    "h2{font-size:1.375rem;line-height:1.25;margin:0 0 1rem}"
+    "h3{font-size:1.125rem;line-height:1.3;margin:0 0 .5rem}"
+    "h4{font-size:14px;font-weight:600;color:#595959;margin:0 0 .5rem}"
+    "p{margin:0 0 .75rem}"
+    "section{margin:0 0 2rem}"
+    "section>h2{border-bottom:1px solid #767676;padding-bottom:.5rem;break-after:avoid}"
+    "article{border:1px solid #767676;border-radius:8px;background:#fff}"
+    "article{padding:1rem 1.25rem;margin:0 0 1rem;break-inside:avoid}"
+    "#disagree article{border-inline-start:4px solid #d9480f}"
+    ".sides{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:0 0 1rem}"
+    "div[data-side=pack]{border-inline-start:1px solid #767676;padding-inline-start:1rem}"
+    "@media screen and (max-width:640px){.sides{grid-template-columns:1fr}"
+    "div[data-side=pack]{border-inline-start:none;border-block-start:1px solid #767676}"
+    "div[data-side=pack]{padding-inline-start:0;padding-block-start:1rem}}"
+    "dl{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:.25rem .75rem;margin:0}"
+    "dt{font-weight:600}"
+    "dd{margin:0}"
+    "bdi,#voice button,#timeline{font-variant-numeric:tabular-nums}"
+    "#scope{margin:0 0 2rem}"
+    "#scope p{color:#595959;margin:.25rem 0}"
+    "#review-status{display:inline-block;border:1px solid #767676;border-radius:999px;background:#f1f1f1}"
+    "#review-status{padding:.2rem .75rem;font-size:14px}"
+    "a{color:#0b5cad;text-decoration:underline}"
+    "article>p:last-child a{display:inline-block;border:1px solid #0b5cad;border-radius:999px}"
+    "article>p:last-child a{padding:.1rem .5rem;font-size:14px}"
+    "article>p:last-child a{text-decoration:none;margin:0 .25rem .25rem 0}"
+    "#voice ul{list-style:none;padding:0;margin:0}"
+    "#voice li{cursor:pointer;padding:.5rem;border-radius:6px}"
+    "#voice li:hover{background:#f5f5f5}"
+    "#voice button{font:inherit;font-size:14px;color:#595959}"
+    "#voice button{background:#fff;border:1px solid #767676;border-radius:6px}"
+    "#voice button{padding:.15rem .5rem;cursor:pointer}"
+    "audio{max-width:100%}"
+    "#timeline{overflow-x:auto;border:1px solid #767676;border-radius:8px;padding:1rem;background:#fff}"
+    "#timeline table{border-collapse:collapse;width:100%}"
+    "#timeline th,#timeline td{border:1px solid #767676;padding:.25rem .5rem;text-align:left}"
+    "#timeline thead th{background:#f1f1f1}"
+    "#timeline tbody tr:nth-child(even){background:#f8f8f8}"
+    "#timeline tfoot td{font-weight:bold}"
+    "#timeline td:nth-child(1),#timeline td:nth-child(6),#timeline td:nth-child(7),"
+    "#timeline td:nth-child(8),#timeline td:nth-child(9){text-align:right;white-space:nowrap}"
+    "@media screen{#timeline table{overflow-wrap:normal}}"
+    "figure{margin:0 0 1rem}"
+    "figure[id^=\"region:\"]{display:inline-block;vertical-align:top;margin:0 1rem 1rem 0}"
+    "figcaption{color:#595959;font-size:14px}"
+    "body>p{color:#595959;font-size:14px}"
+    "summary{cursor:pointer;font-weight:600}"
     "img{max-width:100%;height:auto}"
-    ".sides{display:grid;grid-template-columns:1fr 1fr;gap:1rem}"
-    "@media (max-width:640px){.sides{grid-template-columns:1fr}}"
-    "#disagree{border-left:4px solid #d9480f;padding-left:1rem}"
     ".photo{position:relative;max-width:100%}"
     ".photo img{display:block;width:100%;height:auto}"
     ".photo svg{position:absolute;left:0;top:0;width:100%;height:100%}"
     ".photo svg rect{fill:transparent;stroke:#d9480f;stroke-width:3;vector-effect:non-scaling-stroke}"
     ".pre{white-space:pre-wrap}"
-    "@media print{.sides{grid-template-columns:1fr 1fr}}"
+    "@media print{body{background:#fff;color:#111;margin:0;max-width:none}"
+    ".sides{grid-template-columns:1fr 1fr}"
+    "article{break-inside:avoid}}"
 )
 
 _SCRIPT = (
@@ -119,7 +178,8 @@ def _first_line(text: str) -> str | None:
 
 def _ingredient_html(part) -> str:
     salt = f" {_esc(part.salt)}" if part.salt else ""
-    return f"{_esc(part.inn)}{salt} {_plain(part.amount)} {_esc(part.unit.value)}"
+    dose = f"{_plain(part.amount)} {_esc(part.unit.value)}"
+    return f'{_esc(part.inn)}{salt} <bdi dir="ltr">{dose}</bdi>'
 
 
 def _strength_html(strength) -> str:
@@ -193,7 +253,41 @@ def _request_html(finding, review) -> str:
     return "".join(f'<p data-request="{_esc(rid)}">{REVIEW_REQUESTED}</p>' for rid in lines)
 
 
-def _finding_html(finding, claims, observations, turns, review=None) -> str:
+def _codes_entry(finding, claims, observations, catalogue):
+    if catalogue is None:
+        return None
+    if finding.claim_id is not None:
+        claim = claims.get(finding.claim_id)
+        if claim is None:
+            return None
+        if claim_identity_conflict(claim, catalogue):
+            return None
+        entry = catalogue.resolve(claim.name_text)
+    else:
+        pack = observations.get(finding.observation_id) if finding.observation_id else None
+        if pack is None or not pack.label_text:
+            return None
+        if pack_identity_conflict(pack, catalogue):
+            return None
+        entry = catalogue.resolve(pack.label_text)
+    if entry is None:
+        return None
+    if entry.atc is None and not entry.rxcui:
+        return None
+    return entry
+
+
+def _codes_html(entry) -> str:
+    parts = []
+    if entry.atc is not None:
+        parts.append(CATALOGUE_CODES_ATC.format(code=_esc(entry.atc)))
+    if entry.rxcui:
+        joined = CATALOGUE_CODES_RX_SEPARATOR.join(_esc(code) for code in entry.rxcui)
+        parts.append(CATALOGUE_CODES_RXNORM.format(codes=joined))
+    return f"<p>{CATALOGUE_CODES_LINE.format(codes=CATALOGUE_CODES_SEPARATOR.join(parts))}</p>"
+
+
+def _finding_html(finding, claims, observations, turns, review=None, catalogue=None) -> str:
     claim = claims.get(finding.claim_id) if finding.claim_id else None
     pack = observations.get(finding.observation_id) if finding.observation_id else None
     question = QUESTION_FOR[finding.type]
@@ -219,6 +313,8 @@ def _finding_html(finding, claims, observations, turns, review=None) -> str:
         parts.append(f"{HEARD_IN}: {', '.join(heard)}")
     if seen:
         parts.append(f"{SEEN_IN}: {', '.join(seen)}")
+    entry = _codes_entry(finding, claims, observations, catalogue)
+    codes = _codes_html(entry) if entry is not None else ""
     return (
         f'<article id="finding:{_esc(finding.finding_id)}" '
         f'data-type="{finding.type.value}"><h3 dir="auto">{_heading(finding, claims, observations)}</h3>'
@@ -227,6 +323,7 @@ def _finding_html(finding, claims, observations, turns, review=None) -> str:
         f'<div data-side="patient"><h4>{PATIENT_SIDE_HEADING}</h4>{_patient_html(claim)}</div>'
         f'<div data-side="pack"><h4>{PACK_SIDE_HEADING}</h4>{_pack_html(pack)}</div>'
         "</div>"
+        f"{codes}"
         f"<p>{'; '.join(parts)}</p></article>"
     )
 
@@ -380,3 +477,30 @@ def _scope_html(review=None) -> str:
     lines = "".join(f"<p>{line}</p>" for line in SCOPE_LINES)
     lines += f'<p id="review-status">{_review_status(review)}</p>'
     return f'<header id="scope"><h1>{BRIEF_TITLE}</h1>{lines}</header>'
+
+
+def _timeline_html(report) -> str:
+    head = "".join(f"<th>{_esc(column)}</th>" for column in TIMELINE_COLUMNS)
+    rows = []
+    for step in report.steps:
+        called = step.model_id is not None
+        none = _esc(TIMELINE_NONE)
+        cells = [
+            _esc(str(step.n)),
+            _esc(step.action.value),
+            _esc(step.target),
+            _esc(step.outcome),
+            _esc(step.model_id) if called else none,
+            _esc(str(step.input_tokens)) if called else none,
+            _esc(str(step.output_tokens)) if called else none,
+            _esc(f"{step.latency_ms / 1000:.1f} s") if called else none,
+            _esc(f"${step.cost_usd:.5f}"),
+        ]
+        rows.append("<tr>" + "".join(f"<td>{cell}</td>" for cell in cells) + "</tr>")
+    total = _esc(TIMELINE_TOTAL.format(calls=report.calls, usd=f"{report.spend_usd:.5f}"))
+    span = len(TIMELINE_COLUMNS)
+    return (
+        f'<details id="timeline"><summary>{_esc(TIMELINE_HEADING)}</summary><table>'
+        f"<thead><tr>{head}</tr></thead><tbody>{''.join(rows)}</tbody>"
+        f'<tfoot><tr><td colspan="{span}">{total}</td></tr></tfoot></table></details>'
+    )
