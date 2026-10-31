@@ -81,3 +81,11 @@
   - Tam 2005 (PMID 16129874, up to 67%) and Cornish 2005 (PMID 15738372, 53.6%) are hospital admissions: say "at admission";
   - README line 14's "33 of 44" is confirmed (PMID 42849491). The study enrolled 114 and 98 completed: never "n=100".
 - **PubChem:** "35 of 52 aliases agree with PubChem, none disagree, 17 aren't listed there", never "verified against PubChem" alone. A snapshot test may follow.
+
+## For the judge session: batch 27 merged, and the hero's ten fresh runs (31 Oct, 12:58 CET)
+- **Batch 27 merged** (3d3a30e): word rules on claim amounts. Results in `evidence/batches/27/checks.md`:
+  - the relation audit's ten traps all fail safe offline; live, 19 of 20 calls showed no wrong finding as fact, and the one that did (trap J on the tuned Glimmer, a false disagreement through its tablet count) is batch 27.1's target;
+  - Spark 1.3's, r1's and r2's scores are unchanged, byte for byte; on base Glimmer's replies, 52 wrong amounts are no longer shown.
+- **The README's limits sentence** can now say: each amount is checked as said in a cited turn, and word rules check what it was said about (negation, unit, count, another medicine, past, a split daily total); words outside those rules, and medicines in neither the catalogue nor the reply, aren't seen. Cite SPEC §2 "Relation checks (batch 27)".
+- **The hero, ten fresh runs on 2e0d985** (`evidence/diagnostics/hero-claims-2026-10-31/results.md`): **10 of 10 with the system's own categories, 0 harmful**; 0 of 10 as registered on 28 Oct, whose Concor row named the wrong type. Report both, never only the 10. The 28–29 Oct 6 of 10 predates batch 24's fix (`README.md` in the same folder). Synthetic voice, n = 10.
+- **U1–U8 after batch 27:** 3 of 8 correct, 0 harmful; three of the five misses are packs Spark 1.3 read as partial, batch 28's target.
