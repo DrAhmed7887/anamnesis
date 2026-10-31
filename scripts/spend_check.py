@@ -18,6 +18,11 @@ ROOT = Path(__file__).resolve().parents[1]
 # The credits as recorded in the plan and Notion (Credits & Subscriptions), 28 Oct 2026.
 CREDITS = {"meta": Decimal(150), "fireworks": Decimal(100), "baseten": Decimal(100),
            "google": Decimal("50.95"), "modal": Decimal(100)}
+# Ahmed, 31 Oct 15:13: Meta stops at $80, not 50% (evidence/decisions.md). Muse's read-only grills are in
+# neither ledger, so they're added here: 13 sessions, $3.1251 at muse_usage.py's prices (31 Oct 17:10).
+# Raise it after each new grill.
+STOP_USD = {"meta": Decimal(80)}
+NOT_IN_LEDGERS = {"meta": Decimal("3.13")}
 
 
 def _worktrees() -> list[Path]:
@@ -69,10 +74,13 @@ def main() -> None:
             print(f"{provider:10} ${after:9.4f}  STOP: no known credit for this provider")
             stop = True
             continue
+        after += NOT_IN_LEDGERS.get(provider, Decimal(0))
         share = after / credit
-        flag = "STOP" if share >= args.stop_at else "ok"
+        line = STOP_USD.get(provider)
+        flag = "STOP" if (after >= line if line is not None else share >= args.stop_at) else "ok"
         stop |= flag == "STOP"
-        print(f"{provider:10} ${after:9.4f} of ${credit:>6} = {share:6.1%}  {flag}")
+        note = f" (line ${line}, grills included)" if line is not None else ""
+        print(f"{provider:10} ${after:9.4f} of ${credit:>6} = {share:6.1%}  {flag}{note}")
     sys.exit(1 if stop else 0)
 
 
