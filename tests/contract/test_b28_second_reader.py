@@ -16,7 +16,7 @@ from anamnesis.providers import ProviderError, ProviderTrace, SpendGuard
 from anamnesis.providers.meta import MetaClient, MetaLabelReader
 from anamnesis.providers.openweight import PRESETS, OpenWeightClient, OpenWeightLabelReader
 from anamnesis.review import add_photo, new_review, request_photo, requestable
-from anamnesis.schema import AudioTurn
+from anamnesis.schema import AudioTurn, Strength
 from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.report import AgentAction
 from tests.contract.test_b19_brief import (
@@ -145,6 +145,55 @@ def test_a_second_reading_with_another_strength_keeps_the_first():
     report, _ = run({RC.region_id: [first, first]}, SecondReader({RC.region_id: [ten]}))
     assert report.observations[0].readability.value == "partial"
     assert steps_for(report, RC)[-1] == (AgentAction.SECOND_READ, "conflict: kept the first reading")
+
+
+@pytest.mark.parametrize("second", [
+    reading(label="Concor"),
+    reading(label="Bisoprolol", strength=None).model_copy(update={"inn": "bisoprolol"}),
+])
+def test_a_second_reading_that_knows_less_keeps_the_first(second):
+    first = reading(label="Concor 5", strength=st(mg("bisoprolol", 5)), readability="partial")
+    report, _ = run({RC.region_id: [first, first]}, SecondReader({RC.region_id: [second]}))
+    assert report.observations[0].readability.value == "partial"
+    assert steps_for(report, RC)[-1] == (AgentAction.SECOND_READ, "conflict: kept the first reading")
+    assert ("unreadable", "o0") in [(kind.value, target) for kind, target in requestable(report)]
+
+
+def test_a_second_reading_per_another_unit_keeps_the_first():
+    per_tablet = reading(label="Panadol 250", strength=st(mg("paracetamol", 250)), readability="partial")
+    per_ml = reading(label="Panadol 250 mg/ml",
+                     strength=Strength(ingredients=[mg("paracetamol", 250)], per="ml", release="unknown"))
+    report, _ = run({RC.region_id: [per_tablet, per_tablet]}, SecondReader({RC.region_id: [per_ml]}))
+    assert report.observations[0].readability.value == "partial"
+    assert steps_for(report, RC)[-1] == (AgentAction.SECOND_READ, "conflict: kept the first reading")
+
+
+def test_a_second_reading_with_another_release_keeps_the_first():
+    first = reading(label="Concor 5", strength=st(mg("bisoprolol", 5), release="modified"), readability="partial")
+    second = reading(label="Concor 5 mg\nBisoprolol fumarate", strength=st(mg("bisoprolol", 5), release="immediate"))
+    claims = [claim("c1", "Concor", intake=mg("bisoprolol", 5), per_day="1")]
+    report, _ = run({RC.region_id: [first, first]}, SecondReader({RC.region_id: [second]}), claims=claims)
+    assert report.observations[0].readability.value == "partial"
+    assert D.MATCH not in {finding.type for finding in report.findings}
+    unknown = reading(label="Concor 5", strength=st(mg("bisoprolol", 5)), readability="partial")
+    report, _ = run({RC.region_id: [unknown, unknown]}, SecondReader({RC.region_id: [second]}), claims=claims)
+    assert report.observations[0].readability.value == "readable"  # an unknown release can be completed
+
+
+def test_a_second_reading_with_another_salt_keeps_the_first():
+    succinate = reading(label="Metoprolol succ", strength=st(mg("metoprolol succinate", "47.5")), readability="partial")
+    tartrate = reading(label="Metoprolol tartrate 47.5 mg", strength=st(mg("metoprolol tartrate", "47.5")))
+    report, _ = run({RC.region_id: [succinate, succinate]}, SecondReader({RC.region_id: [tartrate]}))
+    assert report.observations[0].readability.value == "partial"
+    assert steps_for(report, RC)[-1] == (AgentAction.SECOND_READ, "conflict: kept the first reading")
+
+
+def test_a_second_reading_of_another_product_without_its_ingredients_keeps_the_first():
+    first = reading(label="Concor", readability="partial").model_copy(update={"inn": "bisoprolol"})
+    panadol = reading(label="Panadol 500 mg\nParacetamol")
+    report, _ = run({RC.region_id: [first, first]}, SecondReader({RC.region_id: [panadol]}))
+    assert report.observations[0].readability.value == "partial"
+    assert ("unreadable", "o0") in [(kind.value, target) for kind, target in requestable(report)]
 
 
 def test_a_second_reading_for_another_region_is_refused():
