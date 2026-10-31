@@ -92,6 +92,8 @@ def main() -> None:
     parser.add_argument("--limit", type=int, default=None, help="only the first N examples")
     parser.add_argument("--cap", default="8.00", help="total USD cap across all live runs (ledger)")
     parser.add_argument("--session-usd", default="2.00", help="USD cap for this split")
+    parser.add_argument("--out", type=Path, default=OUT,
+                        help="folder for <split>.jsonl (default: the 29 Oct baseline's, runs/spark)")
     args = parser.parse_args()
     answers = args.data / f"{args.split}.answers.jsonl"
     if not answers.exists():
@@ -100,9 +102,9 @@ def main() -> None:
     ledger = SpendGuard(il.LEDGER, cap_usd=Decimal(args.cap))
     capture = Capturing(MetaClient(api_key=os.environ.get("MODEL_API_KEY") or il.keychain("META_API_KEY")))
     guard = SessionGuard(ledger, max_usd=Decimal(args.session_usd), max_calls=2 * len(rows))
-    OUT.mkdir(parents=True, exist_ok=True)
+    args.out.mkdir(parents=True, exist_ok=True)
     start = ledger.total_usd
-    counts = run_split(MetaClaimExtractor(capture, guard), capture, rows, OUT / f"{args.split}.jsonl")
+    counts = run_split(MetaClaimExtractor(capture, guard), capture, rows, args.out / f"{args.split}.jsonl")
     print(f"{args.split}: {counts} · spend ${ledger.total_usd - start:.5f}"
           f" · ledger total ${ledger.total_usd:.5f}")
 
