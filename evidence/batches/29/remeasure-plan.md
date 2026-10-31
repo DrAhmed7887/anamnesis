@@ -17,3 +17,9 @@
 
 ## Spend
 About $3.50 for the 303 notes, $0.70 for test_spain and $0.10 for U2, all Meta. The ledgers put Meta at $67.7 of $150; with Muse's read-only grills (in neither ledger, about $2.7), real use is about $70.4, so the full set would end near $75–76, around Ahmed's 50% stop line. Step 2 waits for his word.
+
+## Amendment before any re-measure call (31 Oct, 15:27): a second, labelled view
+The Opus supervisor's review of batch 29 found that the existing scorer predates the fix: test_real's three U2 notes key "both amounts null" (`finetune/real_slice.py`: a combination couldn't be written without naming ingredients the prompt then forbade inferring), and `finetune/score.py` counts any ingredient name the transcript doesn't contain as harm, even the brand's own, which the product's checks accept (SPEC §2, batch 24). Re-scored as is, the U2 fix would count as a miss and a harm.
+- **The pre-registered scoring stays the primary result,** unchanged.
+- **A second view, applied to every system alike** (`score_views.py`, run on the existing runs before this commit): test_real's three U2 notes key the strength amoxicillin 875 mg + clavulanic acid 125 mg, and a kept ingredient name the claim's brand contains, by the catalogue, isn't counted as harm. On the existing runs it changes only Spark's 29 Oct test_real (25 to 22: its U2 replies had no strength); r1, r2 and base Glimmer are unchanged.
+- **Spend past the old line:** Ahmed raised the Meta stop line to $80 (`evidence/decisions.md`, 15:13), so step 2 (test_spain) runs too.
