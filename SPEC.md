@@ -195,7 +195,7 @@ A number a model writes is kept only if the source states it. The workshop rule 
   - **The tablet and capsule words:**
     - `tablet`, `tab`, `capsule`, `caps`, `comprimido`, `cápsula`, `comprimé` and `gélule`, with their plurals;
     - `قرص`, `أقراص`, `اقراص` and `كبسول`, with or without `ال` and with any suffix.
-  - **Why:** the schema can't say "per 5 ml". The readers wrote per ml, per dose or per tablet; live on 28 Oct, Spark 1.3 and Spark Open both read a 250 mg/5 ml syrup as 250 mg per ml, a fivefold error. Every round that listed wordings, or the places where a volume doesn't count, missed some. A print in the reading's own unit is what makes a reading trustworthy, so a missing wording now loses a strength rather than keeping a wrong one. The reading itself is kept.
+  - **Why:** the schema can't say "per 5 ml". The readers wrote per ml, per dose or per tablet; live on 28 Oct, Spark Open read a 250 mg/5 ml syrup as 250 mg per ml, a fivefold error, and Spark 1.3 as 250 mg per dose (`evidence/batches/22/comparison.md`). Every round that listed wordings, or the places where a volume doesn't count, missed some. A print in the reading's own unit is what makes a reading trustworthy, so a missing wording now loses a strength rather than keeping a wrong one. The reading itself is kept.
   - **Dropped, for example:**
     - `Each 5 ml of reconstituted suspension contains 250 mg`;
     - `Amoxicillin 250 mg/5 ml when reconstituted with water`;
