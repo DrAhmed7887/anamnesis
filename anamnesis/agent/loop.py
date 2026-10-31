@@ -9,7 +9,7 @@ from anamnesis.agent.crop import crop_region, enlarge_crop
 from anamnesis.agent.media import prepare_image
 from anamnesis.agent.session import IntakeSession
 from anamnesis.core.catalogue import Catalogue
-from anamnesis.core.reconcile import reconcile_all
+from anamnesis.core.reconcile import _split_inn_parts, reconcile_all
 from anamnesis.providers.sam import top_regions
 from anamnesis.providers.spark import LabelReading
 from anamnesis.schema import ImageRegion, PackObservation, Readability, Release, canonical_inn, salt_of
@@ -122,7 +122,7 @@ def _named_ingredients(reading: LabelReading) -> frozenset[str] | None:
     if reading.strength is not None:
         return frozenset(canonical_inn(part.inn) for part in reading.strength.ingredients)
     if reading.inn is not None:
-        return frozenset({canonical_inn(reading.inn)})
+        return frozenset(canonical_inn(part) for part in _split_inn_parts(reading.inn))
     return None
 
 
@@ -148,9 +148,10 @@ def _salts(reading: LabelReading) -> dict[str, frozenset[str]]:
             if inferred is not None:
                 found.add(inferred)
     if reading.inn is not None:
-        inferred = salt_of(reading.inn)
-        if inferred is not None:
-            salts.setdefault(canonical_inn(reading.inn), set()).add(inferred)
+        for part in _split_inn_parts(reading.inn):
+            inferred = salt_of(part)
+            if inferred is not None:
+                salts.setdefault(canonical_inn(part), set()).add(inferred)
     return {inn: frozenset(found) for inn, found in salts.items() if found}
 
 

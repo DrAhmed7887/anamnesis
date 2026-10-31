@@ -19,6 +19,26 @@ from anamnesis.schema import (
 from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.templates import QUESTION_FOR, TEMPLATES
 
+_COMBINED_INN_SPLIT = re.compile(r"[/+&]|(?<!\d),|,(?!\d)|\band\b| و ", re.IGNORECASE)
+
+
+def _split_inn_parts(inn: str) -> list[str]:
+    """Split a combined `inn` into its named ingredients (SPEC §3, batch 30).
+
+    A comma between two digits stays (``2,4-dichlorobenzyl alcohol``) and only a spaced ``و``
+    splits, since Arabic names can start with an attached one (``وارفارين``). No ``\\s*`` around
+    the separators: parts are stripped anyway, and it backtracked on long space runs.
+    More than eight parts is read whole, as one name, so a runaway reading stays fast.
+    """
+    parts = []
+    for chunk in _COMBINED_INN_SPLIT.split(inn):
+        chunk = chunk.strip()
+        if chunk:
+            parts.append(chunk)
+    if len(parts) > 8:
+        return [inn.strip()]
+    return parts
+
 
 def _identity(
     strength: Strength | None, inn: str | None, text: str, catalogue: Catalogue,
@@ -34,11 +54,24 @@ def _identity(
             or (name_inns is not None and inns != name_inns)
             or len(inns) < len(strength.ingredients)
         )
-        if inn and _resolve_inn(inn, catalogue) not in inns:
-            conflict = True
+        if inn:
+            parts = _split_inn_parts(inn)
+            if len(parts) >= 2:
+                named = frozenset(_resolve_inn_part(part, catalogue) for part in parts)
+                if named != inns:
+                    conflict = True
+            else:
+                single = parts[0] if parts else inn
+                if _resolve_inn_part(single, catalogue) not in inns:
+                    conflict = True
         return inns, conflict
     if inn:
-        inns = frozenset({_resolve_inn(inn, catalogue)})
+        parts = _split_inn_parts(inn)
+        if len(parts) >= 2:
+            inns = frozenset(_resolve_inn_part(part, catalogue) for part in parts)
+            return inns, ambiguous or (name_inns is not None and inns != name_inns)
+        single = parts[0] if parts else inn
+        inns = frozenset({_resolve_inn_part(single, catalogue)})
         return inns, ambiguous or (name_inns is not None and inns != name_inns)
     if ambiguous:
         return None, True
@@ -50,6 +83,20 @@ def _resolve_inn(name: str, catalogue: Catalogue) -> str:
     canonical = canonical_inn(name)
     known_moieties = {inn for entry in catalogue.entries for inn in entry.inns}
     if canonical in known_moieties:
+        return canonical
+    entry = catalogue.resolve(name)
+    if entry is not None and len(entry.inns) == 1:
+        return next(iter(entry.inns))
+    return canonical
+
+
+def _resolve_inn_part(name: str, catalogue: Catalogue) -> str:
+    """Resolve one `inn` part: through the catalogue only when one name covers all of it."""
+    canonical = canonical_inn(name)
+    known_moieties = {inn for entry in catalogue.entries for inn in entry.inns}
+    if canonical in known_moieties:
+        return canonical
+    if not catalogue.covers(name):
         return canonical
     entry = catalogue.resolve(name)
     if entry is not None and len(entry.inns) == 1:
@@ -244,7 +291,8 @@ def _side_salts(
     parts.extend([intake] if intake else [])
     pairs = [(_resolve_inn(part.inn, catalogue), part.salt or salt_of(part.inn)) for part in parts]
     if inn:
-        pairs.append((_resolve_inn(inn, catalogue), salt_of(inn)))
+        for part in _split_inn_parts(inn):
+            pairs.append((_resolve_inn_part(part, catalogue), salt_of(part)))
     pairs.extend(_text_salts(text, catalogue))
     salts: dict[str, set[str]] = {}
     for moiety, salt in pairs:
