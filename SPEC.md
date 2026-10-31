@@ -1,6 +1,6 @@
 # Anamnesis contract (v3.7, 28 Oct 2026)
 
-A pre-visit intake agent. It takes the patient's voice note (Voice Transcribe supports 25 languages; **tested live so far only on synthetic text-to-speech notes: English, and Egyptian Arabic text with brand names in Latin or Arabic script, spoken by a macOS voice; no human speech yet**) and photos of their medicine packs (tested live on rendered test packs and, from batch 21, public photos of real packs: Wikimedia Commons, DailyMed and Cairo University), and gives the clinician a one-page brief. Every fact in the brief links to the audio turn and the image region it came from. **It reports where sources disagree. It never gives medical advice.** The voice notes are synthetic so far; the photos of real packs are public, and Ahmed's own photos and voice, when recorded, follow `docs/DATA_HANDLING.md` (batch 23, QM M5 #2).
+A pre-visit intake agent. It takes the patient's voice note (Voice Transcribe supports 25 languages; **tested live so far only on synthetic text-to-speech notes: English, and Egyptian Arabic text with brand names in Latin or Arabic script, spoken by a macOS voice, plus eight Spanish and German notes in batch 24; no human speech yet**) and photos of their medicine packs (tested live on rendered test packs and, from batch 21, public photos of real packs: Wikimedia Commons, DailyMed and Cairo University), and gives the clinician a one-page brief. Every fact in the brief links to the audio turn and the image region it came from. **It reports where sources disagree. It never gives medical advice.** The voice notes are synthetic so far; the photos of real packs are public, and Ahmed's own photos and voice, when recorded, follow `docs/DATA_HANDLING.md` (batch 23, QM M5 #2).
 
 ## 1. Evidence (independent IDs, no forced chain)
 | Model | Fields | Rules |
@@ -195,7 +195,7 @@ A number a model writes is kept only if the source states it. The workshop rule 
   - **The tablet and capsule words:**
     - `tablet`, `tab`, `capsule`, `caps`, `comprimido`, `cápsula`, `comprimé` and `gélule`, with their plurals;
     - `قرص`, `أقراص`, `اقراص` and `كبسول`, with or without `ال` and with any suffix.
-  - **Why:** the schema can't say "per 5 ml". The readers wrote per ml, per dose or per tablet; live on 28 Oct, Spark 1.3 and Spark Open both read a 250 mg/5 ml syrup as 250 mg per ml, a fivefold error. Every round that listed wordings, or the places where a volume doesn't count, missed some. A print in the reading's own unit is what makes a reading trustworthy, so a missing wording now loses a strength rather than keeping a wrong one. The reading itself is kept.
+  - **Why:** the schema can't say "per 5 ml". The readers wrote per ml, per dose or per tablet; live on 28 Oct, Spark Open read a 250 mg/5 ml syrup as 250 mg per ml, a fivefold error, and Spark 1.3 as 250 mg per dose (`evidence/batches/22/comparison.md`). Every round that listed wordings, or the places where a volume doesn't count, missed some. A print in the reading's own unit is what makes a reading trustworthy, so a missing wording now loses a strength rather than keeping a wrong one. The reading itself is kept.
   - **Dropped, for example:**
     - `Each 5 ml of reconstituted suspension contains 250 mg`;
     - `Amoxicillin 250 mg/5 ml when reconstituted with water`;
@@ -431,7 +431,7 @@ On 30 Oct Ahmed said yes to putting both open-weight models inside the product, 
 
 `model_id`, `latency_ms`, `input_tokens`, `output_tokens`, `cost_usd` → `evidence/`.
 **No contributor model** (batch 22 round 2, batch 23, batch 23.1; QM M5 #7, M6 #6): `MetaLabelReader`, `MetaClaimExtractor`, the open-weight reader, `ProviderTrace`, `AgentStep` and `SpendGuard.charge_estimate` (so `SessionGuard.charge_estimate` too) all refuse a model id with `-contributor` anywhere in it, in any case, surrounding whitespace ignored, as `scripts/batch.sh` does.
- Hosted Meta models are the default. Open weights (Glimmer on Modal, Spark Open on Baseten) are for comparison only.
+ Hosted Meta models are the default. Open weights are opt-in paths of `scripts/intake_live.py`, never the default: the tuned Glimmer on Modal as the claim extractor (`--extractor glimmer`, batch 26, synthetic voices only), and Muse Spark Open on Fireworks as the label reader or the second reader (`--reader fireworks`, `--second-reader fireworks`, batches 26 and 28, public photos only).
 Billing-uncertain failures are recorded at the pre-call estimate. Rejected 4xx and
 429 requests are not charged.
 
