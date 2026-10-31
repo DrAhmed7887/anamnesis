@@ -382,3 +382,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Ahmed's call:** neutral names. The public copy names the tool behind every batch: Codex for batches 1–12 (Claude Code built batch 6 and some fixes), Claude Code for 13–15.5 and as CEO from 16, and Muse Code for 16–30. It doesn't name the accounts behind those tools, and it leaves out the notes about them.
 - **Where that rewrites text, not only names:** the 27 Oct decision entry, `CLAUDE.md`:10 and pre-B16 grill item J8 (`evidence/grills/pre-b16/effect.md` and `judge.md`).
 - **Also fixed:** the session cleaner now applies the rules in git filter-repo's order (every literal line, then every regex line), so a rule gives the same text in the sessions as in the history.
+- **Dry run (31 Oct, 23:53), 415 commits:**
+  - every scan gives 0 for the build's account names and the notes about them, across all diffs, commit messages and sessions;
+  - the earlier scans still give 0, apart from five known false alarms: a made-up `/Users/x/` path in a unit test, the path pattern in `scripts/still.py`, generic mentions of Notion, a test key in a unit test, and a timestamp that happens to contain a SNOMED-like number;
+  - ruff passes and 2,757 tests pass in the public copy.
