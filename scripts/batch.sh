@@ -51,7 +51,7 @@ gate() {
 muse_build() {
   local label=$1 brief=$2 raw=$3 out=$4 model=$5
   # Ahmed, 28 Oct: pause at 50% of Meta's or any partner's credit. A Muse round has cost up to $1.83.
-  uv run python scripts/spend_check.py --next meta=2.00 || { print -u2 "$label: spend gate (50% of a credit)"; exit 1; }
+  uv run python scripts/spend_check.py --next meta=2.00 || { print -u2 "$label: spend gate (a credit's stop line)"; exit 1; }
   print "muse $model, $label, started $(now)" > "$raw"
   # Muse's goal tracking (cookbook 07): headless "/goal" text isn't parsed as the command (probe, 27 Oct), so the
   # prompt asks Muse to pin the goal with its own goal tool, with an oracle it can run inside its sandbox.
