@@ -386,3 +386,8 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - every scan gives 0 for the build's account names and the notes about them, across all diffs, commit messages and sessions;
   - the earlier scans still give 0, apart from five known false alarms: a made-up `/Users/x/` path in a unit test, the path pattern in `scripts/still.py`, generic mentions of Notion, a test key in a unit test, and a timestamp that happens to contain a SNOMED-like number;
   - ruff passes and 2,757 tests pass in the public copy.
+
+## 2026-11-01, 00:03: the repo names (Ahmed)
+- **Public:** `DrAhmed7887/anamnesis`, created on Tuesday from the filtered copy that `scripts/public/make_public.sh` builds. It stays private until Ahmed makes it public on Wednesday.
+- **Private:** renamed `DrAhmed7887/anamnesis-private`, still private. The three worktrees share one git config, and its `origin` now points at the new name.
+- **Why the remote changed tonight:** GitHub's redirect from the old name ends once the public repo takes it, and a checkout still pointing at `anamnesis` would then push the private history to the public repo.
