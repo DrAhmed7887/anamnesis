@@ -64,3 +64,34 @@ def test_units_stay_when_nothing_was_dropped():
     said = "I take Concor five milligrams, one in the morning."
     regimen = parse(said, claim("Concor", intake_amount=amt("bisoprolol", 5), units="1"))[0].regimen
     assert regimen is not None and regimen.units_per_intake == Decimal(1)
+
+
+# The fresh Muse audit (31 Oct): a count backs the tablet count only if the other rules keep it for this claim.
+@pytest.mark.parametrize("said", [
+    "With Concor I don't take ten milligrams, not two tablets",
+    "I take Concor ten milligrams a day, five in the morning and five at night, and Panadol two tablets",
+])
+def test_a_negated_or_another_medicines_count_doesnt_back_the_tablet_count(said):
+    regimen = parse(said, claim("Concor", intake_amount=amt("bisoprolol", 10), units="2"))[0].regimen
+    assert regimen is None or regimen.units_per_intake is None
+
+
+# The Opus supervisor's review of 27.1 (31 Oct): only "weiß nicht" means "don't know"; "sicher nicht" and
+# «متأكد مش» mean "certainly not", so the negation still drops the amount.
+@pytest.mark.parametrize("said, name", [
+    ("Ich nehme Concor zehn Milligramm, sicher nicht fünf Milligramm", "Concor"),
+    ("باخد كونكور عشرة ملي، متأكد مش خمسة", "كونكور"),
+    ("With Concor I'm not sure not five milligrams", "Concor"),
+    ("I take Concor ten milligrams, I'm sure not five", "Concor"),
+])
+def test_only_weiss_nicht_cancels_a_negation(said, name):
+    assert intake_of(said, claim(name, intake_amount=amt("bisoprolol", 5))) is None
+
+
+@pytest.mark.parametrize("said, name, value", [
+    ("باخد بنادول خمسمية ساعة ما راسي توجعني", "بنادول", "500"),
+    ("باخد كونكور خمسة يوم ويوم لا", "كونكور", "5"),
+    ("I take Concor 10/day.", "Concor", "10"),
+])
+def test_a_singular_time_word_isnt_a_duration(said, name, value):
+    assert intake_of(said, claim(name, intake_amount=amt("bisoprolol", value), per_day="1")) == Decimal(value)
