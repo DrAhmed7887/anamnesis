@@ -117,7 +117,9 @@ case $cmd in
     branch=$(git branch --show-current)
     title=$(head -1 "briefs/$n.md" | sed 's/^# *//')
     # Stage only build paths, so files another tool drops in the repo never ride along.
-    git add anamnesis tests "$ev" "briefs/$n.md" SPEC.md pyproject.toml uv.lock
+    git add anamnesis tests scripts "$ev" "briefs/$n.md" SPEC.md pyproject.toml uv.lock
+    # the read-only plan and audit grills (batch 28 left them behind)
+    git add evidence/grills/b"${n//./}"-muse-* 2>/dev/null || true
     git commit -q -m "feat: batch $n - $title" -m "Built by the batch builder (see Built-by in the review), gated (ruff + pytest + contract lock), reviewed by Claude Code (CEO). Evidence: $ev/"
     # The engine may build in its own worktree while main stays checked out in the main checkout: merge there.
     root=$(git worktree list --porcelain | awk '/^worktree /{wt=substr($0, 10)} $0 == "branch refs/heads/main" {print wt}')
