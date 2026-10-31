@@ -1,0 +1,4 @@
+succinate 23.75 mg -> base 19.45 mg | tartrate 25.0 mg -> base 19.52 mg | diff -0.34%
+succinate 47.5 mg -> base 38.91 mg | tartrate 50.0 mg -> base 39.04 mg | diff -0.34%
+succinate 95 mg -> base 77.82 mg | tartrate 100.0 mg -> base 78.08 mg | diff -0.34%
+succinate 190 mg -> base 155.63 mg | tartrate 200.0 mg -> base 156.17 mg | diff -0.34%

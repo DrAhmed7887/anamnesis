@@ -71,3 +71,13 @@
 ## The tag moved after the relation audit (31 Oct, 00:15 CET)
 - **No code changed.** The tag adds the audit (`evidence/audits/relation-provenance/`, with Muse's double-check) and its decision entry.
 - **For the judge session:** the README's limits section should carry the audit's sentence and numbers ("Decision", 31 Oct, in `evidence/decisions.md`).
+
+## For the judge session: the freeze moved, batch 27 is coming, and PubMed citations (31 Oct, 11:46 CET)
+- **The freeze moved (Ahmed, 31 Oct):** engine changes stay open until Tue 3 Nov 12:00 CET (`evidence/decisions.md`, "10:45: the freeze moves"). Captures come Mon from the tag of that moment.
+- **The README's limits sentence from the audit is about to change.** Batch 27 adds word rules on claim amounts (negation, units, counts, another medicine's amount, past doses, split daily totals), so "which medicine, tense, negation or unit it belonged to is not checked" will no longer be true as written. Wait for the merge entry below before re-wording it.
+- **The hero's 6 of 10 predates batch 24's fix** (`evidence/diagnostics/hero-claims-2026-10-31/`). Ten fresh runs are pre-registered there; don't re-word the hero rows until they're in.
+- **PubMed, checked by the engine through E-utilities** (`evidence/ncbi/README.md`, `pubmed_esummary.json`):
+  - lead the problem statement with Bedell 2000 (PMID 10904455): in an outpatient practice, 76% of patients (239) had at least one discrepancy between what they took and the doctor's record. Of the 545 discrepancies, 51% were medicines taken but not recorded; the split is of discrepancies, not patients;
+  - Tam 2005 (PMID 16129874, up to 67%) and Cornish 2005 (PMID 15738372, 53.6%) are hospital admissions: say "at admission";
+  - README line 14's "33 of 44" is confirmed (PMID 42849491). The study enrolled 114 and 98 completed: never "n=100".
+- **PubChem:** "35 of 52 aliases agree with PubChem, none disagree, 17 aren't listed there", never "verified against PubChem" alone. A snapshot test may follow.

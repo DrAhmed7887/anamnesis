@@ -1,0 +1,57 @@
+{
+ "source": "NCBI E-utilities esummary, db=pubmed, read 31 Oct 2026 by the engine session",
+ "records": [
+  {
+   "pmid": "10904455",
+   "first_author": "Bedell SE",
+   "journal": "Arch Intern Med",
+   "pubdate": "2000 Jul 24",
+   "volume": "160",
+   "issue": "14",
+   "pages": "2129-34",
+   "title": "Discrepancies in the use of medications: their extent and predictors in an outpatient practice.",
+   "doi": [
+    "10.1001/archinte.160.14.2129"
+   ]
+  },
+  {
+   "pmid": "16129874",
+   "first_author": "Tam VC",
+   "journal": "CMAJ",
+   "pubdate": "2005 Aug 30",
+   "volume": "173",
+   "issue": "5",
+   "pages": "510-5",
+   "title": "Frequency, type and clinical importance of medication history errors at admission to hospital: a systematic review.",
+   "doi": [
+    "10.1503/cmaj.045311"
+   ]
+  },
+  {
+   "pmid": "15738372",
+   "first_author": "Cornish PL",
+   "journal": "Arch Intern Med",
+   "pubdate": "2005 Feb 28",
+   "volume": "165",
+   "issue": "4",
+   "pages": "424-9",
+   "title": "Unintended medication discrepancies at the time of hospital admission.",
+   "doi": [
+    "10.1001/archinte.165.4.424"
+   ]
+  },
+  {
+   "pmid": "42849491",
+   "first_author": "Brodeur PG",
+   "journal": "Lancet",
+   "pubdate": "2026 Oct 24",
+   "volume": "408",
+   "issue": "10565",
+   "pages": "1732-1744",
+   "title": "Conversational diagnostic artificial intelligence in ambulatory primary care: a prospective feasibility study.",
+   "doi": [
+    "10.1016/S0140-6736(26)01535-7"
+   ]
+  }
+ ]
+}
