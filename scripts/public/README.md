@@ -5,6 +5,7 @@ The private repository stays as it is. `make_public.sh` builds the public copy f
 1. **`git filter-repo` rewrites every commit:**
    - Home and scratch paths become `<repo>`, `<scratch>` or `~`.
    - Personal account names and other personal details are replaced.
+   - The build's accounts aren't named: the history names the tool behind each batch (Codex, Claude Code, Muse Code). Notes about those accounts are left out, which rewrites the 27 Oct decision entry, `CLAUDE.md`'s line on the early builds and pre-B16 grill item J8.
    - SNOMED CT ids are removed: their licence doesn't clearly allow publishing them (`evidence/decisions.md`, 30 Oct).
    - The author email becomes a GitHub noreply address.
    - The raw Muse session exports leave the history, and come back cleaned in step 2.

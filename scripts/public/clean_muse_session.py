@@ -5,7 +5,8 @@
 Removes two things and rewrites text, nothing else:
 - `encrypted_content`: opaque encrypted reasoning, no use to a reader;
 - `run_context_messages[].text`: the session owner's own context (their skill list), not the repo's;
-- every string: the rules file's literal and `regex:` lines (`old==>new`, as git filter-repo reads them).
+- every string: the rules file's literal and `regex:` lines (`old==>new`), in git filter-repo's order:
+  every literal line first, then every `regex:` line, each top to bottom.
 Every tool call, file read, edit, command, message and billing record stays.
 """
 
@@ -20,16 +21,16 @@ CONTEXT = "[removed for the public copy: the session owner's personal context]"
 
 
 def load_rules(path: Path) -> list[tuple[re.Pattern, str]]:
-    rules = []
+    literals, regexes = [], []
     for line in path.read_text(encoding="utf-8").splitlines():
         if not line.strip() or line.startswith("#"):
             continue
-        old, _, new = line.partition("==>")
+        old, new = line.rsplit("==>", 1) if "==>" in line else (line, "***REMOVED***")
         if old.startswith("regex:"):
-            rules.append((re.compile(old[len("regex:"):]), new))
+            regexes.append((re.compile(old[len("regex:"):]), new))
         else:
-            rules.append((re.compile(re.escape(old)), new.replace("\\", "\\\\")))
-    return rules
+            literals.append((re.compile(re.escape(old)), new.replace("\\", "\\\\")))
+    return literals + regexes
 
 
 def clean(value, rules, key=None):

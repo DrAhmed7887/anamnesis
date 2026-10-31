@@ -377,3 +377,8 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Pending Ahmed:**
   - The repo name.
   - Going public, on Wed.
+
+## 2026-10-31, 23:50: the public copy names the tools, not the accounts (Ahmed)
+- **Ahmed's call:** neutral names. The public copy names the tool behind every batch: Codex for batches 1–12 (Claude Code built batch 6 and some fixes), Claude Code for 13–15.5 and as CEO from 16, and Muse Code for 16–30. It doesn't name the accounts behind those tools, and it leaves out the notes about them.
+- **Where that rewrites text, not only names:** the 27 Oct decision entry, `CLAUDE.md`:10 and pre-B16 grill item J8 (`evidence/grills/pre-b16/effect.md` and `judge.md`).
+- **Also fixed:** the session cleaner now applies the rules in git filter-repo's order (every literal line, then every regex line), so a rule gives the same text in the sessions as in the history.
