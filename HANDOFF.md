@@ -1,6 +1,6 @@
 # Handoff: how to run the Anamnesis engine
 
-For a fresh engine session, or for Ahmed. This covers the state on 28 Oct 2026; the decisions behind it are in `evidence/decisions.md`.
+For a fresh engine session, or for Ahmed. This covers the state on 28 Oct 2026. For everything since (batches 24–30, the opt-in open-weight paths, `demo-freeze` at 710b453), read `evidence/decisions.md` and the last section of `evidence/grills/m9-freeze/clean_checkout.md`.
 
 ## Roles
 - **Claude Code (CEO, engine session):**

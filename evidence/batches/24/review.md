@@ -29,7 +29,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 10 rounds, goal pinn
   - `providers/stated.py`, `providers/numbers.py`, `providers/claims.py`, `core/reconcile.py` and `core/catalogue.yaml`;
   - its unit tests, in `tests/unit/test_b24_extra.py`.
 - **The held-out guard** (16cab05, before the run): Muse's export shows no read under `evidence/` or the fine-tune data (`goal.md`).
-- **An independent Opus supervisor** reviewed each round (`supervisor.md`):
+- **A separate Opus supervisor** (a Claude subagent of the engine session) reviewed each round (`supervisor.md`):
   - **Round 1: CHANGES,** with 1 blocker, 2 majors and 5 minors. The CEO accepted all eight. Findings 1–3 came from the CEO's own SPEC: the CEO's reference build had them too.
     - **The blocker:** an unsaid second ingredient line, relabelled to the brand, reached a false `match`.
     - **The majors:** English "five mil" stated 1000, and a salt said inside a German compound was lost.

@@ -16,7 +16,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 1 round, goal pinned
   - the early returns in `brief_html._codes_entry`;
   - its unit tests in `tests/unit/test_b24_2_extra.py`, including the Panadol Extra case.
 - **The held-out guard:** Muse's export shows no read under `evidence/` or the fine-tune data (`goal.md`).
-- **An independent Opus supervisor** reviewed the build (`supervisor.md`): **APPROVE**.
+- **A separate Opus supervisor** (a Claude subagent of the engine session) reviewed the build (`supervisor.md`): **APPROVE**.
   - **Codes hidden correctly:** no codes line beside a contradiction as the SPEC defines it, and none wrongly hidden.
   - **Salts and aliases keep their codes:** fumarate, "(as …)", German and Latin forms, acetaminophen, بنادول, كونكور.
   - **Nothing else changed:** 377 `reconcile_all` results and 83 existing briefs are byte-identical apart from the codes lines.

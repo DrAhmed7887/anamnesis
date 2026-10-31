@@ -1,6 +1,6 @@
 # Anamnesis contract (v3.7, 28 Oct 2026)
 
-A pre-visit intake agent. It takes the patient's voice note (Voice Transcribe supports 25 languages; **tested live so far only on synthetic text-to-speech notes: English, and Egyptian Arabic text with brand names in Latin or Arabic script, spoken by a macOS voice; no human speech yet**) and photos of their medicine packs (tested live on rendered test packs and, from batch 21, public photos of real packs: Wikimedia Commons, DailyMed and Cairo University), and gives the clinician a one-page brief. Every fact in the brief links to the audio turn and the image region it came from. **It reports where sources disagree. It never gives medical advice.** The voice notes are synthetic so far; the photos of real packs are public, and Ahmed's own photos and voice, when recorded, follow `docs/DATA_HANDLING.md` (batch 23, QM M5 #2).
+A pre-visit intake agent. It takes the patient's voice note (Voice Transcribe supports 25 languages; **tested live so far only on synthetic text-to-speech notes: English, and Egyptian Arabic text with brand names in Latin or Arabic script, spoken by a macOS voice, plus eight Spanish and German notes in batch 24; no human speech yet**) and photos of their medicine packs (tested live on rendered test packs and, from batch 21, public photos of real packs: Wikimedia Commons, DailyMed and Cairo University), and gives the clinician a one-page brief. Every fact in the brief links to the audio turn and the image region it came from. **It reports where sources disagree. It never gives medical advice.** The voice notes are synthetic so far; the photos of real packs are public, and Ahmed's own photos and voice, when recorded, follow `docs/DATA_HANDLING.md` (batch 23, QM M5 #2).
 
 ## 1. Evidence (independent IDs, no forced chain)
 | Model | Fields | Rules |
@@ -431,7 +431,7 @@ On 30 Oct Ahmed said yes to putting both open-weight models inside the product, 
 
 `model_id`, `latency_ms`, `input_tokens`, `output_tokens`, `cost_usd` → `evidence/`.
 **No contributor model** (batch 22 round 2, batch 23, batch 23.1; QM M5 #7, M6 #6): `MetaLabelReader`, `MetaClaimExtractor`, the open-weight reader, `ProviderTrace`, `AgentStep` and `SpendGuard.charge_estimate` (so `SessionGuard.charge_estimate` too) all refuse a model id with `-contributor` anywhere in it, in any case, surrounding whitespace ignored, as `scripts/batch.sh` does.
- Hosted Meta models are the default. Open weights (Glimmer on Modal, Spark Open on Baseten) are for comparison only.
+ Hosted Meta models are the default. Open weights are opt-in paths of `scripts/intake_live.py`, never the default: the tuned Glimmer on Modal as the claim extractor (`--extractor glimmer`, batch 26, synthetic voices only), and Muse Spark Open on Fireworks as the label reader or the second reader (`--reader fireworks`, `--second-reader fireworks`, batches 26 and 28, public photos only).
 Billing-uncertain failures are recorded at the pre-call estimate. Rejected 4xx and
 429 requests are not charged.
 

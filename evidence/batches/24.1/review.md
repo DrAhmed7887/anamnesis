@@ -19,7 +19,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 1 round, goal pinned
     - the contract file's import order would have failed the gate.
 - **Muse wrote all the code:** `core/catalogue.py`, `core/catalogue.yaml`, `brief.py`, `brief_html.py` and `schema/templates.py`, and its unit tests in `tests/unit/test_b24_1_extra.py`.
 - **The held-out guard:** the brief gives every code in its table, so Muse needed nothing under `evidence/`. Muse's export shows no read under `evidence/` or the fine-tune data (`goal.md`).
-- **An independent Opus supervisor** reviewed the build (`supervisor.md`): **APPROVE**, with no finding at a CHANGES level.
+- **A separate Opus supervisor** (a Claude subagent of the engine session) reviewed the build (`supervisor.md`): **APPROVE**, with no finding at a CHANGES level.
   - **Codes:** all 12 entries match the table, and no existing entry changed in any field.
   - **Escaping:** hostile names and hostile code values came out escaped, with no links.
   - **The reference line:** exactly once whenever a codes line shows, and never otherwise.
