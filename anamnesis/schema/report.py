@@ -19,6 +19,7 @@ class AgentAction(StrEnum):
     SEGMENT = "segment"
     READ = "read"
     ZOOM_READ = "zoom_read"
+    SECOND_READ = "second_read"
     RECONCILE = "reconcile"
     BUDGET_EXHAUSTED = "budget_exhausted"
 

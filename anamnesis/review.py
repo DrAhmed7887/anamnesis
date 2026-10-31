@@ -7,6 +7,7 @@ from anamnesis.agent.loop import (
     _observation,
     _prepare,
     _read_photo,
+    _second_read,
     _zoom,
 )
 from anamnesis.agent.session import IntakeSession
@@ -96,7 +97,7 @@ def request_message(report: ReconciliationReport, request: PhotoRequest) -> str:
 def add_photo(
     report: ReconciliationReport, review: Review, request_id: str, photo: Image,
     images: list[Image], audio: Image | None, *, segmenter, reader, catalogue,
-    concepts: tuple[str, ...] = SAM_CONCEPTS, top_k: int = 3,
+    second_reader=None, concepts: tuple[str, ...] = SAM_CONCEPTS, top_k: int = 3,
     max_provider_calls: int | None = None,
 ) -> tuple[ReconciliationReport, Review]:
     if review.intake_id != report.intake_id:
@@ -113,7 +114,8 @@ def add_photo(
     if any(fresh[0][0] == item[0][0] for item in prepared):
         raise ValueError("photo was already given")
     if max_provider_calls is None:
-        max_provider_calls = len(concepts) + 2 * top_k
+        per_region = 3 * top_k if second_reader is not None else 2 * top_k
+        max_provider_calls = len(concepts) + per_region
     session = IntakeSession(max_provider_calls)
     kept, readings = [], []
     if fresh[1] is None:
@@ -121,10 +123,12 @@ def add_photo(
             session.note(AgentAction.SEGMENT, fresh[2][:12], "error: image cannot be decoded")
     else:
         kept, readings = _read_photo(session, segmenter, reader, fresh, concepts, top_k)
-    final = [
-        _zoom(session, reader, image, region, reading) if reading.readability in _NEEDS_ZOOM else reading
-        for image, region, reading in readings
-    ]
+    final = []
+    for image, region, reading in readings:
+        if reading.readability in _NEEDS_ZOOM:
+            reading = _zoom(session, reader, image, region, reading)
+            reading = _second_read(session, second_reader, image, region, reading)
+        final.append(reading)
     fresh_observations = [
         _observation(len(report.observations) + index, reading)
         for index, reading in enumerate(final)
