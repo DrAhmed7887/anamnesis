@@ -99,3 +99,31 @@
   - **The relation checks** (SPEC §2): the README's limits sentence should say each amount is checked as said in a cited turn and, by word rules, as said about that medicine (negation, unit, count, another medicine, past, a split daily total, a duration). Words outside the rules, and medicines neither in the catalogue nor in the reply, aren't seen. Live, the ten traps: 20 of 20 calls with no wrong finding as fact after batch 27.1 (`evidence/batches/27.1/live-results.md`).
   - **The second reader (batch 28):** on the same 16 U1–U8 runs, 10 correct with it and 8 without it, 0 harmful either way; U7 is the difference, Spark Open reading a Sortis 40 mg box Spark 1.3 couldn't (`evidence/batches/28/live-results.md`). It is an option (`--second-reader fireworks`), public photos only; the default path stays Meta's hosted Spark 1.3. Never "better" or "beats": n = 8 cases × 2 runs.
   - **The default path's U1–U8 column after batch 27:** 3 of 8, 0 harmful (`evidence/batches/27/checks.md`), with three of the five misses on partial reads.
+
+## The tag moved after batches 29 and 30 (31 Oct, 19:15 CET)
+- **The tag:** `demo-freeze` now points at 710b453: batch 29 (61ae0e5) and batch 30 (031a87c) merged, with batch 29's re-measure, U2's live checks and their diagnostics.
+- **A fresh clone** of `main` at 710b453 from the private remote: the tree was clean, `uv sync --frozen` ran, ruff was clean, and all 2,757 tests pass offline.
+- **What changed since the last tag:**
+  - `anamnesis/providers/claims.py` (batch 29): Spark's claim prompt adds one sentence for combination products. The tuned Glimmer's prompt is unchanged.
+  - `anamnesis/core/reconcile.py`, `catalogue.py` (`covers`) and `agent/loop.py` (batch 30):
+    - an `inn` naming several ingredients is read as that set;
+    - a catalogue name counts only when it covers all of an `inn`;
+    - an `inn` of more than eight parts is read whole.
+  - `scripts/spend_check.py`: Meta's stop line is $80 (Ahmed, 31 Oct), and it counts Muse's grills.
+- **For the judge session:**
+  - **Spark 1.3 after batch 29,** on the 303 test notes:
+    - 203 fully right with 0 harmful under the second view, which was defined before any call;
+    - 200 with 3 "harmful" as pre-registered: three U2 notes, where the brand's own ingredients count against the reply;
+    - the 29 Oct prompt gives 203 (0) as pre-registered and 200 (0) under the second view;
+    - 64 notes flipped both ways between runs.
+
+    Report both views, and never "improved": the total moved within run-to-run variation (`evidence/batches/29/remeasure-results.md`).
+  - **U2 (Augmentin 875/125):**
+    - the pack is now read as its two ingredients in 3 of 3 live runs;
+    - the pair matched in 1 of 3, against a pre-registered 2 of 3, which is not met, with 0 harmful;
+    - in the other two runs, Spark's claim came back without amounts: 4 of 6 live runs since batch 29's prompt, and 11 of 11 direct calls (`evidence/batches/30/live-results.md`).
+  - **The whole-name rule** closes a false `match` that `main` made: "paracetamol plus caffeine" beside a paracetamol-only strength. In the supervisor's targeted fuzz, nothing moves into `match` over 2,430 cases (`evidence/batches/30/supervisor.md`).
+  - **The framing** (Ahmed, 31 Oct: "finalize today and tomorrow"): "the ingestion problem" for the README's `## Why`, with only the citations in `evidence/ncbi/README.md`, led by Bedell 2000.
+    - Never "firewall", "fail-closed", "eliminates hallucination", "formal invariants", "real-world" for staged cases, FHIR or "digital twin".
+    - 95.7% only as "Glimmer + LoRA r1, 290/303 fully right on synthetic held-out notes, opt-in".
+  - **The engine closes here:** Meta stands at $77.95 of the $80 line, and only release-gate fixes follow.
