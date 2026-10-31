@@ -40,7 +40,10 @@ KNOWING_WORDS = frozenset({
     "sé", "seguro", "segura", "recuerdo",
     "sicher", "weiß",
 })
-"""Words of knowing a negation negates instead of the number (SPEC sect 2, rule 1)."""
+"""Words of knowing a negation right before them negates instead of the number (SPEC sect 2, rule 1)."""
+
+WEISS_WORD = "weiß"
+"""The only knowing word that cancels a negation right after it (SPEC sect 2, rule 1, batch 27.1)."""
 
 MG_WORDS = (
     "mg", "milligram", "milligrams", "miligramo", "miligramos", "milligramm",
@@ -102,6 +105,16 @@ GERMAN_DOSE_WORDS = frozenset({
 SOBRE_WORDS = frozenset({"sobre", "sobres"})
 """Extra count words (SPEC sect 2, rule 3)."""
 
+DURATION_WORDS = (
+    "years", "months", "weeks", "days", "hours",
+    "سنين", "سنوات", "شهور", "اشهر",
+    "اسابيع", "ايام", "ساعات",
+    "años", "meses", "semanas", "días", "horas",
+    "Jahre", "Jahren", "Monate", "Monaten",
+    "Wochen", "Tage", "Tagen", "Stunden",
+)
+"""Plural duration words making a run a duration, never an amount (SPEC sect 2, rule 3, batch 27.1)."""
+
 JOINER_WORDS = frozenset({"and", "و", "y", "und", "the", "a"})
 """Joiners skipped when walking back (SPEC sect 2, rule 4)."""
 
@@ -146,6 +159,7 @@ _CLAUSE_END = _norm_list(CLAUSE_END_WORDS)
 _NEGATION = _norm_list(NEGATION_WORDS)
 _DON = _norm_list(DON_PREFIXES)
 _KNOWING = _norm_list(KNOWING_WORDS)
+_WEISS = _norm(WEISS_WORD)
 _OPEN_UNIT = _norm_list(OPEN_UNIT_WORDS)
 _JOINER = _norm_list(JOINER_WORDS)
 _OF = _norm_list(OF_WORDS)
@@ -158,6 +172,7 @@ _COUNT = (
 )
 _PAST = _phrase_lists(PAST_MARKERS)
 _PER_DAY = _phrase_lists(PER_DAY_PHRASES)
+_DURATION = _norm_list(DURATION_WORDS)
 
 _UNIT_SINGLE: dict[str, str] = {}
 _UNIT_TWO: dict[tuple[str, str], str] = {}
@@ -360,12 +375,27 @@ def _is_negated(tokens: list[Token], start: int, clause: int) -> bool:
             continue
         word = tokens[idx].text
         negated = word in _NEGATION
+        is_t_neg = False
         if not negated and word == "t" and idx - 1 >= 0:
             prev = tokens[idx - 1]
             if not prev.is_digit and prev.clause == clause and prev.text in _DON:
                 negated = True
-        if negated and tokens[idx + 1].text not in _KNOWING:
-            return True
+                is_t_neg = True
+        if not negated:
+            continue
+        if tokens[idx + 1].text in _KNOWING:
+            continue
+        before = idx - 2 if is_t_neg else idx - 1
+        if (
+            before >= 0
+            and tokens[before].clause == clause
+            and not tokens[before].is_digit
+            and tokens[before].text == _WEISS
+        ):
+            # Only "weiß nicht" ("I don't know") cancels the negation; after any
+            # other word of knowing the negation still negates (batch 27.1).
+            continue
+        return True
     return False
 
 
@@ -395,6 +425,22 @@ def _is_count(
                 if between.is_digit or between.text not in _UNIT_SINGLE:
                     return True
     return False
+
+
+def _is_duration(
+    tokens: list[Token], end: int, clause: int, has_unit_word: bool,
+) -> bool:
+    if has_unit_word:
+        return False
+    if not tokens[end].is_digit and tokens[end].text == "a":
+        return False
+    nxt = end + 1
+    return (
+        nxt < len(tokens)
+        and tokens[nxt].clause == clause
+        and not tokens[nxt].is_digit
+        and tokens[nxt].text in _DURATION
+    )
 
 
 def _names_to_token_lists(names: list[str]) -> list[list[str]]:
@@ -540,6 +586,45 @@ def _is_past(
     return False
 
 
+def _name_index(
+    tokens: list[Token], own_names: list[str], another_names: list[str],
+) -> tuple[set[int], set[int], set[int], list[tuple[int, int]]]:
+    """Another/own name positions in one turn (SPEC sect 2, rule 4)."""
+    occs = _find_name_occs(tokens, _names_to_token_lists(own_names), "own")
+    occs += _find_name_occs(tokens, _names_to_token_lists(another_names), "another")
+    kept = _resolve_occs(occs)
+    another_ends = {end for _, end, kind in kept if kind == "another"}
+    another_starts = {start for start, _, kind in kept if kind == "another"}
+    own_starts = {start for start, _, kind in kept if kind == "own"}
+    another_spans = [(start, end) for start, end, kind in kept if kind == "another"]
+    own_covered = {pos for start, end, kind in kept if kind == "own" for pos in range(start, end + 1)}
+    first_words = {
+        parts[0]
+        for parts in _names_to_token_lists(another_names)
+        if parts and len(parts[0]) >= 4
+    }
+    for pos, token in enumerate(tokens):
+        if token.is_digit or pos in own_covered:
+            continue
+        if any(token.text.startswith(word) for word in first_words):
+            another_spans.append((pos, pos))
+    return another_ends, another_starts, own_starts, another_spans
+
+
+def _run_values(tokens: list[Token], start: int, end: int, clause: int) -> set[Decimal]:
+    """Values of one number run plus the one unit or dose word after it (SPEC sect 2, Mentions)."""
+    parts = [token.text for token in tokens[start:end + 1]]
+    nxt = end + 1
+    if (
+        nxt < len(tokens)
+        and tokens[nxt].clause == clause
+        and not tokens[nxt].is_digit
+        and (tokens[nxt].text in GATE_WORDS or tokens[nxt].text in _GATE_EXTRA)
+    ):
+        parts.append(tokens[nxt].text)
+    return stated_amounts(" ".join(parts))
+
+
 def mentions_in_turn(
     transcript: str,
     own_names: list[str],
@@ -559,46 +644,24 @@ def mentions_in_turn(
     tokens = tokenize_turn(transcript)
     if not tokens:
         return []
-    occs = _find_name_occs(tokens, _names_to_token_lists(own_names), "own")
-    occs += _find_name_occs(tokens, _names_to_token_lists(another_names), "another")
-    kept = _resolve_occs(occs)
-    another_ends = {end for _, end, kind in kept if kind == "another"}
-    another_starts = {start for start, _, kind in kept if kind == "another"}
-    own_starts = {start for start, _, kind in kept if kind == "own"}
-    another_spans = [(start, end) for start, end, kind in kept if kind == "another"]
-    own_covered = {pos for start, end, kind in kept if kind == "own" for pos in range(start, end + 1)}
-    first_words = {
-        parts[0]
-        for parts in _names_to_token_lists(another_names)
-        if parts and len(parts[0]) >= 4
-    }
-    for pos, token in enumerate(tokens):
-        if token.is_digit or pos in own_covered:
-            continue
-        if any(token.text.startswith(word) for word in first_words):
-            another_spans.append((pos, pos))
+    another_ends, another_starts, own_starts, another_spans = _name_index(
+        tokens, own_names, another_names,
+    )
     another_clauses = {
         tokens[pos].clause for start, end in another_spans for pos in range(start, end + 1)
     }
     past = _find_past_occs(tokens)
     mentions: list[Mention] = []
     for run_index, (start, end, clause) in enumerate(_number_runs(tokens)):
-        parts = [token.text for token in tokens[start:end + 1]]
-        nxt = end + 1
-        if (
-            nxt < len(tokens)
-            and tokens[nxt].clause == clause
-            and not tokens[nxt].is_digit
-            and (tokens[nxt].text in GATE_WORDS or tokens[nxt].text in _GATE_EXTRA)
-        ):
-            parts.append(tokens[nxt].text)
-        values = stated_amounts(" ".join(parts))
+        values = _run_values(tokens, start, end, clause)
         if not values:
             continue
         unit, unit_len = _run_unit(tokens, end, clause)
         if _is_negated(tokens, start, clause):
             continue
         if _is_count(tokens, start, end, clause, unit_len > 0):
+            continue
+        if _is_duration(tokens, end, clause, unit_len > 0):
             continue
         if _is_another(
             tokens, start, end, clause, unit_len, another_ends, another_starts,
@@ -637,6 +700,44 @@ def mentions_for_cited_turns(
                 clause_has_another=mention.clause_has_another,
             ))
     return all_mentions
+
+
+def count_values_for_cited_turns(
+    transcripts: list[str],
+    own_names: list[str] | None = None,
+    another_names: list[str] | None = None,
+    is_discontinued: bool = False,
+) -> set[Decimal]:
+    """Values of the runs rule 3 reads as counts that rules 1, 4, 5 keep (SPEC sect 2, batch 27.1)."""
+    values: set[Decimal] = set()
+    for text in transcripts:
+        tokens = tokenize_turn(text)
+        another_ends, another_starts, own_starts, another_spans = _name_index(
+            tokens, own_names or [], another_names or [],
+        )
+        past = _find_past_occs(tokens)
+        for start, end, clause in _number_runs(tokens):
+            run_values = _run_values(tokens, start, end, clause)
+            if not run_values:
+                continue
+            _, unit_len = _run_unit(tokens, end, clause)
+            if unit_len > 0:
+                continue
+            if _is_duration(tokens, end, clause, False):
+                continue
+            if not _is_count(tokens, start, end, clause, False):
+                continue
+            if _is_negated(tokens, start, clause):
+                continue
+            if _is_another(
+                tokens, start, end, clause, unit_len,
+                another_ends, another_starts, own_starts,
+            ):
+                continue
+            if not is_discontinued and _is_past(tokens, start, clause, past, another_spans):
+                continue
+            values.update(run_values)
+    return values
 
 
 def own_names_for_claim(

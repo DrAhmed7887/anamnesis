@@ -14,6 +14,7 @@ from anamnesis.providers.meta import MetaClient, spark_call_estimate
 from anamnesis.providers.numbers import coerce_strength, parse_amount_text
 from anamnesis.providers.relations import (
     another_names_for_claim,
+    count_values_for_cited_turns,
     is_amount_grounded,
     mentions_for_cited_turns,
     own_names_for_claim,
@@ -362,6 +363,10 @@ def parse_claims_json(
                 strength = None
             if isinstance(intake_amount, dict) and intake_amount["amount"] not in said:
                 intake_amount = None
+            relation_dropped = False
+            own: list[str] = []
+            another: list[str] = []
+            is_discontinued = raw.get("status") == "discontinued"
             if isinstance(strength, dict) or isinstance(intake_amount, dict):
                 entry = cat.resolve(raw["name_text"]) if isinstance(raw.get("name_text"), str) else None
                 other_texts = [
@@ -372,9 +377,7 @@ def parse_claims_json(
                 another = another_names_for_claim(
                     own, entry, cat, other_texts, raw.get("name_text"),
                 )
-                mentions = mentions_for_cited_turns(
-                    cited, own, another, raw.get("status") == "discontinued",
-                )
+                mentions = mentions_for_cited_turns(cited, own, another, is_discontinued)
                 if isinstance(strength, dict) and not all(
                     is_amount_grounded(
                         part["amount"], part["unit"], mentions, False,
@@ -382,10 +385,21 @@ def parse_claims_json(
                     for part in strength["ingredients"]
                 ):
                     strength = None
+                    relation_dropped = True
                 if isinstance(intake_amount, dict) and not is_amount_grounded(
                     intake_amount["amount"], intake_amount["unit"], mentions, True,
                 ):
                     intake_amount = None
+                    relation_dropped = True
+            if (
+                relation_dropped
+                and isinstance(regimen, dict)
+                and regimen.get("units_per_intake") is not None
+                and regimen["units_per_intake"] not in count_values_for_cited_turns(
+                    cited, own, another, is_discontinued,
+                )
+            ):
+                regimen = {**regimen, "units_per_intake": None}
             units_sent = (
                 isinstance(raw.get("regimen"), dict)
                 and raw["regimen"].get("units_per_intake") is not None

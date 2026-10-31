@@ -1,0 +1,17 @@
+# Batch 27.1: the Opus supervisor
+
+## Round 1 review (31 Oct): SUPERVISOR: CHANGES
+1. **HIGH: the "weiß nicht" rule re-opened traps A and H's negated-amount false match.** The rule applied after every word of knowing, but only German "weiß nicht" means "don't know"; "sicher nicht" means "certainly not", and «متأكد مش» / «فاكر مش» mean "sure / I remember it's not". With a wrong 5 mg reply against a Concor 5 mg pack, "Ich nehme Concor zehn Milligramm, sicher nicht fünf Milligramm" gave `match` (batch 27: `insufficient_information`), and «باخد كونكور عشرة ملي، متأكد مش خمسة» too; "not sure not five" kept the 5. Muse's own test asserted "sicher nicht fünf" keeps 5: the code followed the SPEC's wording. Fix: "weiß"/"weiss" only, in the code and the SPEC.
+2. **LOW, fails safe: a duration can swallow a dose said with no unit word:** «باخد بنادول خمسمية ساعة ما راسي توجعني» («ساعة ما»: "whenever") drops the 500; «خمسة يوم ويوم لا» ("every other day") drops the 5; "Concor 10/day" drops the 10. Plural duration words only would fix most.
+3. **The tablet-count drop is wired correctly** (16,000 single-claim fuzz cases: never without a relation-check drop; always after one unless backed; a value-check drop keeps the count). **LOW:** the backing ignores rules 1, 4 and 5, so Panadol's "two tablets", or "not two tablets", backs a Concor count of 2.
+4. **Nothing else from batch 27 changed:** earlier probes unchanged apart from the intended changes and finding 1; 16,000 multi-claim fuzz cases, 0 crashes, nothing kept that the value check drops; 2,681 tests pass, ruff clean, `tests/contract` untouched.
+
+**The CEO's effect:** all three taken into round 2: "weiß" only; plural duration words only; a count backs a tablet count only if rules 1, 4 and 5 keep it for the claim (also the fresh Muse audit's finding). A CEO reference build passes all 93 batch 27 and 27.1 contract tests, loses none of 1,452 scored replies, changes none of 164 saved claims, and keeps the ten traps safe.
+
+## Round 2 re-check (31 Oct): SUPERVISOR: APPROVE
+1. **The negation fix holds:** with a wrong 5 mg reply against the 5 mg Concor pack, traps A and H and every variant ("sicher nicht fünf", «متأكد مش خمسة», «فاكر مش خمسة», "seguro no cinco", "I'm sure not five", "not sure not five") end as `insufficient_information`; "ich weiß nicht fünf" and «مش عارف خمسة», where 5 was really said, reach `match`.
+2. **Durations behave as the SPEC says:** «خمسمية ساعة ما راسي توجعني», «خمسة يوم ويوم لا» and "Concor 10/day" keep their amounts; "ten a day for five years" and «عشرة ملي في اليوم من خمس سنين» keep the 10. **LOW, fails safe:** Arabic puts a singular noun after numbers from 11, so «اربعين ملي في اليوم بقالي عشرين سنة» still drops the 40 (the 20 splits it). Possible fix: a singular «سنه» or «شهر» after a number as a duration.
+3. **The tablet-count backing is right:** Panadol's "two tablets", "not two tablets" and "used to take two tablets" no longer back Concor's count of 2; the claim's own count does, and a discontinued claim's past count. 16,000 single-claim fuzz cases: never dropped without a relation-check drop, never left unbacked after one, never dropped when backed.
+4. **Nothing from batch 27 changed:** earlier probes give their round 3 answers apart from the intended changes; 8,000 multi-claim fuzz cases, 0 crashes, nothing kept that the value check drops; 2,694 tests, ruff clean, `tests/contract` untouched.
+
+**The CEO's effect:** item 2's Arabic singular stays a known limit (it fails safe); recorded in the review.
