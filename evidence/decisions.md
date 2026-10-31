@@ -332,3 +332,17 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **How:** a pilot written before the calls (6 of 6 combination calls right, controls unchanged), then the CEO's contract and reference build; Muse built it in one round; a fresh Muse audit found nothing; the Opus supervisor approved and noted that the scorer predates the fix, so the re-measure plan gained a second, labelled view before any call.
 - **Cost:** Muse $0.72; the pilot $0.13 of Meta.
 - **Running:** the re-measure of Spark 1.3 with the new prompt on 363 notes, and U2 three times live (`evidence/batches/29/remeasure-plan.md`).
+
+## 2026-10-31, 19:02: batch 30 merged (an `inn` naming several ingredients is read as that set)
+- **What:** the reconciler reads an `inn` such as "amoxicillin/clavulanic acid" as its set of ingredients, each part with its own salt, in identity, salts and the second read. A catalogue name counts only when it covers all of an `inn`, and an `inn` of more than eight parts is read whole. Merged in 031a87c.
+- **Why:** after batch 29, U2's pack side still conflicted, because the label reader writes Augmentin's `inn` as one combined string. This is part of "Fix U2 first".
+- **How:**
+  - the CEO wrote the SPEC, the contract and a reference build before every round;
+  - Muse built it in three rounds;
+  - a fresh Muse audit and the Opus supervisor found a salt lost inside a combined `inn` (round 2), then a part hiding an extra ingredient (round 3: a Triveram pack read short matched a Caduet claim);
+  - the supervisor approved round 3: nothing moves into `match` over 2,430 targeted cases;
+  - the rule also closes a false `match` already on `main` ("paracetamol plus caffeine" beside a paracetamol-only strength).
+- **Known limit, in the safe direction:** an `inn` with a salt or strength the alias table lacks ("bisoprolol fumarato") abstains. None of the 132 saved reports has one.
+- **Live (pre-registered):** U2 gave 1 of 3 `match` and 0 harmful, against an expected 2 of 3. The pack side was right in 3 of 3. The claim lost its amounts in 2 runs, while 11 direct calls with the same prompt were all right. That is Spark varying between calls (`evidence/batches/30/live-results.md`).
+- **Cost:** Muse $2.24 (with the audit); live and diagnostic $0.25. Meta is now about $78.1 of the $80 line, with the grills.
+- **The engine closes here:** what remains on the Meta line is kept for anything before submission. Only release-gate fixes follow.
