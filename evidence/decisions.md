@@ -392,6 +392,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Private:** renamed `DrAhmed7887/anamnesis-private`, still private. The three worktrees share one git config, and its `origin` now points at the new name.
 - **Why the remote changed tonight:** GitHub's redirect from the old name ends once the public repo takes it, and a checkout still pointing at `anamnesis` would then push the private history to the public repo.
 
-## 2026-11-01, 00:40: four more personal items for the public filter (Ahmed's review)
+## 2026-11-01, 00:28: four more personal items for the public filter (Ahmed's review)
 - **Found by Ahmed's review of the public copy, each checked here:** a cloud-drive path in `scripts/qm.sh`; a provider account handle in the Fireworks client, its tests and the fine-tune plan; a local folder name in the M0 grill; and wording in this log that described the personal details removed.
 - **Fixed in the filter:** in the public copy, `scripts/qm.sh` reads the inbox it checks from `QM_SESSIONS_INBOX`, the handle becomes `<account>`, the folder becomes `<workspace>`, and the wording says "personal details". The same rules cover the judge branch's never-words line and one of its commit titles, ahead of Tuesday's merge; that branch's commits give 0 hits once the rules apply.
+- **Dry run (1 Nov, 00:31), 418 commits:** every scan gives 0 for the four items and for everything before, across all diffs, commit messages and sessions, apart from the five known false alarms; ruff passes and 2,757 tests pass in the public copy.
