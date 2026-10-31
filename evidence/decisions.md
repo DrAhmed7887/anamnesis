@@ -321,3 +321,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Measured:** matches the CEO reference on all 1,452 scored replies; none loses a fully-right score against batch 27; 0 of 164 saved live claims change; the ten traps stay safe.
 - **Known limit (fails safe):** Arabic puts a singular noun after numbers from 11 («عشرين سنة»), so such a duration can still split a daily amount.
 - **Cost:** Muse $2.93.
+
+## 2026-10-31, 15:13: the Meta stop line moves to $80 (Ahmed's call)
+- **Ahmed:** "Fix U2 first (~$4)", then "Yes, up to $80" once the full cost was clear: the batch itself, Muse's grills (in neither ledger) and the re-measure of Spark 1.3 with its new prompt on 363 notes bring real Meta use to about $76, past the 50% line ($75).
+- **The new line is $80.** Real use then (ledgers $69.7 with this batch's reservation, plus about $2.7 of grills) leaves about $8 for the re-measure, U2's three live runs and anything before submission. The card still pays only past $150.
