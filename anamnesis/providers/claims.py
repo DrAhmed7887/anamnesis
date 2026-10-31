@@ -46,6 +46,16 @@ _SYSTEM_PROMPT = (
     "Give no medical advice. Only report what the patient said."
 )
 
+_COMBINATION_SENTENCE = (
+    "A combination product said with one amount per ingredient, such as "
+    "'Augmentin 875 and 125 milligrams', is its strength: one ingredient per amount, "
+    "in the order said, each named for the ingredient it belongs to."
+)
+"""The batch 29 sentence, SPEC §2 word for word; only Spark 1.3's claim prompt gets it."""
+
+_SPARK_CLAIM_PROMPT = f"{_SYSTEM_PROMPT} {_COMBINATION_SENTENCE}"
+"""What MetaClaimExtractor sends: the trained prompt plus the combination sentence."""
+
 _AMOUNT_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
@@ -452,7 +462,7 @@ class MetaClaimExtractor:
             "reasoning_effort": "low",
             "max_tokens": 16000,
             "messages": [
-                {"role": "system", "content": _SYSTEM_PROMPT},
+                {"role": "system", "content": _SPARK_CLAIM_PROMPT},
                 {"role": "user", "content": transcript},
             ],
             "response_format": {"type": "json_schema", "json_schema": {
