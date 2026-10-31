@@ -12,7 +12,7 @@ from anamnesis.core.catalogue import Catalogue
 from anamnesis.core.reconcile import reconcile_all
 from anamnesis.providers.sam import top_regions
 from anamnesis.providers.spark import LabelReading
-from anamnesis.schema import ImageRegion, PackObservation, Readability
+from anamnesis.schema import ImageRegion, PackObservation, Readability, Release, canonical_inn, salt_of
 from anamnesis.schema.report import AgentAction, ReconciliationReport
 
 Image = tuple[bytes, str]
@@ -117,6 +117,94 @@ def _zoom(
     return zoomed
 
 
+def _named_ingredients(reading: LabelReading) -> frozenset[str] | None:
+    """Canonical INNs the reading names, or None when it names nothing (SPEC §4 step 5b)."""
+    if reading.strength is not None:
+        return frozenset(canonical_inn(part.inn) for part in reading.strength.ingredients)
+    if reading.inn is not None:
+        return frozenset({canonical_inn(reading.inn)})
+    return None
+
+
+def _strength_key(strength) -> tuple:
+    """Ingredient, amount, unit and per; release is a separate check (SPEC §4 step 5b)."""
+    return (
+        strength.per.value,
+        frozenset(
+            (canonical_inn(part.inn), part.amount, part.unit.value) for part in strength.ingredients
+        ),
+    )
+
+
+def _salts(reading: LabelReading) -> dict[str, frozenset[str]]:
+    """Known salts per canonical ingredient, from amount salts and salts in inns."""
+    salts: dict[str, set[str]] = {}
+    if reading.strength is not None:
+        for part in reading.strength.ingredients:
+            found = salts.setdefault(canonical_inn(part.inn), set())
+            if part.salt is not None:
+                found.add(part.salt)
+            inferred = salt_of(part.inn)
+            if inferred is not None:
+                found.add(inferred)
+    if reading.inn is not None:
+        inferred = salt_of(reading.inn)
+        if inferred is not None:
+            salts.setdefault(canonical_inn(reading.inn), set()).add(inferred)
+    return {inn: frozenset(found) for inn, found in salts.items() if found}
+
+
+def _second_read(
+    session: IntakeSession, second_reader, image: Image, region: ImageRegion,
+    reading: LabelReading,
+) -> LabelReading:
+    """One second-model re-read of the first read's crop; a readable agreement replaces the first."""
+    if second_reader is None or reading.readability not in _NEEDS_ZOOM:
+        return reading
+    if session.exhausted:  # budget_exhausted is the last step: no crop, no log
+        return reading
+    try:
+        crop = crop_region(image[0], region)
+    except ValueError:
+        session.note(AgentAction.SECOND_READ, region.region_id, "error: crop failed")
+        return reading
+    second = session.call(
+        AgentAction.SECOND_READ, region.region_id,
+        lambda: second_reader.read(crop, region, mime="image/png", cropped=True),
+        lambda new: new.readability.value,
+    )
+    if second is None:
+        return reading
+    if second.region_id != region.region_id:
+        session.note(AgentAction.SECOND_READ, region.region_id, "error: reading for another region")
+        return reading
+    if second.readability is not Readability.READABLE:
+        return reading
+    first_names, second_names = _named_ingredients(reading), _named_ingredients(second)
+    if first_names is not None and second_names != first_names:
+        session.note(AgentAction.SECOND_READ, region.region_id, "conflict: kept the first reading")
+        return reading
+    if reading.strength is not None:
+        if second.strength is None:
+            session.note(AgentAction.SECOND_READ, region.region_id, "conflict: kept the first reading")
+            return reading
+        if _strength_key(reading.strength) != _strength_key(second.strength):
+            session.note(AgentAction.SECOND_READ, region.region_id, "conflict: kept the first reading")
+            return reading
+        if (
+            reading.strength.release is not Release.UNKNOWN
+            and second.strength.release != reading.strength.release
+        ):
+            session.note(AgentAction.SECOND_READ, region.region_id, "conflict: kept the first reading")
+            return reading
+    first_salts, second_salts = _salts(reading), _salts(second)
+    for inn, first_set in first_salts.items():
+        if second_salts.get(inn, frozenset()) != first_set:
+            session.note(AgentAction.SECOND_READ, region.region_id, "conflict: kept the first reading")
+            return reading
+    return second
+
+
 def _observation(index: int, reading: LabelReading) -> PackObservation:
     return PackObservation(
         observation_id=f"o{index}", label_text=reading.label_text, inn=reading.inn,
@@ -129,11 +217,12 @@ def run_intake(
     audio: bytes | None, images: list[Image], *, transcriber, extractor, segmenter, reader,
     catalogue: Catalogue, language_bias: list[str] | None = None, keywords: list[str] | None = None,
     lang_hint: str | None = None, concepts: tuple[str, ...] = SAM_CONCEPTS,
-    top_k: int = 3, max_provider_calls: int | None = None,
+    top_k: int = 3, max_provider_calls: int | None = None, second_reader=None,
 ) -> ReconciliationReport:
     """Run one patient intake in a fixed order and return the single report artifact."""
     if max_provider_calls is None:
-        max_provider_calls = 2 + (len(concepts) + 2 * top_k) * len(images)
+        per_region = 3 * top_k if second_reader is not None else 2 * top_k
+        max_provider_calls = 2 + (len(concepts) + per_region) * len(images)
     session = IntakeSession(max_provider_calls)
     turns = []
     if audio is not None:
@@ -160,10 +249,12 @@ def run_intake(
         kept, read = _read_photo(session, segmenter, reader, prepared, concepts, top_k)
         regions.update({region.region_id: region for region in kept})
         readings += read
-    final = [
-        _zoom(session, reader, image, region, reading) if reading.readability in _NEEDS_ZOOM else reading
-        for image, region, reading in readings
-    ]
+    final = []
+    for image, region, reading in readings:
+        if reading.readability in _NEEDS_ZOOM:
+            reading = _zoom(session, reader, image, region, reading)
+            reading = _second_read(session, second_reader, image, region, reading)
+        final.append(reading)
     observations = [_observation(index, reading) for index, reading in enumerate(final)]
     findings = reconcile_all(claims, observations, catalogue)
     if not session.exhausted:
