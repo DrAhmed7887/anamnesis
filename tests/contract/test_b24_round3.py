@@ -22,8 +22,8 @@ def parse(said, **fields):
     return parse_claims_json(json.dumps({"claims": [claim]}, ensure_ascii=False), [turn])[0]
 
 
-def line(inn, amount):
-    return {"inn": inn, "amount": amount, "unit": "mg"}
+def line(inn, amount, unit="mg"):
+    return {"inn": inn, "amount": amount, "unit": unit}
 
 
 # --- #1: English "media" and Spanish phrases that aren't numbers state no half --------------------------------
@@ -66,13 +66,14 @@ def test_mil_before_a_spanish_unit_word_is_still_a_thousand():
 
 # --- #2: a label of number words that need a neighbour is never grounded ---------------------------------------
 
-@pytest.mark.parametrize(("said", "label", "amount"), [
-    ("Farxiga, mil miligramos", "mil miligramos", "1000"),
-    ("Farxiga ein Gramm", "ein Gramm", "1"),
-    ("Farxiga cero coma cinco miligramos", "cero coma cinco", "0.5"),
-    ("Farxiga zero point five", "zero point five", "0.5"),
-    ("Farxiga null Komma fünf Milligramm", "null Komma fünf", "5"),
+# Batch 27: "ein Gramm" states 1 g, so its claim is in grams (SPEC §2 rule 2); the row was mg by default.
+@pytest.mark.parametrize(("said", "label", "amount", "unit"), [
+    ("Farxiga, mil miligramos", "mil miligramos", "1000", "mg"),
+    ("Farxiga ein Gramm", "ein Gramm", "1", "g"),
+    ("Farxiga cero coma cinco miligramos", "cero coma cinco", "0.5", "mg"),
+    ("Farxiga zero point five", "zero point five", "0.5", "mg"),
+    ("Farxiga null Komma fünf Milligramm", "null Komma fünf", "5", "mg"),
 ])
-def test_a_number_word_label_takes_the_claims_name(said, label, amount):
-    claim = parse(said, intake_amount=line(label, amount))
+def test_a_number_word_label_takes_the_claims_name(said, label, amount, unit):
+    claim = parse(said, intake_amount=line(label, amount, unit))
     assert claim.intake_amount is not None and normalise(claim.intake_amount.inn) == "farxiga"
