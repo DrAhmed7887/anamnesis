@@ -127,3 +127,18 @@
     - Never "firewall", "fail-closed", "eliminates hallucination", "formal invariants", "real-world" for staged cases, FHIR or "digital twin".
     - 95.7% only as "Glimmer + LoRA r1, 290/303 fully right on synthetic held-out notes, opt-in".
   - **The engine closes here:** Meta stands at $77.95 of the $80 line, and only release-gate fixes follow.
+
+## The tag moved to 70cceac, docs only (31 Oct, 20:55 CET)
+- **The tag:** `demo-freeze` now points at 70cceac. The code is the same as 710b453: `git diff 710b453 70cceac` is empty over `anamnesis/`, `scripts/`, `tests/`, `finetune/`, `pyproject.toml` and `uv.lock`.
+- **What's new is docs and one measurement:**
+  - SPEC.md:3 and :434 now give the tested languages and the opt-in open-weight paths;
+  - SPEC.md:198 gives the syrup readings as recorded;
+  - batch 24's reviews say "separate", not "independent";
+  - HANDOFF.md points to what changed since 28 Oct;
+  - the hero evidence now says five of ten repeats, and that its 6 of 10 against 10 of 10 is within chance (p = 0.087);
+  - the hero ran ten times on the final code (`evidence/diagnostics/hero-final-2026-10-31/`): 9 of 10 with the system's own categories, 0 harmful.
+- **A fresh clone** of `main` at 70cceac from the private remote: the tree was clean, `uv sync --frozen` ran, ruff was clean, and all 2,757 tests pass offline.
+- **For the judge session:**
+  - README.md and docs/CLAIMS.md on `judge/claims-video` were refreshed to this tag on the "ingestion problem" framing.
+  - An independent checker passed them after one round of fixes: 0 HIGH and 0 MEDIUM inside the two files.
+  - The checker's open item is the evidence tree, for Tuesday's filter: personal context in the M1 Muse export, 409 absolute home paths in 40 tracked files, the Modal account name in 916454b's history, and `CLAUDE.md`:10 naming the build's accounts.
