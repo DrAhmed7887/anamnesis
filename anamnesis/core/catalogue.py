@@ -94,6 +94,11 @@ class Catalogue:
         """True when the text matches a catalogue brand or alias name."""
         return any(brand for _, _, _, brand in self._matches(text))
 
+    def covers(self, text: str) -> bool:
+        """True when one catalogue name matches all of the normalised text (SPEC §3, batch 30 round 3)."""
+        length = len(normalise(text))
+        return any(start == 0 and end == length for start, end, _, _ in self._matches(text))
+
     def mentions_moiety(self, text: str, moiety: str) -> bool:
         """True when the text names the moiety, or a brand whose only INN is that moiety, as whole words."""
         if f" {normalise(moiety)} " in f" {normalise(text)} ":
