@@ -313,3 +313,11 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **A slip, fixed:** the merge script staged `anamnesis/` and `tests/` but not `scripts/`, so `scripts/intake_live.py`'s flag stayed in the batch worktree and `main` failed batch 28's live-script tests for about ten minutes (pushed, no live run used it). Carried in 957dd3c; `batch.sh` now stages `scripts/` and the batch's Muse grills (b0833c2).
 - **Cost:** Muse $3.63 (plan, three rounds, audit).
 - **Live check:** U1–U8 twice, scored with and without the second reader on the same runs (`evidence/batches/28/live-plan.md`, `score_paired.py`), running now.
+
+## 2026-10-31, 14:26: batch 27.1 merged (durations, "weiß nicht", a dropped amount's tablet count)
+- **What:** a number followed by a plural duration word is never an amount; a negation right after German "weiß" doesn't negate the number; and when the relation checks drop a claim's amount, its tablet count goes too unless this claim's own count backs it (SPEC §2, "batch 27.1"). Merged in 63cefc3.
+- **Why:** the Opus supervisor's two fail-safe findings on batch 27, and the live probe after it: on trap J the tuned Glimmer wrote a 10 mg intake and five tablets, and the five gave a false `strength_mismatch`.
+- **How:** CEO reference first; Muse planned, built in two rounds, and a fresh Muse audit and the supervisor reviewed. The supervisor caught that the SPEC's first wording ("a negation after any word of knowing") re-opened trap A's false `match` ("sicher nicht fünf" is "certainly not five"); round 2 narrowed it to "weiß", made duration words plurals only, and made the tablet-count backing follow rules 1, 4 and 5. Approved on round 2.
+- **Measured:** matches the CEO reference on all 1,452 scored replies; none loses a fully-right score against batch 27; 0 of 164 saved live claims change; the ten traps stay safe.
+- **Known limit (fails safe):** Arabic puts a singular noun after numbers from 11 («عشرين سنة»), so such a duration can still split a daily amount.
+- **Cost:** Muse $2.93.
