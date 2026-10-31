@@ -1,4 +1,5 @@
-"""U2 diagnostic after batch 30 (31 Oct, post hoc): Spark 1.3's raw claim replies, with batch 29's prompt, five calls, to see
+"""U2 diagnostic after batch 30 (31 Oct, post hoc): Spark 1.3's raw claim replies, with batch 29's prompt,
+five calls, to see
 why both claims sometimes lose their amounts. Keys from the Keychain, never printed."""
 import json
 import subprocess
@@ -34,7 +35,8 @@ for i in range(5):
     Capture.replies.clear()
     try:
         claims, _ = extractor.extract(TURNS)
-        kept = [(c.name_text, c.strength and [(p.inn, str(p.amount)) for p in c.strength.ingredients], c.intake_amount and str(c.intake_amount.amount)) for c in claims]
+        kept = [(c.name_text, c.strength and [(p.inn, str(p.amount)) for p in c.strength.ingredients],
+                 c.intake_amount and str(c.intake_amount.amount)) for c in claims]
     except Exception as exc:  # report every outcome
         kept = f"error: {type(exc).__name__}"
     raw = []
