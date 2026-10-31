@@ -1,0 +1,170 @@
+[
+ {
+  "case": "U2",
+  "call": 0,
+  "kept": [
+   {
+    "name": "Augmentin",
+    "intake": null,
+    "strength": [
+     "amoxicillin 875",
+     "clavulanic acid 125"
+    ]
+   }
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": null, \"name_text\": \"Augmentin\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [{\"amount\": \"875\", \"inn\": \"amoxicillin\", \"unit\": \"mg\"}, {\"amount\": \"125\", \"inn\": \"clavulanic acid\", \"unit\": \"mg\"}], \"per\": \"dose\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "case": "U2",
+  "call": 1,
+  "kept": [
+   {
+    "name": "Augmentin",
+    "intake": null,
+    "strength": [
+     "amoxicillin 875",
+     "clavulanic acid 125"
+    ]
+   }
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": null, \"name_text\": \"Augmentin\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [{\"amount\": \"875\", \"inn\": \"amoxicillin\", \"unit\": \"mg\"}, {\"amount\": \"125\", \"inn\": \"clavulanic acid\", \"unit\": \"mg\"}], \"per\": \"tablet\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "case": "U2",
+  "call": 2,
+  "kept": [
+   {
+    "name": "Augmentin",
+    "intake": null,
+    "strength": [
+     "amoxicillin 875",
+     "clavulanic acid 125"
+    ]
+   }
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": null, \"name_text\": \"Augmentin\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [{\"amount\": \"875\", \"inn\": \"amoxicillin\", \"unit\": \"mg\"}, {\"amount\": \"125\", \"inn\": \"clavulanic acid\", \"unit\": \"mg\"}], \"per\": \"tablet\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "case": "U2-ar",
+  "call": 0,
+  "kept": [
+   {
+    "name": "اوجمنتين",
+    "intake": null,
+    "strength": [
+     "amoxicillin 875",
+     "clavulanic acid 125"
+    ]
+   }
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": null, \"name_text\": \"اوجمنتين\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [{\"amount\": \"875\", \"inn\": \"amoxicillin\", \"unit\": \"mg\"}, {\"amount\": \"125\", \"inn\": \"clavulanic acid\", \"unit\": \"mg\"}], \"per\": \"tablet\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "case": "U2-ar",
+  "call": 1,
+  "kept": [
+   {
+    "name": "اوجمنتين",
+    "intake": null,
+    "strength": [
+     "amoxicillin 875",
+     "clavulanic acid 125"
+    ]
+   }
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": null, \"name_text\": \"اوجمنتين\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [{\"amount\": \"875\", \"inn\": \"amoxicillin\", \"unit\": \"mg\"}, {\"amount\": \"125\", \"inn\": \"clavulanic acid\", \"unit\": \"mg\"}], \"per\": \"tablet\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "case": "U2-ar",
+  "call": 2,
+  "kept": [
+   {
+    "name": "اوجمنتين",
+    "intake": null,
+    "strength": [
+     "amoxicillin 875",
+     "clavulanic acid 125"
+    ]
+   }
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": null, \"name_text\": \"اوجمنتين\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [{\"amount\": \"875\", \"inn\": \"amoxicillin\", \"unit\": \"mg\"}, {\"amount\": \"125\", \"inn\": \"clavulanic acid\", \"unit\": \"mg\"}], \"per\": \"tablet\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "case": "U1",
+  "call": 0,
+  "kept": [
+   {
+    "name": "Concor",
+    "intake": "5",
+    "strength": null
+   }
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"5\", \"inn\": \"\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": {\"ingredients\": [], \"per\": \"dose\", \"release\": \"unknown\"}, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "case": "U1",
+  "call": 1,
+  "kept": [
+   {
+    "name": "Concor",
+    "intake": "5",
+    "strength": null
+   }
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"5\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "case": "U12",
+  "call": 0,
+  "kept": [
+   {
+    "name": "Concor",
+    "intake": "10",
+    "strength": null
+   },
+   {
+    "name": "BelocZok",
+    "intake": "50",
+    "strength": null
+   }
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ },
+ {
+  "case": "U12",
+  "call": 1,
+  "kept": [
+   {
+    "name": "Concor",
+    "intake": "10",
+    "strength": null
+   },
+   {
+    "name": "BelocZok",
+    "intake": "50",
+    "strength": null
+   }
+  ],
+  "raw": [
+   "{\"claims\": [{\"inn\": null, \"intake_amount\": {\"amount\": \"10\", \"inn\": \"Concor\", \"unit\": \"mg\"}, \"name_text\": \"Concor\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"1\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}, {\"inn\": null, \"intake_amount\": {\"amount\": \"50\", \"inn\": \"BelocZok\", \"unit\": \"mg\"}, \"name_text\": \"BelocZok\", \"regimen\": {\"as_needed\": null, \"intakes_per_day\": \"2\", \"units_per_intake\": null}, \"status\": \"active\", \"strength\": null, \"turn_ids\": [\"turn-0\"]}]}"
+  ]
+ }
+]
