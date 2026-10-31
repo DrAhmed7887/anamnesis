@@ -128,3 +128,53 @@ def test_a_long_run_of_spaces_stays_fast():
     start = time.monotonic()
     pack_identity_conflict(pack("amoxicillin" + " " * 30000 + "x"), CAT)
     assert time.monotonic() - start < 1.0
+
+
+# --- round 3, from the Opus supervisor's round 2 re-check (31 Oct) --------------------------------------------
+# An `inn` names an ingredient through the catalogue only when one catalogue name covers all of it.
+
+CADUET = strength(part("atorvastatin", 20), part("amlodipine", 5))
+CADUET_CLAIM = PatientClaim(claim_id="c1", name_text="Caduet 20/5", strength=CADUET, status="active",
+                            audio_evidence=["turn-0"])
+PARACETAMOL = strength(part("paracetamol", 500))
+PANADOL_CLAIM = PatientClaim(claim_id="c1", name_text="Panadol 500", strength=PARACETAMOL, status="active",
+                             audio_evidence=["turn-0"])
+
+
+@pytest.mark.parametrize("inn", ["atorvastatin/amlodipine with perindopril", "atorvastatin/amlodipine y perindopril",
+                                 "atorvastatin/amlodipine\tو\tperindopril"])
+def test_a_part_with_words_beyond_one_catalogue_name_is_not_that_name(inn):
+    # A Triveram pack (atorvastatin, perindopril, amlodipine) read with two of its three amounts.
+    assert finding(CADUET_CLAIM, pack(inn, CADUET, label="Triveram 20 mg/10 mg/5 mg")) is D.INSUFFICIENT_INFORMATION
+
+
+@pytest.mark.parametrize("inn", ["paracetamol plus caffeine", "paracetamol\tو\tcaffeine", "paracetamol y cafeína"])
+def test_a_one_part_inn_with_words_beyond_one_catalogue_name_is_not_that_name(inn):
+    assert finding(PANADOL_CLAIM, pack(inn, PARACETAMOL, label="Paracetamol 500 mg")) is D.INSUFFICIENT_INFORMATION
+
+
+def test_a_whole_catalogue_name_still_resolves():
+    assert finding(CADUET_CLAIM, pack("atorvastatin/Norvasc", CADUET, label="Caduet 20/5")) is D.MATCH
+    panadol_claim = PANADOL_CLAIM.model_copy(update={"name_text": "Panadol"})
+    assert finding(panadol_claim, pack("Panadol", PARACETAMOL, label="Panadol 500 mg")) is D.MATCH
+    assert finding(CLAIM, pack("amoxicillin trihydrate/potassium clavulanate")) is D.MATCH
+
+
+NINE = ["paracetamol", "caffeine", "amoxicillin", "clavulanic acid", "atorvastatin", "amlodipine", "bisoprolol",
+        "metformin", "metoprolol"]
+
+
+def test_an_inn_of_more_than_eight_parts_is_read_whole():
+    eight = strength(*(part(name, "1") for name in NINE[:8]))
+    assert not pack_identity_conflict(pack("/".join(NINE[:8]), eight, label="x"), CAT)
+    nine = strength(*(part(name, "1") for name in NINE))
+    assert pack_identity_conflict(pack("/".join(NINE), nine, label="x"), CAT)
+
+
+@pytest.mark.parametrize("inn", ["a/" * 15000, "/".join(f"x{i}" for i in range(2000))],
+                         ids=["one part 15,000 times", "2,000 parts"])
+def test_many_parts_stay_fast(inn):
+    import time
+    start = time.monotonic()
+    finding(CLAIM, pack(inn))
+    assert time.monotonic() - start < 1.0
