@@ -50,7 +50,7 @@ def summary(claims) -> list:
 
 
 def main() -> None:
-    guard = SpendGuard(ROOT / "evidence/spend/ledger.jsonl", cap_usd=Decimal("11.00"))
+    guard = SpendGuard(ROOT / "evidence/spend/ledger.jsonl", cap_usd=Decimal("14.00"))
     extractors = {
         "spark-1.3": MetaClaimExtractor(MetaClient(api_key=keychain("META_API_KEY")), guard),
         "glimmer-lora-r1": GlimmerClaimExtractor(

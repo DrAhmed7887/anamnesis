@@ -1,0 +1,326 @@
+[
+  {
+    "case": "A",
+    "model": "spark-1.3",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": "10",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "intake_differs_from_unit_strength",
+    "right": "intake_differs_from_unit_strength",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "A",
+    "model": "glimmer-lora-r1",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": "10",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "intake_differs_from_unit_strength",
+    "right": "intake_differs_from_unit_strength",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "B",
+    "model": "spark-1.3",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": "5",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "match",
+    "right": "match",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "B",
+    "model": "glimmer-lora-r1",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": "5",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "match",
+    "right": "match",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "C",
+    "model": "spark-1.3",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": null,
+        "units": null,
+        "status": "active"
+      },
+      {
+        "name": "Panadol",
+        "intake": "500",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "insufficient_information, missing_modality",
+    "right": "insufficient_information",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "C",
+    "model": "glimmer-lora-r1",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": null,
+        "units": null,
+        "status": "active"
+      },
+      {
+        "name": "Panadol",
+        "intake": "500",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "insufficient_information, missing_modality",
+    "right": "insufficient_information",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "D",
+    "model": "spark-1.3",
+    "claims": [
+      {
+        "name": "Panadol",
+        "intake": null,
+        "units": "2",
+        "status": "active"
+      }
+    ],
+    "findings": "intake_differs_from_unit_strength",
+    "right": "intake_differs_from_unit_strength",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "D",
+    "model": "glimmer-lora-r1",
+    "claims": [
+      {
+        "name": "Panadol",
+        "intake": null,
+        "units": "2",
+        "status": "active"
+      }
+    ],
+    "findings": "intake_differs_from_unit_strength",
+    "right": "intake_differs_from_unit_strength",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "E",
+    "model": "spark-1.3",
+    "claims": [
+      {
+        "name": "Augmentin",
+        "intake": null,
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "insufficient_information",
+    "right": "match",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "E",
+    "model": "glimmer-lora-r1",
+    "claims": [
+      {
+        "name": "Augmentin",
+        "intake": "875",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "insufficient_information",
+    "right": "match",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "F",
+    "model": "spark-1.3",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": null,
+        "units": null,
+        "status": "active"
+      },
+      {
+        "name": "Panadol",
+        "intake": "500",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "insufficient_information, missing_modality",
+    "right": "insufficient_information",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "F",
+    "model": "glimmer-lora-r1",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": null,
+        "units": null,
+        "status": "active"
+      },
+      {
+        "name": "Panadol",
+        "intake": "500",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "insufficient_information, missing_modality",
+    "right": "insufficient_information",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "G",
+    "model": "spark-1.3",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": null,
+        "units": null,
+        "status": "discontinued"
+      }
+    ],
+    "findings": "discontinued_but_present",
+    "right": "discontinued_but_present",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "G",
+    "model": "glimmer-lora-r1",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": null,
+        "units": null,
+        "status": "discontinued"
+      }
+    ],
+    "findings": "discontinued_but_present",
+    "right": "discontinued_but_present",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "H",
+    "model": "spark-1.3",
+    "claims": [
+      {
+        "name": "كونكور",
+        "intake": "10",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "intake_differs_from_unit_strength",
+    "right": "intake_differs_from_unit_strength",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "H",
+    "model": "glimmer-lora-r1",
+    "claims": [
+      {
+        "name": "كونكور",
+        "intake": "10",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "intake_differs_from_unit_strength",
+    "right": "intake_differs_from_unit_strength",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "I",
+    "model": "spark-1.3",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": "5",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "strength_mismatch",
+    "right": "strength_mismatch",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "I",
+    "model": "glimmer-lora-r1",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": "5",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "strength_mismatch",
+    "right": "strength_mismatch",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "J",
+    "model": "spark-1.3",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": "5",
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "match",
+    "right": "match",
+    "wrong_as_fact": false
+  },
+  {
+    "case": "J",
+    "model": "glimmer-lora-r1",
+    "claims": [
+      {
+        "name": "Concor",
+        "intake": null,
+        "units": null,
+        "status": "active"
+      }
+    ],
+    "findings": "insufficient_information",
+    "right": "match",
+    "wrong_as_fact": false
+  }
+]
