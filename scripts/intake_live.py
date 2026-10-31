@@ -2,7 +2,8 @@
 
     PYTHONPATH=. uv run python scripts/intake_live.py [--cap 5.00] [--session-usd 0.25]
     PYTHONPATH=. uv run python scripts/intake_live.py --case R1 --voice v1.wav --photo p1.jpg --lang ar \
-        [--repeat 10] [--top-k 3] [--reader baseten|fireworks] [--extractor glimmer --glimmer-url URL]
+        [--repeat 10] [--top-k 3] [--reader baseten|fireworks] [--extractor glimmer --glimmer-url URL] \
+        [--second-reader fireworks]
 
 With no --case it runs the two synthetic notes (media: scripts/make_synthetic_media.sh). With --case it runs
 one staged case (evidence/batches/21/manifest.md): that voice note and those photos, in order, --repeat times.
@@ -12,7 +13,10 @@ for low reasoning effort, as Spark 1.3's reader does. It refuses any photo
 outside the public folders that docs/DATA_HANDLING.md lets go to Baseten or Fireworks, before the first call.
 --extractor glimmer makes the tuned Glimmer on Modal the claim extractor (token: MODAL_PROXY_TOKEN, URL from
 --glimmer-url or GLIMMER_URL); it refuses any voice note but the synthetic ones under
-evidence/raw/media/public/voice/ and any URL off .modal.run, before the first call. Every voice note is
+evidence/raw/media/public/voice/ and any URL off .modal.run, before the first call. --second-reader fireworks
+gives the loop Muse Spark Open on Fireworks as a second label reader (SPEC §4 step 5b): when Spark 1.3 still
+can't read a pack after its zoom, the same crop is read once more (key: FIREWORKS_API_KEY); it needs --case,
+--reader spark and public photos only, before the first call. Every voice note is
 re-written to its audio frames alone before any call, so no metadata chunk is sent or embedded in a brief.
 The key comes from MODEL_API_KEY in the environment or the macOS Keychain (service META_API_KEY), and is never
 printed or saved. Each intake runs inside a SessionGuard (per-intake $ and call caps) in front of
@@ -20,8 +24,8 @@ evidence/spend/ledger.jsonl.
 Output, per run:
 - evidence/live/<date>/report_<name>.json, the ReconciliationReport (<name>: the language, or case and run);
 - one summary line in evidence/live/<date>/runs.jsonl: findings, calls, spend, wall-clock time, the reader
-  (spark, baseten or fireworks) and the extractor (spark or glimmer), and the latency of each
-  claim-extraction request against the extractor client's timeout;
+  (spark, baseten or fireworks), the extractor (spark or glimmer) and the second reader (fireworks or null),
+  and the latency of each claim-extraction request against the extractor client's timeout;
 - the brief, evidence/raw/briefs/<date>/<name>.html (git-ignored: it embeds the photos and the voice note).
 """
 
@@ -108,13 +112,15 @@ class Run:
     briefs: Path
     open_client: OpenWeightClient | None = None  # set: Muse Spark Open reads the labels
     glimmer_client: OpenWeightClient | None = None  # set: the tuned Glimmer on Modal extracts the claims
+    second_client: OpenWeightClient | None = None  # set: Muse Spark Open re-reads what Spark can't
 
 
 def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]],
            lang: str) -> ReconciliationReport:
     # The loop's own default budget (SPEC §4 Budget): every call it can make. The dollar cap bounds the spend;
     # a fixed 12 dropped a sent pack on a four-photo intake (supervisor 23, round 2 #1).
-    calls = 2 + (len(SAM_CONCEPTS) + 2 * run.top_k) * len(images)
+    per_region = 3 * run.top_k if run.second_client is not None else 2 * run.top_k
+    calls = 2 + (len(SAM_CONCEPTS) + per_region) * len(images)
     # The guard counts every charged attempt and a call charges at most two (one retry), so twice the loop's
     # budget keeps --session-usd the real bound (supervisor 23 round 3 #6).
     guard = SessionGuard(run.ledger, max_usd=run.session_usd, max_calls=2 * calls)
@@ -132,13 +138,19 @@ def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]],
         reader = OpenWeightLabelReader(run.open_client, guard, model=PRESETS[provider]["model"],
                                        price_key=f"muse-spark-open@{provider}", json_mode=False,
                                        reasoning_effort="low" if provider == "fireworks" else None)
+    if run.second_client is None:
+        second_reader = None
+    else:
+        second_reader = OpenWeightLabelReader(
+            run.second_client, guard, model=PRESETS["fireworks"]["model"],
+            price_key="muse-spark-open@fireworks", json_mode=False, reasoning_effort="low")
     start = time.monotonic()
     report = run_intake(
         audio, images,
         transcriber=MetaTranscriber(run.client, guard), extractor=extractor,
         segmenter=MetaSegmenter(run.client, guard), reader=reader,
         catalogue=run.catalogue, language_bias=LANGUAGES[lang], keywords=keywords, lang_hint=lang,
-        max_provider_calls=calls, top_k=run.top_k,
+        max_provider_calls=calls, top_k=run.top_k, second_reader=second_reader,
     )
     wall_s = round(time.monotonic() - start, 1)
     (run.reports / f"report_{name}.json").write_text(report.model_dump_json(indent=2) + "\n", "utf-8")
@@ -147,6 +159,7 @@ def intake(run: Run, name: str, audio: bytes, images: list[tuple[bytes, str]],
     line = {"run": name, "at": datetime.now(UTC).isoformat(timespec="seconds"),
             "reader": "spark" if run.open_client is None else run.open_client.provider,
             "extractor": "spark" if run.glimmer_client is None else "glimmer",
+            "second_reader": None if run.second_client is None else run.second_client.provider,
             "calls": report.calls,
             "spend_usd": str(report.spend_usd), "wall_s": wall_s,
             "claim_request_ms": claim_timed.latencies_ms,
@@ -203,6 +216,9 @@ def main() -> None:
     parser.add_argument("--glimmer-url", default=os.environ.get("GLIMMER_URL"),
                         help="the tuned Glimmer server's base URL (/extract is added to it) "
                              "(default: GLIMMER_URL)")
+    parser.add_argument("--second-reader", choices=("none", "fireworks"), default="none",
+                        help="second label reader: Muse Spark Open on Fireworks re-reads packs Spark 1.3 "
+                             "still can't read after its zoom (public photos only)")
     args = parser.parse_args()
     if args.case and not args.voice:
         sys.exit("--case needs --voice")
@@ -243,6 +259,18 @@ def main() -> None:
                                             or parsed.password is not None))
                 or (port is not None and port != 443)):
             sys.exit(f"{host or 'missing URL'} is not an https:// URL on a .modal.run host.")
+    if args.second_reader == "fireworks":
+        if not args.case:
+            sys.exit("--second-reader fireworks needs --case: "
+                     "only a staged case's public photos may go to Fireworks")
+        if args.reader != "spark":
+            sys.exit("--second-reader fireworks needs --reader spark: "
+                     "the first reader stays Spark 1.3")
+        for path in args.photo:  # checked before any key is read or client built
+            resolved = Path(path).resolve()
+            if not any(resolved.is_relative_to(folder.resolve()) for folder in OPEN_WEIGHT_PHOTOS):
+                sys.exit(f"{path} is not a public photo that may go to Fireworks "
+                         "(docs/DATA_HANDLING.md). Ahmed's own media never go there.")
     day = datetime.now(UTC).strftime("%Y-%m-%d")
     run = Run(SpendGuard(LEDGER, cap_usd=Decimal(args.cap)),
               MetaClient(api_key=os.environ.get("MODEL_API_KEY") or keychain("META_API_KEY")),
@@ -260,6 +288,10 @@ def main() -> None:
         run.glimmer_client = OpenWeightClient(
             api_key=os.environ.get("MODAL_PROXY_TOKEN") or keychain("MODAL_PROXY_TOKEN"),
             base_url=args.glimmer_url, provider="modal", timeout=GLIMMER_TIMEOUT_S)
+    if args.second_reader == "fireworks":
+        run.second_client = OpenWeightClient(
+            api_key=os.environ.get("FIREWORKS_API_KEY") or keychain("FIREWORKS_API_KEY"),
+            base_url=PRESETS["fireworks"]["base_url"], provider="fireworks")
     run.reports.mkdir(parents=True, exist_ok=True)
     run.briefs.mkdir(parents=True, exist_ok=True)
     start = run.ledger.total_usd
