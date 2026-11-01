@@ -430,7 +430,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - no contributor model;
   - Muse doesn't open `evidence/` or `finetune/data*`.
 
-## 2026-11-01, 15:20: batch 31 merged, and the follow-up ran live
+## 2026-11-01, 15:04: batch 31 merged, and the follow-up ran live
 - **Merged:** batch 31, the follow-up (8ee370a, 13:41 UTC). Muse planned it read-only, built it in three rounds and a fresh Muse session audited it; the Opus supervisor sent round 1 back and approved rounds 2 and 3. The gate passed 2,809 tests (`evidence/batches/31/review.md`).
 - **The scope decision:** the follow-up asks only for medicines mentioned but not photographed. An unreadable pack stays with the clinician, because one template can't say which pack is meant and any photo that gives a reading would replace it (supervisor 31 #2). Muse's plan also proposed a model that picks the next ask or stops; it wasn't taken, so no model chooses an action (`evidence/grills/b31-muse-plan/effect.md`).
 - **Live, pre-registered (79c95a6), then three more runs added before they ran (a7d3a2f, 91c0cfc):** matched in 2 of 4 runs on U11. In the registered run and r02 the reader marked the reply partial, so Anamnesis asked once more and the brief waits on the patient (`evidence/batches/31/live.md`). Every run is reported, and the film and README always give the count.
