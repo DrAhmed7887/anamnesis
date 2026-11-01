@@ -402,3 +402,15 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Merged into `main`:** the judge branch (README and CLAIMS at the freeze), plus a README link to `evidence/muse-sessions/`, the folder of cleaned Muse build sessions that exists only in the public copy.
 - **The workflow clips** (outside the repository, in the hackathon folder under `video/workflow/`): an animated node canvas of the intake that replays hero run 2 of 10 on the final code (row 4.29), each model step at 3× its recorded time and every number from the brief's "How it got here" table, and a time-lapse of batch 23's nine rounds (row 5.11). They are rendered frame by frame to 1920×1080 MP4s for scenes 3 and 6.
 - **Submission:** the form answers are drafted from the README with their rows (`SUBMISSION.md` in the hackathon folder). The form is behind Ahmed's sign-in on Cerebral Valley. The event page's deadline is Wed 4 Nov, 21:00 ET (Thu 03:00 CET), and our target is still Wed 15:00 CET.
+
+## 2026-11-01, 13:00: the participant guide's rules, read through Ahmed's own browser
+- **How:** Ahmed connected Kapture, so the guide, which needs his sign-in, was read in his browser on 1 Nov. It was read only: nothing was filled in or sent.
+- **Tools:** no rule limits the tools used to build, so the README's credit to Claude Code stays.
+- **New work only:** judges must be able to identify what was built during the event, and the demo may show only that. The README now says the history starts with the first commit on 27 Oct, 10:34 CET (f996ac9).
+- **Projects to avoid:** the guide's examples include any project that uses AI to generate and give medical advice. Anamnesis gives none (row 1.15). The film's title card and the form's first paragraph now say so up front.
+- **Rights:** a project that uses code, data or assets without the rights is disqualified. Checked the public copy: no commit holds audio, video or an image, and the committed HTML holds no inline media.
+- **Requirements:** the repository must be public and the video link must work. The video is three minutes, showing only what was built during the event. Judges use it with the code and the live product.
+- **Judging:** Impact 30%, Use of Meta AI tooling 25%, Technical depth 20%, Demo 25%.
+- **For Ahmed to weigh:**
+  - Best Agentic Use-Case is judged partly on autonomy, and our framing is human in the loop on purpose.
+  - For Best Build on Meta Open Weight Models, the infrastructure partner checks that the project runs on an eligible open-weight model. Ours are optional paths, and the default is Meta-hosted Spark 1.3.
