@@ -24,4 +24,5 @@ As set out in `live-plan.md` before any call (79c95a6, 14:46 CET), with three mo
 - **A first attempt, refused before any call:** at 14:46 CET the ledger cap refused the first call, because `--cap` was left at its $5.00 default with the ledger at $16.29. Nothing was sent and $0 was spent. Its two lines stay at the top of `runs.jsonl` (lines 1–2), and the registered run overwrote its reports.
 - **n = 4, with one synthetic voice and two public photos:** these numbers describe the runs, not a rate.
 - **Spend:** $0.20199 of Meta for the four runs (44 calls). Meta now stands at about $81.63 of the $150 credit with the grills, and the line is $100.
+  - The ledger lines: the registered run's 11 went into 91c0cfc with the time fix, by a `git commit -a`. The other three runs' 33 are in c59f385.
 - **The files:** `evidence/live/2026-11-01/report_<run>-fu-before.json`, `report_<run>-fu-after.json`, `followup_<run>.json`, and `runs.jsonl` lines 3–10.
