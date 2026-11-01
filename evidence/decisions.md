@@ -470,3 +470,11 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Left out of the film:** the 1 → 3 of 10 public-photo result (row 4.11), the cost per intake and the Muse spend. All stay in the README.
 - **New rows:** 2.9 (the plan, a patient app before telemedicine visits), and §8 rows for the illustrations, the narration and the music.
 - **Spend:** Meta about $82.65 of $150 (line $100), with the three Muse Image calls added to `spend_check.py`'s count outside the ledgers. ElevenLabs credits only for the voice and the music.
+
+## 2026-11-01, 20:59: film v4, Ahmed's second notes
+- **Ahmed:** "the medical researches used are old, is the images right? can we use spanish voice as well", then "I didnt like the part we said we used meta starting like branch 12 or whatever you said".
+- **The studies:** the film's problem numbers now come from Gionfriddo 2022 (a primary-care trial: fewer than 1 in 10 patients had a medication list with no discrepancies) and Handshaw 2024 (pharmacist telemedicine visits with older patients: 66% had at least one unintended discrepancy), rows 6.9 and 6.10, each read at the source. A research subagent found them; the engine re-read both abstracts. Bedell 2000 and Tam 2005 stay in the README and the claims table.
+- **The images:** the boxes are AEMPS's registry images of the real packs, the people are Muse Image illustrations labelled as such, and the replay chip now says "model steps sped up 4.5×" (its old wording could read as slower).
+- **The Spanish voice:** Ahmed chose to hear the patient, tested first. Set 4 (U13d, pre-registered in 2c37ec0 before its first call) read set 3's script in an ElevenLabs voice the film could play. It got 2 of 10, 0 harmful: "bisoprolol" came back as "visoprolol" or joined to "Tomo". As its plan said for fewer than 5, the film plays no patient voice, and its results scene now shows all four sets.
+- **The build line:** "Muse Code wrote most of the product's code" replaces "from batch sixteen on" (row 5.3: 4,249 of 6,474 lines at the freeze).
+- **Spend:** set 4 /bin/zsh.29168; Meta about $82.94 of $150, under the $100 line.
