@@ -34,6 +34,10 @@ If something slips in, the file is retaken, never edited afterwards.
 - **The second reader (batch 28, 31 Oct, Ahmed's go):** `scripts/intake_live.py --second-reader fireworks` sends Fireworks only the crops of a staged case's public photos that Spark 1.3 couldn't read, even after its zoom. The script refuses any other photo before the first call. **Ahmed's own photos and voice never go there.**
 - **The tuned extractor on Modal (batch 26, 30 Oct, Ahmed's go):** `scripts/intake_live.py --extractor glimmer` sends the transcript text of a staged case's synthetic voice note (`evidence/raw/media/public/voice/`, macOS `say`) to the tuned Muse Glimmer on Modal. The audio, the photos and anything of Ahmed's never go there: the script refuses any other voice note before the first call.
 - **Spanish and German synthetic voice notes (batch 24, 29 Oct):** eight macOS `say` notes, in the voices Mónica (es_ES) and Anna (de_DE), read invented scripts (`scripts/make_es_de_media.sh`). They go only to Muse Voice Transcribe on Meta's API, and the four Commons photos used with them go only to SAM 3.1 and Spark 1.3 (`evidence/batches/24/manifest.md`). They serve those runs only: the macOS licence keeps system voices out of the video and any hosted brief.
+- **The Spanish hero, U13 (1 Nov, Ahmed's choice):** two official pack images from AEMPS's public CIMA registry (Emconcor Cor 5 mg and Lopresor 100 mg) and one macOS `say` note in the voice Mónica (`evidence/diagnostics/hero-es-2026-11-01/plan.md`).
+  - The images go only to SAM 3.1 and Spark 1.3, and the note only to Muse Voice Transcribe, all on Meta's API.
+  - AEMPS allows its content to be reproduced when the source and the date of its last update are named, so the film may show the images with that credit.
+  - The voice is never played: the macOS licence keeps it out of the video.
 - **The reviewers never see the media.** The batch supervisor (Claude) and the quality manager (Gemini) get code and text evidence only.
 
 ## What is committed or published
