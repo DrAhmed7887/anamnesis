@@ -17,3 +17,25 @@ Scope matches `briefs/31.md`; the locked files are untouched; 2,786 tests pass a
 - **#1, #3, #4, #7 and the round limit:** taken into the contract and SPEC.
 - **#6:** SPEC says `reply` reports a failed channel by returning `None`, and that anything it raises propagates.
 - **#5, #8 and the fresh Muse audit's three points:** go to Muse in the round 2 brief. The audit's points are a repeated target in one round, a non-integer `max_rounds`, and a named exception for a repeated photo.
+
+## Round 2 re-check (1 Nov): SUPERVISOR: APPROVE
+Every round-1 input now behaves correctly:
+- the foreign, tripled and forged logs are refused;
+- a retargeting `reply` changes nothing;
+- the dark packs stay on the page, unread;
+- a withdrawn medicine isn't asked again.
+
+All 2,805 tests pass, ruff is clean and the locked files are untouched. The shared media check moved into `anamnesis/agent/loop.py` with no change in behaviour. Nothing in Muse's build has to change before merge.
+
+1. **Major, the CEO's decision: existing reconciler behaviour that the follow-up can now reach** (`reconcile.py:457-524`, called for every answer). The patient said Concor 5 mg, and photo 1 shows Concor 10 mg, so `intake_differs_from_unit_strength` is in Disagreements. The follow-up asks only about Beloc-Zok, and the reply shows Beloc-Zok 50 and Concor 5 mg. Concor then pairs with the new 5 mg pack, the 10 mg pack becomes "Photographed, not mentioned", and Disagreements reads "None.". An intake given both photos at once gives identical findings: pairing is one-to-one, and a matching strength scores higher. Fix: a separate reconciler batch; for batch 31, state it in SPEC §8 and pin it.
+2. **Minor, tests:** the skip for a medicine an earlier answer this round resolved is no longer pinned. Muse's code handles it, but deleting the skip still passes all 48 tests. Without it, the run raises after the patient was messaged and 3 calls were charged.
+3. **Minor, SPEC choice:** a late reply (a `no_reply` step whose request the clinician later answers through `add_photo`) makes `render_brief` refuse the log.
+4. **Minor:** a log naming the clinician's own `unreadable` request is credited to Anamnesis. The follow-up never makes such a request now, so refuse any step that isn't `not_photographed`.
+5. **Minor, wording:** the `follow_up` docstring says "every missing photo", and the header line reads as complete while dark packs wait for the clinician. `render_brief` is 56 lines with the log check inline.
+
+**The CEO's effect** (round 3):
+- **#1:** SPEC §8 states it as a known limit, and the contract pins the invariant behind it: after the follow-up, the findings are those of an intake given every photo at once. A reconciler batch can report the losing pack of the same brand with its own type later.
+- **#2:** pinned in the contract.
+- **#3:** a `no_reply` or `duplicate` step may name a request that is now `answered` (a late answer); such a log can only understate "received".
+- **#4:** taken.
+- **#5:** the text names medicines mentioned but not photographed, the docstring is corrected, and the log check becomes a helper.

@@ -32,3 +32,16 @@ The SPEC narrowed the follow-up to medicines mentioned but not photographed (sup
 | A `bool` passes as `max_rounds` | 2 |
 | The brief doesn't check an outcome against its request's status | 2 |
 | The brief allows a step twice | 1 |
+
+## Round 3 (after the supervisor's round-2 APPROVE with five points)
+The contract was raised to 46 cases. The changes:
+- the new header text;
+- a late answer must keep the log valid;
+- a step of a kind the follow-up never makes is refused;
+- the same-round skip (the supervisor's round-2 #2);
+- the invariant that after the follow-up the findings are those of an intake given every photo at once (round-2 #1).
+
+**Results:**
+- **Muse's round-2 build on it:** 40 of 46 pass, and the 6 failures all need round 3's code (the text, the late answer, the kind).
+- **The CEO's reference** (Muse's round-2 build plus those three changes, in a detached worktree, deleted afterwards): 46 of 46 pass, and the full suite has 2,808 passing.
+- **The same-round skip deleted from the reference:** caught (1 failed).

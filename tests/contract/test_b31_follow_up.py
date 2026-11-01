@@ -4,7 +4,8 @@ SPEC §8, "The follow-up by itself". For the Best Agentic Use-Case prize: after 
 for a photo of every medicine they mentioned but didn't photograph, takes the replies, and leaves the brief a draft for
 the clinician to approve. Code fixes the targets, their order and when to stop; models only read the new photos; every
 message is a template that names the medicine. A pack that couldn't be read stays with the clinician (supervisor 31
-#2: one template can't say which pack is meant). Round 2 also pins the supervisor's #1, #3, #4 and #7.
+#2: one template can't say which pack is meant). Round 2 pins the supervisor's #1, #3, #4 and #7; round 3 its round-2
+#1 (the findings are those of an intake given every photo at once), #2, #3 (a late answer) and #4.
 """
 
 import hashlib
@@ -50,6 +51,8 @@ CAT = load_catalogue()
 DRAFT = "Draft: not yet reviewed by a clinician."
 UNREADABLE_MESSAGE = ("Please send one new photo of this medicine pack, with the label facing the camera, "
                       "in good light.")
+LINE = ("Anamnesis sent the follow-up itself, for medicines mentioned but not photographed: photos asked for {asked}, "
+        "received {received}.")
 BELOC_MESSAGE = "Please send one photo of the pack of the medicine you mentioned as “Beloc-Zok”."
 OPEN, ANSWERED = RequestStatus.OPEN, RequestStatus.ANSWERED
 UNREADABLE, NOT_PHOTOGRAPHED = RequestKind.UNREADABLE, RequestKind.NOT_PHOTOGRAPHED
@@ -133,8 +136,11 @@ def trace(cid):
 
 
 class Transcriber:
+    def __init__(self, turns=None):
+        self.turns = turns
+
     def transcribe(self, audio, *, language_bias=None, keywords=None, lang_hint=None):
-        return list(TURNS), trace("voice")
+        return list(self.turns if self.turns is not None else TURNS), trace("voice")
 
 
 class Extractor:
@@ -196,16 +202,19 @@ PHOTO2 = png(400, 300, (180, 190, 200))   # a re-photo that turns out to be the 
 PHOTO3 = png(420, 300, (90, 90, 90))      # a re-photo still too dark to read
 PHOTO4 = png(440, 300, (60, 60, 60))      # and another
 PHOTO5 = png(460, 300, (40, 40, 40))      # and a third
-SHA2, SHA3, SHA4, SHA5 = (hashlib.sha256(p).hexdigest() for p in (PHOTO2, PHOTO3, PHOTO4, PHOTO5))
+PHOTO6 = png(480, 300, (150, 170, 190))   # one photo of both the Beloc-Zok and a Norvasc
+SHA2, SHA3, SHA4, SHA5, SHA6 = (hashlib.sha256(p).hexdigest() for p in (PHOTO2, PHOTO3, PHOTO4, PHOTO5, PHOTO6))
 RC = region_on(PHOTO, (10, 20, 139, 279), 0)
 RU = region_on(PHOTO, (160, 20, 289, 279), 1)
 R2 = region_on(PHOTO2, (20, 20, 379, 279), 0)
 R3 = region_on(PHOTO3, (20, 20, 399, 279), 0)
 R4 = region_on(PHOTO4, (20, 20, 419, 279), 0)
 R5 = region_on(PHOTO5, (20, 20, 439, 279), 0)
+R6A = region_on(PHOTO6, (10, 20, 229, 279), 0)
+R6B = region_on(PHOTO6, (250, 20, 469, 279), 1)
 AUDIO = (b"RIFF fixture voice note", "audio/wav")
 IMAGES = [(PHOTO, "image/png")]
-GIVE2, GIVE3, GIVE4, GIVE5 = ((p, "image/png") for p in (PHOTO2, PHOTO3, PHOTO4, PHOTO5))
+GIVE2, GIVE3, GIVE4, GIVE5, GIVE6 = ((p, "image/png") for p in (PHOTO2, PHOTO3, PHOTO4, PHOTO5, PHOTO6))
 TURNS = [
     AudioTurn(turn_id="turn-0", start_ms=0, end_ms=4000, transcript="I use Concor 5 mg once a day."),
     AudioTurn(turn_id="turn-1", start_ms=4000, end_ms=9000, transcript="And Beloc-Zok, 50 mg twice a day."),
@@ -223,19 +232,24 @@ CONCOR_5 = reading("Concor 5 mg\nBisoprolol fumarate",
 BELOC_50 = reading("Beloc-Zok 50 mg\nMetoprolol succinate\nProlonged-release tablets",
                    Strength(ingredients=[mg("metoprolol succinate", 50)], per="tablet", release="modified"))
 DARK = reading(readability="unreadable")
+NORVASC_5 = reading("Norvasc 5 mg\nAmlodipine besilate",
+                    Strength(ingredients=[mg("amlodipine besilate", 5)], per="tablet", release="immediate"))
+NV_TURN = AudioTurn(turn_id="turn-3", start_ms=13000, end_ms=16000, transcript="And Norvasc 5 mg once a day.")
+NORVASC = PatientClaim(claim_id="c4", name_text="Norvasc", intake_amount=mg("Norvasc", 5),
+                       regimen=DoseRegimen(intakes_per_day=Decimal(1)), status="active", audio_evidence=["turn-3"])
 
 
-def intake(claims=CLAIMS, regions=(RC, RU)):
+def intake(claims=CLAIMS, regions=(RC, RU), turns=None):
     reads = {RC.region_id: [CONCOR_5], RU.region_id: [DARK, DARK]}
-    return run_intake(AUDIO[0], IMAGES, transcriber=Transcriber(), extractor=Extractor(claims),
+    return run_intake(AUDIO[0], IMAGES, transcriber=Transcriber(turns), extractor=Extractor(claims),
                       segmenter=Segmenter({RC.image_sha256: list(regions)}), reader=Reader(reads), catalogue=CAT)
 
 
 def adapters():
     """One segmenter and one reader for every answering photo of a run, as the live script passes them."""
-    segmenter = Segmenter({SHA2: [R2], SHA3: [R3], SHA4: [R4], SHA5: [R5]})
+    segmenter = Segmenter({SHA2: [R2], SHA3: [R3], SHA4: [R4], SHA5: [R5], SHA6: [R6A, R6B]})
     reader = Reader({R2.region_id: [BELOC_50], R3.region_id: [DARK, DARK], R4.region_id: [DARK, DARK],
-                     R5.region_id: [DARK, DARK]})
+                     R5.region_id: [DARK, DARK], R6A.region_id: [BELOC_50], R6B.region_id: [NORVASC_5]})
     return segmenter, reader
 
 
@@ -435,14 +449,13 @@ def test_the_log_is_strict():
 # --- the brief ---------------------------------------------------------------------------------------------
 
 def test_the_line_is_fixed_text_that_gives_no_advice():
-    assert FOLLOW_UP_DONE == "Anamnesis sent the follow-up itself: new photos asked for {asked}, received {received}."
+    assert FOLLOW_UP_DONE == LINE
     assert_no_advice(FOLLOW_UP_DONE.format(asked=2, received=1))
 
 
 @pytest.mark.parametrize(("answers", "line", "status"), [
-    ((GIVE2,), "Anamnesis sent the follow-up itself: new photos asked for 1, received 1.", DRAFT),
-    ((None,), "Anamnesis sent the follow-up itself: new photos asked for 1, received 0.",
-     "Waiting for the patient: new photos requested 1."),
+    ((GIVE2,), LINE.format(asked=1, received=1), DRAFT),
+    ((None,), LINE.format(asked=1, received=0), "Waiting for the patient: new photos requested 1."),
 ])
 def test_the_brief_says_anamnesis_sent_the_follow_up(report, answers, line, status):
     new, review, given, log, *_ = run(report, new_review(report), Patient(*answers))
@@ -456,7 +469,7 @@ def test_the_line_counts_the_log_not_the_review(report):
     new, out, given, log, *_ = run(report, review, Patient(GIVE2))
     assert len(out.requests) == 2 and len(log) == 1
     page = Page(render_brief(new, given, AUDIO, CAT, review=out, follow_up=log))
-    assert page.one("follow-up").text() == "Anamnesis sent the follow-up itself: new photos asked for 1, received 1."
+    assert page.one("follow-up").text() == LINE.format(asked=1, received=1)
 
 
 def test_without_a_log_there_is_no_follow_up_line(report):
@@ -466,10 +479,10 @@ def test_without_a_log_there_is_no_follow_up_line(report):
 
 
 @pytest.mark.parametrize("case", ["no review", "unknown request", "a step twice", "another target", "another kind",
-                                  "answered but open", "no reply but answered"])
+                                  "answered but open"])
 def test_a_log_is_shown_only_with_the_review_it_belongs_to(report, case):
     new, review, given, log, *_ = run(report, new_review(report), Patient(GIVE2))         # r1 answered
-    still, waiting, kept, silent, *_ = run(report, new_review(report), Patient(None))    # r1 open
+    still, waiting, kept, _, *_ = run(report, new_review(report), Patient(None))         # r1 open
     on, kw = (new, given), {"review": review, "follow_up": log}
     step = log[0]
     if case == "no review":
@@ -482,9 +495,48 @@ def test_a_log_is_shown_only_with_the_review_it_belongs_to(report, case):
         kw["follow_up"] = [step.model_copy(update={"target_id": "o1"})]
     elif case == "another kind":
         kw["follow_up"] = [step.model_copy(update={"kind": UNREADABLE})]
-    elif case == "answered but open":
-        on, kw = (still, kept), {"review": waiting, "follow_up": log}
     else:
-        kw["follow_up"] = silent
+        on, kw = (still, kept), {"review": waiting, "follow_up": log}
     with pytest.raises(ValueError):
         render_brief(on[0], on[1], AUDIO, CAT, **kw)
+
+
+def test_a_late_answer_keeps_the_log_valid(report):
+    new, review, given, log, *_ = run(report, new_review(report), Patient(None))   # r1 for c2: no reply yet
+    later, answered = add_photo(new, review, "r1", GIVE2, given, AUDIO, segmenter=Segmenter({SHA2: [R2]}),
+                                reader=Reader({R2.region_id: [BELOC_50]}), catalogue=CAT)
+    page = Page(render_brief(later, [*given, GIVE2], AUDIO, CAT, review=answered, follow_up=log))
+    assert page.one("follow-up").text() == LINE.format(asked=1, received=0)   # it can only understate
+
+
+def test_a_request_the_follow_up_never_makes_is_not_credited_to_it(report):
+    review = request_photo(new_review(report), report, "o1")                       # the clinician's own request
+    later, answered = add_photo(report, review, "r1", GIVE3, IMAGES, AUDIO, segmenter=Segmenter({SHA3: [R3]}),
+                                reader=Reader({R3.region_id: [DARK, DARK]}), catalogue=CAT)
+    step = FollowUpStep(round=1, request_id="r1", target_id="o1", kind=UNREADABLE, outcome=GOT)
+    with pytest.raises(ValueError):
+        render_brief(later, [*IMAGES, GIVE3], AUDIO, CAT, review=answered, follow_up=[step])
+
+
+# --- round 3: what one answer can resolve -----------------------------------------------------------------
+
+def test_a_medicine_an_earlier_answer_this_round_resolved_is_not_asked_for():
+    base = intake(claims=[*CLAIMS[:2], NORVASC], regions=(RC,), turns=[*TURNS, NV_TURN])
+    assert requestable(base) == [(NOT_PHOTOGRAPHED, "c2"), (NOT_PHOTOGRAPHED, "c4")]
+    patient = Patient(GIVE6)                       # the reply about Beloc-Zok shows the Norvasc too
+    new, review, given, log, *_ = run(base, new_review(base), patient)
+    assert [(s.request_id, s.target_id, s.outcome) for s in log] == [("r1", "c2", GOT)]
+    assert len(patient.asked) == 1
+    assert requestable(new) == []
+
+
+def test_after_the_follow_up_the_findings_are_those_of_an_intake_with_every_photo(report):
+    new, review, given, log, *_ = run(report, new_review(report), Patient(GIVE2))
+    together = run_intake(AUDIO[0], given, transcriber=Transcriber(), extractor=Extractor(CLAIMS),
+                          segmenter=Segmenter({RC.image_sha256: [RC, RU], SHA2: [R2]}),
+                          reader=Reader({RC.region_id: [CONCOR_5], RU.region_id: [DARK, DARK],
+                                         R2.region_id: [BELOC_50]}), catalogue=CAT)
+    def found(r):
+        return sorted((f.type.value, f.claim_id or "", f.observation_id or "") for f in r.findings)
+    assert new.intake_id == together.intake_id
+    assert found(new) == found(together)
