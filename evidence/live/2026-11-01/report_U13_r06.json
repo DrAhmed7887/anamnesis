@@ -1,0 +1,290 @@
+{
+  "intake_id": "42e41165346ab38604b09c3949fd978463c98209da55ea600d0973b6b768cbcc",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 3980,
+      "transcript": "Concor diez miligramos cada mañana y metoprolol cien miligramos dos veces al día",
+      "speaker": null,
+      "lang_hint": "es"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "Concor",
+      "inn": null,
+      "strength": null,
+      "intake_amount": {
+        "inn": "concor",
+        "salt": null,
+        "amount": "10",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "1",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    },
+    {
+      "claim_id": "c2",
+      "name_text": "metoprolol",
+      "inn": "metoprolol",
+      "strength": null,
+      "intake_amount": {
+        "inn": "metoprolol",
+        "salt": null,
+        "amount": "100",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": "2",
+        "as_needed": null
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "6fad3a204bee-0",
+      "image_sha256": "6fad3a204bee6dcafa24c43fd431b23b041a161a53b902f651c5679701a26981",
+      "object_id": 0,
+      "x1": 289,
+      "y1": 104,
+      "x2": 683,
+      "y2": 470,
+      "frame_w": 1024,
+      "frame_h": 576,
+      "confidence": 0.7968254089355469
+    },
+    {
+      "region_id": "e0636325920a-0",
+      "image_sha256": "e0636325920ac2ee90dfba697734abd23569abccd7b5ead51967c3ce1131d37f",
+      "object_id": 0,
+      "x1": 287,
+      "y1": 60,
+      "x2": 738,
+      "y2": 503,
+      "frame_w": 1024,
+      "frame_h": 576,
+      "confidence": 0.8160918951034546
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "Emconcor® Cor 5 mg comprimidos recubiertos con película Fumarato de bisoprolol Vía oral 28 comprimidos recubiertos con película MERCK 869750.2 TLD",
+      "inn": "bisoprolol",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "bisoprolol",
+            "salt": null,
+            "amount": "5",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "readable",
+      "country": null,
+      "visual_evidence": [
+        "6fad3a204bee-0"
+      ]
+    },
+    {
+      "observation_id": "o1",
+      "label_text": "Lopresor® 100 mg comprimidos recubiertos con película Metoprolol, tartrato 40 Comprimidos 762250.9-TLD CASEN RECORDATI",
+      "inn": "metoprolol",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "metoprolol",
+            "salt": null,
+            "amount": "100",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "readable",
+      "country": null,
+      "visual_evidence": [
+        "e0636325920a-0"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "c1:o0",
+      "type": "intake_differs_from_unit_strength",
+      "claim_id": "c1",
+      "observation_id": "o0",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "6fad3a204bee-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "Reported intake differs from the strength of one pack unit.",
+      "patient_question_id": "intake"
+    },
+    {
+      "finding_id": "c2:o1",
+      "type": "match",
+      "claim_id": "c2",
+      "observation_id": "o1",
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [
+        "e0636325920a-0"
+      ],
+      "needs_clinician_review": false,
+      "clinician_note": "The compared identity and strength details agree.",
+      "patient_question_id": null
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "b9e8d816-e3be-43c5-85c8-43b1da923c2d"
+      ],
+      "model_id": "muse-voice-transcribe-1.0",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 1899,
+      "cost_usd": "0.00025"
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "2 claims",
+      "call_ids": [
+        "chatcmpl-01a1979c-bc76-70b5-8968-d9fdafa08576"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 640,
+      "output_tokens": 3808,
+      "latency_ms": 12107,
+      "cost_usd": "0.01698400"
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "6fad3a204bee:medicine box",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae75322a4c6da0107f34bb0"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 1299,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 3,
+      "action": "read",
+      "target": "6fad3a204bee-0",
+      "outcome": "readable",
+      "call_ids": [
+        "chatcmpl-01a1979c-d77d-737d-93df-c3fcd0e09abf"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 541,
+      "output_tokens": 1458,
+      "latency_ms": 5401,
+      "cost_usd": "0.00687275"
+    },
+    {
+      "n": 4,
+      "action": "segment",
+      "target": "e0636325920a:medicine box",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae753298b7570f1cf88437d"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 1617,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 5,
+      "action": "segment",
+      "target": "e0636325920a:label",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae7532ad72e9a9a32884e11"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 638,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 6,
+      "action": "segment",
+      "target": "e0636325920a:package",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae7532bcb14cc834bd34e3e"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 1383,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 7,
+      "action": "read",
+      "target": "e0636325920a-0",
+      "outcome": "readable",
+      "call_ids": [
+        "chatcmpl-01a1979d-00bb-710c-9726-c630abfa7346"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 620,
+      "output_tokens": 1533,
+      "latency_ms": 6871,
+      "cost_usd": "0.00729025"
+    },
+    {
+      "n": 8,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "2 findings",
+      "call_ids": [],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0"
+    }
+  ],
+  "calls": 8,
+  "spend_usd": "0.04139700",
+  "superseded": []
+}
