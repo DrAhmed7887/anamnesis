@@ -1,0 +1,321 @@
+{
+  "intake_id": "bf1fcb6e25c5a10228e79b106e5f2aed7a59170ada41c4b69e9cd140417cd1bb",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 3180,
+      "transcript": "I take ibuprofen 400 milligrams when I have pain.",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "ibuprofen",
+      "inn": "ibuprofen",
+      "strength": null,
+      "intake_amount": {
+        "inn": "ibuprofen",
+        "salt": null,
+        "amount": "400",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": null,
+        "as_needed": true
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "63f9fe32e47c-0",
+      "image_sha256": "63f9fe32e47c0dbcdc36b4fd07462ab0e049ed2b052d6e87e6206dcff9c320bb",
+      "object_id": 0,
+      "x1": 324,
+      "y1": 1880,
+      "x2": 1139,
+      "y2": 2474,
+      "frame_w": 2419,
+      "frame_h": 3225,
+      "confidence": 0.5395683646202087
+    },
+    {
+      "region_id": "6eaabb4f7233-0",
+      "image_sha256": "6eaabb4f7233907a8fd0a033927772c540f6386fb36ca4e0a8a990b4ce13e0db",
+      "object_id": 0,
+      "x1": 724,
+      "y1": 629,
+      "x2": 2446,
+      "y2": 1680,
+      "frame_w": 3225,
+      "frame_h": 1814,
+      "confidence": 0.8987342119216919
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "BR\n30 Sugar coated tablets",
+      "inn": null,
+      "strength": null,
+      "readability": "partial",
+      "country": null,
+      "visual_evidence": [
+        "63f9fe32e47c-0"
+      ]
+    },
+    {
+      "observation_id": "o1",
+      "label_text": "BRUFEN®\n400 mg Ibuprofen\n• Relieves pain\n• Lowers fever\n• Treats inflammation\n30 Sugar coated tablets",
+      "inn": "ibuprofen",
+      "strength": {
+        "ingredients": [
+          {
+            "inn": "ibuprofen",
+            "salt": null,
+            "amount": "400",
+            "unit": "mg"
+          }
+        ],
+        "per": "tablet",
+        "release": "immediate"
+      },
+      "readability": "partial",
+      "country": null,
+      "visual_evidence": [
+        "6eaabb4f7233-0"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "-:o0",
+      "type": "unreadable_source",
+      "claim_id": null,
+      "observation_id": "o0",
+      "audio_evidence": [],
+      "visual_evidence": [
+        "63f9fe32e47c-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "The pack label is not fully readable.",
+      "patient_question_id": "unreadable"
+    },
+    {
+      "finding_id": "-:o1",
+      "type": "unreadable_source",
+      "claim_id": null,
+      "observation_id": "o1",
+      "audio_evidence": [],
+      "visual_evidence": [
+        "6eaabb4f7233-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "The pack label is not fully readable.",
+      "patient_question_id": "unreadable"
+    },
+    {
+      "finding_id": "c1:-",
+      "type": "missing_modality",
+      "claim_id": "c1",
+      "observation_id": null,
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [],
+      "needs_clinician_review": true,
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "d297fea7-2d4b-41f3-b43a-f7c97f0e406a"
+      ],
+      "model_id": "muse-voice-transcribe-1.0",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 3922,
+      "cost_usd": "0.00020"
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "chatcmpl-01a1975e-c68d-7041-858c-993bdde4364d"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 631,
+      "output_tokens": 2503,
+      "latency_ms": 8962,
+      "cost_usd": "0.01142650"
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "63f9fe32e47c:medicine box",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae7434724622275e20b4e42"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 3088,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 3,
+      "action": "segment",
+      "target": "63f9fe32e47c:label",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae7434a7ec6e9427e854d70"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 3043,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 4,
+      "action": "read",
+      "target": "63f9fe32e47c-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a1975e-eba0-755e-a5d7-a69e27494f11"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 1067,
+      "output_tokens": 589,
+      "latency_ms": 3259,
+      "cost_usd": "0.00383700"
+    },
+    {
+      "n": 5,
+      "action": "zoom_read",
+      "target": "63f9fe32e47c-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a1975e-f9e4-7117-bfa7-85b755f3ce4c"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 3339,
+      "output_tokens": 527,
+      "latency_ms": 3266,
+      "cost_usd": "0.00641350"
+    },
+    {
+      "n": 6,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "2 findings",
+      "call_ids": [],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0"
+    },
+    {
+      "n": 7,
+      "action": "segment",
+      "target": "6eaabb4f7233:medicine box",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae74354009d6519bf2a4cad"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 2554,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 8,
+      "action": "segment",
+      "target": "6eaabb4f7233:label",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae74357a043188cae6a4f30"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 2448,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 9,
+      "action": "segment",
+      "target": "6eaabb4f7233:package",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae74358305a07a941174d26"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 1276,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 10,
+      "action": "read",
+      "target": "6eaabb4f7233-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a1975f-29d1-744e-be68-142bfa4a598c"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 3078,
+      "output_tokens": 1143,
+      "latency_ms": 5511,
+      "cost_usd": "0.00870525"
+    },
+    {
+      "n": 11,
+      "action": "zoom_read",
+      "target": "6eaabb4f7233-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a1975f-3d2d-777d-bb15-f51f86899626"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 3661,
+      "output_tokens": 816,
+      "latency_ms": 4620,
+      "cost_usd": "0.00804425"
+    },
+    {
+      "n": 12,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "3 findings",
+      "call_ids": [],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0"
+    }
+  ],
+  "calls": 11,
+  "spend_usd": "0.05112650",
+  "superseded": []
+}

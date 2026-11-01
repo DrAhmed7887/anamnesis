@@ -1,0 +1,192 @@
+{
+  "intake_id": "079b4079cbe43da114dda50009c51697e2fb567129af89f9784a51f6cd78ab1f",
+  "turns": [
+    {
+      "turn_id": "turn-0",
+      "start_ms": 0,
+      "end_ms": 3180,
+      "transcript": "I take ibuprofen 400 milligrams when I have pain.",
+      "speaker": null,
+      "lang_hint": "en"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c1",
+      "name_text": "ibuprofen",
+      "inn": "ibuprofen",
+      "strength": null,
+      "intake_amount": {
+        "inn": "ibuprofen",
+        "salt": null,
+        "amount": "400",
+        "unit": "mg"
+      },
+      "regimen": {
+        "units_per_intake": null,
+        "intakes_per_day": null,
+        "as_needed": true
+      },
+      "status": "active",
+      "audio_evidence": [
+        "turn-0"
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "region_id": "63f9fe32e47c-0",
+      "image_sha256": "63f9fe32e47c0dbcdc36b4fd07462ab0e049ed2b052d6e87e6206dcff9c320bb",
+      "object_id": 0,
+      "x1": 324,
+      "y1": 1880,
+      "x2": 1139,
+      "y2": 2474,
+      "frame_w": 2419,
+      "frame_h": 3225,
+      "confidence": 0.5395683646202087
+    }
+  ],
+  "observations": [
+    {
+      "observation_id": "o0",
+      "label_text": "BR\n30 Sugar coated tablets",
+      "inn": null,
+      "strength": null,
+      "readability": "partial",
+      "country": null,
+      "visual_evidence": [
+        "63f9fe32e47c-0"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "-:o0",
+      "type": "unreadable_source",
+      "claim_id": null,
+      "observation_id": "o0",
+      "audio_evidence": [],
+      "visual_evidence": [
+        "63f9fe32e47c-0"
+      ],
+      "needs_clinician_review": true,
+      "clinician_note": "The pack label is not fully readable.",
+      "patient_question_id": "unreadable"
+    },
+    {
+      "finding_id": "c1:-",
+      "type": "missing_modality",
+      "claim_id": "c1",
+      "observation_id": null,
+      "audio_evidence": [
+        "turn-0"
+      ],
+      "visual_evidence": [],
+      "needs_clinician_review": true,
+      "clinician_note": "Medication evidence is present in only one source.",
+      "patient_question_id": "source"
+    }
+  ],
+  "steps": [
+    {
+      "n": 0,
+      "action": "transcribe",
+      "target": "audio",
+      "outcome": "1 turns",
+      "call_ids": [
+        "7e8b5d62-06a8-481b-b0b2-cd19a373f990"
+      ],
+      "model_id": "muse-voice-transcribe-1.0",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 3642,
+      "cost_usd": "0.00020"
+    },
+    {
+      "n": 1,
+      "action": "extract_claims",
+      "target": "turns",
+      "outcome": "1 claims",
+      "call_ids": [
+        "chatcmpl-01a1975c-fab5-721a-9ee2-8c096358ec02"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 631,
+      "output_tokens": 2488,
+      "latency_ms": 6806,
+      "cost_usd": "0.01136275"
+    },
+    {
+      "n": 2,
+      "action": "segment",
+      "target": "63f9fe32e47c:medicine box",
+      "outcome": "0 regions",
+      "call_ids": [
+        "resp_6ae742d2ff862e2c0e7e4505"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 5030,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 3,
+      "action": "segment",
+      "target": "63f9fe32e47c:label",
+      "outcome": "1 regions",
+      "call_ids": [
+        "resp_6ae742d6063b9f6cfbab43b3"
+      ],
+      "model_id": "sam-3.1",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 3933,
+      "cost_usd": "0.0025"
+    },
+    {
+      "n": 4,
+      "action": "read",
+      "target": "63f9fe32e47c-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a1975d-3240-7395-8142-6b008bff1f7e"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 1067,
+      "output_tokens": 1002,
+      "latency_ms": 5148,
+      "cost_usd": "0.00559225"
+    },
+    {
+      "n": 5,
+      "action": "zoom_read",
+      "target": "63f9fe32e47c-0",
+      "outcome": "partial",
+      "call_ids": [
+        "chatcmpl-01a1975d-44df-717c-96cf-9a11b893c785"
+      ],
+      "model_id": "muse-spark-1.3",
+      "input_tokens": 3339,
+      "output_tokens": 637,
+      "latency_ms": 4472,
+      "cost_usd": "0.00688100"
+    },
+    {
+      "n": 6,
+      "action": "reconcile",
+      "target": "all",
+      "outcome": "2 findings",
+      "call_ids": [],
+      "model_id": null,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "latency_ms": 0,
+      "cost_usd": "0"
+    }
+  ],
+  "calls": 6,
+  "spend_usd": "0.02903600",
+  "superseded": []
+}

@@ -1,0 +1,33 @@
+{
+  "asked": [
+    {
+      "request_id": "r1",
+      "kind": "not_photographed",
+      "target_id": "c1",
+      "message": "Please send one photo of the pack of the medicine you mentioned as “Ibuprofen”.",
+      "replied": true
+    }
+  ],
+  "log": [
+    {
+      "round": 1,
+      "request_id": "r1",
+      "target_id": "c1",
+      "kind": "not_photographed",
+      "outcome": "answered"
+    }
+  ],
+  "review": {
+    "intake_id": "bf1fcb6e25c5a10228e79b106e5f2aed7a59170ada41c4b69e9cd140417cd1bb",
+    "status": "draft",
+    "requests": [
+      {
+        "request_id": "r1",
+        "kind": "not_photographed",
+        "target_id": "c1",
+        "status": "answered",
+        "photo_index": 2
+      }
+    ]
+  }
+}
