@@ -1,6 +1,6 @@
 """One self-contained clinician brief page per intake (SPEC §7)."""
 
-from anamnesis.agent.loop import _intake_id, _prepare
+from anamnesis.agent.loop import _checked_prepared
 from anamnesis.brief_html import (
     _SCRIPT,
     _STYLE,
@@ -14,7 +14,7 @@ from anamnesis.brief_html import (
     _voice_html,
 )
 from anamnesis.schema.report import AgentAction, ReconciliationReport
-from anamnesis.schema.review import RequestStatus
+from anamnesis.schema.review import FollowUpOutcome, RequestKind, RequestStatus
 from anamnesis.schema.templates import (
     BRIEF_TITLE,
     CATALOGUE_CODES_REFERENCE,
@@ -36,16 +36,6 @@ from anamnesis.schema.templates import (
 )
 
 Image = tuple[bytes, str]
-
-
-def _checked_prepared(report: ReconciliationReport, images: list[Image], audio: Image | None):
-    """The loop's own prepared photos, refusing media the report wasn't made from."""
-    prepared = _prepare(images)
-    audio_bytes = audio[0] if audio is not None else None
-    want = _intake_id(audio_bytes, [photo for photo, _, _ in prepared])
-    if want != report.intake_id:
-        raise ValueError("media do not match the report")
-    return prepared
 
 
 def coverage_lines(report: ReconciliationReport, images: list[Image], audio: Image | None) -> list[str]:
@@ -94,13 +84,37 @@ def _voice_line(report: ReconciliationReport, audio: Image | None) -> str:
     return COVERAGE_VOICE_OK.format(t=len(report.turns), c=len(report.claims))
 
 
+def _check_follow_up_log(review, follow_up) -> None:
+    """Refuse a follow-up log that does not belong to its review (SPEC §8)."""
+    if not follow_up:
+        return
+    if review is None:
+        raise ValueError("a follow-up log needs its review")
+    known = {item.request_id: item for item in review.requests}
+    seen = set()
+    for step in follow_up:
+        item = known.get(step.request_id)
+        if item is None:
+            raise ValueError("a follow-up step names no request of the review")
+        if step.request_id in seen:
+            raise ValueError("a follow-up step repeats its request")
+        seen.add(step.request_id)
+        if step.target_id != item.target_id or step.kind != item.kind:
+            raise ValueError("a follow-up step differs from its request")
+        if step.kind is not RequestKind.NOT_PHOTOGRAPHED:
+            raise ValueError("a follow-up step names another kind of request")
+        if step.outcome is FollowUpOutcome.ANSWERED and item.status is not RequestStatus.ANSWERED:
+            raise ValueError("an answered step names no answered request")
+
+
 def render_brief(
     report: ReconciliationReport, images: list[Image], audio: Image | None, catalogue,
-    review=None,
+    review=None, follow_up=None,
 ) -> str:
     """Render one deterministic self-contained HTML page for a finished report."""
     if review is not None and review.intake_id != report.intake_id:
         raise ValueError("review is for another report")
+    _check_follow_up_log(review, follow_up)
     prepared = _checked_prepared(report, images, audio)
     claims = {claim.claim_id: claim for claim in report.claims}
     observations = {obs.observation_id: obs for obs in report.observations}
@@ -121,7 +135,7 @@ def render_brief(
         '<head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
         f"<title>{BRIEF_TITLE}</title><style>{_STYLE}</style></head>",
-        "<body>", _scope_html(review),
+        "<body>", _scope_html(review, follow_up),
     ]
     for name in SECTION_ORDER:
         body = "".join(sections[name]) or f"<p>{NONE_TEXT}</p>"

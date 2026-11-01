@@ -3,6 +3,7 @@
 from anamnesis.agent.loop import (
     _NEEDS_ZOOM,
     SAM_CONCEPTS,
+    _checked_prepared,
     _intake_id,
     _observation,
     _prepare,
@@ -14,10 +15,22 @@ from anamnesis.agent.session import IntakeSession
 from anamnesis.core.reconcile import reconcile_all
 from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.report import AgentAction, AgentStep, ReconciliationReport
-from anamnesis.schema.review import PhotoRequest, RequestKind, RequestStatus, Review, ReviewStatus
+from anamnesis.schema.review import (
+    FollowUpOutcome,
+    FollowUpStep,
+    PhotoRequest,
+    RequestKind,
+    RequestStatus,
+    Review,
+    ReviewStatus,
+)
 from anamnesis.schema.templates import REQUEST_NOT_PHOTOGRAPHED, REQUEST_UNREADABLE
 
 Image = tuple[bytes, str]
+
+
+class PhotoAlreadyGiven(ValueError):
+    """A photo that was already given (SPEC §8)."""
 
 
 def _pending_status(requests: list[PhotoRequest]) -> ReviewStatus:
@@ -106,13 +119,11 @@ def add_photo(
     if not wanted or wanted[0].status is not RequestStatus.OPEN:
         raise ValueError("request is not open")
     (asked,) = wanted
-    prepared = _prepare(images)
+    prepared = _checked_prepared(report, images, audio)
     audio_bytes = audio[0] if audio is not None else None
-    if _intake_id(audio_bytes, [item for item, _, _ in prepared]) != report.intake_id:
-        raise ValueError("media do not match the report")
     fresh = _prepare([photo])[0]
     if any(fresh[0][0] == item[0][0] for item in prepared):
-        raise ValueError("photo was already given")
+        raise PhotoAlreadyGiven("photo was already given")
     if max_provider_calls is None:
         per_region = 3 * top_k if second_reader is not None else 2 * top_k
         max_provider_calls = len(concepts) + per_region
@@ -172,3 +183,59 @@ def approve(review: Review, report: ReconciliationReport) -> Review:
         raise ValueError("an open request remains")
     return Review(intake_id=review.intake_id, status=ReviewStatus.APPROVED,
                   requests=list(review.requests))
+
+
+def follow_up(
+    report: ReconciliationReport, review: Review, images: list[Image], audio: Image | None,
+    *, reply, segmenter, reader, catalogue, second_reader=None,
+    concepts: tuple[str, ...] = SAM_CONCEPTS, top_k: int = 3, max_rounds: int = 2,
+) -> tuple[ReconciliationReport, Review, list[Image], list[FollowUpStep]]:
+    """Ask the patient for medicines mentioned but not photographed, take the replies,
+    and leave a draft (SPEC §8)."""
+    if isinstance(max_rounds, bool) or not isinstance(max_rounds, int) or max_rounds < 1:
+        raise ValueError("max_rounds must be an int of at least 1")
+    if review.intake_id != report.intake_id:
+        raise ValueError("review is for another report")
+    if review.status is ReviewStatus.APPROVED:
+        raise ValueError("review is approved")
+    _checked_prepared(report, images, audio)
+    given = list(images)
+    log: list[FollowUpStep] = []
+    for round_no in range(1, max_rounds + 1):
+        held = {
+            item.target_id for item in review.requests
+            if item.status in (RequestStatus.OPEN, RequestStatus.WITHDRAWN)
+        }
+        targets: list[tuple[RequestKind, str]] = []
+        for kind, target in requestable(report):
+            if kind is RequestKind.NOT_PHOTOGRAPHED and target not in held:
+                if target not in {seen for _, seen in targets}:
+                    targets.append((kind, target))
+        if not targets:
+            break
+        for kind, target in targets:
+            if (kind, target) not in requestable(report):
+                continue
+            if any(item.target_id == target and item.status is RequestStatus.OPEN
+                   for item in review.requests):
+                continue
+            review = request_photo(review, report, target)
+            asked = review.requests[-1]
+            photo = reply(asked.model_copy(deep=True), request_message(report, asked))
+            if photo is None:
+                outcome = FollowUpOutcome.NO_REPLY
+            else:
+                try:
+                    report, review = add_photo(
+                        report, review, asked.request_id, photo, given, audio,
+                        segmenter=segmenter, reader=reader, catalogue=catalogue,
+                        second_reader=second_reader, concepts=concepts, top_k=top_k,
+                    )
+                except PhotoAlreadyGiven:
+                    outcome = FollowUpOutcome.DUPLICATE
+                else:
+                    given.append(photo)
+                    outcome = FollowUpOutcome.ANSWERED
+            log.append(FollowUpStep(round=round_no, request_id=asked.request_id,
+                                    target_id=target, kind=kind, outcome=outcome))
+    return report, review, given, log

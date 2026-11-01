@@ -128,6 +128,8 @@ REVIEW_REPLACED = "Replaced by a newer photo."
 REQUEST_UNREADABLE = ("Please send one new photo of this medicine pack, with the label facing the camera, "
                       "in good light.")
 REQUEST_NOT_PHOTOGRAPHED = "Please send one photo of the pack of the medicine you mentioned as “{name}”."
+FOLLOW_UP_DONE = ("Anamnesis sent the follow-up itself, for medicines mentioned but not photographed: "
+                  "photos asked for {asked}, received {received}.")
 
 TIMELINE_HEADING = "How it got here"
 TIMELINE_COLUMNS = ("#", "Step", "Target", "Outcome", "Model", "Tokens in", "Tokens out", "Time", "Cost")

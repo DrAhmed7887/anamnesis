@@ -7,7 +7,7 @@ from anamnesis.agent.crop import crop_region
 from anamnesis.core.overlap import cross_medication
 from anamnesis.core.reconcile import claim_identity_conflict, pack_identity_conflict
 from anamnesis.schema import DiscrepancyType as D
-from anamnesis.schema.review import RequestKind, RequestStatus, ReviewStatus
+from anamnesis.schema.review import FollowUpOutcome, RequestKind, RequestStatus, ReviewStatus
 from anamnesis.schema.templates import (
     BRIEF_TITLE,
     CATALOGUE_CODES_ATC,
@@ -24,6 +24,7 @@ from anamnesis.schema.templates import (
     FIELD_REGIMEN,
     FIELD_STATUS,
     FIELD_STRENGTH,
+    FOLLOW_UP_DONE,
     HEARD_IN,
     HEARD_TURN,
     MENTIONED_NOT_PHOTOGRAPHED,
@@ -473,9 +474,13 @@ def _review_status(review) -> str:
     return REVIEW_WAITING.format(n=open_count)
 
 
-def _scope_html(review=None) -> str:
+def _scope_html(review=None, follow_up=None) -> str:
     lines = "".join(f"<p>{line}</p>" for line in SCOPE_LINES)
     lines += f'<p id="review-status">{_review_status(review)}</p>'
+    if follow_up:
+        asked = len(follow_up)
+        received = sum(1 for step in follow_up if step.outcome is FollowUpOutcome.ANSWERED)
+        lines += f'<p id="follow-up">{FOLLOW_UP_DONE.format(asked=asked, received=received)}</p>'
     return f'<header id="scope"><h1>{BRIEF_TITLE}</h1>{lines}</header>'
 
 

@@ -546,3 +546,33 @@ Nothing in a brief is final until a clinician approves it. Before approving, the
 - The region figure of a superseded observation adds "Replaced by a newer photo." Coverage counts it like any other observation.
 - When the review has a request that isn't withdrawn, coverage ends with "Photos requested {n}, received {m}." (`n` the requests that aren't withdrawn, `m` the answered ones).
 - All of this text lives in `templates.py` and passes `assert_no_advice`.
+
+### The follow-up by itself (`follow_up`, batch 31)
+The clinician doesn't have to start each request for a missing photo. `follow_up` asks the patient for a photo of every medicine they mentioned but didn't photograph, takes the replies, and leaves the brief a draft for the clinician to approve. Code fixes the targets, their order and when to stop; models only read the new photos. No model chooses anything.
+
+- **Only medicines mentioned but not photographed** (`not_photographed` targets). Their message names the medicine, so the patient knows what is asked. A pack that couldn't be read stays with the clinician, as before (`request_photo`): one template can't tell the patient which pack is meant, and any photo that gives a reading would replace it (supervisor 31 #2).
+- `follow_up(report, review, images, audio, *, reply, segmenter, reader, catalogue, second_reader=None, concepts=SAM_CONCEPTS, top_k=3, max_rounds=2) -> (ReconciliationReport, Review, list[Image], list[FollowUpStep])`, in `anamnesis/review.py`. It is pure: it returns new objects and never changes its inputs.
+- `reply(request, message) -> Image | None` is the caller's channel to the patient. It gets a **copy** of the open `PhotoRequest`, so nothing it does to that object reaches the review, and that request's `request_message(report, request)`. It returns one photo, or `None` for no reply; a channel that fails returns `None` too. Anything `reply` raises propagates. `follow_up` calls it exactly once per request it makes, and only after `request_photo` has opened that request.
+- **Refusals** (`ValueError`; nothing changes and `reply` is never called), checked before anything else, whatever the report holds:
+  - the review's `intake_id` isn't the report's;
+  - the review is `approved`;
+  - `max_rounds` isn't an `int` (a `bool` doesn't count), or is below 1;
+  - `images` and `audio` aren't the report's media (the loop's `_intake_id` of the prepared media differs from the report's).
+- **Rounds** `1 … max_rounds`. At the start of a round, the round's targets are the `not_photographed` entries of `requestable(report)`, in its order, whose claim has no `open` or `withdrawn` request in the review, each target once. A withdrawn request is the clinician's decision not to ask, and the follow-up keeps it. For each round target in turn:
+  - if it is no longer in `requestable(report)` (an earlier answer this round resolved it), or it now has an open request, it is skipped and nothing is logged;
+  - otherwise `request_photo` opens a request for it, and `reply` is called with a copy of that request and its message;
+  - **a photo:** it is answered through `add_photo(report, review, request_id, photo, images, audio, segmenter=…, reader=…, catalogue=…, second_reader=…, concepts=…, top_k=…)`. The photo joins `images` for every later request and for the result. Outcome `answered`;
+  - **`None`:** the request stays `open`. Outcome `no_reply`;
+  - **a photo already given** (`add_photo` raises `PhotoAlreadyGiven`, a `ValueError` whose message is still "photo was already given", before any model call): the request stays `open`. Outcome `duplicate`;
+  - any other refusal propagates.
+  The run stops after a round whose target list was empty, or after round `max_rounds`. A target with an open request is never asked again, so a request without a reply waits for the patient, and the clinician can withdraw it.
+- **Result:** the updated report, the review, the images (the input images, then each answering photo in the order it was given: the order `render_brief` and `photo_index` use), and the log. The review is never `approved`: it is `draft`, or `awaiting_patient` while any request is open.
+- **Known limit: every answer is reconciled with all the evidence** (supervisor 31 round 2 #1). `add_photo` re-pairs every claim with every pack, so after the follow-up the findings are exactly those of an intake given every photo at once, apart from packs that a clinician's own request already replaced (`superseded`; supervisor 31 round 3 #2). A reply that also shows another medicine's pack can therefore re-pair that medicine. For example, the patient said Concor 5 mg against a 10 mg pack, and the reply to a Beloc-Zok request also shows a Concor 5 mg box: Concor then matches the new pack, and the 10 mg pack is shown as photographed but not mentioned, no longer as a disagreement. A later reconciler batch may give a readable pack of the same brand that loses the pairing a type of its own.
+- **Spend:** only the answering photos go to models, each under its own `add_photo` call budget. A run asks at most `max_rounds` × (the claims) times, so it makes at most that many × the budget provider calls.
+- **Schema** (`anamnesis/schema/review.py`, `extra="forbid"`): `FollowUpOutcome` (`answered`, `no_reply`, `duplicate`); `FollowUpStep`: `round` (an int, at least 1), `request_id`, `target_id`, `kind` (a `RequestKind`), `outcome`.
+- **On the brief:** `render_brief(..., review=None, follow_up=None)`. A non-empty `follow_up` must belong to the review given, or `render_brief` raises `ValueError`:
+  - each step's `request_id` names one of the review's requests, and no `request_id` appears twice in the log;
+  - each step's `target_id` and `kind` are its request's;
+  - each step's `kind` is `not_photographed`: the follow-up never makes another kind of request (supervisor 31 round 2 #4);
+  - an `answered` step's request is `answered`. A `no_reply` or `duplicate` step's request may be in any state: it can be `open`, `withdrawn`, or `answered` later through `add_photo` (a late answer), so such a log can only understate "received" (#3).
+  The `scope` header then gains `<p id="follow-up">` with "Anamnesis sent the follow-up itself, for medicines mentioned but not photographed: photos asked for {asked}, received {received}." (`asked` the log's steps, `received` its `answered` ones: the log's counts, not the review's). The checks live in one helper, `_check_follow_up_log(review, follow_up)`. Without a log, or with an empty one, there is no such element. The text lives in `templates.py` (`FOLLOW_UP_DONE`) and passes `assert_no_advice`.
