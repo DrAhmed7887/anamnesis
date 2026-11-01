@@ -1881,3 +1881,14 @@
 {"call_id": "chatcmpl-01a1935c-5290-7117-86ab-6e5b94c3ef55", "model_id": "muse-spark-1.3", "cost_usd": "0.00972475", "time_utc": "2026-10-31T19:07:44.198377+00:00", "estimated": false}
 {"call_id": "resp_6ae63c81b861dbcf111a4c94", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-10-31T19:07:46.753495+00:00", "estimated": false}
 {"call_id": "chatcmpl-01a1935c-7cf2-72de-bf50-64c7f1435621", "model_id": "muse-spark-1.3", "cost_usd": "0.01331975", "time_utc": "2026-10-31T19:07:54.877020+00:00", "estimated": false}
+{"call_id": "7e8b5d62-06a8-481b-b0b2-cd19a373f990", "model_id": "muse-voice-transcribe-1.0", "cost_usd": "0.00020", "time_utc": "2026-11-01T13:46:48.805444+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a1975c-fab5-721a-9ee2-8c096358ec02", "model_id": "muse-spark-1.3", "cost_usd": "0.01136275", "time_utc": "2026-11-01T13:46:55.618215+00:00", "estimated": false}
+{"call_id": "resp_6ae742d2ff862e2c0e7e4505", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-11-01T13:47:00.736694+00:00", "estimated": false}
+{"call_id": "resp_6ae742d6063b9f6cfbab43b3", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-11-01T13:47:04.688114+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a1975d-3240-7395-8142-6b008bff1f7e", "model_id": "muse-spark-1.3", "cost_usd": "0.00559225", "time_utc": "2026-11-01T13:47:09.953054+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a1975d-44df-717c-96cf-9a11b893c785", "model_id": "muse-spark-1.3", "cost_usd": "0.00688100", "time_utc": "2026-11-01T13:47:14.721602+00:00", "estimated": false}
+{"call_id": "resp_6ae742e3a39a901af36142bc", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-11-01T13:47:16.796115+00:00", "estimated": false}
+{"call_id": "resp_6ae742e5b97cd50975c84d22", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-11-01T13:47:19.183839+00:00", "estimated": false}
+{"call_id": "resp_6ae742e7e251b79ebb9d464b", "model_id": "sam-3.1", "cost_usd": "0.0025", "time_utc": "2026-11-01T13:47:21.342465+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a1975d-7766-746a-9d33-d8bf1c448d4a", "model_id": "muse-spark-1.3", "cost_usd": "0.00899425", "time_utc": "2026-11-01T13:47:27.769405+00:00", "estimated": false}
+{"call_id": "chatcmpl-01a1975d-8e74-7261-9e7a-c86540130237", "model_id": "muse-spark-1.3", "cost_usd": "0.00771700", "time_utc": "2026-11-01T13:47:33.583812+00:00", "estimated": false}

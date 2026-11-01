@@ -37,7 +37,7 @@ Either way, the run is reported as it came out.
 
 **Cost:** about 5 cents (28 Oct: $0.03337 for the intake and $0.01382 for the re-photo).
 
-## Amendment, 1 Nov 14:52 CET: after the first run, before any other
+## Amendment, 1 Nov 14:48 CET: after the first run, before any other
 - **The first run (14:47 CET)** came out on the second known-variation branch. pk025_b read partial twice, so c1 stayed unpaired. Round 2 asked again (r2), the patient sent nothing, and the review waits on the patient. That run stays the registered result, and `live.md` reports it first.
 - **Why more runs:** one run says little about a reading that varies. On 28 Oct the same crop of pk025_b read ibuprofen 400 mg.
 - **The repeat:** three more runs with the same command and code, named `U11_r02`, `U11_r03` and `U11_r04`, with `--cap 16.70`. Each is scored against the same misses as above.
