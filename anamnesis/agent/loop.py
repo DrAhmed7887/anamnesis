@@ -45,6 +45,18 @@ def _prepare(images: list[Image]) -> list[Prepared]:
     return prepared
 
 
+def _checked_prepared(
+    report: ReconciliationReport, images: list[Image], audio: Image | None,
+) -> list[Prepared]:
+    """The loop's own prepared photos, refusing media the report wasn't made from."""
+    prepared = _prepare(images)
+    audio_bytes = audio[0] if audio is not None else None
+    want = _intake_id(audio_bytes, [photo for photo, _, _ in prepared])
+    if want != report.intake_id:
+        raise ValueError("media do not match the report")
+    return prepared
+
+
 def _segment(
     session: IntakeSession, segmenter, image: Image, sha: str, concepts: tuple[str, ...],
 ) -> list[ImageRegion]:

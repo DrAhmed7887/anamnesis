@@ -25,6 +25,12 @@ class ReviewStatus(StrEnum):
     APPROVED = "approved"
 
 
+class FollowUpOutcome(StrEnum):
+    ANSWERED = "answered"
+    NO_REPLY = "no_reply"
+    DUPLICATE = "duplicate"
+
+
 class PhotoRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -54,3 +60,13 @@ class Review(BaseModel):
         if waiting != any(r.status is RequestStatus.OPEN for r in self.requests):
             raise ValueError("awaiting_patient exactly when a request is open")
         return self
+
+
+class FollowUpStep(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    round: Annotated[int, Field(ge=1)]
+    request_id: NonEmptyStr
+    target_id: NonEmptyStr
+    kind: RequestKind
+    outcome: FollowUpOutcome
