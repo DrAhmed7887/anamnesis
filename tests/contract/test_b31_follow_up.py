@@ -518,6 +518,15 @@ def test_a_request_the_follow_up_never_makes_is_not_credited_to_it(report):
         render_brief(later, [*IMAGES, GIVE3], AUDIO, CAT, review=answered, follow_up=[step])
 
 
+
+def test_a_step_must_name_its_requests_own_kind(report):
+    review = request_photo(new_review(report), report, "o1")                       # the clinician's own request
+    later, answered = add_photo(report, review, "r1", GIVE3, IMAGES, AUDIO, segmenter=Segmenter({SHA3: [R3]}),
+                                reader=Reader({R3.region_id: [DARK, DARK]}), catalogue=CAT)
+    step = FollowUpStep(round=1, request_id="r1", target_id="o1", kind=NOT_PHOTOGRAPHED, outcome=GOT)
+    with pytest.raises(ValueError):                # supervisor 31 round 3 #1: the kind must be its request's
+        render_brief(later, [*IMAGES, GIVE3], AUDIO, CAT, review=answered, follow_up=[step])
+
 # --- round 3: what one answer can resolve -----------------------------------------------------------------
 
 def test_a_medicine_an_earlier_answer_this_round_resolved_is_not_asked_for():

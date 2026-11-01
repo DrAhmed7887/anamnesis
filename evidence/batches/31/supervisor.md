@@ -39,3 +39,14 @@ All 2,805 tests pass, ruff is clean and the locked files are untouched. The shar
 - **#3:** a `no_reply` or `duplicate` step may name a request that is now `answered` (a late answer); such a log can only understate "received".
 - **#4:** taken.
 - **#5:** the text names medicines mentioned but not photographed, the docstring is corrected, and the log check becomes a helper.
+
+## Round 3 re-check (1 Nov): SUPERVISOR: APPROVE
+Round 3 does what was asked, and nothing in Muse's build has to change before merge. All 2,808 tests pass, ruff is clean and the locked files are untouched. Round-2 input 3 (a late reply) is now accepted and only understates; input 4 (the clinician's own `unreadable` request in a log) is refused; logs from another run or tripled are still refused. Of 23 single-rule breaks re-run, the same-round skip is now caught. Deleting the stop on an empty round or the defensive open-request re-check still passes, and neither changes anything observable.
+1. **Minor, tests:** the `step.kind != item.kind` comparison (`brief.py:102`) is no longer exercised, because the "another kind" case is also refused by the new kind check.
+2. **Minor, SPEC wording:** "exactly those of an intake given every photo" is false when a clinician's own `unreadable` request already replaced a pack.
+- **Still open:** a hand-built log naming a `not_photographed` request the clinician made is credited to Anamnesis. Closing that needs `PhotoRequest` to record who made each request.
+
+**The CEO's effect:**
+- **#1:** a contract case: the clinician's own `o1` request in a log with kind `not_photographed` must be refused. Muse's build refuses it.
+- **#2:** SPEC §8 adds "apart from packs that a clinician's own request already replaced (`superseded`)".
+- **The open point:** left as a known limit. The follow-up's log is produced by `follow_up` itself, and a log built by hand isn't a path the product takes.
