@@ -414,3 +414,18 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **For Ahmed to weigh:**
   - Best Agentic Use-Case is judged partly on autonomy, and our framing is human in the loop on purpose.
   - For Best Build on Meta Open Weight Models, the infrastructure partner checks that the project runs on an eligible open-weight model. Ours are optional paths, and the default is Meta-hosted Spark 1.3.
+
+## 2026-11-01, 13:50: the Meta stop line goes to $100, for one agentic feature (Ahmed)
+- **Ahmed:** "raise muse to 100 and connect to reach a feature that can win this category and then he build it and you review then at night we finalize." The category is the Best Agentic Use-Case bonus prize, which the guide judges on autonomy, effectiveness and practical usefulness.
+- **The line:** $80 → $100 (`scripts/spend_check.py`). Spend before this was $78.35 of the $150 credit, and the card pays only past $150.
+- **The plan:** batch 31, run as before.
+  1. A read-only Muse session proposes and plans the feature (`evidence/grills/b31-muse-plan/`), and the CEO triages it.
+  2. The CEO writes the SPEC lines and the contract.
+  3. Muse Code builds it, the gate runs, and the Opus supervisor reviews it.
+  4. It merges, then the live run, the claims, the README and the film follow, finalized tonight.
+- **Fixed limits for the feature:**
+  - no medical advice, and every patient-facing line comes from `templates.py`;
+  - nothing is final until the clinician approves;
+  - every finding keeps its provenance;
+  - no contributor model;
+  - Muse doesn't open `evidence/` or `finetune/data*`.
