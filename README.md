@@ -33,7 +33,8 @@ Every number below has its n and its misses further down. These are staged tests
 
 | What | Result | n, and the catch | Rows |
 |---|---|---|---|
-| The hero case: Concor 10 mg said against a 5 mg box, and Beloc-Zok against a Bloxazoc box | **9 of 10 on the final code** (31 Oct), scored with the system's own categories; 0 of 10 as registered. Earlier sets, scored the same way: 10 of 10 on batch 27's code (31 Oct), 1 of 1 on batch 24.1's code from a fresh clone (30 Oct), and 6 of 10 on batch 23.1's code (28–29 Oct). 0 harmful in each set | n = 10 per set (1 in the clone set), one synthetic voice; the registered key named the wrong category for Concor; on the final code, run 9 abstained because the reader gave no strength | [4.29, 4.22, 4.28, 4.5] |
+| The Spanish hero: 10 mg of bisoprolol said against a 5 mg Emconcor box, and metoprolol against a Lopresor 100 mg box, on images from Spain's medicines registry | **9 of 10** in the third pre-registered set (the boxes cropped to their front, the generic names said); 3 of 10 and 4 of 10 in the first two sets. 0 harmful in each set | n = 10 per set, one synthetic Spanish voice; the earlier misses came from the media: the note's first words lost, uncropped images read partial, the brand Emconcor misheard | [4.30] |
+| The first hero (U12): Concor 10 mg said against a 5 mg box, and Beloc-Zok against a Bloxazoc box | **9 of 10 on the final code** (31 Oct), scored with the system's own categories; 0 of 10 as registered. Earlier sets, scored the same way: 10 of 10 on batch 27's code (31 Oct), 1 of 1 on batch 24.1's code from a fresh clone (30 Oct), and 6 of 10 on batch 23.1's code (28–29 Oct). 0 harmful in each set | n = 10 per set (1 in the clone set), one synthetic voice; the registered key named the wrong category for Concor; on the final code, run 9 abstained because the reader gave no strength | [4.29, 4.22, 4.28, 4.5] |
 | The follow-up by itself, live on U11: one public pack photographed twice | Anamnesis asked for the ibuprofen photo by itself in 4 of 4 runs and left the unreadable pack to the clinician. **Matched in 2 of 4**; in the other 2 the reader marked the new photo partial, so it asked once more, and the brief waits on the patient | n = 4, one synthetic voice; the registered run is one of the two that didn't match; the patient's replies are scripted | [2.8, 2.7] |
 | Ten public pack photos | 1 of 10 right before batch 21, 3 of 10 after. No false match, and no wrong strength or ingredient shown as fact | 10 cases, one run per pass. Seven cases miss in both runs: U2, U5, U6, U7, U8, U9 and U10 | [4.11] |
 | Ten invented traps for the relation checks | Before batch 27, 7 of the 10 would have been shown as fact if a model had made them, 3 as false matches. After it, 0. Live, 20 calls (one per trap and model, on invented text): none showed a wrong finding as fact after batch 27.1 | In the live calls Spark 1.3 never made one of these errors: on every trap it was right or abstained. Word rules, not understanding | [4.23, 1.22] |
@@ -107,10 +108,25 @@ flowchart LR
 ## Results, as measured
 These are staged tests, not a validation. The expected results come first, and every run is reported as it came out, failures included. [4.15] No patient data: the pack photos are rendered test images or public photos of real packs, the patients' histories are invented, and every voice so far is synthetic. [3.3]
 
-Each result names the code it ran on, and later batches haven't rerun every earlier result. The pause and the hero's first ten ran on batch 23.1's code (28–29 Oct). The hero's batch 27 ten ran on batch 27's code, and its final ten on the final code, the code of the `demo-freeze` tag (both 31 Oct); batches 27.1, 28, 29 and 30 merged between those two. Ten public photos ran on batches 1–20 and on batch 21, and the label-reader comparison on batch 22's code. Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on the comparison. The follow-up's four runs ran on batch 31's code (1 Nov), merged after the freeze. [2.5, 4.5, 4.22, 4.29, 4.11, 4.13, 4.14, 1.19, 2.8]
+Each result names the code it ran on, and later batches haven't rerun every earlier result. The pause and the first hero's first ten ran on batch 23.1's code (28–29 Oct). The first hero's batch 27 ten ran on batch 27's code, and its final ten on the final code, the code of the `demo-freeze` tag (both 31 Oct); batches 27.1, 28, 29 and 30 merged between those two. Ten public photos ran on batches 1–20 and on batch 21, and the label-reader comparison on batch 22's code. Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on the comparison. The follow-up's four runs and the Spanish hero's three sets ran on batch 31's code (1 Nov), merged after the freeze. [2.5, 4.5, 4.22, 4.29, 4.11, 4.13, 4.14, 1.19, 2.8, 4.30]
 
-### The hero case, in four sets of runs
-We ran the hero case in four separate sets, and the sets are never added together. The latest, ten runs on the final code (the `demo-freeze` tag, 31 Oct, 20:02–20:08 CET), gave **9 of 10** with the system's own categories and 0 of 10 as registered. No set showed a harmful finding: no false match and no wrong strength. [4.29, 4.22, 4.28, 4.5]
+### The Spanish hero, in three sets
+Three pre-registered sets of ten on 1 Nov, all on batch 31's code. They use two official pack images from Spain's medicines registry, AEMPS CIMA (Emconcor Cor 5 mg and Lopresor 100 mg), and a synthetic Spanish voice note. Only the media changed between the sets. [4.30]
+
+| Set | What changed | All three findings | Harmful |
+|---|---|---|---|
+| 1 | "Tomo Emconcor diez miligramos cada mañana y metoprolol cien miligramos dos veces al día", with the images as the registry publishes them | 3 of 10 | 0 |
+| 2 | 0.8 s of silence before the note, and each image cropped to its box's front | 4 of 10 | 0 |
+| 3 | The patient says "bisoprolol" instead of "Emconcor" | **9 of 10** | 0 |
+
+- **The causes:**
+  - In set 1, the note's first words were lost in every run, and the reader marked an uncropped image partial in 4 runs.
+  - In set 2, the crops read in 20 of 20, but the brand Emconcor was misheard in 6 runs ("Cocor", "Koncor", Arabic script).
+  - In set 3, the one miss was a repeated "dos miligramos" read as a 2 mg intake: a false disagreement, not a false match.
+- **What the numbers are:** one synthetic voice, two registry images and n = 10 per set, so they describe the runs, not rates. The sets are never added together. The details are in [`evidence/diagnostics/hero-es-2026-11-01/results.md`](evidence/diagnostics/hero-es-2026-11-01/results.md). [4.30]
+
+### The first hero (U12), in four sets of runs
+We ran the first hero case in four separate sets, and the sets are never added together. The latest, ten runs on the final code (the `demo-freeze` tag, 31 Oct, 20:02–20:08 CET), gave **9 of 10** with the system's own categories and 0 of 10 as registered. No set showed a harmful finding: no false match and no wrong strength. [4.29, 4.22, 4.28, 4.5]
 
 | Set | Code | As registered on 28 Oct (Concor `strength_mismatch`) | With the system's own categories, decided after the first ten |
 |---|---|---|---|
@@ -201,7 +217,7 @@ Eight synthetic Spanish and German notes ran live once each in batch 24, with th
 - Two of the seven (G1, G3) count under the pre-registered alternative that the pack is read as partial. n = 8, macOS voices; English and Egyptian Arabic stay the tested core. [4.27]
 
 ### Cost and time
-About 3 cents per intake (12 live intakes, 28 Oct). [4.2] One intake took 17 to 49 seconds (12 live intakes, 28 Oct). [4.9] The hero's runs cost about 4 cents each and took 29–48 s. [4.2, 4.9, 4.28, 4.29]
+About 3 cents per intake (12 live intakes, 28 Oct). [4.2] One intake took 17 to 49 seconds (12 live intakes, 28 Oct). [4.9] The first hero's runs cost about 4 cents each and took 29–48 s. [4.2, 4.9, 4.28, 4.29]
 
 ## Open weights
 Built with Muse Spark Open, Meta's open-weight model, in a zero-shot comparison, in full-intake runs as its label reader, and as an optional reader. The default path stays Meta-hosted Muse Spark 1.3, and the tuned Muse Glimmer 30B is an optional claim extractor. [1.21, 4.13, 4.16, 1.28]
@@ -325,7 +341,7 @@ uv run pytest
 
 ## Limitations
 - No outside usability check was done: it was declined ("not now"). [4.8]
-- Tested on synthetic voices only: English and Egyptian Arabic, plus eight Spanish and German notes in batch 24. [3.3, 4.12, 4.27]
+- Tested on synthetic voices only: English and Egyptian Arabic, plus eight Spanish and German notes in batch 24 and the Spanish hero's 30 runs. [3.3, 4.12, 4.27, 4.30]
 - Voice Transcribe sometimes hears an unknown brand as a catalogued one (S1: "Emconcor" as "Concor"), and the same Arabic recording came back in three different spellings across runs. Curated Arabic brand names cover the ones seen so far. [4.27, 4.3]
 - Turns, not words: click a turn and you hear the whole turn. [1.4]
 - The checks look at values and word rules, not understanding. Each amount is checked as said in a cited turn and, by word rules, as said about that medicine (negation, unit, tablet count, another medicine, past, a split daily total, a duration). A medicine that is neither in the catalogue nor in the reply isn't seen as another medicine, and words outside the lists aren't seen. A bare number with no unit or count word beside it grounds an amount of that value in any unit, and an Arabic singular noun after a number from 11 can still split a daily amount. [1.22, 1.13]
@@ -338,17 +354,18 @@ uv run pytest
 - Salt names that aren't curated, such as rosuvastatin calcium, sitagliptin phosphate and candesartan cilexetil, stay as written, so a pack read with its salt doesn't pair with the patient's claim. [4.17]
 - Decomposed accents (Unicode NFD) in catalogue names aren't normalised, so such a name goes unpaired. [4.17]
 - Spoken numbers with a thousand after a hundred or another thousand are a known gap: "two hundred and one thousand" parses as 201,000, and «ألفين وألف» as 3,000. [4.17]
-- The hero is one synthetic voice and one file, run in four sets that are never added together: 9 of 10 on the final code, 10 of 10 on batch 27's code, 1 of 1 from a fresh clone, and 6 of 10 on batch 23.1's code. Voice Transcribe returned 7 different transcripts of it in the first ten, and some misses started there. Human speech may transcribe differently. [4.5, 4.22, 4.28, 4.29]
+- The Spanish hero is one synthetic voice and two registry images, cropped to the box's front from the second set on: 9 of 10 in its third set, after 3 and 4 of 10. In that voice, Voice Transcribe misheard the brand Emconcor in 6 of 10 runs of the second set, and heard the generic names in every run of the third. [4.30]
+- The first hero (U12) is one synthetic voice and one file, run in four sets that are never added together: 9 of 10 on the final code, 10 of 10 on batch 27's code, 1 of 1 from a fresh clone, and 6 of 10 on batch 23.1's code. Voice Transcribe returned 7 different transcripts of it in the first ten, and some misses started there. Human speech may transcribe differently. [4.5, 4.22, 4.28, 4.29]
 - Label reading varies from run to run: on the final code the reader left the Bloxazoc strength empty in 1 of 10 runs, and the pair abstained. [4.29]
 - Spark varies between calls: U2's claim lost its amounts in 2 of 3 live runs, while 11 of 11 direct calls with the same prompt kept them. The live script doesn't save raw replies, so a cause can't always be proven. [4.25, 4.27]
 - The pause ran live once, on public photos, with a synthetic voice note. [2.5]
 - The follow-up ran live four times, on one public pack photographed twice and one synthetic voice note, and matched in 2 of 4. It asks only for medicines mentioned but not photographed, and not for one the patient said they had stopped: an unreadable pack waits for the clinician. After it, the findings are those of an intake given every photo at once, apart from a pack the clinician's own request already replaced, so a reply that also shows another medicine's pack can re-pair that medicine. A log built by hand that names a request the clinician made would be credited to Anamnesis. [2.8, 2.7]
 - The tuned model is measured on generated text and a small synthetic-voice slice, from one training run. [4.18]
 - In the first Fireworks column (batch 26), Spark Open timed out on 7 of 8 intakes, so that column says nothing about its reading; after batch 26.1, the second Fireworks column ran inside the limit and got 5 of 8. [4.20]
-- Every miss is recorded in the evidence files the rows cite, among them [`evidence/batches/27/checks.md`](evidence/batches/27/checks.md), [`evidence/batches/24/live.md`](evidence/batches/24/live.md) and [`evidence/batches/31/live.md`](evidence/batches/31/live.md): the hero's four sets, the ten public photos, the two synthetic notes, the Spanish and German notes, the U1–U8 rows and the follow-up's four runs. [4.5, 4.22, 4.28, 4.29, 4.11, 4.12, 4.27, 4.20, 4.21, 4.24, 4.25, 2.8]
+- Every miss is recorded in the evidence files the rows cite, among them [`evidence/batches/27/checks.md`](evidence/batches/27/checks.md), [`evidence/batches/24/live.md`](evidence/batches/24/live.md), [`evidence/batches/31/live.md`](evidence/batches/31/live.md) and [`evidence/diagnostics/hero-es-2026-11-01/results.md`](evidence/diagnostics/hero-es-2026-11-01/results.md): the Spanish hero's three sets, the first hero's four sets, the ten public photos, the two synthetic notes, the Spanish and German notes, the U1–U8 rows and the follow-up's four runs. [4.5, 4.22, 4.28, 4.29, 4.11, 4.12, 4.27, 4.20, 4.21, 4.24, 4.25, 2.8, 4.30]
 
 ## Data and privacy
-- No patient data. The pack photos are rendered test images or public photos of real packs, the patients' histories are invented, and every voice so far is synthetic. [3.3] The rules for the developer's own photos and voice are in [`docs/DATA_HANDLING.md`](docs/DATA_HANDLING.md).
+- No patient data. The pack photos are rendered test images or public photos of real packs, the patients' histories are invented, and every voice so far is synthetic. [3.3] The Spanish hero's pack images come from Spain's public medicines registry, AEMPS CIMA. [4.30] The rules for the developer's own photos and voice are in [`docs/DATA_HANDLING.md`](docs/DATA_HANDLING.md).
 - The developer's own photos and voice go only to Meta's Model API. Public pack photos may also go to Baseten or Fireworks, and the transcript text of a synthetic voice note to Modal. The live script refuses any other file before its first call. [3.7]
 - Every call the product makes to Meta's Model API used a standard model: no contributor model id appears in the ledger's 1,883 lines (31 Oct, 20:08 CET). Two early Muse Code review runs on 27 Oct (the M1 core grill, and probably the M0 plan grill) used contributor mode, which lets Meta train on what it was sent; M1 saw synthetic code only. [3.4]
 - NCBI and PubChem were used while building only: the product never calls them. [6.7]
