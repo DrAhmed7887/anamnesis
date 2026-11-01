@@ -62,3 +62,33 @@ As set out in `plan-set2.md` before any call of this set (c71100c, 16:04 CET). T
 - **Spend:** $0.28617 of Meta for the ten runs, 70 calls. Meta now stands at about $82.35 of the $150 credit with the grills, and the line is $100.
 - **The plan's line:** fewer than 5 of 10, so U12 stays the film's hero, and both Spanish sets go into the README.
 - **The files:** `evidence/live/2026-11-01/report_U13b_r01.json` … `_r10.json`, and `runs.jsonl` lines 21–30.
+
+## The third set, U13c (1 Nov, 16:22–16:25 CET): 9 of 10, 0 harmful
+
+As set out in `plan-set3.md` before any call of this set (59f19ec, 16:21 CET). The one change: the patient says "bisoprolol" instead of "Emconcor".
+
+| Run | Bisoprolol (10 mg said, Emconcor Cor 5 mg box) | Metoprolol, Lopresor 100 mg box | Beta-blocker note | Counts |
+|---|---|---|---|---|
+| r01–r09 | `intake_differs_from_unit_strength` | `match` | yes | ✓ |
+| r10 | `intake_differs_from_unit_strength` | `strength_mismatch` | yes | ✗ |
+
+- **Heard:** "Toma bisoprolol diez miligramos cada mañana y metoprolol cien miligramos dos veces al día" in r01 and r05–r09, word for word apart from "Toma" for "Tomo". The other four repeated a few words: "miligramos miligramos" (r03, r04), and "dos miligramos dos veces" (r02, r10).
+- **r10, the miss:**
+  - The repeated "dos miligramos" was taken as the metoprolol intake, 2 mg, so the pair showed `strength_mismatch` against the 100 mg box.
+  - It is a false disagreement that a clinician would catch by hearing the turn. It isn't harmful by the registered definition: no false match, and no wrong strength read from a pack.
+  - r02 had the same repeat and kept 100 mg.
+- **The reading:** all 20 pack readings were readable again.
+- **Harmful: 0.**
+- **Spend:** $0.26647 of Meta for the ten runs, 70 calls. Meta now stands at about $82.62 of the $150 credit with the grills, and the line is $100.
+- **The plan's line:** 5 or more of 10, so U13c becomes the hero of the film and the README, with its count. The first two Spanish sets, 3 and 4 of 10, are reported beside it.
+- **The files:** `evidence/live/2026-11-01/report_U13c_r01.json` … `_r10.json`, and `runs.jsonl` lines 31–40.
+
+## The three sets together
+- **What changed between them:** only the media.
+  - Set 2 added a lead-in silence to the note and cropped the images to the box front.
+  - Set 3 had the patient say the generic name instead of the brand.
+  - The code was the same throughout.
+- **What they show:**
+  - In this synthetic Spanish voice, Voice Transcribe hears "bisoprolol" and "metoprolol" far more reliably than the brand "Emconcor".
+  - The reader marks the uncropped studio shots partial more often than the cropped fronts.
+  - n = 10 per set, one synthetic voice and two registry images, so these describe the runs, not rates.
