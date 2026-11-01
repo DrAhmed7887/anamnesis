@@ -439,3 +439,20 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Ledgers:** batch 31's three Muse rounds were added to `main`'s Muse ledger (563ff85); they had stayed uncommitted in the batch worktree.
 - **Spend:** Meta about $81.63 of $150 with the grills (line $100): batch 31 about $3.08, the live runs $0.20.
 - **The film:** the rough cut gains two scenes from run 3 of 4, with "2 of 4" in the caption and the banner "the developer plays the patient and the clinician".
+
+## 2026-11-01, 16:32: the Spanish hero replaces U12 in the film (Ahmed)
+- **Ahmed:** "we need better since we use spanish and german and ignore anything else for now". He had asked why the film showed Chinese: U12's Concor box was the one sold in China.
+- **Sources checked:**
+  - Wikimedia Commons has no German or Spanish bisoprolol or Beloc-Zok box, and Germany has no open registry of pack images.
+  - Spain's AEMPS CIMA publishes official pack images, and AEMPS's legal notice allows reproduction when the origin and the date of the last update are named.
+  - Ahmed chose a Spanish voice note and the registry images.
+- **Three pre-registered sets of ten (row 4.30):**
+  - 3 of 10: the note's opening was lost, and the uncropped images were read partial.
+  - 4 of 10, after 0.8 s of lead-in silence and front crops: the brand Emconcor was misheard.
+  - 9 of 10, with the patient saying "bisoprolol".
+
+  All 30 runs had 0 harmful findings. Each set was committed before its first call, and each next set was Ahmed's choice. The third plan ruled out a fourth.
+- **What changed:**
+  - The film's hero scenes, its results card and the intake workflow clip now show U13c run 1.
+  - The README leads with the Spanish hero, and U12 stays in the record as the first hero.
+- **Spend:** $0.98750 for the 30 runs. Meta is about $82.62 of $150, and the line is $100.
