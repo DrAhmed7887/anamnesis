@@ -455,4 +455,4 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **What changed:**
   - The film's hero scenes, its results card and the intake workflow clip now show U13c run 1.
   - The README leads with the Spanish hero, and U12 stays in the record as the first hero.
-- **Spend:** $0.98750 for the 30 runs. Meta is about $82.62 of $150, and the line is $100.
+- **Spend:** $0.98751 for the 30 runs. Meta is about $82.62 of $150, and the line is $100.

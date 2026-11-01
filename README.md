@@ -121,7 +121,7 @@ Three pre-registered sets of ten on 1 Nov, all on batch 31's code. They use two 
 
 - **The causes:**
   - In set 1, the note's first words were lost in every run, and the reader marked an uncropped image partial in 4 runs.
-  - In set 2, the crops read in 20 of 20, but the brand Emconcor was misheard in 6 runs ("Cocor", "Koncor", Arabic script).
+  - In set 2, the crops read in 20 of 20, but the brand Emconcor came back as the catalogued "Concor" in only 4 runs. Otherwise it came back as "Cocor", "Koncor" or "Korcor", in Arabic script, or not at all.
   - In set 3, the one miss was a repeated "dos miligramos" read as a 2 mg intake: a false disagreement, not a false match.
 - **What the numbers are:** one synthetic voice, two registry images and n = 10 per set, so they describe the runs, not rates. The sets are never added together. The details are in [`evidence/diagnostics/hero-es-2026-11-01/results.md`](evidence/diagnostics/hero-es-2026-11-01/results.md). [4.30]
 
@@ -354,7 +354,7 @@ uv run pytest
 - Salt names that aren't curated, such as rosuvastatin calcium, sitagliptin phosphate and candesartan cilexetil, stay as written, so a pack read with its salt doesn't pair with the patient's claim. [4.17]
 - Decomposed accents (Unicode NFD) in catalogue names aren't normalised, so such a name goes unpaired. [4.17]
 - Spoken numbers with a thousand after a hundred or another thousand are a known gap: "two hundred and one thousand" parses as 201,000, and «ألفين وألف» as 3,000. [4.17]
-- The Spanish hero is one synthetic voice and two registry images, cropped to the box's front from the second set on: 9 of 10 in its third set, after 3 and 4 of 10. In that voice, Voice Transcribe misheard the brand Emconcor in 6 of 10 runs of the second set, and heard the generic names in every run of the third. [4.30]
+- The Spanish hero is one synthetic voice and two registry images, cropped to the box's front from the second set on: 9 of 10 in its third set, after 3 and 4 of 10. In that voice, Voice Transcribe wrote the brand Emconcor as the catalogued "Concor" in only 4 of 10 runs of the second set, and wrote the generic names in every run of the third. [4.30]
 - The first hero (U12) is one synthetic voice and one file, run in four sets that are never added together: 9 of 10 on the final code, 10 of 10 on batch 27's code, 1 of 1 from a fresh clone, and 6 of 10 on batch 23.1's code. Voice Transcribe returned 7 different transcripts of it in the first ten, and some misses started there. Human speech may transcribe differently. [4.5, 4.22, 4.28, 4.29]
 - Label reading varies from run to run: on the final code the reader left the Bloxazoc strength empty in 1 of 10 runs, and the pair abstained. [4.29]
 - Spark varies between calls: U2's claim lost its amounts in 2 of 3 live runs, while 11 of 11 direct calls with the same prompt kept them. The live script doesn't save raw replies, so a cause can't always be proven. [4.25, 4.27]
