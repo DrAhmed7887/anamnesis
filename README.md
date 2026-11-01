@@ -6,6 +6,8 @@ The patient sends a voice note and photos of their medicine packs. The clinician
 
 Built for the Meta Global AI Developer Hackathon. Track: Indie. Also entered for two bonus prizes: Best Agentic Use-Case and Best Build on Meta Open Weight Models. [6.4]
 
+All the code, tests and evidence here were written during the hackathon: the history starts with the first commit on 27 Oct 2026, 10:34 CET. [5.8]
+
 Anamnesis gives no medical advice, and every run so far is a staged test, not clinical use. [1.15]
 
 Numbers in brackets, such as [4.13], are rows of [`docs/CLAIMS.md`](docs/CLAIMS.md). Each row gives a claim's evidence by file and line, and the words the claim may use.
