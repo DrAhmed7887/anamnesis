@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # The credits as recorded in the plan and Notion (Credits & Subscriptions), 28 Oct 2026.
 CREDITS = {"meta": Decimal(150), "fireworks": Decimal(100), "baseten": Decimal(100),
            "google": Decimal("50.95"), "modal": Decimal(100)}
-# Ahmed, 1 Nov 13:50: Meta stops at $100 (it was $80 from 31 Oct 15:13; evidence/decisions.md).
+# Ahmed, 1 Nov 13:15: Meta stops at $100 (it was $80 from 31 Oct 15:13; evidence/decisions.md).
 # Muse's read-only grills are in neither ledger, so they're added here: 13 sessions, $3.1251 at
 # muse_usage.py's prices (31 Oct 17:10). Raise it after each new grill.
 STOP_USD = {"meta": Decimal(100)}

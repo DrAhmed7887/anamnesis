@@ -403,7 +403,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **The workflow clips** (outside the repository, in the hackathon folder under `video/workflow/`): an animated node canvas of the intake that replays hero run 2 of 10 on the final code (row 4.29), each model step at 3× its recorded time and every number from the brief's "How it got here" table, and a time-lapse of batch 23's nine rounds (row 5.11). They are rendered frame by frame to 1920×1080 MP4s for scenes 3 and 6.
 - **Submission:** the form answers are drafted from the README with their rows (`SUBMISSION.md` in the hackathon folder). The form is behind Ahmed's sign-in on Cerebral Valley. The event page's deadline is Wed 4 Nov, 21:00 ET (Thu 03:00 CET), and our target is still Wed 15:00 CET.
 
-## 2026-11-01, 13:00: the participant guide's rules, read through Ahmed's own browser
+## 2026-11-01, 12:30: the participant guide's rules, read through Ahmed's own browser
 - **How:** Ahmed connected Kapture, so the guide, which needs his sign-in, was read in his browser on 1 Nov. It was read only: nothing was filled in or sent.
 - **Tools:** no rule limits the tools used to build, so the README's credit to Claude Code stays.
 - **New work only:** judges must be able to identify what was built during the event, and the demo may show only that. The README now says the history starts with the first commit on 27 Oct, 10:34 CET (f996ac9).
@@ -415,7 +415,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - Best Agentic Use-Case is judged partly on autonomy, and our framing is human in the loop on purpose.
   - For Best Build on Meta Open Weight Models, the infrastructure partner checks that the project runs on an eligible open-weight model. Ours are optional paths, and the default is Meta-hosted Spark 1.3.
 
-## 2026-11-01, 13:50: the Meta stop line goes to $100, for one agentic feature (Ahmed)
+## 2026-11-01, 13:15: the Meta stop line goes to $100, for one agentic feature (Ahmed)
 - **Ahmed:** "raise muse to 100 and connect to reach a feature that can win this category and then he build it and you review then at night we finalize." The category is the Best Agentic Use-Case bonus prize, which the guide judges on autonomy, effectiveness and practical usefulness.
 - **The line:** $80 → $100 (`scripts/spend_check.py`). Spend before this was $78.35 of the $150 credit, and the card pays only past $150.
 - **The plan:** batch 31, run as before.
