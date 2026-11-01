@@ -309,6 +309,7 @@ A descriptive comparison from one pass, n = 20: 20 photos of 17 packs, since the
 - Batches 1 to 20 were each specified, built, gated and reviewed in one day, 27 Oct. [5.8]
 - Muse Code's sessions cost about $60.66 of Meta credit so far, priced from its own billing records (31 Oct). [5.5] About $78.35 of the $150 credit as of 31 Oct 20:08 CET, counting the adapter calls, Muse's billing records and 13 priced Muse grill runs; the two earliest grills (M0 and M1) aren't in that tally. [5.5, 5.6]
 - Each Muse batch's record is in `evidence/batches/<n>/`: `builder.md`, `gate.json`, `supervisor.md` and `review.md`. [5.1]
+- Every Muse Code build session is in [`evidence/muse-sessions/`](evidence/muse-sessions/), as Muse exported it, indexed by batch, round, model, tokens and cost. Two things were removed for the public copy: the encrypted reasoning, and the session owner's own context.
 
 ## Run the tests
 2,757 tests run offline, with no keys. A fresh clone at the `demo-freeze` tag installs from the lock file and passes all of them. [5.7]
@@ -360,6 +361,7 @@ The code is licensed under Apache-2.0 ([`LICENSE`](LICENSE)). That licence cover
 - [`tests/contract/`](tests/contract/): the acceptance tests. [5.4]
 - [`finetune/`](finetune/) and [`evidence/finetune/`](evidence/finetune/): the LoRA's data generator, trainer and scorer, and its plan and results. [4.18]
 - [`evidence/`](evidence/): each batch's record, the live runs, the spend ledgers, the decisions, and the PubMed and PubChem checks.
+- [`evidence/muse-sessions/`](evidence/muse-sessions/): Muse Code's build sessions, one file per round.
 - [`docs/CLAIMS.md`](docs/CLAIMS.md): every claim on this page, with its evidence.
 
 By Ahmed Zayed, physician (MBBCh). [6.1]
