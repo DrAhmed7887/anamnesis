@@ -456,3 +456,17 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - The film's hero scenes, its results card and the intake workflow clip now show U13c run 1.
   - The README leads with the Spanish hero, and U12 stays in the record as the first hero.
 - **Spend:** $0.98751 for the 30 runs. Meta is about $82.62 of $150, and the line is $100.
+
+## 2026-11-01, 20:11: film v4, the plain-language cut (Ahmed)
+- **Ahmed, on v3:** "the brief sucks and it does help the non techncical people or understand and why on earth are including the credit in google, I need a better brief and more explaining and I like the workflow and animation maybe it should ve been better how what we are doing is helpimn g the community and how meta is leading and real data we improved and how fine tuning help and how this prototype can lead to better telemedicine". He also asked whether ElevenLabs could make video: its API has no video generation, so the film's three illustrations come from Meta's Muse Image ($0.03).
+- **What changed in the film:**
+  - Animated scenes replace most brief screenshots: two study rings, a text-only chat that can't see the box, patient → Anamnesis → clinician, said vs. on the box, one click to hear and one to see, the three safety beats, the three Spanish sets with each set's cause, the fine-tune bars, and the plan. A real brief appears only as short proof.
+  - Script v4, 16 lines in the same AI voice, each kept with the rows it stays inside. Pauses longer than 0.55 s are shortened; no word is changed.
+  - No money on screen: the run cost left the intake clip's summary and Muse's cost left the build clip's. Source credits moved from the frames to the closing card and the video description, and the frames keep the staged-test labels.
+  - A music bed from Eleven Music, 182 s.
+- **Fixed after the video director's notes and the claims check:**
+  - The Spanish sets: the crop came before set 2, not set 3, so each set now carries its own change and cause (row 4.30).
+  - "No harmful claims after the product's checks" (row 4.18); "Muse Spark" instead of "the reader"; the follow-up's other two runs are said too (row 2.8); "a number is kept only if it's in the transcript" (row 1.13), later cut from the voice for length.
+- **Left out of the film:** the 1 → 3 of 10 public-photo result (row 4.11), the cost per intake and the Muse spend. All stay in the README.
+- **New rows:** 2.9 (the plan, a patient app before telemedicine visits), and §8 rows for the illustrations, the narration and the music.
+- **Spend:** Meta about $82.65 of $150 (line $100), with the three Muse Image calls added to `spend_check.py`'s count outside the ledgers. ElevenLabs credits only for the voice and the music.
