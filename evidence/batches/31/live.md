@@ -1,6 +1,6 @@
 # Batch 31: the follow-up live on U11, matched in 2 of 4 runs
 
-As set out in `live-plan.md` before any call (79c95a6, 14:46 CET), with three more runs added by its amendment before they ran (a7d3a2f and 91c0cfc, 14:48). The code is `main` with batch 31 merged (8ee370a); the commits after it change only docs. The runner is `scripts/follow_up_live.py`. The staged patient is the script: it answers the first request with pk025_b and sends nothing after that.
+As set out in `live-plan.md` before any call (79c95a6, 14:46 CET), with three more runs added by its amendment before they ran (a7d3a2f and 91c0cfc, 14:48). The code is `main` with batch 31 merged (8ee370a): nothing under `anamnesis/` or `tests/` changed after it, and the later commits add the live script, docs, the batch log and the ledgers. The runner is `scripts/follow_up_live.py`. The staged patient is the script: it answers the first request with pk025_b and sends nothing after that.
 
 | Run | Asked | The reply's reading (read, then 2× zoom) | c1 after | Review | Follow-up cost |
 |---|---|---|---|---|---|
@@ -9,7 +9,7 @@ As set out in `live-plan.md` before any call (79c95a6, 14:46 CET), with three mo
 | U11_r03 | r1 | partial, readable | `match` with o1 | draft | $0.02246 |
 | U11_r04 | r1 | partial, readable | `match` with o1 | draft | $0.02157 |
 
-- **The intake on pk025_a, in every run:** partial at both zoom levels, so `unreadable_source` for the pack (o0) and `missing_modality` for the ibuprofen claim (c1). `requestable` listed o0, then c1.
+- **The intake on pk025_a, in every run:** the first read said partial. After the 2× zoom it said partial again in U11 and r02, and unreadable in r03 and r04. Either way the pack (o0) got `unreadable_source` and the ibuprofen claim (c1) `missing_modality`, and `requestable` listed o0, then c1.
 - **The follow-up, in every run:**
   - Its only target was c1, the medicine the patient mentioned. The unreadable first pack (o0) stayed with the clinician.
   - The patient got the template with the claim's name: "Please send one photo of the pack of the medicine you mentioned as “ibuprofen”." In r03 the claim's name came back as "Ibuprofen".
