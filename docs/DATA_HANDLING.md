@@ -38,6 +38,7 @@ If something slips in, the file is retaken, never edited afterwards.
   - The images go only to SAM 3.1 and Spark 1.3, and the note only to Muse Voice Transcribe, all on Meta's API.
   - AEMPS allows its content to be reproduced when the source and the date of its last update are named, so the film may show the images with that credit.
   - The voice is never played: the macOS licence keeps it out of the video.
+  - **Set 4 (1 Nov, evening, Ahmed's choice):** the same script read by "Rosa", a voice from ElevenLabs' voice library, made on Ahmed's paid ElevenLabs plan, whose licence covers commercial use (`evidence/diagnostics/hero-es-2026-11-01/make_voice_set4.py`). The note goes only to Muse Voice Transcribe on Meta's API. Unlike the `say` notes, the film may play it.
 - **The reviewers never see the media.** The batch supervisor (Claude) and the quality manager (Gemini) get code and text evidence only.
 
 ## What is committed or published
