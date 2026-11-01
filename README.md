@@ -33,7 +33,7 @@ Every number below has its n and its misses further down. These are staged tests
 
 | What | Result | n, and the catch | Rows |
 |---|---|---|---|
-| The Spanish hero: 10 mg of bisoprolol said against a 5 mg Emconcor box, and metoprolol against a Lopresor 100 mg box, on images from Spain's medicines registry | **9 of 10** in the third pre-registered set (the boxes cropped to their front, the generic names said); 3 of 10 and 4 of 10 in the first two sets. 0 harmful in each set | n = 10 per set, one synthetic Spanish voice; the earlier misses came from the media: the note's first words lost, uncropped images read partial, the brand Emconcor misheard | [4.30] |
+| The Spanish hero: 10 mg of bisoprolol said against a 5 mg Emconcor box, and metoprolol against a Lopresor 100 mg box, on images from Spain's medicines registry | **9 of 10** in the third pre-registered set (the boxes cropped to their front, the generic names said); 3 of 10 and 4 of 10 in the first two sets; 2 of 10 in a fourth set read by a second voice, heard as "visoprolol". 0 harmful in each set | n = 10 per set, two synthetic Spanish voices; the earlier misses came from the media: the note's first words lost, uncropped images read partial, the brand Emconcor misheard | [4.30] |
 | The first hero (U12): Concor 10 mg said against a 5 mg box, and Beloc-Zok against a Bloxazoc box | **9 of 10 on the final code** (31 Oct), scored with the system's own categories; 0 of 10 as registered. Earlier sets, scored the same way: 10 of 10 on batch 27's code (31 Oct), 1 of 1 on batch 24.1's code from a fresh clone (30 Oct), and 6 of 10 on batch 23.1's code (28–29 Oct). 0 harmful in each set | n = 10 per set (1 in the clone set), one synthetic voice; the registered key named the wrong category for Concor; on the final code, run 9 abstained because the reader gave no strength | [4.29, 4.22, 4.28, 4.5] |
 | The follow-up by itself, live on U11: one public pack photographed twice | Anamnesis asked for the ibuprofen photo by itself in 4 of 4 runs and left the unreadable pack to the clinician. **Matched in 2 of 4**; in the other 2 the reader marked the new photo partial, so it asked once more, and the brief waits on the patient | n = 4, one synthetic voice; the registered run is one of the two that didn't match; the patient's replies are scripted | [2.8, 2.7] |
 | Ten public pack photos | 1 of 10 right before batch 21, 3 of 10 after. No false match, and no wrong strength or ingredient shown as fact | 10 cases, one run per pass. Seven cases miss in both runs: U2, U5, U6, U7, U8, U9 and U10 | [4.11] |
@@ -110,20 +110,22 @@ These are staged tests, not a validation. The expected results come first, and e
 
 Each result names the code it ran on, and later batches haven't rerun every earlier result. The pause and the first hero's first ten ran on batch 23.1's code (28–29 Oct). The first hero's batch 27 ten ran on batch 27's code, and its final ten on the final code, the code of the `demo-freeze` tag (both 31 Oct); batches 27.1, 28, 29 and 30 merged between those two. Ten public photos ran on batches 1–20 and on batch 21, and the label-reader comparison on batch 22's code. Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on the comparison. The follow-up's four runs and the Spanish hero's three sets ran on batch 31's code (1 Nov), merged after the freeze. [2.5, 4.5, 4.22, 4.29, 4.11, 4.13, 4.14, 1.19, 2.8, 4.30]
 
-### The Spanish hero, in three sets
-Three pre-registered sets of ten on 1 Nov, all on batch 31's code. They use two official pack images from Spain's medicines registry, AEMPS CIMA (Emconcor Cor 5 mg and Lopresor 100 mg), and a synthetic Spanish voice note. Only the media changed between the sets. [4.30]
+### The Spanish hero, in four sets
+Four pre-registered sets of ten on 1 Nov, all on batch 31's code. They use two official pack images from Spain's medicines registry, AEMPS CIMA (Emconcor Cor 5 mg and Lopresor 100 mg), and a synthetic Spanish voice note. Only the media changed between the sets. [4.30]
 
 | Set | What changed | All three findings | Harmful |
 |---|---|---|---|
 | 1 | "Tomo Emconcor diez miligramos cada mañana y metoprolol cien miligramos dos veces al día", with the images as the registry publishes them | 3 of 10 | 0 |
 | 2 | 0.8 s of silence before the note, and each image cropped to its box's front | 4 of 10 | 0 |
 | 3 | The patient says "bisoprolol" instead of "Emconcor" | **9 of 10** | 0 |
+| 4 | Set 3's note read by a second synthetic voice, from ElevenLabs, so the film could play it | 2 of 10 | 0 |
 
 - **The causes:**
   - In set 1, the note's first words were lost in every run, and the reader marked an uncropped image partial in 4 runs.
   - In set 2, the crops read in 20 of 20, but the brand Emconcor came back as the catalogued "Concor" in only 4 runs. Otherwise it came back as "Cocor", "Koncor" or "Korcor", in Arabic script, or not at all.
   - In set 3, the one miss was a repeated "dos miligramos" read as a 2 mg intake: a false disagreement, not a false match.
-- **What the numbers are:** one synthetic voice, two registry images and n = 10 per set, so they describe the runs, not rates. The sets are never added together. The details are in [`evidence/diagnostics/hero-es-2026-11-01/results.md`](evidence/diagnostics/hero-es-2026-11-01/results.md). [4.30]
+  - In set 4, "bisoprolol" came back as its own word in only 2 runs. Otherwise Voice Transcribe wrote "visoprolol" (b and v sound alike in Spanish) or joined it to "Tomo", so the claim's name didn't resolve and there was no bisoprolol finding. Metoprolol matched in all 10. The film plays no patient voice, as the set's plan said for fewer than 5 of 10.
+- **What the numbers are:** two synthetic voices, two registry images and n = 10 per set, so they describe the runs, not rates. The sets are never added together. The details are in [`evidence/diagnostics/hero-es-2026-11-01/results.md`](evidence/diagnostics/hero-es-2026-11-01/results.md). [4.30]
 
 ### The first hero (U12), in four sets of runs
 We ran the first hero case in four separate sets, and the sets are never added together. The latest, ten runs on the final code (the `demo-freeze` tag, 31 Oct, 20:02–20:08 CET), gave **9 of 10** with the system's own categories and 0 of 10 as registered. No set showed a harmful finding: no false match and no wrong strength. [4.29, 4.22, 4.28, 4.5]
@@ -354,7 +356,7 @@ uv run pytest
 - Salt names that aren't curated, such as rosuvastatin calcium, sitagliptin phosphate and candesartan cilexetil, stay as written, so a pack read with its salt doesn't pair with the patient's claim. [4.17]
 - Decomposed accents (Unicode NFD) in catalogue names aren't normalised, so such a name goes unpaired. [4.17]
 - Spoken numbers with a thousand after a hundred or another thousand are a known gap: "two hundred and one thousand" parses as 201,000, and «ألفين وألف» as 3,000. [4.17]
-- The Spanish hero is one synthetic voice and two registry images, cropped to the box's front from the second set on: 9 of 10 in its third set, after 3 and 4 of 10. In that voice, Voice Transcribe wrote the brand Emconcor as the catalogued "Concor" in only 4 of 10 runs of the second set, and wrote the generic names in every run of the third. [4.30]
+- The Spanish hero is one synthetic voice and two registry images, cropped to the box's front from the second set on: 9 of 10 in its third set, after 3 and 4 of 10. In that voice, Voice Transcribe wrote the brand Emconcor as the catalogued "Concor" in only 4 of 10 runs of the second set, and wrote the generic names in every run of the third. A fourth set, read by a second synthetic voice, got 2 of 10: "bisoprolol" came back as "visoprolol" or joined to the word before it, and names are matched as written. [4.30]
 - The first hero (U12) is one synthetic voice and one file, run in four sets that are never added together: 9 of 10 on the final code, 10 of 10 on batch 27's code, 1 of 1 from a fresh clone, and 6 of 10 on batch 23.1's code. Voice Transcribe returned 7 different transcripts of it in the first ten, and some misses started there. Human speech may transcribe differently. [4.5, 4.22, 4.28, 4.29]
 - Label reading varies from run to run: on the final code the reader left the Bloxazoc strength empty in 1 of 10 runs, and the pair abstained. [4.29]
 - Spark varies between calls: U2's claim lost its amounts in 2 of 3 live runs, while 11 of 11 direct calls with the same prompt kept them. The live script doesn't save raw replies, so a cause can't always be proven. [4.25, 4.27]

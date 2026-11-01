@@ -92,3 +92,21 @@ As set out in `plan-set3.md` before any call of this set (59f19ec, 16:21 CET). T
   - In this synthetic Spanish voice, Voice Transcribe hears "bisoprolol" and "metoprolol" far more reliably than the brand "Emconcor".
   - The reader marks the uncropped studio shots partial more often than the cropped fronts.
   - n = 10 per set, one synthetic voice and two registry images, so these describe the runs, not rates.
+
+## The fourth set, U13d (1 Nov, 20:45–20:48 CET): 2 of 10, 0 harmful
+
+As set out in `plan-set4.md` before any call of this set (2c37ec0, 20:44 CET). The one change: the voice, "Rosa" from ElevenLabs' voice library (peninsular Spanish), so the film could play the note it was tested on. It is a different test from sets 1–3, reported beside them and never added to them.
+
+| Run | Bisoprolol (10 mg said, Emconcor Cor 5 mg box) | Metoprolol, Lopresor 100 mg box | Beta-blocker note | Counts |
+|---|---|---|---|---|
+| r04, r08 | `intake_differs_from_unit_strength` | `match` | yes | ✓ |
+| r01–r03, r05–r07, r09, r10 | no bisoprolol finding: the claim's name didn't resolve | `match` | no | ✗ |
+
+- **Heard:** "bisoprolol" came back as its own word in only r04 and r08. Otherwise Voice Transcribe joined it to the verb ("Tomobisoprolol", r01, r09, r10), wrote it with a v ("visoprolol", r03), or both ("Tomovisoprolol", r02, r05–r07). In Spanish, b and v are pronounced alike.
+- **What followed:** the claim's name didn't match the catalogue, so the pair ended `unresolved_name` or `missing_modality`, and there was no bisoprolol finding and no beta-blocker note.
+- **Metoprolol:** `match` in all 10. All 20 pack readings were readable.
+- **Harmful: 0.** No false match, and no wrong strength read from a pack.
+- **Spend:** $0.29168 of Meta for the ten runs, 70 calls. Meta now stands at about $82.94 of the $150 credit with the grills, and the line is $100.
+- **The plan's line:** fewer than 5 of 10, so the film keeps set 3's run and plays no patient voice. Set 3 stays the Spanish hero's result. There is no fifth set.
+- **What it shows:** names are matched as written. A Spanish "b" heard as "v", or a name run into the word before it, leaves the claim unresolved, and the brief says so. Accepting such spellings would be a product change for after the hackathon; none was made here.
+- **The files:** `evidence/live/2026-11-01/report_U13d_r01.json` … `_r10.json`, and `runs.jsonl` lines 41–50.
