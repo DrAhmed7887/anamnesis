@@ -429,3 +429,13 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - every finding keeps its provenance;
   - no contributor model;
   - Muse doesn't open `evidence/` or `finetune/data*`.
+
+## 2026-11-01, 15:20: batch 31 merged, and the follow-up ran live
+- **Merged:** batch 31, the follow-up (8ee370a, 13:41 UTC). Muse planned it read-only, built it in three rounds and a fresh Muse session audited it; the Opus supervisor sent round 1 back and approved rounds 2 and 3. The gate passed 2,809 tests (`evidence/batches/31/review.md`).
+- **The scope decision:** the follow-up asks only for medicines mentioned but not photographed. An unreadable pack stays with the clinician, because one template can't say which pack is meant and any photo that gives a reading would replace it (supervisor 31 #2). Muse's plan also proposed a model that picks the next ask or stops; it wasn't taken, so no model chooses an action (`evidence/grills/b31-muse-plan/effect.md`).
+- **Live, pre-registered (79c95a6), then three more runs added before they ran (a7d3a2f, 91c0cfc):** matched in 2 of 4 runs on U11. In the registered run and r02 the reader marked the reply partial, so Anamnesis asked once more and the brief waits on the patient (`evidence/batches/31/live.md`). Every run is reported, and the film and README always give the count.
+- **A refused first attempt:** the script's $5 ledger cap refused the first call at 14:46 CET, with nothing sent and $0 spent. `--cap` is now set per run, as batch 24's manifest does.
+- **Docs:** CLAIMS rows 2.7, 2.8, 5.19 and 5.20; rows 2.3 and 2.6 gained a line each; the README's pause section, at-a-glance table, limitations and test count (8a470ac). Line numbers that batch 31 moved in `review.py`, `brief_html.py` and `agent/loop.py` were moved to match `main`.
+- **Ledgers:** batch 31's three Muse rounds were added to `main`'s Muse ledger (563ff85); they had stayed uncommitted in the batch worktree.
+- **Spend:** Meta about $81.63 of $150 with the grills (line $100): batch 31 about $3.08, the live runs $0.20.
+- **The film:** the rough cut gains two scenes from run 3 of 4, with "2 of 4" in the caption and the banner "the developer plays the patient and the clinician".
