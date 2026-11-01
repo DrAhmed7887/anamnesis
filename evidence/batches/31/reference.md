@@ -17,3 +17,18 @@ Before Muse built anything, the CEO wrote a throwaway reference of SPEC §8 "The
 | The follow-up's own media check is removed | 1 |
 
 Two first attempts at the last two breaks hit the wrong code: one appended to the run's own copy of the list, and one removed `add_photo`'s check rather than the follow-up's. Rerun on the right code, both were caught.
+
+## Round 2 (after the supervisor's review)
+The SPEC narrowed the follow-up to medicines mentioned but not photographed (supervisor #2), and it took #1, #3, #4, #7 and a stricter `max_rounds`. The contract was rewritten to 43 cases. The CEO's reference was Muse's round-1 code plus those rules, in a detached worktree that was deleted afterwards.
+- **The contract on the reference:** 43 of 43 pass. The full suite has 2,800 passing.
+- **Muse's round-1 code against the round-2 contract:** it fails at collection (no `PhotoAlreadyGiven`), as it should.
+- **Deliberate breaks of the new rules, each run alone:** 6 of 6 caught.
+
+| Break | Failed |
+|---|---|
+| `reply` gets the review's own request object | 1 |
+| A withdrawn request's target is asked again | 1 |
+| Unreadable packs are asked for too | 14 |
+| A `bool` passes as `max_rounds` | 2 |
+| The brief doesn't check an outcome against its request's status | 2 |
+| The brief allows a step twice | 1 |

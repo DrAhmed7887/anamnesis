@@ -1,9 +1,10 @@
 """Batch 31 contract: the follow-up runs by itself. Written by the CEO; Muse must not edit it.
 
 SPEC §8, "The follow-up by itself". For the Best Agentic Use-Case prize: after the intake, Anamnesis asks the patient
-for every photo the brief is missing, takes the replies, and leaves the brief a draft for the clinician to approve.
-Code fixes the targets, their order and when to stop; models only read the new photos; every message is a template.
-Each round asks only the targets pending when it starts, so a pack that stays unreadable gets one ask per round.
+for a photo of every medicine they mentioned but didn't photograph, takes the replies, and leaves the brief a draft for
+the clinician to approve. Code fixes the targets, their order and when to stop; models only read the new photos; every
+message is a template that names the medicine. A pack that couldn't be read stays with the clinician (supervisor 31
+#2: one template can't say which pack is meant). Round 2 also pins the supervisor's #1, #3, #4 and #7.
 """
 
 import hashlib
@@ -22,8 +23,19 @@ from anamnesis.core.catalogue import load_catalogue
 from anamnesis.core.guardrails import assert_no_advice
 from anamnesis.providers import ProviderTrace
 from anamnesis.providers.spark import LabelReading
-from anamnesis.review import approve, follow_up, new_review, request_message, request_photo, requestable
+from anamnesis.review import (
+    PhotoAlreadyGiven,
+    add_photo,
+    approve,
+    follow_up,
+    new_review,
+    request_message,
+    request_photo,
+    requestable,
+    withdraw,
+)
 from anamnesis.schema import AudioTurn, DoseRegimen, ImageRegion, IngredientAmount, PatientClaim, Strength
+from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema.review import (
     FollowUpOutcome,
     FollowUpStep,
@@ -183,15 +195,17 @@ PHOTO = png(600, 300, (200, 200, 200))
 PHOTO2 = png(400, 300, (180, 190, 200))   # a re-photo that turns out to be the Beloc-Zok
 PHOTO3 = png(420, 300, (90, 90, 90))      # a re-photo still too dark to read
 PHOTO4 = png(440, 300, (60, 60, 60))      # and another
-SHA2, SHA3, SHA4 = (hashlib.sha256(p).hexdigest() for p in (PHOTO2, PHOTO3, PHOTO4))
+PHOTO5 = png(460, 300, (40, 40, 40))      # and a third
+SHA2, SHA3, SHA4, SHA5 = (hashlib.sha256(p).hexdigest() for p in (PHOTO2, PHOTO3, PHOTO4, PHOTO5))
 RC = region_on(PHOTO, (10, 20, 139, 279), 0)
 RU = region_on(PHOTO, (160, 20, 289, 279), 1)
 R2 = region_on(PHOTO2, (20, 20, 379, 279), 0)
 R3 = region_on(PHOTO3, (20, 20, 399, 279), 0)
 R4 = region_on(PHOTO4, (20, 20, 419, 279), 0)
+R5 = region_on(PHOTO5, (20, 20, 439, 279), 0)
 AUDIO = (b"RIFF fixture voice note", "audio/wav")
 IMAGES = [(PHOTO, "image/png")]
-GIVE2, GIVE3, GIVE4 = (PHOTO2, "image/png"), (PHOTO3, "image/png"), (PHOTO4, "image/png")
+GIVE2, GIVE3, GIVE4, GIVE5 = ((p, "image/png") for p in (PHOTO2, PHOTO3, PHOTO4, PHOTO5))
 TURNS = [
     AudioTurn(turn_id="turn-0", start_ms=0, end_ms=4000, transcript="I use Concor 5 mg once a day."),
     AudioTurn(turn_id="turn-1", start_ms=4000, end_ms=9000, transcript="And Beloc-Zok, 50 mg twice a day."),
@@ -219,8 +233,9 @@ def intake(claims=CLAIMS, regions=(RC, RU)):
 
 def adapters():
     """One segmenter and one reader for every answering photo of a run, as the live script passes them."""
-    segmenter = Segmenter({SHA2: [R2], SHA3: [R3], SHA4: [R4]})
-    reader = Reader({R2.region_id: [BELOC_50], R3.region_id: [DARK, DARK], R4.region_id: [DARK, DARK]})
+    segmenter = Segmenter({SHA2: [R2], SHA3: [R3], SHA4: [R4], SHA5: [R5]})
+    reader = Reader({R2.region_id: [BELOC_50], R3.region_id: [DARK, DARK], R4.region_id: [DARK, DARK],
+                     R5.region_id: [DARK, DARK]})
     return segmenter, reader
 
 
@@ -240,126 +255,154 @@ def test_the_fixture_is_what_the_tests_assume(report):
     assert requestable(report) == [(UNREADABLE, "o1"), (NOT_PHOTOGRAPHED, "c2")]
 
 
+def quiet():
+    """Nothing for the follow-up to ask: Concor matched, and at most a dark pack that stays with the clinician."""
+    return intake(claims=CLAIMS[:1], regions=(RC,))
+
+
 # --- the run -----------------------------------------------------------------------------------------------
 
-def test_with_nothing_to_ask_it_returns_its_inputs_and_asks_nobody():
-    clean = intake(claims=CLAIMS[:1], regions=(RC,))
-    assert requestable(clean) == []
-    review, patient = new_review(clean), Patient(GIVE2)
-    new, out, given, log, segmenter, reader = run(clean, review, patient)
-    assert (new, out, given, log) == (clean, review, IMAGES, [])
+@pytest.mark.parametrize("regions", [(RC,), (RC, RU)])
+def test_with_no_medicine_left_to_photograph_it_returns_its_inputs_and_asks_nobody(regions):
+    calm = intake(claims=CLAIMS[:1], regions=regions)
+    assert all(kind is UNREADABLE for kind, _ in requestable(calm))
+    review, patient = new_review(calm), Patient(GIVE2)
+    new, out, given, log, segmenter, reader = run(calm, review, patient)
+    assert (new, out, given, log) == (calm, review, IMAGES, [])
     assert patient.asked == [] and segmenter.seen == [] and reader.seen == []
 
 
-def test_the_unreadable_pack_is_asked_for_and_answered_without_a_clinician(report):
+def test_a_medicine_mentioned_but_not_photographed_is_asked_for_by_name_and_answered(report):
     patient = Patient(GIVE2)
     new, review, given, log, segmenter, reader = run(report, new_review(report), patient)
-    assert log == [FollowUpStep(round=1, request_id="r1", target_id="o1", kind=UNREADABLE, outcome=GOT)]
-    assert len(patient.asked) == 1
+    assert [(req.request_id, req.kind, req.target_id) for req, _ in patient.asked] == [("r1", NOT_PHOTOGRAPHED, "c2")]
+    assert patient.asked[0][1] == BELOC_MESSAGE
+    assert log == [FollowUpStep(round=1, request_id="r1", target_id="c2", kind=NOT_PHOTOGRAPHED, outcome=GOT)]
     assert [(r.request_id, r.status, r.photo_index) for r in review.requests] == [("r1", ANSWERED, 2)]
     assert review.status is ReviewStatus.DRAFT and review.intake_id == new.intake_id
     assert given == [*IMAGES, GIVE2]
-    assert new.superseded == ["o1"]
-    assert requestable(new) == []          # the re-photo was the Beloc-Zok, so nothing is left to ask
+    assert new.superseded == []                        # an answer about a medicine replaces no pack
+    assert [f.type for f in new.findings if f.claim_id == "c2"] == [D.MATCH]
+    assert requestable(new) == [(UNREADABLE, "o1")]    # the dark pack stays with the clinician
     assert set(segmenter.seen) == {SHA2}
 
 
-def test_every_target_is_asked_once_in_finding_order_with_its_template_message(report):
-    patient = Patient(None, None)
+def test_an_unreadable_pack_is_never_the_follow_ups_to_ask_for(report):
+    patient = Patient(GIVE3, GIVE4, GIVE5)
+    new, review, *_ = run(report, new_review(report), patient, max_rounds=3)
+    assert patient.asked and all(req.kind is NOT_PHOTOGRAPHED for req, _ in patient.asked)
+    assert all(r.kind is NOT_PHOTOGRAPHED for r in review.requests)
+    assert "o1" not in new.superseded
+
+
+def test_the_message_names_the_medicine_and_is_its_template(report):
+    patient = Patient(None)
     new, review, given, log, segmenter, reader = run(report, new_review(report), patient)
-    assert [(req.request_id, req.kind, req.target_id, req.status) for req, _ in patient.asked] == [
-        ("r1", UNREADABLE, "o1", OPEN), ("r2", NOT_PHOTOGRAPHED, "c2", OPEN)]
-    assert [message for _, message in patient.asked] == [UNREADABLE_MESSAGE, BELOC_MESSAGE]
-    for request, message in patient.asked:
-        assert message == request_message(report, request)
-        assert_no_advice(message)
-    assert [(s.round, s.request_id, s.target_id, s.outcome) for s in log] == [(1, "r1", "o1", NONE),
-                                                                               (1, "r2", "c2", NONE)]
+    [(request, message)] = patient.asked
+    assert (request.request_id, request.kind, request.target_id, request.status) == ("r1", NOT_PHOTOGRAPHED, "c2",
+                                                                                      OPEN)
+    assert message == BELOC_MESSAGE == request_message(report, request)
+    assert_no_advice(message)
+    assert [(s.round, s.request_id, s.target_id, s.outcome) for s in log] == [(1, "r1", "c2", NONE)]
     assert review.status is ReviewStatus.AWAITING_PATIENT
-    assert [r.status for r in review.requests] == [OPEN, OPEN]
+    assert [r.status for r in review.requests] == [OPEN]
     assert (new, given) == (report, IMAGES)
     assert segmenter.seen == [] and reader.seen == []
 
 
-@pytest.mark.parametrize(("max_rounds", "asked"), [(1, ["o1", "c2"]), (2, ["o1", "c2", "o2"])])
-def test_a_pack_that_stays_unreadable_gets_one_ask_per_round_and_no_more(report, max_rounds, asked):
-    patient = Patient(GIVE3, None, GIVE4)
+@pytest.mark.parametrize("max_rounds", [1, 2, 3])
+def test_a_photo_that_cannot_be_read_is_asked_for_again_once_per_round(report, max_rounds):
+    patient = Patient(GIVE3, GIVE4, GIVE5)
     new, review, given, log, *_ = run(report, new_review(report), patient, max_rounds=max_rounds)
-    assert [s.target_id for s in log] == asked
-    assert [s.round for s in log] == [1, 1, 2][:len(asked)]
-    assert [s.outcome for s in log] == [GOT, NONE, GOT][:len(asked)]
-    newest = new.observations[-1].observation_id
-    assert newest not in [r.target_id for r in review.requests]   # it appeared in the last round: it waits
-    assert (UNREADABLE, newest) in requestable(new)
-    assert given == [*IMAGES, GIVE3, GIVE4][:len(IMAGES) + asked.count("o1") + asked.count("o2")]
+    assert [(s.round, s.target_id, s.outcome) for s in log] == [(r, "c2", GOT) for r in range(1, max_rounds + 1)]
+    assert len(patient.asked) == max_rounds
+    assert [f.type for f in new.findings if f.claim_id == "c2"] == [D.MISSING_MODALITY]
+    assert given == [*IMAGES, GIVE3, GIVE4, GIVE5][:1 + max_rounds]
 
 
 def test_a_photo_already_given_is_logged_as_a_duplicate_and_goes_to_no_model(report):
-    patient = Patient(IMAGES[0], None)
+    patient = Patient(IMAGES[0])
     new, review, given, log, segmenter, reader = run(report, new_review(report), patient)
-    assert [(s.target_id, s.outcome) for s in log] == [("o1", AGAIN), ("c2", NONE)]
-    assert len(patient.asked) == 2
+    assert [(s.target_id, s.outcome) for s in log] == [("c2", AGAIN)]
+    assert len(patient.asked) == 1
     assert segmenter.seen == [] and reader.seen == []
-    assert [r.status for r in review.requests] == [OPEN, OPEN]
+    assert [r.status for r in review.requests] == [OPEN]
     assert (new, given) == (report, IMAGES)
 
 
-def test_a_target_with_an_open_request_is_never_asked_again(report):
-    review = request_photo(new_review(report), report, "o1")     # the clinician asked first
-    patient = Patient(None)
+def test_a_repeated_photo_is_refused_with_its_own_error(report):
+    review = request_photo(new_review(report), report, "c2")
+    with pytest.raises(PhotoAlreadyGiven, match="photo was already given"):
+        add_photo(report, review, "r1", IMAGES[0], IMAGES, AUDIO, segmenter=Segmenter({}), reader=Reader({}),
+                  catalogue=CAT)
+    assert issubclass(PhotoAlreadyGiven, ValueError)
+
+
+@pytest.mark.parametrize("withdrawn", [False, True])
+def test_a_medicine_the_clinician_asked_for_or_withdrew_is_left_alone(report, withdrawn):
+    review = request_photo(new_review(report), report, "c2")
+    if withdrawn:
+        review = withdraw(review, "r1")
+    patient = Patient(GIVE2)
     new, out, given, log, *_ = run(report, review, patient)
-    assert [(req.request_id, req.target_id) for req, _ in patient.asked] == [("r2", "c2")]
-    assert [s.request_id for s in log] == ["r2"]
-    assert [(r.request_id, r.status) for r in out.requests] == [("r1", OPEN), ("r2", OPEN)]
+    assert patient.asked == [] and log == []
+    assert (new, out, given) == (report, review, IMAGES)
 
 
 def test_it_never_approves_and_the_clinician_still_has_to(report):
     new, review, *_ = run(report, new_review(report), Patient(GIVE2))
     assert review.status is ReviewStatus.DRAFT
     assert approve(review, new).status is ReviewStatus.APPROVED
-    same, waiting, *_ = run(report, new_review(report), Patient(None, None))
+    same, waiting, *_ = run(report, new_review(report), Patient(None))
     assert waiting.status is ReviewStatus.AWAITING_PATIENT
     with pytest.raises(ValueError):
         approve(waiting, same)
 
 
-@pytest.mark.parametrize("case", ["another report", "approved", "no rounds", "other media"])
-def test_a_refused_follow_up_changes_nothing_and_asks_nobody(report, case):
-    review, images, kw = new_review(report), IMAGES, {}
+@pytest.mark.parametrize("calm", [False, True])
+@pytest.mark.parametrize("case", ["another report", "approved", "no rounds", "rounds not an int", "rounds a bool",
+                                  "other media"])
+def test_a_refused_follow_up_changes_nothing_and_asks_nobody(report, calm, case):
+    base = quiet() if calm else report   # with nothing to ask, no other check can refuse first
+    review, images, kw = new_review(base), IMAGES, {}
     if case == "another report":
         review = Review(intake_id="0" * 64, status=ReviewStatus.DRAFT)
     elif case == "approved":
-        review = approve(new_review(report), report)
+        review = approve(new_review(base), base)
     elif case == "no rounds":
         kw = {"max_rounds": 0}
+    elif case == "rounds not an int":
+        kw = {"max_rounds": 1.5}
+    elif case == "rounds a bool":
+        kw = {"max_rounds": True}
     else:
         images = [GIVE2]
-    before = (report.model_dump(), review.model_dump())
+    before = (base.model_dump(), review.model_dump())
     patient = Patient(GIVE2)
     with pytest.raises(ValueError):
-        run(report, review, patient, images=images, **kw)
+        run(base, review, patient, images=images, **kw)
     assert patient.asked == []
-    assert (report.model_dump(), review.model_dump()) == before
+    assert (base.model_dump(), review.model_dump()) == before
 
 
 def test_the_inputs_are_left_as_they_were(report):
     review, images = new_review(report), list(IMAGES)
     before = (report.model_dump(), review.model_dump(), list(images))
     segmenter, reader = adapters()
-    follow_up(report, review, images, AUDIO, reply=Patient(GIVE3, None, GIVE4), segmenter=segmenter, reader=reader,
+    follow_up(report, review, images, AUDIO, reply=Patient(GIVE3, GIVE4), segmenter=segmenter, reader=reader,
               catalogue=CAT)
     assert (report.model_dump(), review.model_dump(), images) == before
 
 
 def test_turns_claims_and_earlier_evidence_are_kept(report):
-    new, *_ = run(report, new_review(report), Patient(GIVE3, None, GIVE4))
+    new, *_ = run(report, new_review(report), Patient(GIVE3, GIVE4))
     assert new.turns == report.turns and new.claims == report.claims
     assert new.observations[:len(report.observations)] == report.observations
     assert new.steps[:len(report.steps)] == report.steps
 
 
 def test_only_the_answering_photos_go_to_a_model_each_within_its_budget(report):
-    new, review, given, log, segmenter, reader = run(report, new_review(report), Patient(GIVE3, None, GIVE4))
+    new, review, given, log, segmenter, reader = run(report, new_review(report), Patient(GIVE3, GIVE4))
     assert set(segmenter.seen) == {SHA3, SHA4}
     assert set(reader.seen) == {R3.region_id, R4.region_id}
     answered = [s for s in log if s.outcome is GOT]
@@ -367,8 +410,21 @@ def test_only_the_answering_photos_go_to_a_model_each_within_its_budget(report):
     assert 0 < new.calls - report.calls <= len(answered) * (len(SAM_CONCEPTS) + 2 * 3)
 
 
+def test_what_reply_does_to_its_request_reaches_nothing(report):
+    def meddling(request, message):
+        request.target_id, request.kind = "o0", UNREADABLE   # tries to aim the answer at the matched Concor pack
+        return GIVE2
+    new, review, given, log, *_ = run(report, new_review(report), meddling)
+    assert [(r.request_id, r.kind, r.target_id, r.status) for r in review.requests] == [
+        ("r1", NOT_PHOTOGRAPHED, "c2", ANSWERED)]
+    assert (log[0].target_id, log[0].kind) == ("c2", NOT_PHOTOGRAPHED)
+    assert new.superseded == []
+    assert [f.type for f in new.findings if f.observation_id == "o0"] == [
+        f.type for f in report.findings if f.observation_id == "o0"]
+
+
 def test_the_log_is_strict():
-    ok = {"round": 1, "request_id": "r1", "target_id": "o1", "kind": "unreadable", "outcome": "answered"}
+    ok = {"round": 1, "request_id": "r1", "target_id": "c2", "kind": "not_photographed", "outcome": "answered"}
     assert FollowUpStep(**ok).outcome is GOT
     for bad in ({**ok, "round": 0}, {**ok, "outcome": "approved"}, {**ok, "kind": "other"}, {**ok, "extra": 1}):
         with pytest.raises(ValidationError):
@@ -385,8 +441,8 @@ def test_the_line_is_fixed_text_that_gives_no_advice():
 
 @pytest.mark.parametrize(("answers", "line", "status"), [
     ((GIVE2,), "Anamnesis sent the follow-up itself: new photos asked for 1, received 1.", DRAFT),
-    ((None, None), "Anamnesis sent the follow-up itself: new photos asked for 2, received 0.",
-     "Waiting for the patient: new photos requested 2."),
+    ((None,), "Anamnesis sent the follow-up itself: new photos asked for 1, received 0.",
+     "Waiting for the patient: new photos requested 1."),
 ])
 def test_the_brief_says_anamnesis_sent_the_follow_up(report, answers, line, status):
     new, review, given, log, *_ = run(report, new_review(report), Patient(*answers))
@@ -395,15 +451,40 @@ def test_the_brief_says_anamnesis_sent_the_follow_up(report, answers, line, stat
     assert page.one("review-status").text() == status
 
 
+def test_the_line_counts_the_log_not_the_review(report):
+    review = request_photo(new_review(report), report, "o1")   # the clinician asked for the dark pack first
+    new, out, given, log, *_ = run(report, review, Patient(GIVE2))
+    assert len(out.requests) == 2 and len(log) == 1
+    page = Page(render_brief(new, given, AUDIO, CAT, review=out, follow_up=log))
+    assert page.one("follow-up").text() == "Anamnesis sent the follow-up itself: new photos asked for 1, received 1."
+
+
 def test_without_a_log_there_is_no_follow_up_line(report):
     for log in (None, []):
         page = Page(render_brief(report, IMAGES, AUDIO, CAT, review=new_review(report), follow_up=log))
         assert page.root.with_id("follow-up") == []
 
 
-def test_a_log_is_shown_only_with_the_review_it_belongs_to(report):
-    new, review, given, log, *_ = run(report, new_review(report), Patient(GIVE2))
+@pytest.mark.parametrize("case", ["no review", "unknown request", "a step twice", "another target", "another kind",
+                                  "answered but open", "no reply but answered"])
+def test_a_log_is_shown_only_with_the_review_it_belongs_to(report, case):
+    new, review, given, log, *_ = run(report, new_review(report), Patient(GIVE2))         # r1 answered
+    still, waiting, kept, silent, *_ = run(report, new_review(report), Patient(None))    # r1 open
+    on, kw = (new, given), {"review": review, "follow_up": log}
+    step = log[0]
+    if case == "no review":
+        kw = {"follow_up": log}
+    elif case == "unknown request":
+        kw["follow_up"] = [step.model_copy(update={"request_id": "r9"})]
+    elif case == "a step twice":
+        kw["follow_up"] = [step, step]
+    elif case == "another target":
+        kw["follow_up"] = [step.model_copy(update={"target_id": "o1"})]
+    elif case == "another kind":
+        kw["follow_up"] = [step.model_copy(update={"kind": UNREADABLE})]
+    elif case == "answered but open":
+        on, kw = (still, kept), {"review": waiting, "follow_up": log}
+    else:
+        kw["follow_up"] = silent
     with pytest.raises(ValueError):
-        render_brief(new, given, AUDIO, CAT, follow_up=log)
-    with pytest.raises(ValueError):
-        render_brief(new, given, AUDIO, CAT, review=review, follow_up=[log[0].model_copy(update={"request_id": "r9"})])
+        render_brief(on[0], on[1], AUDIO, CAT, **kw)
