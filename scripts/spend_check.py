@@ -20,9 +20,10 @@ CREDITS = {"meta": Decimal(150), "fireworks": Decimal(100), "baseten": Decimal(1
            "google": Decimal("50.95"), "modal": Decimal(100)}
 # Ahmed, 1 Nov 13:15: Meta stops at $100 (it was $80 from 31 Oct 15:13; evidence/decisions.md).
 # Muse's read-only grills are in neither ledger, so they're added here: 13 sessions, $3.1251 at
-# muse_usage.py's prices (31 Oct 17:10). Raise it after each new grill.
+# muse_usage.py's prices (31 Oct 17:10), then batch 31's plan ($0.2012) and audit ($0.2461), 1 Nov.
+# Raise it after each new grill.
 STOP_USD = {"meta": Decimal(100)}
-NOT_IN_LEDGERS = {"meta": Decimal("3.13")}
+NOT_IN_LEDGERS = {"meta": Decimal("3.58")}
 
 
 def _worktrees() -> list[Path]:
