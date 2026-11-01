@@ -2,7 +2,10 @@
 `intake_differs_from_unit_strength`, metoprolol against the Lopresor box `match`, and the beta-blocker note.
 The rules of `evidence/diagnostics/hero-claims-2026-10-31/score_rerun.py`, with this case's names and boxes.
 
-    PYTHONPATH=. uv run python evidence/diagnostics/hero-es-2026-11-01/score.py evidence/live/2026-11-01
+    PYTHONPATH=. uv run python evidence/diagnostics/hero-es-2026-11-01/score.py evidence/live/2026-11-01 \
+        [U13b]
+
+The optional case id picks the set (`plan-set2.md`); the rules are the same for both.
 """
 
 import sys
@@ -53,7 +56,8 @@ def score(report: ReconciliationReport) -> tuple[bool, list[str], list[str]]:
 
 
 def main() -> None:
-    runs = sorted(Path(sys.argv[1]).glob("report_U13_r*.json"))
+    case = sys.argv[2] if len(sys.argv) > 2 else "U13"
+    runs = sorted(Path(sys.argv[1]).glob(f"report_{case}_r*.json"))
     correct = harmed = 0
     for path in runs:
         report = ReconciliationReport.model_validate_json(path.read_text(encoding="utf-8"))
