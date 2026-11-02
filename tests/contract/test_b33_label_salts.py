@@ -141,6 +141,23 @@ def test_a_label_salt_counts_in_the_strength_rule_as_an_exact_one_does(claim_of)
         assert kind(claim_of(label, 50), succinate) is D.MATCH, label
 
 
+# --- round 2 (the supervisor's #3): every part's label, and only beside its moiety -------------------------------
+
+def both(strength_label, intake_label, mg=100):
+    claim = stated(strength_label, mg)
+    return claim.model_copy(update={"intake_amount": amt(intake_label, mg), "regimen": intake(intake_label, mg).regimen})
+
+
+def test_a_claim_with_a_strength_and_an_intake_reads_both_labels():
+    assert kind(both("metoprolol", "tomo metoprolol succinate"), TARTRATE) is D.FORMULATION_MISMATCH
+    assert kind(both("metoprolol succinate 100 mg", "metoprolol"), TARTRATE) is D.FORMULATION_MISMATCH
+    assert kind(both("metoprolol", "tomo metoprolol"), TARTRATE) is D.MATCH
+
+
+def test_a_salt_word_counts_only_beside_its_moiety_or_brand():
+    assert kind(intake("tomo succinate", 100), TARTRATE) is D.INSUFFICIENT_INFORMATION
+
+
 # --- nothing else changes ----------------------------------------------------------------------------------------
 
 def test_the_packs_salt_basis_lookup_still_reads_only_its_exact_name():
