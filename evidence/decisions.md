@@ -477,7 +477,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **The images:** the boxes are AEMPS's registry images of the real packs, the people are Muse Image illustrations labelled as such, and the replay chip now says "model steps sped up 4.5×" (its old wording could read as slower).
 - **The Spanish voice:** Ahmed chose to hear the patient, tested first. Set 4 (U13d, pre-registered in 2c37ec0 before its first call) read set 3's script in an ElevenLabs voice the film could play. It got 2 of 10, 0 harmful: "bisoprolol" came back as "visoprolol" or joined to "Tomo". As its plan said for fewer than 5, the film plays no patient voice, and its results scene now shows all four sets.
 - **The build line:** "Muse Code wrote most of the product's code" replaces "from batch sixteen on" (row 5.3: 4,249 of 6,474 lines at the freeze).
-- **Spend:** set 4 /bin/zsh.29168; Meta about $82.94 of $150, under the $100 line.
+- **Spend:** set 4 $0.29168; Meta about $82.94 of $150, under the $100 line.
 
 ## 2026-11-02, 02:08: batch 32 and the Spanish hero's fifth set (Ahmed)
 - **Ahmed, on the four Spanish sets:** "can we improve this data? also where is the spanish voice", and on the build line, "it doesnt make sense that muse code wrote it 7 times it seems like muse code did bad part". He chose to fix the code, then re-test the same voice.
@@ -486,3 +486,11 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Ahmed's call after the results:** play the set-5 note in the film, with both counts always shown together (row 4.30).
 - **The build line** now tells the fix, not batch 23's seven send-backs.
 - **Spend:** batch 32 $1.43622 of Muse, set 5 $0.31445; Meta about $84.69 of $150, under the $100 line.
+
+## 2026-11-02, 14:10: batch 33, a salt said inside a longer label (Ahmed)
+- **Ahmed:** "Yes, batch 33", to closing the gap the README had just named: a salt said inside a longer ingredient label wasn't read, so "tomo metoprolol succinate" matched a tartrate pack.
+- **The process, as since batch 26:** a read-only Muse plan, then the CEO's SPEC bullets, a 38-case contract and a throwaway reference (6 of 6 breaks caught; the 205 saved live reports unchanged), then Muse's build in one round, then the Opus supervisor and a fresh read-only Muse audit.
+- **The verdicts:** the supervisor approved (none of 22,746 generated pairs newly matches) and found a gap in the CEO's contract, closed as round 2 of the contract (33e6bd9), with no Muse round. The audit asked for changes; the CEO ran each finding, and none was a false match (`evidence/grills/b33-muse-audit/effect.md`). The older limits it and the supervisor named are now in SPEC rule 6. Merged as c55a83b (row 5.23).
+- **Left for later:** Spanish salt names, counting calcium trihydrate as calcium and hemifumarate as fumarate, and reading "equivalent to" on packs that print their salt basis. Each fails toward review.
+- **Also fixed:** the set 4 spend line above read "/bin/zsh.29168"; a shell had expanded its `$0`.
+- **Spend:** batch 33's build $0.75216, its plan and audit $0.53886; Meta about $85.98 of $150, under the $100 line.
