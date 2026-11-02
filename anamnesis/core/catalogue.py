@@ -23,6 +23,9 @@ def normalise(text: str) -> str:
 ARABIC_CLITICS = r"(?:وال|بال|فال|لل|ال|و|ف|ب|ل)?"
 """Attached Arabic clitics accepted before a matched word (SPEC §2, §3)."""
 
+TOMAR_FORMS = r"(?:tomamos|tomas|toman|tomo|toma)?"
+"""Attached forms of *tomar* accepted before a Latin-script name (SPEC §3)."""
+
 
 @dataclass(frozen=True)
 class CatalogueEntry:
@@ -109,20 +112,30 @@ class Catalogue:
         normalised = normalise(text)
         matches = []
         for entry in self.entries:
-            names = [(entry.brand, True)]
-            names.extend((alias, True) for alias in entry.aliases)
+            names = [(entry.brand, True, False)]
+            names.extend((alias, True, False) for alias in entry.aliases)
             if len(entry.inns) == 1:
                 (moiety,) = entry.inns
-                aliases = [alias for alias, (target, _) in INN_ALIASES.items() if target == moiety]
-                names.extend((name, False) for name in (moiety, *aliases))
-            for raw, brand in names:
+                names.append((moiety, False, False))
+                names.extend(
+                    (alias, False, bool(salt))
+                    for alias, (target, salt) in INN_ALIASES.items()
+                    if target == moiety
+                )
+            for raw, brand, salted in names:
                 name = normalise(raw)
                 variants = [name]
                 if brand and " " in name:
                     variants.append(name.replace(" ", ""))
                 for variant in dict.fromkeys(variants):
-                    prefix = ARABIC_CLITICS if re.search(r"[\u0600-\u06ff]", name) else ""
-                    pattern = re.compile(rf"(?<!\w){prefix}{re.escape(variant)}(?!\w)")
+                    if salted:
+                        prefix, body = "", re.escape(variant)
+                    elif re.search(r"[\u0600-\u06ff]", name):
+                        prefix, body = ARABIC_CLITICS, re.escape(variant)
+                    else:
+                        prefix = TOMAR_FORMS
+                        body = "".join("[bv]" if char in "bv" else re.escape(char) for char in variant)
+                    pattern = re.compile(rf"(?<!\w){prefix}{body}(?!\w)")
                     matches.extend(
                         (found.start(), found.end(), entry, brand)
                         for found in pattern.finditer(normalised)
