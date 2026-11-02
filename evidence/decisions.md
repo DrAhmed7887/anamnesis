@@ -478,3 +478,11 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **The Spanish voice:** Ahmed chose to hear the patient, tested first. Set 4 (U13d, pre-registered in 2c37ec0 before its first call) read set 3's script in an ElevenLabs voice the film could play. It got 2 of 10, 0 harmful: "bisoprolol" came back as "visoprolol" or joined to "Tomo". As its plan said for fewer than 5, the film plays no patient voice, and its results scene now shows all four sets.
 - **The build line:** "Muse Code wrote most of the product's code" replaces "from batch sixteen on" (row 5.3: 4,249 of 6,474 lines at the freeze).
 - **Spend:** set 4 /bin/zsh.29168; Meta about $82.94 of $150, under the $100 line.
+
+## 2026-11-02, 02:08: batch 32 and the Spanish hero's fifth set (Ahmed)
+- **Ahmed, on the four Spanish sets:** "can we improve this data? also where is the spanish voice", and on the build line, "it doesnt make sense that muse code wrote it 7 times it seems like muse code did bad part". He chose to fix the code, then re-test the same voice.
+- **Batch 32** (SPEC §3, "Spanish speech"): Muse Code built it in two rounds. The Opus supervisor sent round 1 back for a salt-name safety point (a misspelled salt could turn an abstention into a match) and approved round 2. Merged as af84dcc (row 5.21).
+- **Set 5** (U13e, pre-registered in 468bcc2 before its first call): the same ElevenLabs note on the new code. All 10 runs gave the three findings; 0 harmful. The registered scorer counted 0 of 10, because it never looks a claim up in the catalogue, though the plan said it would; a second reading that does gives 10 of 10, and moves set 2 from 4 to 5. The CEO's error is written down in `results.md`.
+- **Ahmed's call after the results:** play the set-5 note in the film, with both counts always shown together (row 4.30).
+- **The build line** now tells the fix, not batch 23's seven send-backs.
+- **Spend:** batch 32 $1.43622 of Muse, set 5 $0.31445; Meta about $84.69 of $150, under the $100 line.
