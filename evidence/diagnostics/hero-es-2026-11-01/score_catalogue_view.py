@@ -1,7 +1,8 @@
-"""A second reading of the Spanish hero's sets, written after set 5 ran (2 Nov): `score.py` unchanged, except that
-when it can't find the bisoprolol claim by "concor" in the name or by its `inn` as written, it looks the claim's
-name up in the catalogue, as `plan-set5.md` said the claim would be found ("through the catalogue, as the product
-now resolves it"). The registered counts stay those of `score.py`; this reading is reported beside them.
+"""A second reading of the Spanish hero's sets, written after set 5 ran (2 Nov): `score.py` unchanged, except
+that when it can't find the bisoprolol claim by "concor" in the name or by its `inn` as written, it looks the
+claim's name up in the catalogue, as `plan-set5.md` said the claim would be found ("through the catalogue, as
+the product now resolves it"). The registered counts stay those of `score.py`; this reading is reported
+beside them.
 
     PYTHONPATH=. uv run python evidence/diagnostics/hero-es-2026-11-01/score_catalogue_view.py \
         evidence/live/2026-11-02 U13e
