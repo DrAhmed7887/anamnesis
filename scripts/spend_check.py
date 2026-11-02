@@ -22,9 +22,10 @@ CREDITS = {"meta": Decimal(150), "fireworks": Decimal(100), "baseten": Decimal(1
 # Muse's read-only grills are in neither ledger, so they're added here: 13 sessions, $3.1251 at
 # muse_usage.py's prices (31 Oct 17:10), then batch 31's plan ($0.2012) and audit ($0.2461), 1 Nov.
 # Then the v4 film's three Muse Image illustrations, $0.03 (1 Nov, late), and batch 33's plan ($0.25617) and
-# audit ($0.28269), 2 Nov. Raise it after each new grill.
+# audit ($0.28269), 2 Nov, then batch 34's plan ($0.26612) and audit ($0.26079).
+# Raise it after each new grill.
 STOP_USD = {"meta": Decimal(100)}
-NOT_IN_LEDGERS = {"meta": Decimal("4.15")}
+NOT_IN_LEDGERS = {"meta": Decimal("4.67")}
 
 
 def _worktrees() -> list[Path]:

@@ -7,6 +7,7 @@ from anamnesis.core.catalogue import ARABIC_CLITICS, Catalogue, normalise
 from anamnesis.schema import (
     INN_ALIASES,
     SALT_BASIS_EQUIVALENTS,
+    SPANISH_SALT_NAMES,
     Finding,
     IngredientAmount,
     PackObservation,
@@ -266,12 +267,21 @@ def _text_salts(text: str, catalogue: Catalogue) -> list[tuple[str, str]]:
 
 
 def _loose_salts(text: str, padded: str, catalogue: Catalogue) -> set[tuple[str, str]]:
-    """Curated salt words that sit apart from the moiety, when the text names the moiety or its brand."""
-    present = {
-        (moiety, normalise(salt))
-        for moiety, salt in INN_ALIASES.values()
-        if salt and f" {normalise(salt)} " in padded and catalogue.mentions_moiety(text, moiety)
-    }
+    """Curated salt words that sit apart from the moiety, when the text names the moiety or its brand.
+
+    A salt's Spanish words (SPANISH_SALT_NAMES) count too, read as the English salt
+    (SPEC §3 rule 6, batch 34).
+    """
+    present = set()
+    for moiety, salt in set(INN_ALIASES.values()):
+        if not salt:
+            continue
+        names = [normalise(salt)]
+        names.extend(
+            normalise(spanish) for spanish, english in SPANISH_SALT_NAMES.items() if english == salt
+        )
+        if any(f" {name} " in padded for name in names) and catalogue.mentions_moiety(text, moiety):
+            present.add((moiety, normalise(salt)))
     return {
         (moiety, salt)
         for moiety, salt in present
@@ -286,7 +296,10 @@ def _side_salts(
     text: str,
     catalogue: Catalogue,
 ) -> dict[str, frozenset[str]]:
-    """Known salts per canonical ingredient from strength, intake, scalar inn and free text."""
+    """Known salts per canonical ingredient from strength, intake, scalar inn and free text.
+
+    Each strength ingredient's and intake's label is read as free text too (SPEC §3 rule 6, batch 33).
+    """
     parts = list(strength.ingredients) if strength else []
     parts.extend([intake] if intake else [])
     pairs = [(_resolve_inn(part.inn, catalogue), part.salt or salt_of(part.inn)) for part in parts]

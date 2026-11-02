@@ -98,6 +98,20 @@ INN_ALIASES: dict[str, tuple[str, str | None]] = {
     "coffeinum": ("caffeine", None),
 }
 
+SPANISH_SALT_NAMES: dict[str, str] = {
+    "succinato": "succinate",
+    "tartrato": "tartrate",
+    "fumarato": "fumarate",
+    "hemifumarato": "hemifumarate",
+    "besilato": "besilate",
+    "maleato": "maleate",
+    "hidrocloruro": "hydrochloride",
+    "cálcica": "calcium",
+    "calcica": "calcium",
+    "cálcica trihidrato": "calcium trihydrate",
+    "calcica trihidrato": "calcium trihydrate",
+}
+
 SALT_BASIS_EQUIVALENTS: dict[tuple[str, str, Decimal], Decimal] = {
     ("metoprolol", "succinate", Decimal("23.75")): Decimal("25"),
     ("metoprolol", "succinate", Decimal("47.5")): Decimal("50"),
