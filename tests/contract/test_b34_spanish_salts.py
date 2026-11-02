@@ -178,6 +178,23 @@ def test_a_spanish_label_salt_counts_in_the_strength_rule_as_an_english_one_does
     assert kind(claim_of("metoprolol succinato", 47.5), SUCCINATE) is D.MATCH
 
 
+# --- round 2 (the supervisor's #1): a text mixing the languages reads as its all-English wording ------------------
+
+@pytest.mark.parametrize("mixed,english,name,observed", [
+    ("Lipitor calcium (cálcica trihidrato)", "Lipitor calcium (calcium trihydrate)", "Lipitor",
+     atorvastatin("calcium trihydrate")),
+    ("Lipitor cálcica (calcium trihydrate)", "Lipitor calcium (calcium trihydrate)", "Lipitor",
+     atorvastatin("calcium trihydrate")),
+    ("atorvastatin calcium, cálcica trihidrato", "atorvastatin calcium, calcium trihydrate", "Atorvastatina",
+     atorvastatin("calcium trihydrate")),
+    ("metoprolol succinato (succinate)", "metoprolol succinate (succinate)", "Metoprolol", TARTRATE),
+    ("Metoprolol tartrato, metoprolol succinate", "Metoprolol tartrate, metoprolol succinate", "Metoprolol", TARTRATE),
+])
+def test_a_text_mixing_the_languages_reads_as_its_english_wording(mixed, english, name, observed):
+    mg = observed.strength.ingredients[0].amount
+    assert kind(intake(mixed, mg, name=name), observed) is kind(intake(english, mg, name=name), observed)
+
+
 # --- only the listed words, only beside their moiety, and nothing else changes -----------------------------------
 
 def test_a_spanish_salt_word_counts_only_beside_its_moiety_or_brand():
