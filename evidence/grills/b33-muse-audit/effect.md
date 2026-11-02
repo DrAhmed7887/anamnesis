@@ -1,0 +1,7 @@
+# What the CEO took from Muse's audit of batch 33 (2 Nov)
+
+A fresh Muse Code session audited the build read-only (`brief.md`, `muse.md`), on muse-spark-1.3 only, for $0.28269 at `muse_usage.price` (317,054 input tokens, 188,213 of them cached, and 21,977 output). Its verdict was to request changes. Each finding was run on the batch code and on `main` (the CEO's probe, offline):
+
+1. **A salt from one part's label credited to another moiety (Medium):** no result changed. An Augmentin part labelled "amoxicillin trihydrate with clavulanate potassium" and a metoprolol part labelled "metoprolol, not atorvastatin calcium" both give `insufficient_information` on `main` and on the build, because a part naming two moieties already fails its side's identity. Not taken.
+2. **Alias and loose salt words suppressed separately (Medium):** real, and the supervisor's #1. A pack part "atorvastatin calcium (as calcium trihydrate)" now names two salts and abstains, where it matched on `main`; the same words in `label_text` or `name_text` already abstained on `main`. The proposed fix, one suppression over both sets, would turn such abstentions into matches, which batch 33's hard limit forbids. Written into SPEC rule 6's known limits instead.
+3. **The loose moiety not resolved (Low):** can't happen with today's table: every salted moiety in `INN_ALIASES` resolves to itself through `_resolve_inn`. Not taken.

@@ -290,6 +290,8 @@ def _side_salts(
     parts = list(strength.ingredients) if strength else []
     parts.extend([intake] if intake else [])
     pairs = [(_resolve_inn(part.inn, catalogue), part.salt or salt_of(part.inn)) for part in parts]
+    for part in parts:
+        pairs.extend(_text_salts(part.inn, catalogue))
     if inn:
         for part in _split_inn_parts(inn):
             pairs.append((_resolve_inn_part(part, catalogue), salt_of(part)))
