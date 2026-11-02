@@ -487,7 +487,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **The build line** now tells the fix, not batch 23's seven send-backs.
 - **Spend:** batch 32 $1.43622 of Muse, set 5 $0.31445; Meta about $84.69 of $150, under the $100 line.
 
-## 2026-11-02, 14:10: batch 33, a salt said inside a longer label (Ahmed)
+## 2026-11-02, 13:07: batch 33, a salt said inside a longer label (Ahmed)
 - **Ahmed:** "Yes, batch 33", to closing the gap the README had just named: a salt said inside a longer ingredient label wasn't read, so "tomo metoprolol succinate" matched a tartrate pack.
 - **The process, as since batch 26:** a read-only Muse plan, then the CEO's SPEC bullets, a 38-case contract and a throwaway reference (6 of 6 breaks caught; the 205 saved live reports unchanged), then Muse's build in one round, then the Opus supervisor and a fresh read-only Muse audit.
 - **The verdicts:** the supervisor approved (none of 22,746 generated pairs newly matches) and found a gap in the CEO's contract, closed as round 2 of the contract (33e6bd9), with no Muse round. The audit asked for changes; the CEO ran each finding, and none was a false match (`evidence/grills/b33-muse-audit/effect.md`). The older limits it and the supervisor named are now in SPEC rule 6. Merged as c55a83b (row 5.23).
