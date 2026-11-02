@@ -9,7 +9,7 @@ import pytest
 
 from anamnesis.core.catalogue import load_catalogue, normalise
 from anamnesis.core.overlap import OverlapKind, cross_medication
-from anamnesis.core.reconcile import reconcile_all
+from anamnesis.core.reconcile import reconcile_all, reconcile_pair
 from anamnesis.schema import DiscrepancyType as D
 from anamnesis.schema import DoseRegimen, IngredientAmount, PackObservation, PatientClaim, Strength
 from anamnesis.schema.medication import INN_ALIASES
@@ -56,7 +56,10 @@ def test_an_attached_form_before_a_brand():
 
 @pytest.mark.parametrize("text", ["tomo", "Toma", "tomatobisoprolol", "atomobisoprolol", "tomotomobisoprolol",
                                   "tomobisoprololx", "xbisoprolol", "tomobisoprolol5", "tomsbisoprolol",
-                                  "tomovisoprololes"])
+                                  "tomovisoprololes",
+                                  # round 2 (the supervisor's #3): only b and v fold, and only the five forms attach
+                                  "pisoprolol", "wisoprolol", "Peloc-Zok", "Norpasc", "tomóbisoprolol",
+                                  "tomebisoprolol", "tomababisoprolol"])
 def test_nothing_else_is_attached(text):
     assert CAT.resolve(text) is None
 
@@ -157,3 +160,51 @@ def test_the_claim_keeps_the_name_as_heard():
     claims = [heard("c1", "Tomovisoprolol", "tomovisoprolol", "tomovisoprolol", 10, 1)]
     reconcile_all(claims, PACKS, CAT)
     assert claims[0].name_text == "Tomovisoprolol"
+
+
+
+# --- round 2: a name that carries a salt is matched only as written (the supervisor's #1) --------------------------
+
+# the salt-bearing aliases the catalogue lists: those of its single-ingredient entries
+SALTED = list(dict.fromkeys(alias for entry in CAT.entries if len(entry.inns) == 1
+                            for alias, (target, salt) in INN_ALIASES.items() if salt and target in entry.inns))
+
+
+def test_a_name_with_a_salt_is_matched_only_as_written():
+    assert SALTED
+    for alias in SALTED:
+        name = normalise(alias)
+        assert CAT.covers(name), alias
+        swapped = name.translate(str.maketrans("bv", "vb"))
+        if swapped != name:
+            assert not CAT.covers(swapped), swapped
+        assert not CAT.covers("tomo" + name), "tomo" + name
+
+
+def salted(inn, mg, salt=None):
+    return Strength(ingredients=[IngredientAmount(inn=inn, salt=salt, amount=Decimal(str(mg)), unit="mg")],
+                    per="tablet", release="immediate")
+
+
+def pair(name, inn, moiety, mg, label, salt):
+    claim = PatientClaim(claim_id="c1", name_text=name, inn=inn, strength=salted(moiety, mg), intake_amount=None,
+                         regimen=None, status="active", audio_evidence=["t"])
+    pack = PackObservation(observation_id="o1", label_text=label, strength=salted(moiety, mg, salt),
+                           readability="readable", country=None, visual_evidence=["r"])
+    return reconcile_pair(claim, pack, CAT).type
+
+
+@pytest.mark.parametrize("name,inn,moiety,mg,label,salt", [
+    ("Metoprolol", "tomometoprolol succinate", "metoprolol", 100, "Metoprolol tartrate 100 mg", "tartrate"),
+    ("amlodipine vesilate", "amlodipine vesilate", "amlodipine", 5, "Amlodipine maleate 5 mg", "maleate"),
+    ("Bisoprolol", "visoprolol hemifumarate", "bisoprolol", 5, "Bisoprolol fumarate 5 mg", "fumarate"),
+    ("Atorvastatin", "atorbastatin calcium", "atorvastatin", 20, "Atorvastatin calcium trihydrate 20 mg",
+     "calcium trihydrate"),
+])
+def test_a_misspelled_salt_never_becomes_a_match(name, inn, moiety, mg, label, salt):
+    assert pair(name, inn, moiety, mg, label, salt) is D.INSUFFICIENT_INFORMATION
+
+
+def test_a_salt_spelled_as_written_still_disagrees():
+    assert pair("Metoprolol", "metoprolol succinate", "metoprolol", 100, "Metoprolol tartrate 100 mg",
+                "tartrate") is D.FORMULATION_MISMATCH
