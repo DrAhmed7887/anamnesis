@@ -90,7 +90,7 @@ Fireworks no longer serves base Glimmer serverlessly, and it serves no LoRA serv
 - **Modal:** on this account, it asks for a payment method before it runs a GPU large enough for Glimmer. The H200, H100 and A100 80 GB were each refused on 29 Oct, before anything ran.
 
 ## Amended 29 Oct (2): r2, the same recipe on a verified Spanish vocabulary (Ahmed's call, before any r2 call)
-**Why:** Ahmed asked for better, non-US data, from "WHO and USA or Europe, whatever makes it easy". r1 stands as run and scored (f07e273). r2 changes only the names the patient says.
+**Why:** Ahmed asked for better, non-US data, from "WHO and USA or Europe, whatever makes it easy". r1 stands as run and scored (45d6bc7). r2 changes only the names the patient says.
 
 **The vocabulary:** `scripts/drugs_v2.py`, from AEMPS CIMA (Spain's medicines agency), read 29 Oct, written to `evidence/data/drugs_v2.{json,md}`.
 - 59 of r1's 60 INNs map to a Spanish name that CIMA's own SNOMED CT VTM confirms. Prednisolone has no marketed tablet or capsule in Spain.

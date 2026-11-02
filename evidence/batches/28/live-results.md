@@ -1,6 +1,6 @@
 # Batch 28's live check (31 Oct, 13:35–13:46 CET), as `live-plan.md` set out before any call
 
-U1–U8, two runs each, on `main` at b0833c2 (batch 28 merged, the live script carried in): Spark 1.3 transcribes, extracts and reads; Muse Spark Open on Fireworks, at low effort, reads only what Spark 1.3 still reads as partial or unreadable after its zoom. Scored with `score_paired.py` (with and without the second reader, on the same runs) and `evidence/batches/22/intake_score.py` (against 8b993ff).
+U1–U8, two runs each, on `main` at a89bc0c (batch 28 merged, the live script carried in): Spark 1.3 transcribes, extracts and reads; Muse Spark Open on Fireworks, at low effort, reads only what Spark 1.3 still reads as partial or unreadable after its zoom. Scored with `score_paired.py` (with and without the second reader, on the same runs) and `evidence/batches/22/intake_score.py` (against d5f0606).
 
 ## The result
 | | Correct | Harmful |

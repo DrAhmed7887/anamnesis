@@ -1,6 +1,6 @@
 # The hero on the final code (31 Oct, 20:02–20:08 CET): 9 of 10 with the system's own categories
 
-As set out in `plan.md` before any call: U12, ten runs on the default path, with the code of `demo-freeze` (710b453), in one sitting. Scored with `score_rerun.py`, the 31 Oct scorer with only its file pattern changed.
+As set out in `plan.md` before any call: U12, ten runs on the default path, with the code of `demo-freeze` (34473ba), in one sitting. Scored with `score_rerun.py`, the 31 Oct scorer with only its file pattern changed.
 
 | Scored | Correct | Harmful |
 |---|---|---|

@@ -165,7 +165,7 @@ Voice Transcribe returned 7 different transcripts of the one file, with a word o
 </details>
 
 ### Ten public pack photos, before and after batch 21
-The expected results were committed before the first run (8b993ff). [4.4] On the same ten pre-registered public-photo cases, with the same expected results, the code got 1 right before batch 21 and 3 after it. Neither run showed a false match, or a wrong strength or ingredient as fact. Seven cases miss in both runs: U2, U5, U6, U7, U8, U9 and U10. [4.11]
+The expected results were committed before the first run (d5f0606). [4.4] On the same ten pre-registered public-photo cases, with the same expected results, the code got 1 right before batch 21 and 3 after it. Neither run showed a false match, or a wrong strength or ingredient as fact. Seven cases miss in both runs: U2, U5, U6, U7, U8, U9 and U10. [4.11]
 
 <details>
 <summary>Every case, before and after batch 21</summary>

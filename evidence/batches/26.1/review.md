@@ -16,7 +16,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 1 round, planned fir
 
 **Who did what:**
 - **Muse planned first** (`evidence/grills/b261-muse-plan/`, $0.18): "Accept", with 7 risks, all handled in the contract.
-- **The CEO** wrote the SPEC paragraph, the contract and the brief (a00f4be).
+- **The CEO** wrote the SPEC paragraph, the contract and the brief (80deaa7).
   - The reference build passed 16 contract tests (2,506 in all).
   - It caught 6 of 6 mutants.
 - **Muse wrote the code** in one round ($0.54): the option, its validation, the live script's wiring, and 13 unit tests.
@@ -24,7 +24,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 1 round, planned fir
   - **The Opus supervisor approved** (`supervisor.md`): the request is unchanged under None, the comparison path is unchanged, and Muse's tests catch two breaking edits the contract misses.
   - **A fresh Muse audit passed it** (`evidence/grills/b261-muse-audit/`, $0.21).
 
-**The gate:** pass, 2,519 tests, ruff clean, contract untouched since a00f4be (`gate.json`).
+**The gate:** pass, 2,519 tests, ruff clean, contract untouched since 80deaa7 (`gate.json`).
 
 **Found, not fixed here:** validation compares by equality (supervisor, low), and the run log doesn't record the effort (info).
 

@@ -1,6 +1,6 @@
 # Batch 27: the checks after the merge (31 Oct), as pre-registered in `check-plan.md`
 
-All on merged `main` (3d3a30e). Every result is reported.
+All on merged `main` (3931b42). Every result is reported.
 
 ## Offline ($0)
 1. **The relation audit's ten traps** (`audit.py`, output in `checks-offline.md`): no wrong reply shown as fact (0 of 10), and every right reply keeps the careful listener's findings. Before batch 27, seven of the ten passed, three as false `match`es.
@@ -12,12 +12,12 @@ All on merged `main` (3d3a30e). Every result is reported.
    - Post hoc and descriptive: these replies were committed on 29 Oct, before the rules existed, and base Glimmer is not a model the product uses.
 3. **Every saved live report re-parsed** (`recheck_reports.py`): 97 report files, 120 claims, **0 changed**.
 
-## Live (31 Oct, 12:35–12:54 CET, `main` at 2e0d985)
+## Live (31 Oct, 12:35–12:54 CET, `main` at 54adcee)
 4. **The audit's live probe, again** (`probe_after.py`, `probe_after.json`): ten traps × Spark 1.3 and the tuned Glimmer.
    - **19 of 20 calls show no wrong finding as fact.** Spark 1.3 got all ten right or failed safe, as on 31 Oct at 00:07.
    - **J on the tuned Glimmer is still wrong as fact, and the pre-registered expectation ("should now fail safe") did not hold.** Batch 27 dropped Glimmer's 10 mg intake (rule 6), but its reply also put 5 in `units_per_intake` ("five in the morning" read as five tablets), a field the relation checks don't cover (SPEC §2, "Known limits": `regimen` numbers aren't checked). So the false `intake_differs_from_unit_strength` of 00:07 became a false `strength_mismatch`: a false disagreement, not a false match.
    - **The fix goes into batch 27.1:** when the relation checks drop a claim's amount, its `units_per_intake` goes too, unless a count mention (rule 3) grounds that value. J then fails safe.
-5. **One default-path U1–U8 column** (`intake_score.py`, against 8b993ff): **3 of 8 correct, 0 harmful.**
+5. **One default-path U1–U8 column** (`intake_score.py`, against d5f0606): **3 of 8 correct, 0 harmful.**
    - U1, U3 and U5 correct.
    - **U4, U7 and U8: Spark 1.3 read the pack as partial, even after its zoom** (`unreadable_source`), so the claim stood alone. U4 was read in full on 30 Oct: the reader varies from run to run. These are batch 28's target.
    - **U2:** the claim came back with no amounts, so the pair with the correctly read Augmentin pack is `insufficient_information`. The merged checks keep every plausible shape of that reply (a strength of 875/125, an intake of 875, or both: tested offline), so the amounts were missing from Spark's reply itself; the adapter doesn't keep raw replies.

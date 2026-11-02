@@ -37,7 +37,7 @@ Round 1 was reviewed twice. The CEO rendered it at 1280 px, at 375 px on a phone
 
 ## Rules
 - **Only `_STYLE` changes in this round.** Keep round 1's viewport tag and unit-test assertion as they are.
-- **Never create, modify or delete anything under `tests/contract/`, any `conftest.py`, `pyproject.toml` or `uv.lock`.** The contract was updated after round 1 (commit 4a7ae6e): its hidden-text check now matches whole declarations, so `font-size:0.875rem` is fine.
+- **Never create, modify or delete anything under `tests/contract/`, any `conftest.py`, `pyproject.toml` or `uv.lock`.** The contract was updated after round 1 (commit a4cc468): its hidden-text check now matches whole declarations, so `font-size:0.875rem` is fine.
 - Don't edit `SPEC.md`, `scripts/`, `evidence/`, `docs/`, `NOTICE` or `finetune/`.
 - Work only inside this repository. No network, no API keys, no git commits, no new dependencies.
 - Run the tools as `.venv/bin/ruff` and `.venv/bin/python -m pytest`.

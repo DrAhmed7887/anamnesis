@@ -1,11 +1,11 @@
 # Plan to the freeze: Spanish and German, 29 Oct 2026, 15:30 CET (grilled before Ahmed decides)
 
-**Correction, 29 Oct 14:31 CET:** the clock times in this file and in `grill-prompt.md` are wrong ("15:30 CET", and the credits read "at 14:45"). Both files were written before 14:11 CET, when they were committed (843f64f). `grill-prompt.md` stays as it was sent.
+**Correction, 29 Oct 14:31 CET:** the clock times in this file and in `grill-prompt.md` are wrong ("15:30 CET", and the credits read "at 14:45"). Both files were written before 14:11 CET, when they were committed (161d411). `grill-prompt.md` stays as it was sent.
 
 ## Where things stand
-- **`main` at 25a9274:** 2,075 tests pass. The feature freeze is Sat 31 Oct 23:59 CET; submission is Wed 4 Nov by 15:00.
+- **`main` at 2b0415a:** 2,075 tests pass. The feature freeze is Sat 31 Oct 23:59 CET; submission is Wed 4 Nov by 15:00.
 - **The fine-tune:**
-  - r1's results are committed (f07e273): Glimmer + LoRA got 290/303 fully right, against Spark 1.3's 193/303.
+  - r1's results are committed (45d6bc7): Glimmer + LoRA got 290/303 fully right, against Spark 1.3's 193/303.
   - r2 (the same recipe plus 80 Spanish brands from AEMPS CIMA) is trained, and its adapter is on Modal. Its eval hasn't run.
   - Spark 1.3 on `test_spain` (60 notes) is done: $0.80, with its replies saved but not yet committed.
 - **The credits, read at their sources today at 14:45:**

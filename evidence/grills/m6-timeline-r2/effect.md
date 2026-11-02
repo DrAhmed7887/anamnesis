@@ -6,9 +6,9 @@
 
 | # | Finding | Decision |
 |---|---|---|
-| 1 | blocker: `evidence/batches/22/comparison.md` isn't in the package | **Branch timing, not a defect.** The batch 23 branch was cut (87e323d) before the comparison was committed on main (fa377d1). Main is merged into the branch before the final check and the merge |
+| 1 | blocker: `evidence/batches/22/comparison.md` isn't in the package | **Branch timing, not a defect.** The batch 23 branch was cut (d80f974) before the comparison was committed on main (9751055). Main is merged into the branch before the final check and the merge |
 | 2 | blocker: no round 2 supervisor report, review or merge | **Process.** The supervisor's round 2 review is in `supervisor.md` (CHANGES); round 3 follows |
-| 3 | major: no open-weight or 39-photo calls in `ledger.jsonl` | **The same branch timing.** Main's ledger holds them (fa377d1). The spend gate now reads every worktree's ledgers (461caa1) |
+| 3 | major: no open-weight or 39-photo calls in `ledger.jsonl` | **The same branch timing.** Main's ledger holds them (9751055). The spend gate now reads every worktree's ledgers (42474b4) |
 | 4 | minor: a bracket without a spoon word (`250 mg per (5 ml)`) is kept | **Accepted, round 3** (Muse and the supervisor found it too) |
 | 5 | minor: a decimal-comma volume, `mL`, `ملي` | **Already handled; pinned in round 3.** A comma is a decimal mark in volumes (`2,5 ml`), and matching ignores case. `ملي` reads as `مل`, because it isn't followed by `جم` or `غ` |
 | 6 | minor: the timeline total cell has no `colspan` | **Accepted, round 3** |

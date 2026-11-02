@@ -16,7 +16,7 @@ The contract was proven passable on a throwaway scratch copy of this branch befo
 
 The supervisor's two 19.1 mutants (unescaped rows, no `dir="auto"`) passed all 707 tests then. They now fail the contract.
 
-## Part 2 (contract lock 6ad7021): reference build
+## Part 2 (contract lock eceb312): reference build
 - **Before the build:** 47 part-2 cases fail and 7 pins pass. Every failure is an assertion, never an error. The Norvasc pairing case fails in both pack orders.
 - **Reference build:** a scratch copy with these changes:
   - the number-word split in `_word_amounts`;

@@ -14,7 +14,7 @@ Prompt: `evidence/grills/BATCH_SUPERVISOR_PROMPT.md`. The builder was Muse Code 
 5. **minor** scope: `intake_amount` is also nulled when it fails validation for other reasons; harmless once #1 is in; document it in SPEC.
 6. **minor**, orchestrator scope: the contract commit's SPEC also described crop-first reads (Z8) and Spark estimates and length stops (C6, C7) as batch 16, with no brief or contract.
 
-**CEO triage:** all accepted. #1, #3 and #5 went into SPEC §2 and #1 and #3 into the contract (second `test(contract): batch 16` commit, `a493090`); #6 relabelled to batch 18 in SPEC with the current behaviour stated; #1–#4 sent back to Muse as round 2 (`round2-brief.md`).
+**CEO triage:** all accepted. #1, #3 and #5 went into SPEC §2 and #1 and #3 into the contract (second `test(contract): batch 16` commit, `9152fae`); #6 relabelled to batch 18 in SPEC with the current behaviour stated; #1–#4 sent back to Muse as round 2 (`round2-brief.md`).
 
 ## Round 2: SUPERVISOR: APPROVE
 All four round-1 fixes check out; the full suite passes (518).

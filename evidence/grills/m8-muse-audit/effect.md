@@ -1,6 +1,6 @@
 # M8 audit by Muse Code (28 Oct evening): what changes
 
-Muse Code (`muse-spark-1.3`) ran headless, read-only, in its own worktree, on `main` at e6b7e6a, with contributor mode off and no foreign personal context. The brief is `brief.md`, the reply `muse.md`, the goal record `goal.md` and the cost `usage.json`.
+Muse Code (`muse-spark-1.3`) ran headless, read-only, in its own worktree, on `main` at 7abdd89, with contributor mode off and no foreign personal context. The brief is `brief.md`, the reply `muse.md`, the goal record `goal.md` and the cost `usage.json`.
 
 - **How it worked:**
   - It pinned the audit as its goal with its goal tool.

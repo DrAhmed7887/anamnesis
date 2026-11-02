@@ -1,6 +1,6 @@
 # Batch 20 supervisor (Claude Opus 5.5, high effort, read-only)
 
-Prompt: `evidence/grills/BATCH_SUPERVISOR_PROMPT.md`. The builder was Muse Code (`muse-spark-1.3`). The supervisor is a different model family and was not told the CEO's opinion. It probed offline, in scratch copies of the code from before and after the batch. The docs-only commit `f4eb10a` (another session) was out of scope.
+Prompt: `evidence/grills/BATCH_SUPERVISOR_PROMPT.md`. The builder was Muse Code (`muse-spark-1.3`). The supervisor is a different model family and was not told the CEO's opinion. It probed offline, in scratch copies of the code from before and after the batch. The docs-only commit `2f0a45d` (another session) was out of scope.
 
 ## Round 1: SUPERVISOR: CHANGES
 1. **major** `anamnesis/providers/spark.py` (`parse_label_json`). A label reply whose `label_text` isn't a string crashes the intake instead of being a malformed reply.

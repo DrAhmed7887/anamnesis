@@ -1,4 +1,4 @@
-# Batch 30: the live check (31 Oct, 19:04 CET, on merged `main` 3bbc770)
+# Batch 30: the live check (31 Oct, 19:04 CET, on merged `main` cdb91b3)
 
 **Pre-registered** (`live-plan.md`, before the build): U2 three times on the default path, with `match` in at least two of three and 0 harmful.
 

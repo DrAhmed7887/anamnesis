@@ -1,7 +1,7 @@
 # Batch 24.2: the CEO's reference build, 30 Oct
 
 - **Contract:** `test_b24_2_codes_conflict.py`, 5 tests.
-  - On main, both at 2c1bffe and on this branch at 441d92a, 3 fail and 2 pass.
+  - On main, both at 03f500a and on this branch at 9f7e80e, 3 fail and 2 pass.
   - The 3 that fail are the contradictions: a claim's stated INN, a claim's strength, and a pack's reading that disagrees with its label.
   - The 2 that pass guard against over-fixing: an agreeing claim and an agreeing pack keep their codes.
 - **Reference build:** a scratch clone of main outside the repo. `brief_html._codes_entry` shows no codes when the reconciler's identity check (`_claim_identity`, or `_pack_identity` with the pack's country) reports a conflict, through two public wrappers in `core/reconcile.py`. **2,416 passed**, ruff clean. No earlier test changed.

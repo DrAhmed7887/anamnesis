@@ -6,7 +6,7 @@
   - **Fireworks**, with strict JSON mode.
 - **The same input for each:** the same SAM 3.1 crops, system prompt, schema and parser (`anamnesis/providers/openweight.py`, batch 22).
 - **Zero-shot:** no model was trained.
-- **Pre-registered:** the expected readings and scoring rules were committed before any call (c1b5b6e: `preregistration.json`, `preregistration-gemini.json`, `preregistration-notes.md`).
+- **Pre-registered:** the expected readings and scoring rules were committed before any call (f59b010: `preregistration.json`, `preregistration-gemini.json`, `preregistration-notes.md`).
 - **Run:** `scripts/reader_eval.py`, one pass. The photos are 30 Cairo University phone photos (CC BY 4.0, two per pack) and 9 Wikimedia Commons photos.
 
 **This is a comparison, not a benchmark.** n is small and every miss is listed.

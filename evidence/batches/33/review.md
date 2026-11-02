@@ -24,7 +24,7 @@ Verdict: PASS
   - #2, alias and loose salt words suppressed separately, is the supervisor's #1. Its fix would turn abstentions into matches, which this batch's hard limit forbids.
   - #3 can't happen with today's table: every salted moiety resolves to itself.
 
-**The gate** (on the round-2 contract, `33e6bd9`): 2,925 tests pass, ruff is clean, and the contract lock holds.
+**The gate** (on the round-2 contract, `d7a0b02`): 2,925 tests pass, ruff is clean, and the contract lock holds.
 
 **Usage:** Muse's build $0.75216 est. (the Muse ledger); its plan and audit $0.53886, in neither ledger (`scripts/spend_check.py` adds them).
 

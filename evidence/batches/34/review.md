@@ -24,7 +24,7 @@ Verdict: PASS
   - #4, the `_loose_salts` docstring: taken in round 2, with batch 33's `_side_salts` docstring.
 - **A fresh Muse session audited it, read-only** (`evidence/grills/b34-muse-audit/`, $0.26079): pass, with one Low finding, the supervisor's #3 (`effect.md` there).
 
-**The gate** (on the round-2 contract, `7c9cbbe`): 2,986 tests pass, ruff is clean, and the contract lock holds.
+**The gate** (on the round-2 contract, `a83e843`): 2,986 tests pass, ruff is clean, and the contract lock holds.
 
 **Usage:** Muse's two rounds $0.68751 est. (the Muse ledger); its plan and audit $0.52691, in neither ledger (`scripts/spend_check.py` adds them).
 

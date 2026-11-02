@@ -8,7 +8,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 1 round, goal pinned
 - **Freeze:** it is a provenance fix, which the freeze allows.
 
 **Who did what:**
-- **Claude Code (Opus 5.5), as CEO,** wrote the SPEC line, the brief and the contract (d99b40a).
+- **Claude Code (Opus 5.5), as CEO,** wrote the SPEC line, the brief and the contract (2f2694c).
   - **The reference build** (`reference.md`) gave 2,416 passed, with one mutant per behaviour, all four caught.
   - **The contract:** on main, 3 of the 5 contract tests fail (the contradictions) and 2 pass (the guards against over-fixing).
 - **Muse wrote all the code:**

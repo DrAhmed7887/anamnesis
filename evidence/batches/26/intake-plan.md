@@ -3,7 +3,7 @@
 **Why:** batch 26 makes the tuned Muse Glimmer on Modal an optional claim extractor, and Muse Spark Open on Fireworks an optional label reader (SPEC §4). This run puts both inside the full intake, on cases whose expected results were committed before any model saw them.
 
 ## Plan, committed before the first call
-- **Cases:** U1–U8 from `evidence/batches/21/manifest.md`, unchanged: the same synthetic voice notes, the same Commons photos and the same pre-registered expected results (8b993ff). They are scored by `evidence/batches/22/intake_score.py`, unchanged.
+- **Cases:** U1–U8 from `evidence/batches/21/manifest.md`, unchanged: the same synthetic voice notes, the same Commons photos and the same pre-registered expected results (d5f0606). They are scored by `evidence/batches/22/intake_score.py`, unchanged.
 - **Code:** `main` after batch 26 merges. Each case runs once in each column, all on that one commit.
 - **The columns:**
   - **`<case>-b26`, the control:** the default path. Spark 1.3 extracts the claims and reads the labels.
@@ -27,7 +27,7 @@ GLIMMER_URL=<the deployed server> uv run python scripts/intake_live.py --cap 11.
 The server is warmed through `GET /health` first.
 
 ## Results, 30 Oct evening
-- **Code:** `main` at dfc72e3, with batch 26 merged. The Glimmer server was deployed from that commit.
+- **Code:** `main` at 914a444, with batch 26 merged. The Glimmer server was deployed from that commit.
 - **Files:** 24 intakes, each case once in each column. The reports are `report_<case>-<column>.json` in `evidence/live/2026-10-30/`, and each intake has a line in `runs.jsonl`.
 - **Scoring:** `evidence/batches/22/intake_score.py`, unchanged. Every column ran with `--session-usd 0.50`, because the supervisor found the $0.25 default below two Glimmer estimates.
 
@@ -67,10 +67,10 @@ The live ledger went from $8.04 to $9.01.
 ## A fourth column after batch 26.1: plan, committed before its first call (30 Oct, 23:40 CET)
 - **Why:** the third column lost 7 of its 8 readings to Fireworks timeouts. The cause was the reasoning effort: the open-weight reader sent none, so Spark Open reasoned at its default, `xhigh`. Batch 26.1 makes `--reader fireworks` ask for `low`, as Spark 1.3's reader does (SPEC §4). Three diagnostic reads at `low` took 16–24 s, and all three were correct.
 - **The column:** `<case>-b261-open`. The tuned Glimmer extracts and Spark Open on Fireworks reads, at low effort.
-  - It runs on `main` after batch 26.1 merges, on the same eight cases, voice notes and photos, with the same expected results (8b993ff), the same scorer and the same caps (`--session-usd 0.50`).
-  - The Glimmer server stays as deployed from dfc72e3, because batch 26.1 doesn't change it.
+  - It runs on `main` after batch 26.1 merges, on the same eight cases, voice notes and photos, with the same expected results (d5f0606), the same scorer and the same caps (`--session-usd 0.50`).
+  - The Glimmer server stays as deployed from 914a444, because batch 26.1 doesn't change it.
 - **How it's reported:** as a second draw of the open column, after a fix. The third column stays in the table as run, 1 of 8.
-  - The first two columns ran on dfc72e3. Batch 26.1 changes nothing on their paths, so they stay the controls, and this is noted beside them.
+  - The first two columns ran on 914a444. Batch 26.1 changes nothing on their paths, so they stay the controls, and this is noted beside them.
   - n = 8, one run each; never "better" or "beats".
 - **Known risks, written before the run:**
   - **U2:** the claim may again come out as one 875 mg intake.
@@ -79,7 +79,7 @@ The live ledger went from $8.04 to $9.01.
 - **Spend:** about $0.10 of Meta, $0.25 of Fireworks and about $2 of Modal (a cold start, the column and 10 idle minutes). `scripts/spend_check.py` runs first.
 
 ## The fourth column's results (30 Oct, 23:41–23:49 CET)
-- **Code:** `main` at c016ccc, with batch 26.1 merged. The Glimmer server is as deployed from dfc72e3, because batch 26.1 doesn't change it.
+- **Code:** `main` at f2d243a, with batch 26.1 merged. The Glimmer server is as deployed from 914a444, because batch 26.1 doesn't change it.
 
 | Case | Expected | Glimmer extracts, Spark Open on Fireworks reads at low effort |
 |---|---|---|
@@ -96,5 +96,5 @@ The live ledger went from $8.04 to $9.01.
 - **Harm check:** no false `match`, and no wrong strength or ingredient shown as fact.
 - **Timing:** every Fireworks read finished inside the 60 s limit, and the intakes took 31–94 s.
 - **So:** with both model steps on Meta open weights (the tuned Glimmer on Modal and Spark Open on Fireworks), the full intake ran end to end on all eight cases and got five right. That's the most of the four columns, with no harmful finding.
-  - It is one run per case, after a fix, and the first two columns ran on dfc72e3 with unchanged paths. So it is never "better" or "beats", and the third column stays in the record as run.
+  - It is one run per case, after a fix, and the first two columns ran on 914a444 with unchanged paths. So it is never "better" or "beats", and the third column stays in the record as run.
 - **Cost:** about $0.18 on the live ledger, for Meta, Fireworks and Modal's per-call estimates. The container's time is reconciled from Modal's billing.

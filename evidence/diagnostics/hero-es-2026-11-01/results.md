@@ -1,6 +1,6 @@
 # The Spanish hero, U13 (1 Nov, 15:53–15:59 CET): 3 of 10, 0 harmful
 
-As set out in `plan.md` before any call (db31140, 15:53 CET): ten runs on `main`, on the default path, scored with `score.py`.
+As set out in `plan.md` before any call (216a703, 15:53 CET): ten runs on `main`, on the default path, scored with `score.py`.
 
 | Run | Emconcor (10 mg said, 5 mg box) | Metoprolol, Lopresor 100 mg box | Beta-blocker note | Counts | Heard |
 |---|---|---|---|---|---|
@@ -33,7 +33,7 @@ As set out in `plan.md` before any call (db31140, 15:53 CET): ten runs on `main`
 
 ## The second set, U13b (1 Nov, 16:05–16:09 CET): 4 of 10, 0 harmful
 
-As set out in `plan-set2.md` before any call of this set (c71100c, 16:04 CET). The note gained 0.8 s of silence at its start, and each image was cropped to its box's front face. Nothing else changed.
+As set out in `plan-set2.md` before any call of this set (e91488f, 16:04 CET). The note gained 0.8 s of silence at its start, and each image was cropped to its box's front face. Nothing else changed.
 
 | Run | Heard | Emconcor (10 mg said, 5 mg box) | Metoprolol, Lopresor box | Beta-blocker note | Counts |
 |---|---|---|---|---|---|
@@ -65,7 +65,7 @@ As set out in `plan-set2.md` before any call of this set (c71100c, 16:04 CET). T
 
 ## The third set, U13c (1 Nov, 16:22–16:25 CET): 9 of 10, 0 harmful
 
-As set out in `plan-set3.md` before any call of this set (59f19ec, 16:21 CET). The one change: the patient says "bisoprolol" instead of "Emconcor".
+As set out in `plan-set3.md` before any call of this set (baa22d1, 16:21 CET). The one change: the patient says "bisoprolol" instead of "Emconcor".
 
 | Run | Bisoprolol (10 mg said, Emconcor Cor 5 mg box) | Metoprolol, Lopresor 100 mg box | Beta-blocker note | Counts |
 |---|---|---|---|---|
@@ -95,7 +95,7 @@ As set out in `plan-set3.md` before any call of this set (59f19ec, 16:21 CET). T
 
 ## The fourth set, U13d (1 Nov, 20:45–20:48 CET): 2 of 10, 0 harmful
 
-As set out in `plan-set4.md` before any call of this set (2c37ec0, 20:44 CET). The one change: the voice, "Rosa" from ElevenLabs' voice library (peninsular Spanish), so the film could play the note it was tested on. It is a different test from sets 1–3, reported beside them and never added to them.
+As set out in `plan-set4.md` before any call of this set (1f9f1ef, 20:44 CET). The one change: the voice, "Rosa" from ElevenLabs' voice library (peninsular Spanish), so the film could play the note it was tested on. It is a different test from sets 1–3, reported beside them and never added to them.
 
 | Run | Bisoprolol (10 mg said, Emconcor Cor 5 mg box) | Metoprolol, Lopresor 100 mg box | Beta-blocker note | Counts |
 |---|---|---|---|---|
@@ -113,7 +113,7 @@ As set out in `plan-set4.md` before any call of this set (2c37ec0, 20:44 CET). T
 
 ## The fifth set, U13e (2 Nov, 01:57–02:01 CET), batch 32's code: 0 of 10 as registered, 10 of 10 read from the product's findings, 0 harmful
 
-As set out in `plan-set5.md` before any call of this set (468bcc2 and its date fix 4ed7bae, 01:56 CET). The one change from set 4: the code, `main` with batch 32 merged (af84dcc). The voice note is set 4's, unchanged.
+As set out in `plan-set5.md` before any call of this set (dda5b0e and its date fix d587463, 01:56 CET). The one change from set 4: the code, `main` with batch 32 merged (715723b). The voice note is set 4's, unchanged.
 
 | Run | Heard as | Bisoprolol (10 mg said, Emconcor Cor 5 mg box) | Metoprolol, Lopresor 100 mg box | Beta-blocker note |
 |---|---|---|---|---|

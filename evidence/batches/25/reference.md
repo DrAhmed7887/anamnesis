@@ -2,7 +2,7 @@
 
 **What it proves:** the contract can be met, the full suite stays green with a new style and the viewport tag, and each rule catches its own break.
 
-**The contract on the code before the batch** (main 63002d3; contract a42676b): 2 of the 11 contract tests fail, `test_the_style_is_new` and `test_the_page_is_laid_out_at_the_screens_width`. The other 9 pass by design: they pin what must not change.
+**The contract on the code before the batch** (main 6d00514; contract 7649078): 2 of the 11 contract tests fail, `test_the_style_is_new` and `test_the_page_is_laid_out_at_the_screens_width`. The other 9 pass by design: they pin what must not change.
 
 **The reference,** in a scratch clone of the contract commit:
 - **The code:**
@@ -42,6 +42,6 @@ At 1280 px the reference keeps the two sides side by side (461.5 px each).
 
 **Two problems it found in the CEO's own work, both fixed before the build:**
 1. **The unit-test pin.** The brief asked Muse to move the amber accent from the Disagreements section onto each card, and to edit no test. But `tests/unit/test_brief_extra.py:252` pins the section bar. The brief now names that one assertion and asks Muse to repoint it.
-2. **The missing viewport tag.** Without it a phone lays the page out 980 px wide, so no style could make the 640 px rule apply. The tag joined the batch as its only change outside the style, pinned by the contract (`a42676b`, amended before any build).
+2. **The missing viewport tag.** Without it a phone lays the page out 980 px wide, so no style could make the 640 px rule apply. The tag joined the batch as its only change outside the style, pinned by the contract (`7649078`, amended before any build).
 
 **What the contract can't see:** how the page looks. The review judges that: screenshots before and after, contrast measured in the browser, the phone and print layouts, and the supervisor.

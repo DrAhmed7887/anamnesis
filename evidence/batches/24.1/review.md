@@ -11,7 +11,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 1 round, goal pinned
 - **No SNOMED CT in the product.** Ahmed decides on Tue whether the ids stay in the public copy of `evidence/data/drugs_v2.json`.
 
 **Who did what:**
-- **Claude Code (Opus 5.5), as CEO,** wrote the SPEC lines, the brief, the contract, `NOTICE` and the fine-tune pin (50eb972).
+- **Claude Code (Opus 5.5), as CEO,** wrote the SPEC lines, the brief, the contract, `NOTICE` and the fine-tune pin (43e0a0a).
   - **The reference build** was proved twice: first on batch 24's reference, then on main after batch 24 merged (`reference.md`). On main it gave 2,408 passed, with one mutant per behaviour, all eight caught.
   - **Three problems it found in the CEO's own work,** all fixed before the build:
     - the fine-tune read every catalogue entry, so new entries would have changed r1's data (now pinned);

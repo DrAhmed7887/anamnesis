@@ -1,9 +1,9 @@
 # The fine-tune's evaluation: results as they come in
 
-Pre-registered in `plan.md` (53fc023, amended in 12d4a3c before any training or evaluation call). Every system is scored by `finetune/score.py`, unchanged. Every miss is listed per split and system in `runs/<system>/<split>.score.txt`.
+Pre-registered in `plan.md` (973e106, amended in 5a8f13e before any training or evaluation call). Every system is scored by `finetune/score.py`, unchanged. Every miss is listed per split and system in `runs/<system>/<split>.score.txt`.
 
 ## Spark 1.3, the product's extractor today (29 Oct)
-**How:** `finetune/spark_eval.py`, run on `main` at 12d4a3c. Each example's turns went through `MetaClaimExtractor`: reasoning effort low, 16,000 max tokens, the strict claims schema. The first reply was scored. All 303 examples replied, none needed the product's second attempt, and none errored.
+**How:** `finetune/spark_eval.py`, run on `main` at 5a8f13e. Each example's turns went through `MetaClaimExtractor`: reasoning effort low, 16,000 max tokens, the strict claims schema. The first reply was scored. All 303 examples replied, none needed the product's second attempt, and none errored.
 
 | Split | n | Valid JSON | Transcripts fully right | Claims missing / extra | Harmful, before / after the product's checks |
 |---|---|---|---|---|---|
@@ -49,7 +49,7 @@ I scored the replies again with only those shapes rewritten: the strength set to
 - **The hero's transcript:** test_real #9 and #10 are U12 transcripts, and each lost both amounts this way: Spark sent empty strength objects and empty labels in #9, and empty labels in #10. The hero's live runs didn't keep their replies, so it can't be told whether r01, r05 and r09 failed the same way.
 
 ### Against the live runs
-The claims saved from the live runs scored 24 of 33 on test_real (7d1fe26). This draw scores 20 of 33 on the same transcripts. Spark's replies vary between calls, as U12's 10 runs showed, so one draw per system is a limit on every number here.
+The claims saved from the live runs scored 24 of 33 on test_real (3ea9b60). This draw scores 20 of 33 on the same transcripts. Spark's replies vary between calls, as U12's 10 runs showed, so one draw per system is a limit on every number here.
 
 ### Cost and time
 - **Cost:** $3.495 for the 303 calls, about $0.0115 a call, plus $0.026 for a 2-example check before them.
@@ -57,9 +57,9 @@ The claims saved from the live runs scored 24 of 33 on test_real (7d1fe26). This
 - **Latency:** the median was 7.4 to 9.4 s per split, and the longest 23.7 s, inside the extractor's 30 s timeout.
 
 ## Base and tuned Glimmer
-*Run on 29 Oct, after Ahmed added a payment method to Modal and the section below was committed (7817c35).*
+*Run on 29 Oct, after Ahmed added a payment method to Modal and the section below was committed (66075ab).*
 
-**Training (run r1, `runs/r1/train.json`):** as `plan.md` (12d4a3c) set it, on one H100.
+**Training (run r1, `runs/r1/train.json`):** as `plan.md` (5a8f13e) set it, on one H100.
 - 150 steps over 2 epochs, 998k tokens with the prompts, in 14 minutes. Peak memory was 61.3 GiB.
 - The training loss went from 0.687 at step 1 to about 0.0001.
 - The validation loss was 0.0007 after epoch 1 and 0.0002 after epoch 2. The validation set uses the training templates, so this says little about new notes.
@@ -141,7 +141,7 @@ Field accuracy, over the 547 answer claims:
   - Spark 1.3 took a median of 7.4 to 9.4 s per call, one call at a time.
 
 ## r2: r1's recipe on Spain's verified vocabulary (29 Oct)
-Pre-registered in `plan.md`, amendment 2 (25a9274), before any r2 call. The tables come from `PYTHONPATH=. .venv/bin/python evidence/finetune/summarize.py --table r2`. Every miss is in `runs/r2/<system>/<split>.score.txt` and `runs/spark/test_spain.score.txt`.
+Pre-registered in `plan.md`, amendment 2 (2b0415a), before any r2 call. The tables come from `PYTHONPATH=. .venv/bin/python evidence/finetune/summarize.py --table r2`. Every miss is in `runs/r2/<system>/<split>.score.txt` and `runs/spark/test_spain.score.txt`.
 - **Training (`runs/r2/train.json`):** r1's settings on data_v2's 1,200 examples, on one H100: 830 s of training and 1,005,956 tokens seen. The validation loss was 0.0005 after each epoch (r1's was 0.0007, then 0.0002).
 - **Evaluation (`runs/r2/eval.json`):** one vLLM 0.32.0 engine held both adapters. It scored base Glimmer, r1 and r2 on test_spain, then r2 on r1's four test splits. Spark 1.3 read test_spain through the product's extractor, in 60 calls.
 - **The brands are unseen:** none of test_spain's 19 brands is in r2's training or validation data, by whole word (`tests/unit/test_finetune_v2.py::test_the_committed_v2_data_holds_the_split`). r1 never saw them either.
@@ -202,7 +202,7 @@ Pre-registered in `plan.md`, amendment 2 (25a9274), before any r2 call. The tabl
 - **The pre-registered risk, name_text,** is where both runs miss: 102 of 108 names for r2 and 103 for r1. Each misspelled Thervan ("Theravan", "Therav") made the product reject its reply, so those claims were lost and nothing false was shown. #6 is a generated note whose two sentences run together.
 - **No regression shows on r1's splits:** r2 is fully right on 295 of 303 and r1 on 290, both with 0 harmful claims.
 - **Limits:** these are single runs on generated text, with the brands said inside English and Egyptian-Arabic speech, from one European market. A gap of a few notes is descriptive, and a second run of either recipe could move it.
-- **r1 stays the headline result (f07e273).** r2 shows that adding Spain's brand names to training changed nothing measurable on these tests.
+- **r1 stays the headline result (45d6bc7).** r2 shows that adding Spain's brand names to training changed nothing measurable on these tests.
 
 ### Cost and time
 - **Modal, the ledger's estimates:** r2's smoke runs $0.71, its training $1.14 (894 s with loading) and the eval $0.86 (673 s). In the eval, the engine loaded in 202 s, base Glimmer took 389 s for test_spain's 60 notes, and each adapter took 7 to 11 s per split.
@@ -219,9 +219,9 @@ Pre-registered in `plan.md`, amendment 2 (25a9274), before any r2 call. The tabl
 
 ## Re-scored after batch 24 (29 Oct, 23:45 CET)
 - **What changed:**
-  - **Batch 24** (bcfa3bc, merged in 6360325) grounds the ingredient fields and counts an empty strength as no strength.
+  - **Batch 24** (6b5013e, merged in ab676b6) grounds the ingredient fields and counts an empty strength as no strength.
   - **The scorer** (`finetune/score.py`) now counts harm "after the checks" on the product's parsed output. An INN said under an alias counts as said.
-- **Every number matches the prediction committed before the build** (`evidence/batches/24/rescore-prediction.md`, 7007699). The CEO's reference build made that prediction:
+- **Every number matches the prediction committed before the build** (`evidence/batches/24/rescore-prediction.md`, 1f19ca3). The CEO's reference build made that prediction:
 
   | System | r1's four splits (303 notes) | test_spain (60 notes) |
   |---|---|---|

@@ -74,7 +74,7 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
 - Muse Code build runs are billed by Meta outside our adapter ledger, so each run's cost is logged below.
 
 ## 2026-10-27 (evening): roles revised: Claude Code is CEO, Muse Code builds everything
-- Ahmed decided that Claude Code acts as CEO. It writes `SPEC.md`, the briefs and the contract tests, runs Muse headless, gates, has each batch reviewed by an independent Opus supervisor, merges, and reports the Meta usage after every batch. **From batch 16 on, Muse Code writes all code.** Antigravity is no longer in the loop; its pipeline commit (`92dea05`) and SPEC v3.2 draft were kept, and the draft's unbuilt parts (crop-first reads, Spark estimates) are labelled batch 18.
+- Ahmed decided that Claude Code acts as CEO. It writes `SPEC.md`, the briefs and the contract tests, runs Muse headless, gates, has each batch reviewed by an independent Opus supervisor, merges, and reports the Meta usage after every batch. **From batch 16 on, Muse Code writes all code.** Antigravity is no longer in the loop; its pipeline commit (`e96b56d`) and SPEC v3.2 draft were kept, and the draft's unbuilt parts (crop-first reads, Spark estimates) are labelled batch 18.
 - Muse usage is priced per session from its own billing records at the documented Spark 1.3 prices (`scripts/muse_usage.py` → `evidence/spend/muse_ledger.jsonl`, `evidence/batches/<n>/usage.json`). Meta's dashboard is the final word.
 - GPT-family second opinions come from GPT-OSS 120B via Antigravity.
 
@@ -137,10 +137,10 @@ From batch 13: Claude Sonnet subagents build (high effort); an Opus 5.5 supervis
 
 ## 2026-10-28: the zero-shot open-weight comparison returns, as batch 22 (Ahmed's call)
 - **What changed:** the plan's revision had cut the open-weight benchmark and made batch 22 the "how it got here" timeline. Ahmed then said yes to a zero-shot comparison (the plan's addendum, 28 Oct). The timeline moves to batch 23 and is still the first thing cut.
-- **What it is:** `OpenWeightLabelReader` (batch 22, merged in 38dd1f4) reads a pack crop with Meta's open-weight Muse Spark Open on Fireworks or Baseten, using Spark 1.3's prompt, schema and parser. `scripts/reader_eval.py` segments each photo once with SAM 3.1, and every reader reads the same crops. No model is trained: the training research found no time for a fine-tune before the freeze.
-- **Photos:** only the 39 public ones: 30 Cairo University phone photos (CC BY 4.0) and 9 Wikimedia Commons photos. Their expected readings and scoring rules were committed before any call (c1b5b6e). Ahmed's own photos and voice never go to these providers (`docs/DATA_HANDLING.md`).
+- **What it is:** `OpenWeightLabelReader` (batch 22, merged in 3afad86) reads a pack crop with Meta's open-weight Muse Spark Open on Fireworks or Baseten, using Spark 1.3's prompt, schema and parser. `scripts/reader_eval.py` segments each photo once with SAM 3.1, and every reader reads the same crops. No model is trained: the training research found no time for a fine-tune before the freeze.
+- **Photos:** only the 39 public ones: 30 Cairo University phone photos (CC BY 4.0) and 9 Wikimedia Commons photos. Their expected readings and scoring rules were committed before any call (f59b010). Ahmed's own photos and voice never go to these providers (`docs/DATA_HANDLING.md`).
 - **How it is reported:** a descriptive comparison, n = 39, with every miss published per photo and reader. Never a "benchmark", and never "beats". Entering the open-weight prize track waits for Ahmed to read the guide's wording.
-- **Spend:** about $2 a pass on Meta's credit for SAM and Spark 1.3. The open-weight reads go on the Fireworks or Baseten credit, which the Meta total leaves out (a81c9d1).
+- **Spend:** about $2 a pass on Meta's credit for SAM and Spark 1.3. The open-weight reads go on the Fireworks or Baseten credit, which the Meta total leaves out (15e2aca).
 
 ## 2026-10-28: three AI-written notes moved to the Trash (Ahmed's call)
 - **Moved to the macOS Trash:** `docs/SUGGESTIONS_FOR_CLAUDE.md`, `docs/DATASET_RESEARCH_AUDIT.md` (both 27 Oct, from Antigravity) and `docs/PUBLICATION_BLUEPRINT_LUNA.md` (28 Oct, "generated via GPT-6 Luna"). They can be restored from the Trash until it is emptied.
@@ -202,7 +202,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
      - `evidence/data/drugs_v2.json` and `.md` no longer carry the 59 VTM ids.
      - `scripts/drugs_v2.py` still reads CIMA's VTM to map products but never writes it.
      - `tests/unit/test_finetune_v2.py` now asserts that the field is absent.
-   - **Tue 3 Nov:** the public copy's history filter replaces the 59 ids in older commits. They are listed by `git show 2c1bffe:evidence/data/drugs_v2.json`. The one-id mentions in plan and grill notes and in the 24.1 contract go with them.
+   - **Tue 3 Nov:** the public copy's history filter replaces the 59 ids in older commits. They are listed by `git show 03f500a:evidence/data/drugs_v2.json`. The one-id mentions in plan and grill notes and in the 24.1 contract go with them.
 2. **Apache-2.0, for the code only.**
    - **Why:** Apache-2.0 §4(d) makes redistributors carry `NOTICE` forward, which keeps the WHOCC's required ATC reference attached. It also gives an explicit patent grant.
    - **The scope:** an open licence can't carry the WHOCC's terms (no commercial distribution, no changes), so the data stay under their own terms. `NOTICE` and a header comment in `anamnesis/core/catalogue.yaml` say so.
@@ -211,7 +211,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 4. **No catalogue codes beside a side that contradicts its own name.** This is batch 24.2, a provenance fix, which the freeze allows.
    - **Why:** the research found no published guidance on codes beside a conflict. Medication-reconciliation sources favour the patient's own words, checking against a second source, and flagging conflicts. A code the patient's own words dispute is worse than no code.
    - **For after the hackathon:** labelling codes "from the name" next to a flagged conflict, as the research suggests.
-   - **Merged as batch 24.2** (ec714ab, merged in c639af4). The supervisor approved it, and `demo-freeze` moved to f29092e.
+   - **Merged as batch 24.2** (0dd468f, merged in 8b8d826). The supervisor approved it, and `demo-freeze` moved to 137b5ea.
    - **The supervisor's follow-up, for a later batch:** the check doesn't read the intake amount's own ingredient. "Concor" with an atorvastatin intake and `inn` left empty still shows bisoprolol's codes, but only when the model ignores its prompt.
 
 ## 2026-10-30: batch 25, the brief's look (Ahmed's go)
@@ -224,9 +224,9 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - red.
 
   The batch adds no words, loads nothing and keeps the amber accent.
-- **Merged as batch 25** (df1f251, merged in 63b9312):
+- **Merged as batch 25** (2d41fa1, merged in e4c7e5b):
   - two Muse rounds, $1.28, and supervisor APPROVE in both;
-  - `demo-freeze` moved to 0d8424c, and a fresh clone passed 2,428 tests.
+  - `demo-freeze` moved to f66776f, and a fresh clone passed 2,428 tests.
 - **Recorded, not done:**
   - crops from real phone photos still take a row each, because a width cap would shrink the zoom view;
   - an opened timeline could clip about 10 px when printed on A5;
@@ -246,9 +246,9 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - Muse planned first, read-only, because Ahmed asked: "dont you think muse should plan and double check?" (`evidence/grills/b26-muse-plan/`).
   - The CEO wrote the contract, and Muse built the batch in 3 rounds.
   - The Opus supervisor and a fresh Muse audit reviewed it (`evidence/grills/b26-muse-audit/`).
-  - Merged in 12093c9 (feat 916454b).
+  - Merged in 535be2f (feat 066922a).
 - **Live on Modal:** three servers, the CEO's reference and the batch's own after rounds 1 and 2, each returned 5 of 5 test notes fully right and byte-identical to the eval's replies.
-- **U1–U8, three columns,** pre-registered in 9d84f59 (`evidence/batches/26/intake-plan.md`):
+- **U1–U8, three columns,** pre-registered in 083ea87 (`evidence/batches/26/intake-plan.md`):
   - **Spark 1.3 does both:** 4 of 8.
   - **Glimmer extracts, Spark 1.3 reads:** 3 of 8.
   - **Glimmer extracts, Spark Open on Fireworks reads:** 1 of 8.
@@ -268,7 +268,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - Fireworks about $0.45, and Meta about $0.40 for the live runs.
 - **Open:**
   - **Fireworks' timeout:** the reader's 60 s client timeout against tonight's Fireworks latency. A batch 26.1 raising it would be Ahmed's call.
-  - **Tuesday's history scrub:** the Modal account name appears in 916454b's `batch_smoke_r2/run.txt`, now redacted in the tree.
+  - **Tuesday's history scrub:** the Modal account name appears in 066922a's `batch_smoke_r2/run.txt`, now redacted in the tree.
   - **The digital twin idea** stays after the hackathon.
 - **Kept out of the repo,** from the pasted notes: "lock the $10K", "zero-risk", "25,000+ tests", the 2,417 count, and the MDR class lines.
 
@@ -276,7 +276,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Batch 26.1:** Ahmed said yes to fixing the Fireworks column.
   - **The diagnosis changed the fix.** The cause wasn't the timeout: with a 180 s limit, Fireworks itself dropped a request at about 62 s. It was the reasoning effort: the open-weight reader sent none, so Spark Open reasoned at its default, `xhigh`.
   - **The fix:** `--reader fireworks` now asks for `low`, as Spark 1.3's reader does. Batch 22's comparison path is unchanged.
-  - **How it was built:** Muse planned it, built it in one round and audited it. The Opus supervisor approved. Merged in 0af0e33.
+  - **How it was built:** Muse planned it, built it in one round and audited it. The Opus supervisor approved. Merged in 0a9c69b.
   - **The pre-registered fourth column:** 5 of 8, with 0 harmful.
 - **The win grill:** Ahmed asked for a grill of the entry on GPT-6 Astra through his Azure OpenAI resource, Azure for Students (`evidence/grills/win-grill-astra/`). It cost about $0.22 of Azure credit.
   - Its main advice: report full-intake results beside the fine-tune's; audit relation-level provenance patterns; test real voices on invented scripts; show the agent's real state transitions; and build the hero on the clinician's re-photo pause.
@@ -300,7 +300,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **The freeze, proposed:** engine changes until **Tue 3 Nov 12:00 CET**, each through the gate, the supervisor and a fresh clone. The film is captured Mon from the tag of that moment; a later change to what the demo shows means re-capturing that shot Tue morning. After Tue 12:00, only the release-gate fixes. Ahmed confirms or moves it.
 
 ## 2026-10-31, 12:33: batch 27 merged (relation checks on claim amounts)
-- **What:** after the value check, six word rules decide what each number in a cited turn was said about: negation, another unit, a count, another medicine's amount, a past amount, and a split daily total (SPEC §2, "Relation checks (batch 27)"). Merged in 3d3a30e.
+- **What:** after the value check, six word rules decide what each number in a cited turn was said about: negation, another unit, a count, another medicine's amount, a past amount, and a split daily total (SPEC §2, "Relation checks (batch 27)"). Merged in 3931b42.
 - **How it was built:** the CEO prototyped and measured the rules first; Muse planned read-only, built in three rounds and was audited by a fresh Muse session; the Opus supervisor sent round 2 back with five findings (all taken) and approved round 3 after 32,000 fuzzed replies with no crash and nothing kept that the value check would drop.
 - **Checks after the merge** (`evidence/batches/27/checks.md`): the audit's ten traps all fail safe; 0 of 120 saved live claims change; Spark 1.3's, r1's and r2's re-scores are byte-identical; on base Glimmer's committed replies, 52 wrong amounts are no longer shown, with 2 right strengths dropped by the pairing rule.
 - **Batch 27.1, after batch 28** (both fail safe): a duration ("for five years") can split a daily total; German "weiß nicht" before a number still negates it.
@@ -308,14 +308,14 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Also today:** PubMed citations re-checked for the judge session (`evidence/ncbi/`), and a PubChem snapshot test of the INN aliases (35 agree, 0 disagree, 17 unlisted), from the NCBI review session's handoff (Ahmed's call).
 
 ## 2026-10-31, 13:31: batch 28 merged (a second label reader after the zoom)
-- **What:** with `--second-reader fireworks`, a pack Spark 1.3 still reads as partial or unreadable after its zoom gets one read of the same crop by Muse Spark Open on Fireworks (SPEC §4 step 5b). The second reading counts only when it is readable, for the same region, and keeps everything the first had with the same values (ingredients, strength with its `per`, a known release, known salts). Otherwise the first stands and the pack stays requestable for a re-photo. Merged in 6b114f3, with the live script carried in 957dd3c.
+- **What:** with `--second-reader fireworks`, a pack Spark 1.3 still reads as partial or unreadable after its zoom gets one read of the same crop by Muse Spark Open on Fireworks (SPEC §4 step 5b). The second reading counts only when it is readable, for the same region, and keeps everything the first had with the same values (ingredients, strength with its `per`, a known release, known salts). Otherwise the first stands and the pack stays requestable for a re-photo. Merged in 2dd2774, with the live script carried in c4e043f.
 - **How it was built:** the CEO's SPEC, contract and reference build first; Muse planned read-only, built in three rounds, and was audited by a fresh Muse session. The audit and the Opus supervisor found the first SPEC too loose: a second model reading another release, or losing a known one, could make a false `match`. Rounds 2 and 3 closed it; the supervisor approved after a separate coding of the rule agreed on 20,000 random reading pairs, and confirmed the path without a second reader is byte-identical on 1,500 random intakes.
-- **A slip, fixed:** the merge script staged `anamnesis/` and `tests/` but not `scripts/`, so `scripts/intake_live.py`'s flag stayed in the batch worktree and `main` failed batch 28's live-script tests for about ten minutes (pushed, no live run used it). Carried in 957dd3c; `batch.sh` now stages `scripts/` and the batch's Muse grills (b0833c2).
+- **A slip, fixed:** the merge script staged `anamnesis/` and `tests/` but not `scripts/`, so `scripts/intake_live.py`'s flag stayed in the batch worktree and `main` failed batch 28's live-script tests for about ten minutes (pushed, no live run used it). Carried in c4e043f; `batch.sh` now stages `scripts/` and the batch's Muse grills (a89bc0c).
 - **Cost:** Muse $3.63 (plan, three rounds, audit).
 - **Live check:** U1–U8 twice, scored with and without the second reader on the same runs (`evidence/batches/28/live-plan.md`, `score_paired.py`), running now.
 
 ## 2026-10-31, 14:26: batch 27.1 merged (durations, "weiß nicht", a dropped amount's tablet count)
-- **What:** a number followed by a plural duration word is never an amount; a negation right after German "weiß" doesn't negate the number; and when the relation checks drop a claim's amount, its tablet count goes too unless this claim's own count backs it (SPEC §2, "batch 27.1"). Merged in 63cefc3.
+- **What:** a number followed by a plural duration word is never an amount; a negation right after German "weiß" doesn't negate the number; and when the relation checks drop a claim's amount, its tablet count goes too unless this claim's own count backs it (SPEC §2, "batch 27.1"). Merged in 348655c.
 - **Why:** the Opus supervisor's two fail-safe findings on batch 27, and the live probe after it: on trap J the tuned Glimmer wrote a 10 mg intake and five tablets, and the five gave a false `strength_mismatch`.
 - **How:** CEO reference first; Muse planned, built in two rounds, and a fresh Muse audit and the supervisor reviewed. The supervisor caught that the SPEC's first wording ("a negation after any word of knowing") re-opened trap A's false `match` ("sicher nicht fünf" is "certainly not five"); round 2 narrowed it to "weiß", made duration words plurals only, and made the tablet-count backing follow rules 1, 4 and 5. Approved on round 2.
 - **Measured:** matches the CEO reference on all 1,452 scored replies; none loses a fully-right score against batch 27; 0 of 164 saved live claims change; the ten traps stay safe.
@@ -327,14 +327,14 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **The new line is $80.** Real use then (ledgers $69.7 with this batch's reservation, plus about $2.7 of grills) leaves about $8 for the re-measure, U2's three live runs and anything before submission. The card still pays only past $150.
 
 ## 2026-10-31, 15:28: batch 29 merged (one sentence in Spark's claim prompt, for combinations)
-- **What:** `MetaClaimExtractor` sends the trained prompt plus "A combination product said with one amount per ingredient, such as 'Augmentin 875 and 125 milligrams', is its strength: one ingredient per amount, in the order said, each named for the ingredient it belongs to." The tuned Glimmer's prompt is unchanged (pinned). Merged in 61ae0e5.
+- **What:** `MetaClaimExtractor` sends the trained prompt plus "A combination product said with one amount per ingredient, such as 'Augmentin 875 and 125 milligrams', is its strength: one ingredient per amount, in the order said, each named for the ingredient it belongs to." The tuned Glimmer's prompt is unchanged (pinned). Merged in 7ee6073.
 - **Why:** U2 missed in all three of the day's live runs: Spark wrote no amount, or "875 and 125" as one string. Ahmed: "Fix U2 first (~$4)", then the $80 line.
 - **How:** a pilot written before the calls (6 of 6 combination calls right, controls unchanged), then the CEO's contract and reference build; Muse built it in one round; a fresh Muse audit found nothing; the Opus supervisor approved and noted that the scorer predates the fix, so the re-measure plan gained a second, labelled view before any call.
 - **Cost:** Muse $0.72; the pilot $0.13 of Meta.
 - **Running:** the re-measure of Spark 1.3 with the new prompt on 363 notes, and U2 three times live (`evidence/batches/29/remeasure-plan.md`).
 
 ## 2026-10-31, 19:02: batch 30 merged (an `inn` naming several ingredients is read as that set)
-- **What:** the reconciler reads an `inn` such as "amoxicillin/clavulanic acid" as its set of ingredients, each part with its own salt, in identity, salts and the second read. A catalogue name counts only when it covers all of an `inn`, and an `inn` of more than eight parts is read whole. Merged in 031a87c.
+- **What:** the reconciler reads an `inn` such as "amoxicillin/clavulanic acid" as its set of ingredients, each part with its own salt, in identity, salts and the second read. A catalogue name counts only when it covers all of an `inn`, and an `inn` of more than eight parts is read whole. Merged in 9d60776.
 - **Why:** after batch 29, U2's pack side still conflicted, because the label reader writes Augmentin's `inn` as one combined string. This is part of "Fix U2 first".
 - **How:**
   - the CEO wrote the SPEC, the contract and a reference build before every round;
@@ -351,7 +351,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Tuesday's filter must cover four things:**
   - the M1 Muse export (personal context);
   - absolute home paths in 40 tracked files (409 hits);
-  - the Modal account name in 916454b's history;
+  - the Modal account name in 066922a's history;
   - `CLAUDE.md`:10, which names the build's accounts.
 - **Then re-grep** for all of them and the email address before anything is public.
 - **Ahmed decides** what the public copy says about the build's accounts (already on his list for Tuesday).
@@ -406,7 +406,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 ## 2026-11-01, 12:30: the participant guide's rules, read through Ahmed's own browser
 - **How:** Ahmed connected Kapture, so the guide, which needs his sign-in, was read in his browser on 1 Nov. It was read only: nothing was filled in or sent.
 - **Tools:** no rule limits the tools used to build, so the README's credit to Claude Code stays.
-- **New work only:** judges must be able to identify what was built during the event, and the demo may show only that. The README now says the history starts with the first commit on 27 Oct, 10:34 CET (f996ac9).
+- **New work only:** judges must be able to identify what was built during the event, and the demo may show only that. The README now says the history starts with the first commit on 27 Oct, 10:34 CET (a2dc93b).
 - **Projects to avoid:** the guide's examples include any project that uses AI to generate and give medical advice. Anamnesis gives none (row 1.15). The film's title card and the form's first paragraph now say so up front.
 - **Rights:** a project that uses code, data or assets without the rights is disqualified. Checked the public copy: no commit holds audio, video or an image, and the committed HTML holds no inline media.
 - **Requirements:** the repository must be public and the video link must work. The video is three minutes, showing only what was built during the event. Judges use it with the code and the live product.
@@ -431,12 +431,12 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - Muse doesn't open `evidence/` or `finetune/data*`.
 
 ## 2026-11-01, 15:04: batch 31 merged, and the follow-up ran live
-- **Merged:** batch 31, the follow-up (8ee370a, 13:41 UTC). Muse planned it read-only, built it in three rounds and a fresh Muse session audited it; the Opus supervisor sent round 1 back and approved rounds 2 and 3. The gate passed 2,809 tests (`evidence/batches/31/review.md`).
+- **Merged:** batch 31, the follow-up (f50b8fb, 13:41 UTC). Muse planned it read-only, built it in three rounds and a fresh Muse session audited it; the Opus supervisor sent round 1 back and approved rounds 2 and 3. The gate passed 2,809 tests (`evidence/batches/31/review.md`).
 - **The scope decision:** the follow-up asks only for medicines mentioned but not photographed. An unreadable pack stays with the clinician, because one template can't say which pack is meant and any photo that gives a reading would replace it (supervisor 31 #2). Muse's plan also proposed a model that picks the next ask or stops; it wasn't taken, so no model chooses an action (`evidence/grills/b31-muse-plan/effect.md`).
-- **Live, pre-registered (79c95a6), then three more runs added before they ran (a7d3a2f, 91c0cfc):** matched in 2 of 4 runs on U11. In the registered run and r02 the reader marked the reply partial, so Anamnesis asked once more and the brief waits on the patient (`evidence/batches/31/live.md`). Every run is reported, and the film and README always give the count.
+- **Live, pre-registered (2a13d16), then three more runs added before they ran (f15ad5b, a72f530):** matched in 2 of 4 runs on U11. In the registered run and r02 the reader marked the reply partial, so Anamnesis asked once more and the brief waits on the patient (`evidence/batches/31/live.md`). Every run is reported, and the film and README always give the count.
 - **A refused first attempt:** the script's $5 ledger cap refused the first call at 14:46 CET, with nothing sent and $0 spent. `--cap` is now set per run, as batch 24's manifest does.
-- **Docs:** CLAIMS rows 2.7, 2.8, 5.19 and 5.20; rows 2.3 and 2.6 gained a line each; the README's pause section, at-a-glance table, limitations and test count (8a470ac). Line numbers that batch 31 moved in `review.py`, `brief_html.py` and `agent/loop.py` were moved to match `main`.
-- **Ledgers:** batch 31's three Muse rounds were added to `main`'s Muse ledger (563ff85); they had stayed uncommitted in the batch worktree.
+- **Docs:** CLAIMS rows 2.7, 2.8, 5.19 and 5.20; rows 2.3 and 2.6 gained a line each; the README's pause section, at-a-glance table, limitations and test count (8ed5161). Line numbers that batch 31 moved in `review.py`, `brief_html.py` and `agent/loop.py` were moved to match `main`.
+- **Ledgers:** batch 31's three Muse rounds were added to `main`'s Muse ledger (e1aab31); they had stayed uncommitted in the batch worktree.
 - **Spend:** Meta about $81.63 of $150 with the grills (line $100): batch 31 about $3.08, the live runs $0.20.
 - **The film:** the rough cut gains two scenes from run 3 of 4, with "2 of 4" in the caption and the banner "the developer plays the patient and the clinician".
 
@@ -475,14 +475,14 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Ahmed:** "the medical researches used are old, is the images right? can we use spanish voice as well", then "I didnt like the part we said we used meta starting like branch 12 or whatever you said".
 - **The studies:** the film's problem numbers now come from Gionfriddo 2022 (a primary-care trial: fewer than 1 in 10 patients had a medication list with no discrepancies) and Handshaw 2024 (pharmacist telemedicine visits with older patients: 66% had at least one unintended discrepancy), rows 6.9 and 6.10, each read at the source. A research subagent found them; the engine re-read both abstracts. Bedell 2000 and Tam 2005 stay in the README and the claims table.
 - **The images:** the boxes are AEMPS's registry images of the real packs, the people are Muse Image illustrations labelled as such, and the replay chip now says "model steps sped up 4.5×" (its old wording could read as slower).
-- **The Spanish voice:** Ahmed chose to hear the patient, tested first. Set 4 (U13d, pre-registered in 2c37ec0 before its first call) read set 3's script in an ElevenLabs voice the film could play. It got 2 of 10, 0 harmful: "bisoprolol" came back as "visoprolol" or joined to "Tomo". As its plan said for fewer than 5, the film plays no patient voice, and its results scene now shows all four sets.
+- **The Spanish voice:** Ahmed chose to hear the patient, tested first. Set 4 (U13d, pre-registered in 1f9f1ef before its first call) read set 3's script in an ElevenLabs voice the film could play. It got 2 of 10, 0 harmful: "bisoprolol" came back as "visoprolol" or joined to "Tomo". As its plan said for fewer than 5, the film plays no patient voice, and its results scene now shows all four sets.
 - **The build line:** "Muse Code wrote most of the product's code" replaces "from batch sixteen on" (row 5.3: 4,249 of 6,474 lines at the freeze).
 - **Spend:** set 4 $0.29168; Meta about $82.94 of $150, under the $100 line.
 
 ## 2026-11-02, 02:08: batch 32 and the Spanish hero's fifth set (Ahmed)
 - **Ahmed, on the four Spanish sets:** "can we improve this data? also where is the spanish voice", and on the build line, "it doesnt make sense that muse code wrote it 7 times it seems like muse code did bad part". He chose to fix the code, then re-test the same voice.
-- **Batch 32** (SPEC §3, "Spanish speech"): Muse Code built it in two rounds. The Opus supervisor sent round 1 back for a salt-name safety point (a misspelled salt could turn an abstention into a match) and approved round 2. Merged as af84dcc (row 5.21).
-- **Set 5** (U13e, pre-registered in 468bcc2 before its first call): the same ElevenLabs note on the new code. All 10 runs gave the three findings; 0 harmful. The registered scorer counted 0 of 10, because it never looks a claim up in the catalogue, though the plan said it would; a second reading that does gives 10 of 10, and moves set 2 from 4 to 5. The CEO's error is written down in `results.md`.
+- **Batch 32** (SPEC §3, "Spanish speech"): Muse Code built it in two rounds. The Opus supervisor sent round 1 back for a salt-name safety point (a misspelled salt could turn an abstention into a match) and approved round 2. Merged as 715723b (row 5.21).
+- **Set 5** (U13e, pre-registered in dda5b0e before its first call): the same ElevenLabs note on the new code. All 10 runs gave the three findings; 0 harmful. The registered scorer counted 0 of 10, because it never looks a claim up in the catalogue, though the plan said it would; a second reading that does gives 10 of 10, and moves set 2 from 4 to 5. The CEO's error is written down in `results.md`.
 - **Ahmed's call after the results:** play the set-5 note in the film, with both counts always shown together (row 4.30).
 - **The build line** now tells the fix, not batch 23's seven send-backs.
 - **Spend:** batch 32 $1.43622 of Muse, set 5 $0.31445; Meta about $84.69 of $150, under the $100 line.
@@ -490,7 +490,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 ## 2026-11-02, 13:07: batch 33, a salt said inside a longer label (Ahmed)
 - **Ahmed:** "Yes, batch 33", to closing the gap the README had just named: a salt said inside a longer ingredient label wasn't read, so "tomo metoprolol succinate" matched a tartrate pack.
 - **The process, as since batch 26:** a read-only Muse plan, then the CEO's SPEC bullets, a 38-case contract and a throwaway reference (6 of 6 breaks caught; the 205 saved live reports unchanged), then Muse's build in one round, then the Opus supervisor and a fresh read-only Muse audit.
-- **The verdicts:** the supervisor approved (none of 22,746 generated pairs newly matches) and found a gap in the CEO's contract, closed as round 2 of the contract (33e6bd9), with no Muse round. The audit asked for changes; the CEO ran each finding, and none was a false match (`evidence/grills/b33-muse-audit/effect.md`). The older limits it and the supervisor named are now in SPEC rule 6. Merged as c55a83b (row 5.23).
+- **The verdicts:** the supervisor approved (none of 22,746 generated pairs newly matches) and found a gap in the CEO's contract, closed as round 2 of the contract (d7a0b02), with no Muse round. The audit asked for changes; the CEO ran each finding, and none was a false match (`evidence/grills/b33-muse-audit/effect.md`). The older limits it and the supervisor named are now in SPEC rule 6. Merged as 682cd47 (row 5.23).
 - **Left for later:** Spanish salt names, counting calcium trihydrate as calcium and hemifumarate as fumarate, and reading "equivalent to" on packs that print their salt basis. Each fails toward review.
 - **Also fixed:** the set 4 spend line above read "/bin/zsh.29168"; a shell had expanded its `$0`.
 - **Spend:** batch 33's build $0.75216, its plan and audit $0.53886; Meta about $85.98 of $150, under the $100 line.
@@ -499,7 +499,7 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Ahmed:** "Yes, batch 34", to closing the remaining Spanish false-match path: a Spanish salt name was read as no salt, so "metoprolol succinato" matched a tartrate pack, and a claim named "Metoprolol succinate" matched Spain's Lopresor box ("Metoprolol, tartrato").
 - **The source:** the CEO queried AEMPS CIMA's list of active substances for each catalogue moiety (`evidence/data/cima_salts.json`). Its Spanish names map one to one onto the salts `INN_ALIASES` already curates in English.
 - **The design:** a separate table of eleven Spanish words, read only by `_loose_salts`, each as its English salt. Muse's read-only plan chose it over adding the names to `INN_ALIASES`, which also feeds identity, grounding and name matching. "calcio", the noun, and the amoxicillin and clavulanate words are left out on purpose.
-- **The verdicts:** the Opus supervisor approved round 1 (the 205 saved reports unchanged, the hero included). Its #1, a mixed calcium/calcium trihydrate text now matching, is what the all-English wording already did; the CEO kept the SPEC's design, named it as the one move toward `match` and pinned it (round 2 of the contract, 7c9cbbe). Muse's round 2 changed two docstrings only. The fresh Muse audit passed. Merged as 7182893 (row 5.24).
+- **The verdicts:** the Opus supervisor approved round 1 (the 205 saved reports unchanged, the hero included). Its #1, a mixed calcium/calcium trihydrate text now matching, is what the all-English wording already did; the CEO kept the SPEC's design, named it as the one move toward `match` and pinned it (round 2 of the contract, a83e843). Muse's round 2 changed two docstrings only. The fresh Muse audit passed. Merged as 4f6a19a (row 5.24).
 - **Left for later:** other languages' salt names (German "Metoprolol Succinat"), and the older salt limits SPEC rule 6 names.
 - **Spend:** batch 34's two rounds $0.68751, its plan and audit $0.52691; Meta about $87.19 of $150, under the $100 line.
 

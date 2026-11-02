@@ -15,7 +15,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 3 rounds, planned fi
 
 **Who did what:**
 - **Muse planned first,** read-only (`evidence/grills/b26-muse-plan/`, $0.21), because Ahmed asked for it. Its 9 risks went into the contract, including four the CEO's draft lacked: the seed rule, one conversation per request, the timeouts, and an estimate for time-billed calls.
-- **The CEO** wrote the SPEC paragraph, the `DATA_HANDLING.md` line, the contract and the brief (9c83e52).
+- **The CEO** wrote the SPEC paragraph, the `DATA_HANDLING.md` line, the contract and the brief (7f79c23).
   - **The reference build** passed and caught 20 of 20 mutants (`reference.md`).
   - **The CEO's reference server on Modal** returned 5 of 5 test notes fully right and byte-identical to the eval's replies.
   - **Two problems in the CEO's own contract** were fixed before the build.
@@ -41,7 +41,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 3 rounds, planned fi
     Round 3 changed no server code (`batch_smoke/`, `batch_smoke_r2/`).
 - **The held-out guard:** the goal check flagged none in rounds 1 and 2. In round 3 it flagged `evidence/raw/media/public/voice/U1.wav`. That was a path Muse passed to the script's `main()` with every client stubbed out, to probe the voice guard. Nothing read the file, and it's a synthetic voice note, not an expected result.
 
-**The gate:** pass, 2,490 tests, ruff clean, contract untouched since 9c83e52 (`gate.json`).
+**The gate:** pass, 2,490 tests, ruff clean, contract untouched since 7f79c23 (`gate.json`).
 
 **Found, not fixed here:**
 - **A client timeout doesn't stop the server's generation.** The 600 s server timeout also bounds the 5–6 minute start, so it stays. Modal's billing is the final word on cost.

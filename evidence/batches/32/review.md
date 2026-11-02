@@ -21,7 +21,7 @@ Verdict: PASS
   - **Round 2, APPROVE**, with one minor point on SPEC wording, taken by the CEO without another Muse round: the label limit is now stated as partly new with this batch.
   - **Its probes:** nothing newly matches among 729 RxNorm and CIMA drug names or 313,489 dictionary entries; of 193 saved live reports, only the eight U13d runs change, each to the intended result.
 
-**The gate** (on the round-2 contract, `6722c7f`): 2,877 tests pass, ruff is clean, and the contract lock holds.
+**The gate** (on the round-2 contract, `7309f38`): 2,877 tests pass, ruff is clean, and the contract lock holds.
 
 **Usage:** Muse's two rounds cost $1.43622 est. (the Muse ledger).
 

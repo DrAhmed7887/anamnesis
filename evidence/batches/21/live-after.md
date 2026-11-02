@@ -1,7 +1,7 @@
 # Batch 21: the same pre-registered cases on the merged code, 28 Oct (after the batch)
 
 **Setup.**
-- Code: `main` after the batch 21 merge (`ea5a705`).
+- Code: `main` after the batch 21 merge (`1171009`).
 - Cases: the same cases, voice notes, photos and expected results as `live-before.md` and `manifest.md`, unchanged. Each ran once, named `<case>-b21` in `evidence/live/2026-10-28/`.
 - Cost: 12 intakes for **$0.36826** (corrected 28 Oct: first written as $0.36897; `runs.jsonl` and the ledger agree on $0.36826), plus 2 diagnostic calls for $0.02221. The ledger total is now $1.21236.
 

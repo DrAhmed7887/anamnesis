@@ -1,10 +1,10 @@
 # M6 final check (Gemini 4, merged batch 23): what changes
 
-Gemini 4 Argon on Vertex, 28 Oct, after batch 23 merged (558fa7a). **VERDICT: PASS**, with 1 major and 6 minors (`qm.md`). The package was batch 23 alone, about 210k tokens.
+Gemini 4 Argon on Vertex, 28 Oct, after batch 23 merged (ab04356). **VERDICT: PASS**, with 1 major and 6 minors (`qm.md`). The package was batch 23 alone, about 210k tokens.
 
 | # | Severity | Decision | What changes |
 |---|---|---|---|
-| 1 | major | **Accepted as a scope note, not a defect.** | The 39-photo and real-media claims are backed by files on main: `evidence/batches/22/comparison.md` (fa377d1) and `evidence/batches/21/`. They weren't in this package because it covered batch 23 alone. The pre-freeze check on Sat runs across batches 21–23. |
+| 1 | major | **Accepted as a scope note, not a defect.** | The 39-photo and real-media claims are backed by files on main: `evidence/batches/22/comparison.md` (9751055) and `evidence/batches/21/`. They weren't in this package because it covered batch 23 alone. The pre-freeze check on Sat runs across batches 21–23. |
 | 2 | minor | **Taken, batch 23.1.** | The tablet-word carve-out applies only with `in` or `في`, as the supervisor's round 9 #1 also proposed. |
 | 3 | minor | **Taken, batch 23.1.** | `معلقتان` and `المعلقتان` are pinned in the contract, not only in Muse's unit tests. |
 | 4 | minor | **Taken, batch 23.1.** | Any number of bracket groups in the always-counts form, as SPEC already says. Plural per-1-ml targets (`1 millilitres`, `mililitros`). Both pinned. |

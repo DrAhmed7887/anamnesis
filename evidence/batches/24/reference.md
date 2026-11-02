@@ -1,6 +1,6 @@
 # Batch 24: the CEO's reference build, 29 Oct
 
-- **Contract:** `test_b24_number_words.py` (part 1), `test_b24_grounding.py` (part 2) and `test_b24_release.py` (part 3). That's 87 tests: 77 from 11bf9de, plus 10 added in this amendment.
+- **Contract:** `test_b24_number_words.py` (part 1), `test_b24_grounding.py` (part 2) and `test_b24_release.py` (part 3). That's 87 tests: 77 from c2b7fe5, plus 10 added in this amendment.
 - **On the code before the batch:** 62 fail and 25 pass. The 25 that pass are of three kinds:
   - the "never" and "states nothing" cases, which hold today because no Spanish or German word is read yet;
   - the English and Arabic pins;
@@ -121,7 +121,7 @@ The first clock-time check the reference had was redundant, so no test caught it
   - Earlier tests that said bare Spanish or German numbers now say them with a unit or dose word.
   - "fünf hundert Milligramm" now states 100, never 500.
 - **Reference build:** **2,289 passed**, ruff clean.
-- **Differential:** English and Arabic give exactly the results of 843f64f on all 21,747 fuzz phrases.
+- **Differential:** English and Arabic give exactly the results of 161d411 on all 21,747 fuzz phrases.
 - **Fine-tune re-score:** unchanged.
 
 **One mutant per rule** (failures in `tests/contract`):
@@ -136,7 +136,7 @@ The first clock-time check the reference had was redundant, so no test caught it
 ## Round 7: the amount rule, whatever closes the run
 - **Contract:** `test_b24_round7.py`, 13 tests. On Muse's round 6 code, 6 fail and 7 pass.
 - **Reference build:** **2,302 passed**, ruff clean.
-- **Differential:** English and Arabic give exactly the results of 843f64f on all 21,747 fuzz phrases.
+- **Differential:** English and Arabic give exactly the results of 161d411 on all 21,747 fuzz phrases.
 - **A fix to the reference itself:** an English "hundred" after a Spanish number stated the Spanish part without an amount. It is fixed and pinned.
 
 **One mutant per rule** (failures in `tests/contract`):
@@ -151,10 +151,10 @@ The first clock-time check the reference had was redundant, so no test caught it
 - **Contract:** `test_b24_round8.py`, 31 tests. On Muse's round 7 code, 21 fail and 10 pass. All 4 end-to-end false matches are among the 21. The 10 that pass guard against over-fixing: amounts that must still read, and English that must read as before.
 - **Reference build:** **2,333 passed**, ruff clean.
 - **Differential:**
-  - **English and Arabic:** exactly the results of 843f64f on all 21,747 fuzz phrases.
+  - **English and Arabic:** exactly the results of 161d411 on all 21,747 fuzz phrases.
   - **Spanish, German and mixed:** 107 of the 25,292 phrases differ from the round 7 reference.
     - 12 state less: clock times and mixed joins.
-    - 95 state more. Every new value is one that 843f64f states for the same phrase: an English "hundred" or "half" read alone, once the Spanish or German number before it is closed.
+    - 95 state more. Every new value is one that 161d411 states for the same phrase: an English "hundred" or "half" read alone, once the Spanish or German number before it is closed.
 - **Two changes to the reference while building it:**
   - **The German `um` rule was dropped.** It was redundant with round 6, and it would have mis-read decimals.
   - **The close before an English point** stated 0.5 for "dos point cinco miligramos", so a mixed decimal now states nothing.
@@ -185,10 +185,10 @@ The first clock-time check the reference had was redundant, so no test caught it
 - **Contract:** `test_b24_round9.py`, 31 tests. On Muse's round 8 code, 26 fail and 5 pass. All 4 end-to-end false matches are among the 26.
 - **Reference build:** **2,364 passed**, ruff clean.
 - **Differential:**
-  - **English and Arabic:** exactly the results of 843f64f on all 21,747 fuzz phrases.
+  - **English and Arabic:** exactly the results of 161d411 on all 21,747 fuzz phrases.
   - **Spanish, German and mixed:** 88 of the 25,292 phrases differ from round 8's reference.
     - 5 state less.
-    - 83 state more. Every new value but one is a value 843f64f states for the same phrase.
+    - 83 state more. Every new value but one is a value 161d411 states for the same phrase.
     - The one exception: "la - doscientos - tres comprimido" states 203. That is a Spanish number before a dose word (round 6), which round 8 had wrongly taken for an hour.
 - **Two simplifications while building it:**
   - Compound minutes don't require a ten before the `y`.
@@ -217,7 +217,7 @@ The first clock-time check the reference had was redundant, so no test caught it
 - **An earlier test removed:** `test_b24_round8.py` drops the CEO's own word-salad pin "a las eight y cuarenta y dos pastillas". With no English hour after `las`, that input states 42.
 - **Reference build:** **2,377 passed**, ruff clean.
 - **Differential:**
-  - **English and Arabic:** exactly the results of 843f64f on all 21,747 fuzz phrases.
+  - **English and Arabic:** exactly the results of 161d411 on all 21,747 fuzz phrases.
   - **Spanish, German and mixed:** 7 phrases differ from round 9's reference, and all 7 state less.
 - **The live scripts:** S1–G4 read exactly as under rounds 7–9.
 

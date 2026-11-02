@@ -10,7 +10,7 @@
   - **Why "metoprolol" and not "Lopresor":** Lopresor isn't in the catalogue, and a claim's ingredient that the patient didn't say becomes null (SPEC §2, batch 24). So a claim said only as "Lopresor" would end `unresolved_name`. Patients in Spain often name a generic by its ingredient, and the box carries the brand. This was decided from the code, before any call.
   - **Licence:** AEMPS's legal notice allows its content to be reproduced when the source is named and the date of its last update is given (aemps.gob.es, Aviso legal, read 1 Nov 2026). The film credits both images that way.
 - **What:** ten runs in one sitting with `scripts/intake_live.py --case U13 --repeat 10 --lang es`, each with the voice note and both images. It runs on the default path: Spark 1.3 extracts the claims and reads the labels, with no second reader. `--cap` is the ledger total plus $0.80.
-  - **The code:** `main` at the commit that adds this plan. Nothing under `anamnesis/` or `tests/` has changed since batch 31 merged (8ee370a).
+  - **The code:** `main` at the commit that adds this plan. Nothing under `anamnesis/` or `tests/` has changed since batch 31 merged (f50b8fb).
 - **Expected, with the system's own categories** (as in the 31 Oct final ten, `evidence/diagnostics/hero-final-2026-10-31/`):
   1. Emconcor, 10 mg said once a day, against the 5 mg box: `intake_differs_from_unit_strength`.
   2. Metoprolol, 100 mg said twice a day, against the Lopresor 100 mg box: `match`.

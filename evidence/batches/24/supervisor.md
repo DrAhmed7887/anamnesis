@@ -100,14 +100,14 @@ SUPERVISOR: CHANGES. All eight round 1 fixes hold; it reran the full suite (2198
    - **Fix:** count every word the number reader classifies, plus `null`.
 3. **Minor: `mil` before an English unit abbreviation multiplied.**
    - **Inputs:** "five mil ml" stated 5000, "ten mil mg" 10000, and «خمسين» "mil mg" 50000.
-   - **Fuzz:** of 21,747 English and Arabic phrases compared with 843f64f, 21 differed, and every one was this pattern.
+   - **Fuzz:** of 21,747 English and Arabic phrases compared with 161d411, 21 differed, and every one was this pattern.
    - **Fix:** after `mil`, only Spanish unit words count.
 
 **Round 1 findings, rechecked:**
 - **1–8 are fixed,** each with probes beyond the contract.
 - **On pack readings, only those whose own lines collapse to one ingredient change.** Example: [Panadol 1000, paracetamol 500] was a false `match` before batch 24 and is now `insufficient_information`.
 
-**English and Arabic against 843f64f:** 118 of 140 hand-picked inputs give identical results. Each of the other 22 has a Spanish or German homograph, or `mil` before a unit.
+**English and Arabic against 161d411:** 118 of 140 hand-picked inputs give identical results. Each of the other 22 has a Spanish or German homograph, or `mil` before a unit.
 
 **CEO's triage:** all three accepted and pinned in `tests/contract/test_b24_round3.py` (18 tests, 13 fail on round 2). They were proved on a reference build (2,206 passed), with one mutant per fix, each caught. Still recorded as limits: the rare English homographs `dos`, `uno` and `elf` (German 11). Each states only its own small number, and none was found in a real transcript.
 
@@ -129,8 +129,8 @@ SUPERVISOR: CHANGES. All three round 3 fixes held as written, and every earlier 
    - "un nivel medio sobre el tema".
 
    **Fix:** count `y` only after a number word, drop `un`/`una` as contexts, and drop `sobre` from the dose words.
-4. **Minor:** a one-letter word was grounded as a prefix ("vitamin d" by "de"). This is the same on 843f64f, which had no grounding at all.
-5. **Backlog, the same on 843f64f:**
+4. **Minor:** a one-letter word was grounded as a prefix ("vitamin d" by "de"). This is the same on 161d411, which had no grounding at all.
+5. **Backlog, the same on 161d411:**
    - "at some point two years ago" states 0.2, and "at this point five" states 0.5;
    - British "half two" states 2.5;
    - a `name_text` "Panadol" cut from "Panadol Extra 500 mg" matches a Panadol 500 mg pack.
@@ -196,7 +196,7 @@ They found the gaps a review would have reported. So round 7 went straight to th
 3. **An English "point" with Spanish or German digit words made a decimal outside any amount.** "la point seis" stated 0.6.
 4. **In the CEO's own reference only:** an English "hundred" after a Spanish number stated the Spanish part without an amount ("ochocientos hundred" stated 800). Muse's code didn't have this. It is pinned anyway.
 
-On the same corpus, English and Arabic gave exactly the results of 843f64f, in both Muse's code and the reference.
+On the same corpus, English and Arabic gave exactly the results of 161d411, in both Muse's code and the reference.
 
 ## Round 7 review (covers rounds 6 and 7): SUPERVISOR: CHANGES
 1. **High: a Spanish or German number joined an English hundred, thousand, half or point after it.**
@@ -214,9 +214,9 @@ On the same corpus, English and Arabic gave exactly the results of 843f64f, in b
 **CEO's triage:**
 - **Findings 2 and 3 share one cause, the Spanish clock time.** So they get one rule, not two point fixes: an hour after `la` or `las` and its minutes state nothing unless a unit or dose word follows. The minutes are a Spanish number after `y`, or a Spanish 10–59 said straight after the hour.
 - **Finding 1:** an English or Arabic hundred, thousand, half or point closes an open Spanish or German run first.
-  - **A decimal begun in Spanish or German with an English point states nothing.** The close alone made "dos point cinco miligramos" state 0.5, a value 843f64f never stated.
+  - **A decimal begun in Spanish or German with an English point states nothing.** The close alone made "dos point cinco miligramos" state 0.5, a value 161d411 never stated.
 - **No German clock rule:** German numbers never combine (round 6), so the close covers "um sechs hundred". An `um` rule would also have made "um acht Komma fünf Milligramm" (raised by 8.5 mg) state only 5.
-- **Finding 4:** English "coma" reads as 843f64f did again. "two point cinco" stays: it fails closed.
+- **Finding 4:** English "coma" reads as 161d411 did again. "two point cinco" stays: it fails closed.
 - **Finding 5:** fixed in round 8.
 - **Finding 6:** the round 8 brief asks for the cleanup.
 
@@ -254,9 +254,9 @@ On the same corpus, English and Arabic gave exactly the results of 843f64f, in b
    - The English plural "LAs" lowercases to `las`, so "I take two Cardizem LAs four hundred twenty milligrams each of diltiazem." also stated 120, in English-only text.
 2. **Minor: an article joined a number of 100 or more before it.** "zweihundert Ein-Gramm-Tabletten" stated 201, "two hundred un miligramos" 201 and "one thousand un gramo" 1001. On these two the CEO's reference already closed the English run, and Muse's code didn't.
 
-**Backlog (843f64f does the same):** the catalogue route for amount labels keeps a salt that contradicts the one said.
+**Backlog (161d411 does the same):** the catalogue route for amount labels keeps a salt that contradicts the one said.
 
-**Held:** no mixed runs for plain numbers, multipliers, halves and points (about 78,000 random mixed phrases); `la` and `las` for Spanish words and digits; digit hours; minutes; `y`; and every earlier fix. English and Arabic matched 843f64f on 100,000 phrases, apart from phrases with `las` (#1) or `un`/`una` (#2).
+**Held:** no mixed runs for plain numbers, multipliers, halves and points (about 78,000 random mixed phrases); `la` and `las` for Spanish words and digits; digit hours; minutes; `y`; and every earlier fix. English and Arabic matched 161d411 on 100,000 phrases, apart from phrases with `las` (#1) or `un`/`una` (#2).
 
 **CEO's triage:**
 - **Finding 1 comes from the CEO's own round 8 SPEC,** which let English number words be an hour after `las` to catch "a las eight y cuarenta". Round 10 removes that.
@@ -273,6 +273,6 @@ Three minors, none on a plausible input. All are recorded in `review.md` for aft
 
 **Held:**
 - Both round 10 rules, on 20,000 generated LA/LAs/las phrases.
-- English and Arabic, unchanged from 843f64f on 40,000 random inputs.
+- English and Arabic, unchanged from 161d411 on 40,000 random inputs.
 - Every earlier fix.
 - A 90,000-input concatenation fuzz found no new family.

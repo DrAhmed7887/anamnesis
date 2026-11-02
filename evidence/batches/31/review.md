@@ -32,7 +32,7 @@ Verdict: PASS
   - **Round 2:** it approved with five points, all taken in round 3. Among them is a known limit now stated in SPEC §8 and pinned: after the follow-up, the findings are those of an intake given every photo at once.
   - **Round 3:** approved. Its two minor points were taken by the CEO without another Muse round: a contract case for a step whose kind differs from its request's, and SPEC wording.
 
-**The gate** (on the final contract, `7f7d544`): 2,809 tests pass, ruff is clean, and the contract lock holds.
+**The gate** (on the final contract, `3f2a714`): 2,809 tests pass, ruff is clean, and the contract lock holds.
 
 **Usage:** Muse's three build rounds cost $2.63079 est. (`usage.json`, the Muse ledger). The read-only plan and audit cost $0.4473 more and are counted in `scripts/spend_check.py`. Meta stood at about $81.4 of the $150 credit, and the line is $100.
 

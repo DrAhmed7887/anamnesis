@@ -11,7 +11,7 @@ Prompt: `evidence/grills/BATCH_SUPERVISOR_PROMPT.md`. The builder was Muse Code 
 
 Checked and safe: the builder's C8 deviation matches the reworded SPEC; C4 flags no brand-plus-ingredient label (Panadol Extra, Augmentin, Beloc-Zok succinate, Lipitor with its Arabic alias) and catches two products in Arabic or a brand beside a different ingredient; the C1 parser nulls the claim's amounts for "1-2", "1 or 2", "2 tablets", "two", "½", "1/2" and "2.000"; nothing touches provenance, spend or model prose; the new `match` note passes `assert_no_advice`.
 
-**CEO triage:** all accepted. #1 and #2 went into SPEC and the contract (second `test(contract): batch 17` commit, `ce05389`); #1–#3 went back to Muse as round 2 (`round2-brief.md`); #4 is recorded as intended regression guards.
+**CEO triage:** all accepted. #1 and #2 went into SPEC and the contract (second `test(contract): batch 17` commit, `ebd731b`); #1–#3 went back to Muse as round 2 (`round2-brief.md`); #4 is recorded as intended regression guards.
 
 ## Round 2: SUPERVISOR: APPROVE
 All three round-1 findings fixed; the widened units rule makes no consistent case worse (probes, offline).

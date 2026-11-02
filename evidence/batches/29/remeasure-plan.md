@@ -3,7 +3,7 @@
 ## What runs, after batch 29 merges
 1. **Spark 1.3 with the batch 29 prompt on the fine-tune's four test splits** (303 notes: test_iid, test_shift, test_codeswitch, test_real), through `finetune/spark_eval.py --out evidence/finetune/runs/spark-b29`, so the 29 Oct baseline replies in `runs/spark/` stay as they are. One call per note.
 2. **test_spain** (60 notes) the same way, only if Ahmed allows the spend past the $75 line (below).
-3. **U2 on the default path, three live runs** (`scripts/intake_live.py`, public photo, synthetic voice), scored with `evidence/batches/22/intake_score.py` against 8b993ff.
+3. **U2 on the default path, three live runs** (`scripts/intake_live.py`, public photo, synthetic voice), scored with `evidence/batches/22/intake_score.py` against d5f0606.
 
 ## What is reported (every note that changes, misses included)
 - Fully right and harmful-after-checks for both prompts, per split, scored with `finetune/score.py`'s `score()` on today's checks.

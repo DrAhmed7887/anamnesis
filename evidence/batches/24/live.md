@@ -1,9 +1,9 @@
 # Batch 24: the 8 Spanish and German live cases, run on main after the merge
 
-- **When:** 29 Oct 2026, 23:37–23:40 CET. Main at 9099fd1 (batch 24 merged in 6360325), one run per case (`scripts/intake_live.py`).
+- **When:** 29 Oct 2026, 23:37–23:40 CET. Main at f748096 (batch 24 merged in ab676b6), one run per case (`scripts/intake_live.py`).
 - **Cost:** $0.18 of Meta in all (`evidence/spend/ledger.jsonl`).
 - **Inputs:** synthetic voice notes (macOS `say`, Mónica and Anna; for runs only, never in the film). Each file matched its hash in `manifest.md` before any call.
-- **Pre-registration:** `manifest.md` (23530fe, amended in 1ef4536 and a7a6828 before any call).
+- **Pre-registration:** `manifest.md` (93acb56, amended in ffd8945 and fdd5aae before any call).
 - **Reports:** `evidence/live/2026-10-29/report_<case>.json`.
 
 ## Findings against the pre-registration: 7 of 8
@@ -38,7 +38,7 @@
 - **S1 and G3:** no unsaid INN was kept in either case.
 
 ## S1 and G3 again, after batch 24.1 merged (30 Oct, 00:08–00:09 CET)
-- **Main and cost:** main at aa88878, with Emconcor and Sortis in the catalogue. One run each, $0.05.
+- **Main and cost:** main at 4b08275, with Emconcor and Sortis in the catalogue. One run each, $0.05.
 - **Reports:** `report_S1_after_24_1.json` and `report_G3_after_24_1.json`.
 - **Pre-registered** for this point in `manifest.md`, "After batch 24b, if it merges".
 

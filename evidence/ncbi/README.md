@@ -18,7 +18,7 @@ Each record was re-read by the engine through NCBI E-utilities on 31 Oct (`pubme
 - **These are the studies' numbers.** Anamnesis measured none of them: they describe the problem, not the product.
 
 ## 2. PubChem: the INN aliases (owner: the engine)
-- **The probe:** `pubchem_probe.py` (read-only, written by the review session), run on `anamnesis/schema/medication.py` at 87e572c. For each alias it resolves name → CID → parent CID (or the components, for mixtures) and compares it with the CID of the moiety the alias maps to. Output: `pubchem_aliases.json`.
+- **The probe:** `pubchem_probe.py` (read-only, written by the review session), run on `anamnesis/schema/medication.py` at aba0bdd. For each alias it resolves name → CID → parent CID (or the components, for mixtures) and compares it with the CID of the moiety the alias maps to. Output: `pubchem_aliases.json`.
 - **Result: 35 of 52 aliases agree with PubChem, none disagree, and 17 aren't listed there.** The 17 are Latin genitive salt names, German compounds and accented forms; they need another source (Ph. Eur. names, or the CIMA data in `evidence/data/drugs_v2.json`).
 - **The salt basis:** metoprolol succinate 47.5 mg carries 38.91 mg of base and tartrate 50 mg carries 39.04 mg, 0.34% apart at all four strengths (`salt_basis.txt`; molecular weights from PubChem).
 - **Say it as:** "35 of 52 aliases agree with PubChem, none disagree, 17 aren't listed there". Never "verified against PubChem" on its own.

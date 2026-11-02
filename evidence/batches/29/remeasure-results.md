@@ -1,6 +1,6 @@
 # Batch 29's re-measure (31 Oct, 15:30–16:29 CET), as `remeasure-plan.md` set out before any call
 
-Spark 1.3 with the batch 29 prompt, one call per note, on `main` at 1674b02, into `evidence/finetune/runs/spark-b29/`; the 29 Oct baseline (`runs/spark/`) is unchanged. 363 replies, no errors. Scored by `score_views.py`.
+Spark 1.3 with the batch 29 prompt, one call per note, on `main` at 12025aa, into `evidence/finetune/runs/spark-b29/`; the 29 Oct baseline (`runs/spark/`) is unchanged. 363 replies, no errors. Scored by `score_views.py`.
 
 ## Fully right (harmful after the product's checks)
 | | test_iid | test_shift | test_codeswitch | test_real | **all four** | test_spain |

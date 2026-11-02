@@ -1,7 +1,7 @@
 # Batch 28: the live check of the second reader, written before any call
 
 ## What runs
-- **The cases:** U1–U8, batch 21's staged cases on public Commons photos, with their synthetic `say` voice notes (`evidence/raw/media/public/`). The expected results are the ones pre-registered in batch 21 (8b993ff), scored with `evidence/batches/22/intake_score.py`.
+- **The cases:** U1–U8, batch 21's staged cases on public Commons photos, with their synthetic `say` voice notes (`evidence/raw/media/public/`). The expected results are the ones pre-registered in batch 21 (d5f0606), scored with `evidence/batches/22/intake_score.py`.
 - **The column:** Spark 1.3 transcribes, extracts and reads, as on the default path. With `--second-reader fireworks`, Muse Spark Open on Fireworks (low effort) reads only the packs Spark 1.3 still reads as partial or unreadable after its zoom.
 - **Two runs per case:** 16 intakes on the merged `main`, one commit, in one sitting.
 

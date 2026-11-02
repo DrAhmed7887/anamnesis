@@ -2,7 +2,7 @@
 
 **What ran:** Muse Code (muse-spark-1.3, standard mode) planned batch 26 in its own worktree copy (`scripts/grill.sh b26-muse-plan`), read-only, on 30 Oct at 19:56 CET, before the CEO wrote the contract. Ahmed asked for it: "dont you think muse should plan and double check?"
 
-**Verdict:** "directionally right, but the endpoint will not reproduce the eval unless seed, batching, timeouts and cost path are pinned". All 9 of its risks were checked against the code it cited, and each is now in the contract or the brief (contract commit 9c83e52).
+**Verdict:** "directionally right, but the endpoint will not reproduce the eval unless seed, batching, timeouts and cost path are pinned". All 9 of its risks were checked against the code it cited, and each is now in the contract or the brief (contract commit 7f79c23).
 
 | # | Muse's risk | Outcome |
 |---|---|---|

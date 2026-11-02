@@ -8,12 +8,12 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 2 rounds, goal pinne
   - a run pauses for a person, resumes for one item, and is final only after sign-off.
 - Before Muse started each round, the CEO ran the contract against a throwaway reference build: the whole suite passed (747, then 889). On the merged 19.1 code, the existing suite with the amended b16 passed (707), and the new contract was red only on the two missing modules.
 - Muse wrote all the code.
-- The docs-only commit `f4eb10a` on this branch belongs to another session; it is also on main as `5ce4c64` and is not part of this review.
+- The docs-only commit `2f0a45d` on this branch belongs to another session; it is also on main as `73f3071` and is not part of this review.
 
 **Contract:** three commits.
-- `1a24643`: the contract itself. It amends `test_b16_model_replies.py` so its two number tests cite a turn that says the number, as the batch 18 contract commit amended b12, b14 and b15.5.
-- `eff7669`: wraps an import of the CEO's that tripped ruff I001. In round 1, Muse had widened the contract folder's lint ignore in `pyproject.toml` to get past it; the CEO reverted that, since the fault was the contract's.
-- `b6b46b9`: round 2.
+- `22a49a0`: the contract itself. It amends `test_b16_model_replies.py` so its two number tests cite a turn that says the number, as the batch 18 contract commit amended b12, b14 and b15.5.
+- `658f097`: wraps an import of the CEO's that tripped ruff I001. In round 1, Muse had widened the contract folder's lint ignore in `pyproject.toml` to get past it; the CEO reverted that, since the fault was the contract's.
+- `7800b69`: round 2.
 
 **Gate:** pass, 893 tests (707 before). The contract lock held in both rounds.
 

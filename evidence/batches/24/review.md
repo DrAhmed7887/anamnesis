@@ -16,7 +16,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 10 rounds, goal pinn
 - **Claude Code (Opus 5.5), as CEO,** wrote:
   - the SPEC lines;
   - the brief;
-  - the contract (11bf9de), amended after the CEO's reference build and before any Muse run (43a7e84, `reference.md`).
+  - the contract (c2b7fe5), amended after the CEO's reference build and before any Muse run (987cfcc, `reference.md`).
 
   The reference build found four problems in the CEO's own contract, all fixed before the build:
   - the SPEC's `einhalb` as 1.5;
@@ -28,7 +28,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 10 rounds, goal pinn
 - **Muse wrote all the code:**
   - `providers/stated.py`, `providers/numbers.py`, `providers/claims.py`, `core/reconcile.py` and `core/catalogue.yaml`;
   - its unit tests, in `tests/unit/test_b24_extra.py`.
-- **The held-out guard** (16cab05, before the run): Muse's export shows no read under `evidence/` or the fine-tune data (`goal.md`).
+- **The held-out guard** (30c29bf, before the run): Muse's export shows no read under `evidence/` or the fine-tune data (`goal.md`).
 - **A separate Opus supervisor** (a Claude subagent of the engine session) reviewed each round (`supervisor.md`):
   - **Round 1: CHANGES,** with 1 blocker, 2 majors and 5 minors. The CEO accepted all eight. Findings 1–3 came from the CEO's own SPEC: the CEO's reference build had them too.
     - **The blocker:** an unsaid second ingredient line, relabelled to the brand, reached a false `match`.
@@ -84,7 +84,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 10 rounds, goal pinn
 
     **What the review covered:**
     - Both round 10 rules held on 20,000 generated "LA", "LAs" and "las" phrases.
-    - English and Arabic matched 843f64f on 40,000 random inputs.
+    - English and Arabic matched 161d411 on 40,000 random inputs.
     - Every earlier fix held.
     - A 90,000-input fuzz found no new family.
 
@@ -105,7 +105,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 10 rounds, goal pinn
 - **21,747 English and Arabic phrases** (the round 2 supervisor's fuzz set): Muse's rounds 3 to 10 give exactly what the code before batch 24 gave on every one.
 - **25,292 Spanish, German and mixed phrases:** Muse and the CEO's reference disagree on 6 after round 3, 2 after rounds 4 and 5, 8 after round 7, and none after rounds 8 to 10. Through round 5 the reference was the looser one, and Muse follows the SPEC: the reference used a half as the base of a decimal ("medio coma siete" as 1.2) and accepted German `null` after English "point". After round 7 the reference was the stricter one: Muse keeps the English value of an English word said after a dropped Spanish one ("quinientos hundred" states 100), as the SPEC's "English unchanged" rule requires. Round 6's differential also found the reference's own bug, an English "hundred" stating a Spanish part, which round 7 pins.
 
-**A behavioural check beyond the contract.** Every committed fine-tune reply was re-scored with Muse's parser after each of the ten rounds, against the prediction committed before the build (`rescore-prediction.md`, 7007699). All ten rounds match it number for number:
+**A behavioural check beyond the contract.** Every committed fine-tune reply was re-scored with Muse's parser after each of the ten rounds, against the prediction committed before the build (`rescore-prediction.md`, 1f19ca3). All ten rounds match it number for number:
 - **Spark 1.3, fully right:** 193 → 203 on r1's splits, and 38 → 40 on test_spain.
 - **Base Glimmer's harmful claims after the checks:** 54 → 0, and 9 → 0, with the scorer counting on the product's output.
 - **r1 and r2:** unchanged, with 0 harmful claims.

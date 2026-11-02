@@ -43,7 +43,7 @@ SUPERVISOR: CHANGES
 - **`normalise`:** `catalogue.yaml` has no `۰–۹`, so no lookup changes.
 - **`package`:** it runs only when the first two concepts return nothing or fail, so it can't add a second set of regions to a photo.
 - **Claims:** the volume rule never touches one. `parse_label_json` is called only by the readers and the fixtures.
-- **Not reviewed:** `tests/contract/test_b23_round2.py` (an untracked CEO draft) and commits `155dcc6` and `7261a49` (scripts only) appeared while I worked. `anamnesis/` and `tests/unit/` still matched the after copy.
+- **Not reviewed:** `tests/contract/test_b23_round2.py` (an untracked CEO draft) and commits `4005c93` and `d66f8e1` (scripts only) appeared while I worked. `anamnesis/` and `tests/unit/` still matched the after copy.
 
 ## Round 2 (28 Oct)
 
@@ -112,7 +112,7 @@ Round 3 fixes every round 2 input except an OCR'd "5 mI", and Muse's code follow
 - the live script's loop budget.
 
 **The CEO's response, round 4:**
-- **#6:** fixed directly in `intake_live.py` (447a85c).
+- **#6:** fixed directly in `intake_live.py` (7cc73a1).
 - **#1–#5 and #7:** handled by replacing the round 1–3 wording patterns with one clause rule (SPEC §2). It asks whether a clause that isn't about water prints a dose volume at all, so no list of starters, connectors, spoons or contains words is needed.
 
 ## Round 4 (28 Oct)

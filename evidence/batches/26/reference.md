@@ -2,7 +2,7 @@
 
 **Order of work, 30 Oct:**
 1. Muse planned the batch, read-only (`evidence/grills/b26-muse-plan/`, triage in `effect.md`).
-2. The CEO wrote SPEC §4's paragraph, the `DATA_HANDLING.md` line, the contract (`tests/contract/test_b26_open_weight_path.py`) and the brief. That is contract commit 9c83e52.
+2. The CEO wrote SPEC §4's paragraph, the `DATA_HANDLING.md` line, the contract (`tests/contract/test_b26_open_weight_path.py`) and the brief. That is contract commit 7f79c23.
 3. The CEO built a reference in a scratch clone. It was never shown to Muse.
 
 ## The reference passes the contract

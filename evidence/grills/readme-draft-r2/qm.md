@@ -35,7 +35,7 @@
 **6. Severity: MEDIUM**
 * **README:** `"Every run below predates batch 23. The synthetic notes ran on the code of 27 Oct, of batch 20 and of batch 21, the public photos on batch 20's and batch 21's, and the comparison on batch 22's. Batch 23's changes, the "package" concept and the volume rule, haven't been rerun on any of them. [4.1, 4.11, 4.13, 4.14, 1.19]"`
 * **Row:** [4.1, 4.11, 4.13, 4.14, 1.19]
-* **Why:** None of the five cited rows states or backs that the pre-batch-21 runs of the synthetic notes or public photos ran specifically `"on the code ... of batch 20"`; rows 4.1, 4.11, and 4.12 only describe them as `"before batch 21"` (at `main` 3b40d5a / 6d41473, which covers batches 1–20) and attribute the regression to `"the batch 20 prompt"`. Nor do those rows state the synthetic notes weren't rerun on batch 23.
+* **Why:** None of the five cited rows states or backs that the pre-batch-21 runs of the synthetic notes or public photos ran specifically `"on the code ... of batch 20"`; rows 4.1, 4.11, and 4.12 only describe them as `"before batch 21"` (at `main` 8bb9035 / c136a83, which covers batches 1–20) and attribute the regression to `"the batch 20 prompt"`. Nor do those rows state the synthetic notes weren't rerun on batch 23.
 * **Fix:** `"The synthetic notes ran on 27 Oct and on 28 Oct before and after batch 21, and the public photos ran before and after batch 21. [4.1, 4.11, 4.12] Neither the comparison nor U1–U10 has been rerun on batch 23's 'package' concept or volume rule. [1.19, 4.13, 4.14]"`
 
 ### C. Uses a word or claim that the table forbids

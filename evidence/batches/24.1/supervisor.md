@@ -15,4 +15,4 @@
 2. **Low, for Ahmed:** claim "Concor" with said INN "atorvastatin" shows bisoprolol's codes next to the patient's atorvastatin. This follows the SPEC; whether to hide codes when name and ingredient conflict is a design decision.
 3. **Low:** the pack side resolves without `pack.country`, while reconciliation uses it. It has no visible effect today.
 4. **Nit:** the codes entry is worked out twice, and the results agree.
-5. **Housekeeping:** the worktree's ledger copy. Main already has the line (11a0ebb).
+5. **Housekeeping:** the worktree's ledger copy. Main already has the line (e68c5e6).

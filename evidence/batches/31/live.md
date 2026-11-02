@@ -1,6 +1,6 @@
 # Batch 31: the follow-up live on U11, matched in 2 of 4 runs
 
-As set out in `live-plan.md` before any call (79c95a6, 14:46 CET), with three more runs added by its amendment before they ran (a7d3a2f and 91c0cfc, 14:48). The code is `main` with batch 31 merged (8ee370a): nothing under `anamnesis/` or `tests/` changed after it, and the later commits add the live script, docs, the batch log and the ledgers. The runner is `scripts/follow_up_live.py`. The staged patient is the script: it answers the first request with pk025_b and sends nothing after that.
+As set out in `live-plan.md` before any call (2a13d16, 14:46 CET), with three more runs added by its amendment before they ran (f15ad5b and a72f530, 14:48). The code is `main` with batch 31 merged (f50b8fb): nothing under `anamnesis/` or `tests/` changed after it, and the later commits add the live script, docs, the batch log and the ledgers. The runner is `scripts/follow_up_live.py`. The staged patient is the script: it answers the first request with pk025_b and sends nothing after that.
 
 | Run | Asked | The reply's reading (read, then 2× zoom) | c1 after | Review | Follow-up cost |
 |---|---|---|---|---|---|
@@ -24,5 +24,5 @@ As set out in `live-plan.md` before any call (79c95a6, 14:46 CET), with three mo
 - **A first attempt, refused before any call:** at 14:46 CET the ledger cap refused the first call, because `--cap` was left at its $5.00 default with the ledger at $16.29. Nothing was sent and $0 was spent. Its two lines stay at the top of `runs.jsonl` (lines 1–2), and the registered run overwrote its reports.
 - **n = 4, with one synthetic voice and two public photos:** these numbers describe the runs, not a rate.
 - **Spend:** $0.20199 of Meta for the four runs (44 calls). Meta now stands at about $81.63 of the $150 credit with the grills, and the line is $100.
-  - The ledger lines: the registered run's 11 went into 91c0cfc with the time fix, by a `git commit -a`. The other three runs' 33 are in c59f385.
+  - The ledger lines: the registered run's 11 went into a72f530 with the time fix, by a `git commit -a`. The other three runs' 33 are in 45e5ee6.
 - **The files:** `evidence/live/2026-11-01/report_<run>-fu-before.json`, `report_<run>-fu-after.json`, `followup_<run>.json`, and `runs.jsonl` lines 3–10.

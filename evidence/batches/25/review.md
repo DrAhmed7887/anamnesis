@@ -16,10 +16,10 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 2 rounds, with its b
 - **Why:** Ahmed's go on 30 Oct. The brief is the product's main screen and appears in the film, and it read like a plain document. The batch lands before the freeze (Sat 31 Oct 23:59).
 
 **Who did what:**
-- **Claude Code (Opus 5.5), as CEO,** wrote the SPEC paragraph "The look (batch 25)", the brief and the contract (a42676b).
+- **Claude Code (Opus 5.5), as CEO,** wrote the SPEC paragraph "The look (batch 25)", the brief and the contract (7649078).
   - **The reference build** (`reference.md`) gave 2,428 passed. It caught 17 mutants and passed the 2 legitimate rules.
   - **Two problems it found in the CEO's own work,** fixed before the build: a unit test pinned the section bar the brief moved, and the page had no viewport tag.
-  - **One problem Muse found:** the contract's hidden-text check rejected a legitimate `font-size:0.875rem`. The CEO found the same flaw for `background-color:transparent`. Both checks now match whole declarations (4a7ae6e), re-proven with three new mutants.
+  - **One problem Muse found:** the contract's hidden-text check rejected a legitimate `font-size:0.875rem`. The CEO found the same flaw for `background-color:transparent`. Both checks now match whole declarations (a4cc468), re-proven with three new mutants.
 - **Muse wrote all the code** in two rounds:
   - **Round 1:** the style, the viewport tag and the one assertion ($0.83).
   - **Round 2:** five style fixes from the reviews ($0.45):
@@ -37,7 +37,7 @@ Built-by: Muse Code (muse-spark-1.3, contributor mode off), 2 rounds, with its b
     - crops from real phone photos still take a row each, because a width cap would shrink the zoom view;
     - an opened timeline could clip about 10 px when printed on A5.
 
-**The gate:** pass, 2,428 tests, ruff clean, contract untouched since 4a7ae6e (`gate.json`).
+**The gate:** pass, 2,428 tests, ruff clean, contract untouched since a4cc468 (`gate.json`).
 
 **Checks beyond the gate, by the CEO in the desktop app's browser and headless Chrome:**
 - **Identity:** six briefs are identical to the code before the batch outside the style and the viewport tag. These are the contract's five plus an empty intake.

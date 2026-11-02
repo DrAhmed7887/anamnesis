@@ -1,6 +1,6 @@
 # Batch 27.1's live check (31 Oct, 14:35 CET), as `live-plan.md` set out before any call
 
-The relation audit's ten traps, once each on Spark 1.3 and the tuned Glimmer on Modal, through `probe_after.py`, on merged `main` (ec7b355). Output: `probe_after.json`.
+The relation audit's ten traps, once each on Spark 1.3 and the tuned Glimmer on Modal, through `probe_after.py`, on merged `main` (9d9bb89). Output: `probe_after.json`.
 
 - **20 calls, no wrong finding shown as fact.**
 - **Trap J on the tuned Glimmer now fails safe:** its claims came back with neither the intake nor the tablet count, and the finding is `insufficient_information`, where the probe after batch 27 gave a false `strength_mismatch`. The probe keeps parsed claims, not raw replies, so whether Glimmer wrote the same reply as then can't be told from here; the expectation ("should now fail safe") held.

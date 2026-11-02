@@ -55,7 +55,7 @@ The product code is correct. The only blocking problem is one test in item 5 tha
    - **Fix:** print only the host.
 
 **Round 1 checks still hold**
-- **Scope:** only `base.py`, `glimmer.py`, `intake_live.py`, `modal_serve.py` and `test_b26_extra.py` differ from HEAD. HEAD moved to 1d1549a while I worked, a Muse-ledger-only commit at 20:50. The contract is untouched.
+- **Scope:** only `base.py`, `glimmer.py`, `intake_live.py`, `modal_serve.py` and `test_b26_extra.py` differ from HEAD. HEAD moved to 1f9634b while I worked, a Muse-ledger-only commit at 20:50. The contract is untouched.
 - **Prompt:** the two messages equal `SYSTEM_CONTENT` and `format_turns`.
 - **Engine and cost controls:** I loaded the server with stand-in modal/fastapi/vllm. Its `LLM(...)` arguments, LoRA and runs reload match `evaluate`. Proxy auth is on, `max_containers` 1, timeout and scaledown 600, no `min_containers`.
 - **Charging:** each new error carries its charged trace and makes one call.

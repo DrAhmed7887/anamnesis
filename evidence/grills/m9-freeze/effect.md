@@ -17,5 +17,5 @@
 | 6 | The codes line resolves a pack without its country | **Recorded in batch 24.1's review.** It has no visible effect today, because entries with the same ingredient carry the same codes. |
 | 7 | The cross-language input classes the supervisor recorded, the colon clock time, and contradicted salt labels | **To the README's Limitations** (judge-facing session), as `evidence/batches/24/review.md` lists them. |
 | 8 | Raw model replies aren't saved; disclose S1's transcription miss | **Disclose it in the README and CLAIMS** (judge-facing session). Saving the raw reply in `intake_live.py` waits until after the freeze. |
-| 9 | The README and CLAIMS must report U12's 0 of 10 and how Modal was unblocked | **Judge-facing session,** from `04beb2e` and `evidence/finetune/results.md`. |
+| 9 | The README and CLAIMS must report U12's 0 of 10 and how Modal was unblocked | **Judge-facing session,** from `b231edf` and `evidence/finetune/results.md`. |
 | 10 | `LICENSE`, the hosted brief, CLAIMS on main and the final video aren't on main yet | **Per the Mon–Tue schedule.** The licence choice is Ahmed's. |

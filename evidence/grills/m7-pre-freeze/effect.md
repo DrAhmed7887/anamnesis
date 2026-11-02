@@ -1,6 +1,6 @@
 # M7 pre-freeze check (Gemini 4, 28 Oct evening): what changes
 
-Two Gemini 4 Argon passes on Vertex, on `main` at c744fc7 (batches 1–23.1 and the 28 Oct scripts):
+Two Gemini 4 Argon passes on Vertex, on `main` at acff1af (batches 1–23.1 and the 28 Oct scripts):
 - **The QM review** (`qm.md`) covered batches 21–23.1 and every module in `anamnesis/`: 267k tokens for $0.54616. **VERDICT: PASS**, with 2 major and 5 minor findings.
 - **The grill** (`grill.md`; prompt in `grill-prompt.md`) covered the code, `SPEC.md`, `docs/DATA_HANDLING.md`, the contract test names and the scripts that make live calls or guard data: 97k tokens for $0.24847. It claimed 11 breaks, 2 of them critical and 5 high.
 - **Every claimed break was run against the code before triage**, offline (`verify_grill.py`, output in `verify_grill.out`). **Neither critical one reproduces. Two high ones are real:** #6, fixed here, and #3, which fails open on a wording packs don't print and stays a known limit. This line first said "one high one is real" (corrected 28 Oct, as the judge-facing session pointed out).
@@ -8,12 +8,12 @@ Two Gemini 4 Argon passes on Vertex, on `main` at c744fc7 (batches 1–23.1 and 
 ## The QM review
 | # | Severity | Decision | What changes |
 |---|---|---|---|
-| 1 | major | **Already planned.** | The judge-facing README draft (judge/claims-video, 3f7ce35) replaces `main`'s stale README when that branch merges on Tue. |
+| 1 | major | **Already planned.** | The judge-facing README draft (judge/claims-video, 9fb7e65) replaces `main`'s stale README when that branch merges on Tue. |
 | 2 | major | **Already planned.** | Ahmed's recordings come next, then the R cases, the hero's 10 runs and R2's live pause. The agentic bonus line waits on R2 (claims row 6.4). |
 | 3 | minor | **Already planned; Ahmed's call.** | Invariant 3 stays at risk until Tue's filtered public repo drops the M1 Muse export. The `CLAUDE.md` "synthetic data only" wording is Ahmed's decision, and it is on his list. |
 | 4 | minor | **Routed** to the judge-facing session. | The README's Limitations name the known fail-open and untested classes that the QM lists. |
 | 5 | minor | **Taken, in `SPEC.md` §2.** | The water lead-in skips only round brackets, as the code does (`_skip_fillers`, `_followed_by_water`). The SPEC said "brackets". The code's narrower rule fails closed: a square bracket keeps the volume counting. |
-| 6 | minor | **Nothing to change.** | Neither the README draft nor `docs/CLAIMS.md` cites the batch 21 run's cost, so the superseded $0.36897 in commit 8800944's message reaches no reader. `live-after.md` has the corrected $0.36826. |
+| 6 | minor | **Nothing to change.** | Neither the README draft nor `docs/CLAIMS.md` cites the batch 21 run's cost, so the superseded $0.36897 in commit 07948a9's message reaches no reader. `live-after.md` has the corrected $0.36826. |
 | 7 | minor | **Already planned.** | The LICENSE, the claims table on `main`, the hosted brief and the video are on the plan for Mon–Wed. The declined usability check is already in the README draft's Limitations. |
 
 ## The grill: each claimed break, run against the code

@@ -2,7 +2,7 @@
 
 - **Contract:** `test_b24_1_codes.py`, 18 tests.
   - First proof: on the code after batch 24's reference build.
-  - Proved again at 23:45 CET on main at 9099fd1, after batch 24 merged: 14 fail and 4 pass. The 4 that pass are the SNOMED and NOTICE guards and the unknown-name case.
+  - Proved again at 23:45 CET on main at f748096, after batch 24 merged: 14 fail and 4 pass. The 4 that pass are the SNOMED and NOTICE guards and the unknown-name case.
 - **Reference build:** a scratch clone of main outside the repo, with both parts done by the CEO. **2,408 passed**, ruff clean.
 - **A fix to the contract file itself:** its import block failed ruff's ordering in the repo layout (a missing blank line before the first-party imports). That would have failed the gate. It was fixed before this commit.
 
@@ -15,7 +15,7 @@
   - `rxcui/3523/properties.json` gives TTY IN, not suppressed.
 
 ## One mutant per behaviour
-Each mutant was applied alone to the reference build on main at 9099fd1. The count is the failures in `tests/contract` plus the two fine-tune data tests.
+Each mutant was applied alone to the reference build on main at f748096. The count is the failures in `tests/contract` plus the two fine-tune data tests.
 
 | Mutant | Failures |
 |---|---|

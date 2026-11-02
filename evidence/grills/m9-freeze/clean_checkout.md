@@ -1,6 +1,6 @@
 # The clean-checkout run at `demo-freeze` (30 Oct, 00:14 CET)
 
-- **The clone:** `git clone --depth 1 --branch demo-freeze` from the private GitHub remote. The tag points at 4b32c02.
+- **The clone:** `git clone --depth 1 --branch demo-freeze` from the private GitHub remote. The tag points at b9c8c0a.
   - The tree was clean.
   - `uv sync --frozen` installed from the lock file.
   - Ruff passed, and `uv run pytest -q` gave **2,411 passed**.
@@ -18,13 +18,13 @@
 - **One usage note:** `scripts/intake_live.py` runs as its docstring says, with `PYTHONPATH=.`. Without it, the import fails before any call.
 
 ## The tag moved after batch 24.2 (30 Oct, 06:05 CET)
-- **Why it moved:** `demo-freeze` went from 4b32c02 to f29092e, the merge of batch 24.2. That is decision 4 of 30 Oct, a provenance fix the freeze allows (`evidence/decisions.md`). The official freeze is Sat 31 Oct 23:59.
+- **Why it moved:** `demo-freeze` went from b9c8c0a to 137b5ea, the merge of batch 24.2. That is decision 4 of 30 Oct, a provenance fix the freeze allows (`evidence/decisions.md`). The official freeze is Sat 31 Oct 23:59.
 - **What sits between the two tags:**
   - Apache-2.0 for the code only;
   - SNOMED CT ids out of the repository;
   - `CLAUDE.md`'s data line;
   - batch 24.2: no catalogue codes beside a side that contradicts its own name.
-- **A fresh clone of main at f29092e from the private remote:**
+- **A fresh clone of main at 137b5ea from the private remote:**
   - the tree was clean;
   - `uv sync --frozen` ran;
   - ruff passed, and pytest gave **2,417 passed**;
@@ -32,11 +32,11 @@
 - **No live run:** batch 24.2 changes only which boxes show a codes line. U12's sides agree with their names, and the supervisor found 83 existing briefs byte-identical apart from codes lines.
 
 ## The tag moved after batch 25 (30 Oct, 15:21 CET)
-- **Why it moved:** `demo-freeze` went from f29092e to 0d8424c, batch 25's log commit after its merge (63b9312). Batch 25 is the brief's look and a viewport tag for phones, on Ahmed's go of 30 Oct. The official freeze is Sat 31 Oct 23:59.
+- **Why it moved:** `demo-freeze` went from 137b5ea to f66776f, batch 25's log commit after its merge (e4c7e5b). Batch 25 is the brief's look and a viewport tag for phones, on Ahmed's go of 30 Oct. The official freeze is Sat 31 Oct 23:59.
 - **What sits between the two tags:**
-  - 63002d3, the record of the previous move;
-  - batch 25's commits: its contract (a42676b, fixed in 4a7ae6e), the Muse ledger (98bf622), the build (df1f251), the merge (63b9312) and its log line (0d8424c).
-- **A fresh clone of main at 0d8424c from the private remote:**
+  - 6d00514, the record of the previous move;
+  - batch 25's commits: its contract (7649078, fixed in a4cc468), the Muse ledger (2305885), the build (2d41fa1), the merge (e4c7e5b) and its log line (f66776f).
+- **A fresh clone of main at f66776f from the private remote:**
   - the tree was clean;
   - `uv sync --frozen` ran;
   - ruff passed, and pytest gave **2,428 passed**;
@@ -48,7 +48,7 @@
   - `docs/CLAIMS.md` rows 1.3 and 1.4 cite `brief_html.py` lines, so they need re-citing at the tag, as planned.
 
 ## The tag moved after batch 26 (30 Oct, 23:10 CET)
-- **The tag:** `demo-freeze` now points at 4dbacff: batch 26 merged in 12093c9, plus the live U1–U8 results and the Modal reconcile.
+- **The tag:** `demo-freeze` now points at 4737477: batch 26 merged in 535be2f, plus the live U1–U8 results and the Modal reconcile.
 - **A fresh clone** of the tag from the private remote passes all 2,490 tests offline.
 - **What batch 26 changed:**
   - `anamnesis/providers/base.py`: the Modal price and `gpu_ms`;
@@ -61,7 +61,7 @@
   - new rows for the open-weight path should cite `evidence/batches/26/intake-plan.md` ("Results, 30 Oct evening") and the 30 Oct batch 26 entry in `evidence/decisions.md`, with their wording limits: never "better", "beats" or "matches", and Fireworks "couldn't be judged live".
 
 ## The tag moved after batch 26.1 (30 Oct, 23:53 CET)
-- **The tag:** `demo-freeze` now points at c657db5: batch 26.1 merged in 0af0e33, plus the fourth live column and the Astra grill.
+- **The tag:** `demo-freeze` now points at d24cfcf: batch 26.1 merged in 0a9c69b, plus the fourth live column and the Astra grill.
 - **A fresh clone** of the tag passes all 2,519 tests.
 - **What batch 26.1 changed:** `anamnesis/providers/openweight.py` (an optional `reasoning_effort` on the reader) and `scripts/intake_live.py`, where Fireworks asks for `low`. Neither file is cited by line in `docs/CLAIMS.md`.
 - **For the judge session:**
@@ -83,16 +83,16 @@
 - **PubChem:** "35 of 52 aliases agree with PubChem, none disagree, 17 aren't listed there", never "verified against PubChem" alone. A snapshot test may follow.
 
 ## For the judge session: batch 27 merged, and the hero's ten fresh runs (31 Oct, 12:58 CET)
-- **Batch 27 merged** (3d3a30e): word rules on claim amounts. Results in `evidence/batches/27/checks.md`:
+- **Batch 27 merged** (3931b42): word rules on claim amounts. Results in `evidence/batches/27/checks.md`:
   - the relation audit's ten traps all fail safe offline; live, 19 of 20 calls showed no wrong finding as fact, and the one that did (trap J on the tuned Glimmer, a false disagreement through its tablet count) is batch 27.1's target;
   - Spark 1.3's, r1's and r2's scores are unchanged, byte for byte; on base Glimmer's replies, 52 wrong amounts are no longer shown.
 - **The README's limits sentence** can now say: each amount is checked as said in a cited turn, and word rules check what it was said about (negation, unit, count, another medicine, past, a split daily total); words outside those rules, and medicines in neither the catalogue nor the reply, aren't seen. Cite SPEC §2 "Relation checks (batch 27)".
-- **The hero, ten fresh runs on 2e0d985** (`evidence/diagnostics/hero-claims-2026-10-31/results.md`): **10 of 10 with the system's own categories, 0 harmful**; 0 of 10 as registered on 28 Oct, whose Concor row named the wrong type. Report both, never only the 10. The 28–29 Oct 6 of 10 predates batch 24's fix (`README.md` in the same folder). Synthetic voice, n = 10.
+- **The hero, ten fresh runs on 54adcee** (`evidence/diagnostics/hero-claims-2026-10-31/results.md`): **10 of 10 with the system's own categories, 0 harmful**; 0 of 10 as registered on 28 Oct, whose Concor row named the wrong type. Report both, never only the 10. The 28–29 Oct 6 of 10 predates batch 24's fix (`README.md` in the same folder). Synthetic voice, n = 10.
 - **U1–U8 after batch 27:** 3 of 8 correct, 0 harmful; three of the five misses are packs Spark 1.3 read as partial, batch 28's target.
 
 ## The tag moved after batches 27, 28 and 27.1 (31 Oct, 14:38 CET)
-- **The tag:** `demo-freeze` now points at 4334037: batch 27 (3d3a30e), batch 28 (6b114f3, with its live script in 957dd3c) and batch 27.1 (63cefc3) merged, with their live checks.
-- **A fresh clone** of `main` at 4334037 from the private remote: ruff clean, all 2,694 tests pass offline.
+- **The tag:** `demo-freeze` now points at db6207b: batch 27 (3931b42), batch 28 (2dd2774, with its live script in c4e043f) and batch 27.1 (348655c) merged, with their live checks.
+- **A fresh clone** of `main` at db6207b from the private remote: ruff clean, all 2,694 tests pass offline.
 - **What changed since the last tag:** `anamnesis/providers/relations.py` (new) and the hook in `claims.py` (batches 27 and 27.1); `anamnesis/agent/loop.py`, `review.py`, `schema/report.py` and `scripts/intake_live.py` (batch 28: the optional second reader). The default path's behaviour changes only through the relation checks; with no `--second-reader`, the loop is byte-identical to before (the supervisor's 1,500-intake check).
 - **For the judge session:**
   - **The hero:** 10 of 10 fresh runs with the system's own categories, 0 of 10 as registered on 28 Oct, 0 harmful (`evidence/diagnostics/hero-claims-2026-10-31/results.md`). Report both.
@@ -101,8 +101,8 @@
   - **The default path's U1–U8 column after batch 27:** 3 of 8, 0 harmful (`evidence/batches/27/checks.md`), with three of the five misses on partial reads.
 
 ## The tag moved after batches 29 and 30 (31 Oct, 19:15 CET)
-- **The tag:** `demo-freeze` now points at 710b453: batch 29 (61ae0e5) and batch 30 (031a87c) merged, with batch 29's re-measure, U2's live checks and their diagnostics.
-- **A fresh clone** of `main` at 710b453 from the private remote: the tree was clean, `uv sync --frozen` ran, ruff was clean, and all 2,757 tests pass offline.
+- **The tag:** `demo-freeze` now points at 34473ba: batch 29 (7ee6073) and batch 30 (9d60776) merged, with batch 29's re-measure, U2's live checks and their diagnostics.
+- **A fresh clone** of `main` at 34473ba from the private remote: the tree was clean, `uv sync --frozen` ran, ruff was clean, and all 2,757 tests pass offline.
 - **What changed since the last tag:**
   - `anamnesis/providers/claims.py` (batch 29): Spark's claim prompt adds one sentence for combination products. The tuned Glimmer's prompt is unchanged.
   - `anamnesis/core/reconcile.py`, `catalogue.py` (`covers`) and `agent/loop.py` (batch 30):
@@ -128,8 +128,8 @@
     - 95.7% only as "Glimmer + LoRA r1, 290/303 fully right on synthetic held-out notes, opt-in".
   - **The engine closes here:** Meta stands at $77.95 of the $80 line, and only release-gate fixes follow.
 
-## The tag moved to 70cceac, docs only (31 Oct, 20:55 CET)
-- **The tag:** `demo-freeze` now points at 70cceac. The code is the same as 710b453: `git diff 710b453 70cceac` is empty over `anamnesis/`, `scripts/`, `tests/`, `finetune/`, `pyproject.toml` and `uv.lock`.
+## The tag moved to 5c90be4, docs only (31 Oct, 20:55 CET)
+- **The tag:** `demo-freeze` now points at 5c90be4. The code is the same as 34473ba: `git diff 34473ba 5c90be4` is empty over `anamnesis/`, `scripts/`, `tests/`, `finetune/`, `pyproject.toml` and `uv.lock`.
 - **What's new is docs and one measurement:**
   - SPEC.md:3 and :434 now give the tested languages and the opt-in open-weight paths;
   - SPEC.md:198 gives the syrup readings as recorded;
@@ -137,8 +137,8 @@
   - HANDOFF.md points to what changed since 28 Oct;
   - the hero evidence now says five of ten repeats, and that its 6 of 10 against 10 of 10 is within chance (p = 0.087);
   - the hero ran ten times on the final code (`evidence/diagnostics/hero-final-2026-10-31/`): 9 of 10 with the system's own categories, 0 harmful.
-- **A fresh clone** of `main` at 70cceac from the private remote: the tree was clean, `uv sync --frozen` ran, ruff was clean, and all 2,757 tests pass offline.
+- **A fresh clone** of `main` at 5c90be4 from the private remote: the tree was clean, `uv sync --frozen` ran, ruff was clean, and all 2,757 tests pass offline.
 - **For the judge session:**
   - README.md and docs/CLAIMS.md on `judge/claims-video` were refreshed to this tag on the "ingestion problem" framing.
   - An independent checker passed them after one round of fixes: 0 HIGH and 0 MEDIUM inside the two files.
-  - The checker's open item is the evidence tree, for Tuesday's filter: personal context in the M1 Muse export, 409 absolute home paths in 40 tracked files, the Modal account name in 916454b's history, and `CLAUDE.md`:10 naming the build's accounts.
+  - The checker's open item is the evidence tree, for Tuesday's filter: personal context in the M1 Muse export, 409 absolute home paths in 40 tracked files, the Modal account name in 066922a's history, and `CLAUDE.md`:10 naming the build's accounts.

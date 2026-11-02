@@ -1,6 +1,6 @@
-# README draft check (Gemini 4, judge/claims-video a00f113): what changes
+# README draft check (Gemini 4, judge/claims-video 60eec91): what changes
 
-Gemini 4 Argon on Vertex, 28 Oct, on the README draft and `docs/CLAIMS.md` at a00f113. **Verdict: HOLD**, with 1 high and 4 medium findings (`qm.md`). The package was those two files, about 18k tokens.
+Gemini 4 Argon on Vertex, 28 Oct, on the README draft and `docs/CLAIMS.md` at 60eec91. **Verdict: HOLD**, with 1 high and 4 medium findings (`qm.md`). The package was those two files, about 18k tokens.
 
 | # | Severity | Decision | What changes |
 |---|---|---|---|

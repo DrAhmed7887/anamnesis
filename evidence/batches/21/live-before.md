@@ -1,8 +1,8 @@
 # Batch 21: first live runs on today's code, 28 Oct (before the batch is built)
 
 **Setup.**
-- Code: branch `batch/21-real-media` before its build. In `anamnesis/` it is identical to `main` 3b40d5a.
-- Runner: `scripts/intake_live.py` (8b993ff). The expected results were pre-registered in `manifest.md` (8b993ff) before the first call.
+- Code: branch `batch/21-real-media` before its build. In `anamnesis/` it is identical to `main` 8bb9035.
+- Runner: `scripts/intake_live.py` (d5f0606). The expected results were pre-registered in `manifest.md` (d5f0606) before the first call.
 - Volume: 12 intakes plus 1 diagnostic claim call. 59 adapter calls, **$0.33919** on the ledger. The ledger total is now $0.82189.
 - Reports: `evidence/live/2026-10-28/`, one line per run in `runs.jsonl`. The briefs are git-ignored.
 

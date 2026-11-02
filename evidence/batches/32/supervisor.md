@@ -1,7 +1,7 @@
 # Batch 32: the Opus supervisor
 
 ## Round 1 review (1 Nov): SUPERVISOR: CHANGES
-Scope matches `briefs/32.md`: Muse changed only `Catalogue._matches` (`catalogue.py:124-129`) and added `tests/unit/test_b32_extra.py`. The locked files are untouched, and nothing else outside `anamnesis/` and `tests/unit/` is Muse's (the ledger row and `evidence/batches/32/` come from the harness). Ruff is clean and all 2,863 tests pass here, the socket test included. Every input below was run offline against the real catalogue, comparing the contract commit's matching (3878912) with Muse's.
+Scope matches `briefs/32.md`: Muse changed only `Catalogue._matches` (`catalogue.py:124-129`) and added `tests/unit/test_b32_extra.py`. The locked files are untouched, and nothing else outside `anamnesis/` and `tests/unit/` is Muse's (the ledger row and `evidence/batches/32/` come from the harness). Ruff is clean and all 2,863 tests pass here, the socket test included. Every input below was run offline against the real catalogue, comparing the contract commit's matching (05bf160) with Muse's.
 
 1. **Major, a SPEC decision: a folded salt name drops its salt** (`catalogue.py:124-128`, read by `reconcile.py:295`). `_resolve_inn_part` now reads an `inn` through the fold, but `salt_of` still reads its salt only as written. The salt is lost, so a side that used to abstain can now `match`. Inputs run, with claim and pack at equal strength:
    - `inn` "tomometoprolol succinate" against Metoprolol tartrate 100 mg: `insufficient_information` → `match`. Spelled "metoprolol succinate", it gives `formulation_mismatch`.
@@ -29,7 +29,7 @@ Scope matches `briefs/32.md`: Muse changed only `Catalogue._matches` (`catalogue
   - "Veloc-Zok visoprolol", "visoprolol norbasc", "tomoemconcor y tomaveloc-zok", "tomolipitor tomasortis" and "tomobisoprolol/tomometoprolol".
 
   None of these inputs went from ambiguous to resolved.
-- **Arabic:** the 17 Arabic patterns are byte-identical to 3878912's. "tomoكونكور", "كونكورtomo" and "tomoبيلوك زوك" resolve as before.
+- **Arabic:** the 17 Arabic patterns are byte-identical to 05bf160's. "tomoكونكور", "كونكورtomo" and "tomoبيلوك زوك" resolve as before.
 - **The helpers follow `_matches` with no code of their own:**
   - `covers` holds for the joined forms but not for "Tomo Veloc Zok";
   - `brand_entry` and `matches_brand` hold for "Veloc-Zok" and "Norbasc", but not for the INN-only "visoprolol";
@@ -38,7 +38,7 @@ Scope matches `briefs/32.md`: Muse changed only `Catalogue._matches` (`catalogue
 - **Speed:** inputs of 12,000 to 20,000 characters take 42-63 ms, against 37-42 ms before. The pattern has no nested repeats.
 
 ## Round 2 review (2 Nov): SUPERVISOR: APPROVE
-Round 2 does what was asked, and nothing in Muse's build has to change before merge. Muse changed only `catalogue.py` and `tests/unit/test_b32_extra.py`, and the locked files are untouched. Ruff is clean and all 2,877 tests pass here, the socket test included. Every check below was rerun offline against contract commit 6722c7f.
+Round 2 does what was asked, and nothing in Muse's build has to change before merge. Muse changed only `catalogue.py` and `tests/unit/test_b32_extra.py`, and the locked files are untouched. Ruff is clean and all 2,877 tests pass here, the socket test included. Every check below was rerun offline against contract commit 7309f38.
 - **Round 1's #1 is closed.** These pairs are all `insufficient_information` again, as they were before the batch:
   - "tomometoprolol succinate" against a tartrate pack, as `inn` alone and as name and `inn`;
   - "amlodipine vesilate" against maleate;
@@ -47,8 +47,8 @@ Round 2 does what was asked, and nothing in Muse's build has to change before me
 
   "metoprolol succinate" still gives `formulation_mismatch`.
 - **Nothing else moved.** Of the 92 compiled patterns:
-  - the 30 for names that carry a salt are byte-identical to 3878912's;
-  - the 17 Arabic ones are byte-identical to 3878912's;
+  - the 30 for names that carry a salt are byte-identical to 05bf160's;
+  - the 17 Arabic ones are byte-identical to 05bf160's;
   - the other 45 are byte-identical to round 1's.
 
   Of round 1's 87 probe inputs, only three moved, and each went back to its pre-batch result: "amlodipine vesilate" no longer covers, and "amlodipinvesilat" and "visoprololfumarat" are unresolved.

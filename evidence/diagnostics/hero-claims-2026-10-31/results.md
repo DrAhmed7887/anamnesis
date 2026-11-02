@@ -1,6 +1,6 @@
 # The hero, ten fresh runs (31 Oct, 12:45–12:54 CET): 10 of 10 with the system's own categories
 
-As set out in `hero-rerun-plan.md` before any call: U12 (two public Commons photos, the synthetic voice note `U12.wav`), ten runs on the default path (Spark 1.3 transcribes, extracts and reads), `main` at 2e0d985 (batch 27 merged), one sitting. Scorer: `score_rerun.py`.
+As set out in `hero-rerun-plan.md` before any call: U12 (two public Commons photos, the synthetic voice note `U12.wav`), ten runs on the default path (Spark 1.3 transcribes, extracts and reads), `main` at 54adcee (batch 27 merged), one sitting. Scorer: `score_rerun.py`.
 
 | Scored | Correct | Harmful |
 |---|---|---|

@@ -10,7 +10,7 @@
 - **Expected:** the three findings of `plan-set3.md`: bisoprolol `intake_differs_from_unit_strength` against the Emconcor Cor 5 mg box, metoprolol `match` against the Lopresor 100 mg box, and the beta-blocker note.
 - **The scorer:** `score.py`, unchanged, run with the case id U13d.
 - **Harmful and risks:** as in `plan.md`. The slower read gives Voice Transcribe more room to repeat a word, as in set 3's r02 and r10.
-- **The command:** `PYTHONPATH=. uv run python scripts/intake_live.py --case U13d --voice evidence/raw/media/public/voice/U13d.wav --photo evidence/raw/media/public/cima/emconcor_cor_5mg_es_front.jpg --photo evidence/raw/media/public/cima/lopresor_100mg_es_front.jpg --lang es --repeat 10 --cap 18.28`: the adapter ledger's $17.48 plus $0.80. The code is `main`: nothing under `anamnesis/` or `tests/`, and nothing in `scripts/intake_live.py`, has changed since 8ee370a.
+- **The command:** `PYTHONPATH=. uv run python scripts/intake_live.py --case U13d --voice evidence/raw/media/public/voice/U13d.wav --photo evidence/raw/media/public/cima/emconcor_cor_5mg_es_front.jpg --photo evidence/raw/media/public/cima/lopresor_100mg_es_front.jpg --lang es --repeat 10 --cap 18.28`: the adapter ledger's $17.48 plus $0.80. The code is `main`: nothing under `anamnesis/` or `tests/`, and nothing in `scripts/intake_live.py`, has changed since f50b8fb.
 - **What happens next:**
   - Set 3 stays the README's Spanish hero result. Set 4 is reported beside the three sets, with its count, whatever it is.
   - If 5 or more of the 10 count, the film plays U13d's note and shows the first counted U13d run in its test scenes, and the film's results give set 4's count too.

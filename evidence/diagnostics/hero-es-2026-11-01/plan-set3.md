@@ -1,6 +1,6 @@
 # The Spanish hero, third set (U13c): written before any call of this set (1 Nov, 16:21 CET)
 
-- **Why:** the second set got 4 of 10, with 0 harmful (`results.md`, 28ab084).
+- **Why:** the second set got 4 of 10, with 0 harmful (`results.md`, 956af17).
   - The cropped images read 20 of 20, and every miss was the brand "Emconcor" misheard in the synthetic Spanish voice ("Cocor", "Koncor", "Korcor", dropped, or written in Arabic script).
   - Ahmed chose a third set in which the patient says the generic name.
 - **The only change: the patient says "bisoprolol" instead of "Emconcor".**
@@ -18,7 +18,7 @@
 - **Harmful and risks:** as in `plan.md`.
   - A misheard "bisoprolol" can't ground the claim's ingredient, so that pair ends `unresolved_name`.
   - Label reading varies from run to run, though the second set read 20 of 20.
-- **The command:** `scripts/intake_live.py --case U13c --repeat 10 --lang es`, with `U13c.wav` and the two `_front.jpg` images. `--cap` is the ledger total plus $0.80. The code is `main` as before: nothing under `anamnesis/` or `tests/` has changed since 8ee370a.
+- **The command:** `scripts/intake_live.py --case U13c --repeat 10 --lang es`, with `U13c.wav` and the two `_front.jpg` images. `--cap` is the ledger total plus $0.80. The code is `main` as before: nothing under `anamnesis/` or `tests/` has changed since f50b8fb.
 - **What happens next:**
   - If 5 or more of the 10 count, U13c becomes the hero of the film and the README, with its count. The first two Spanish sets are reported beside it.
   - If fewer, U12 stays the film's hero, and all three Spanish sets go into the README.
