@@ -502,3 +502,12 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **The verdicts:** the Opus supervisor approved round 1 (the 205 saved reports unchanged, the hero included). Its #1, a mixed calcium/calcium trihydrate text now matching, is what the all-English wording already did; the CEO kept the SPEC's design, named it as the one move toward `match` and pinned it (round 2 of the contract, 7c9cbbe). Muse's round 2 changed two docstrings only. The fresh Muse audit passed. Merged as 7182893 (row 5.24).
 - **Left for later:** other languages' salt names (German "Metoprolol Succinat"), and the older salt limits SPEC rule 6 names.
 - **Spend:** batch 34's two rounds $0.68751, its plan and audit $0.52691; Meta about $87.19 of $150, under the $100 line.
+
+## 2026-11-02, 23:45: the project is final (Ahmed)
+- **Ahmed:** "let's finalize the project", after batch 34.
+- **The engine is closed:** no more batches. The one change left is the film's YouTube link in the README, after Ahmed uploads it, and then one more rebuild of the public copy.
+- **The final checks, on the GitHub copy (`26cc3e6`, 520 commits, with the `demo-freeze` tag):**
+  - A fresh clone passes all 2,986 tests with `uv run pytest`, as the README says, and ruff is clean.
+  - The 29 links in the README, the claims table, the spec and the notices resolve. The claims table's 544 cited paths exist, and its 559 line numbers fall inside their files.
+  - The film (`film_v4.mp4`, 2:56) was checked against the final README and needs no change.
+- **Spend:** none since batch 34. Meta about $87.19 of $150, under the $100 line.
