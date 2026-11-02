@@ -494,3 +494,11 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
 - **Left for later:** Spanish salt names, counting calcium trihydrate as calcium and hemifumarate as fumarate, and reading "equivalent to" on packs that print their salt basis. Each fails toward review.
 - **Also fixed:** the set 4 spend line above read "/bin/zsh.29168"; a shell had expanded its `$0`.
 - **Spend:** batch 33's build $0.75216, its plan and audit $0.53886; Meta about $85.98 of $150, under the $100 line.
+
+## 2026-11-02, 14:03: batch 34, Spanish salt names (Ahmed)
+- **Ahmed:** "Yes, batch 34", to closing the remaining Spanish false-match path: a Spanish salt name was read as no salt, so "metoprolol succinato" matched a tartrate pack, and a claim named "Metoprolol succinate" matched Spain's Lopresor box ("Metoprolol, tartrato").
+- **The source:** the CEO queried AEMPS CIMA's list of active substances for each catalogue moiety (`evidence/data/cima_salts.json`). Its Spanish names map one to one onto the salts `INN_ALIASES` already curates in English.
+- **The design:** a separate table of eleven Spanish words, read only by `_loose_salts`, each as its English salt. Muse's read-only plan chose it over adding the names to `INN_ALIASES`, which also feeds identity, grounding and name matching. "calcio", the noun, and the amoxicillin and clavulanate words are left out on purpose.
+- **The verdicts:** the Opus supervisor approved round 1 (the 205 saved reports unchanged, the hero included). Its #1, a mixed calcium/calcium trihydrate text now matching, is what the all-English wording already did; the CEO kept the SPEC's design, named it as the one move toward `match` and pinned it (round 2 of the contract, 7c9cbbe). Muse's round 2 changed two docstrings only. The fresh Muse audit passed. Merged as 7182893 (row 5.24).
+- **Left for later:** other languages' salt names (German "Metoprolol Succinat"), and the older salt limits SPEC rule 6 names.
+- **Spend:** batch 34's two rounds $0.68751, its plan and audit $0.52691; Meta about $87.19 of $150, under the $100 line.
