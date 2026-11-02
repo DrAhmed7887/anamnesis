@@ -5,6 +5,7 @@ from anamnesis.schema.findings import DiscrepancyType, Finding
 from anamnesis.schema.medication import (
     INN_ALIASES,
     SALT_BASIS_EQUIVALENTS,
+    SPANISH_SALT_NAMES,
     DoseRegimen,
     IngredientAmount,
     MedicationStatus,
@@ -37,6 +38,7 @@ __all__ = [
     "Readability",
     "Release",
     "SALT_BASIS_EQUIVALENTS",
+    "SPANISH_SALT_NAMES",
     "Strength",
     "StrengthPer",
     "Unit",

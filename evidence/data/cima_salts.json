@@ -1,0 +1,64 @@
+{
+ "source": "AEMPS CIMA REST API, maestra 1 (active substances), queried by name",
+ "attribution": "Source: Agencia Española de Medicamentos y Productos Sanitarios (AEMPS), CIMA, https://cima.aemps.es.",
+ "fetched": "2026-11-02",
+ "purpose": "the Spanish names of the salts INN_ALIASES curates (batch 34)",
+ "queries": {
+  "amlodipino": {
+   "url": "https://cima.aemps.es/cima/rest/maestras?maestra=1&nombre=amlodipino",
+   "names": [
+    "AMLODIPINO",
+    "AMLODIPINO BESILATO",
+    "AMLODIPINO MALEATO"
+   ]
+  },
+  "amoxicilina": {
+   "url": "https://cima.aemps.es/cima/rest/maestras?maestra=1&nombre=amoxicilina",
+   "names": [
+    "AMOXICILINA",
+    "AMOXICILINA SODICA",
+    "AMOXICILINA TRIHIDRATO"
+   ]
+  },
+  "atorvastatina": {
+   "url": "https://cima.aemps.es/cima/rest/maestras?maestra=1&nombre=atorvastatina",
+   "names": [
+    "ATORVASTATINA",
+    "ATORVASTATINA CALCICA",
+    "ATORVASTATINA CALCICA TRIHIDRATO"
+   ]
+  },
+  "bisoprolol": {
+   "url": "https://cima.aemps.es/cima/rest/maestras?maestra=1&nombre=bisoprolol",
+   "names": [
+    "BISOPROLOL",
+    "BISOPROLOL FUMARATO",
+    "BISOPROLOL HEMIFUMARATO"
+   ]
+  },
+  "clavulan": {
+   "url": "https://cima.aemps.es/cima/rest/maestras?maestra=1&nombre=clavulan",
+   "names": [
+    "CLAVULANATO POTASIO",
+    "CLAVULANATO POTASIO DILUIDO CON CELULOSA MICROCRISTALINA",
+    "CLAVULANATO POTASIO DILUIDO CON SILICE COLOIDAL HIDRATADA",
+    "CLAVULANICO ACIDO"
+   ]
+  },
+  "metformina": {
+   "url": "https://cima.aemps.es/cima/rest/maestras?maestra=1&nombre=metformina",
+   "names": [
+    "METFORMINA",
+    "METFORMINA HIDROCLORURO"
+   ]
+  },
+  "metoprolol": {
+   "url": "https://cima.aemps.es/cima/rest/maestras?maestra=1&nombre=metoprolol",
+   "names": [
+    "METOPROLOL",
+    "METOPROLOL SUCCINATO",
+    "METOPROLOL TARTRATO"
+   ]
+  }
+ }
+}
