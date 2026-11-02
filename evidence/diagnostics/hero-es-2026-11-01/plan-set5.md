@@ -1,4 +1,4 @@
-# The Spanish hero, fifth set (U13e): written before any call of this set (1 Nov, 01:56 CET)
+# The Spanish hero, fifth set (U13e): written before any call of this set (2 Nov, 01:56 CET)
 
 - **Why a fifth set:** set 4 (2 of 10, `results.md`) failed on name matching, not on the media: Voice Transcribe wrote "visoprolol" or joined the verb to the name ("Tomobisoprolol", "Tomovisoprolol"), and the catalogue matched names only as written. Ahmed chose to fix the code and re-test the same voice (1 Nov, evening). Batch 32 (SPEC §3, "Spanish speech") lets `b` and `v` match each other and accepts one attached form of *tomar* before a Latin-script name. It merged into `main` as af84dcc after its gate, the supervisor and the CEO's review. `plan-set4.md` said there would be no fifth set for that code; this set is on new code, so it gets its own plan, as the first hero's sets on later code did.
 - **The only change: the code.** The voice note is set 4's file, unchanged: `evidence/raw/media/public/voice/U13d.wav`, sha256 96188b57db9c02a8…, read by the ElevenLabs voice "Rosa". The images are set 3's and set 4's cropped fronts, unchanged.
