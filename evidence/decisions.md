@@ -511,3 +511,12 @@ Ahmed, 30 Oct: "you decide with the help of maybe gemini agent". A Gemini resear
   - The 29 links in the README, the claims table, the spec and the notices resolve. The claims table's 544 cited paths exist, and its 559 line numbers fall inside their files.
   - The film (`film_v4.mp4`, 2:56) was checked against the final README and needs no change.
 - **Spend:** none since batch 34. Meta about $87.19 of $150, under the $100 line.
+
+## 2026-11-03, 00:05: the film is on YouTube (Ahmed)
+- **Ahmed:** "Good as it is" for `film_v4.mp4`, then "kapture is attached, do it".
+- **Done:** uploaded as unlisted to Ahmed's own channel, through Kapture in his signed-in Chrome: https://youtu.be/r4TFxWLJ7Ls.
+  - The title and description are the kit's, and the captions are `film_v4.srt`.
+  - The video language is English, "not made for kids" is set, and the AI-use answer is "Yes", as the kit advised.
+  - YouTube's copyright and Community Guidelines checks found no issues.
+- **Checked signed out:** oEmbed answers 200 with the title and channel. The watch page reports the video as playable and unlisted, 176 s long, with a caption track.
+- **The README** links the film. The public copy is rebuilt for it.

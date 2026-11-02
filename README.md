@@ -4,6 +4,8 @@
 
 The patient sends a voice note and photos of their medicine packs. The clinician gets a one-page brief. [1.1] Every finding links back to the audio turn and the image region it came from. [1.3]
 
+**The film (under three minutes):** [youtu.be/r4TFxWLJ7Ls](https://youtu.be/r4TFxWLJ7Ls), on YouTube with English captions.
+
 Built for the Meta Global AI Developer Hackathon. Track: Indie. Also entered for two bonus prizes: Best Agentic Use-Case and Best Build on Meta Open Weight Models. [6.4]
 
 All the code, tests and evidence here were written during the hackathon: the history starts with the first commit on 27 Oct 2026, 10:34 CET. [5.8]
