@@ -59,7 +59,7 @@ flowchart TD
     st --> cmp["Plain code compares<br/>the two sides"]
     cmp --> brief["One-page brief:<br/>each finding linked to its turn and crop"]
     brief --> doc{"Clinician"}
-    doc -- "asks for one new photo" --> photo
+    doc -- "asks for one new photo" --> again["One new photo:<br/>only it is processed,<br/>and the brief updates"]
     doc -- "approves" --> signed["Approved brief"]
 ```
 <sub>The diagram restates rows 1.2, 1.3, 1.6, 1.13, 1.16, 1.22, 1.27, 1.28, 2.1, 2.2, 3.1 and 3.6.</sub>
