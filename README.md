@@ -46,13 +46,13 @@ Every number below has its n and its misses further down. These are staged tests
 
 ## How it works
 ```mermaid
-flowchart LR
-    voice["Voice note"] --> vt["Muse Voice Transcribe:<br/>timed turns"]
-    vt --> cx["Muse Spark 1.3:<br/>the medicines the patient names<br/>(optional: tuned Muse Glimmer)"]
+flowchart TD
     photo["Pack photos"] --> clean["Turned upright,<br/>metadata stripped"]
     clean --> sam["SAM 3.1:<br/>marks each pack it finds"]
     sam --> rd["Muse Spark 1.3:<br/>reads each crop,<br/>once more at 2× if it can't"]
     rd -.->|"still unreadable (optional)"| rd2["Muse Spark Open:<br/>one second read"]
+    voice["Voice note"] --> vt["Muse Voice Transcribe:<br/>timed turns"]
+    vt --> cx["Muse Spark 1.3:<br/>the medicines the patient names<br/>(optional: tuned Muse Glimmer)"]
     cx --> st["Each amount is kept only if it is said in a cited turn,<br/>and said about that medicine (word rules),<br/>or is printed in the reader's label text"]
     rd --> st
     rd2 -.-> st
